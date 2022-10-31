@@ -51,7 +51,7 @@
  * correct configure script check for regcomp() -- could lead to false negatives.
 # (r1621)
  * Don't break build on missing 'gs'.
-# (r1616,r1659,r1660,r1667)
+# (r1616,r1659,r1660,r1667,r1762)
  * Using --load-shadow-dir <dir> adds a shadow directory (experimental).
    Then 'scale "shadow"' (bound to key '"') will substitute the current displayed image with that 
    of the first same-named file located under a shadow directory.
@@ -284,7 +284,7 @@
  * Command 'desc "-nooverw" "-append" "save"' will either force overwrite; saving and appending possible, if user request.
 # (r1039, also in branches/0.5)
  * To ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
-# (r1035)
+# (r1035,r1762)
  * New switch --mark-from-image-descriptions-file: read file names from a description file and use them to mark current list files.
 # (r1030) (FIXME: to document better)
  * Introduced alphanumeric restriction in the descriptions shebang variables: must begin with underscore or alphabetic, continue with underscore or alphanumeric.
