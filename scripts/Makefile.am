@@ -9,6 +9,7 @@ EXTRA_DIST= \
 	$(srcdir)/tests/maxlenscript.fim \
 	$(srcdir)/tests/version.sh \
 	$(srcdir)/tests/font.sh \
+	$(srcdir)/tests/spawn_and_quit.exp \
 	$(srcdir)/example/oneline.fim		\
 	$(srcdir)/rc/fimrc.eog		\
 	$(srcdir)/rc/fimrc.gqview		\
