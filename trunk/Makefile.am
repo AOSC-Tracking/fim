@@ -74,17 +74,27 @@ FIMVIDEOTESTOPTS=-K fmfmwsk--++hhllt -K ':quit' -K ''
 aatests: all
 	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa   $(FIMVIDEOTESTOPTS)
+	if test -n "$(DISPLAY)"; then \
+		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
+	fi
+
 
 .PHONY: cacatests
 cacatests: all
 	$(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
+	if test -n "$(DISPLAY)"; then \
+		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca=w $(FIMVIDEOTESTOPTS); \
+	fi
+
 
 .PHONY: sdltests
 sdltests: all
 	if test -n "$(DISPLAY)"; then \
 		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl  $(FIMVIDEOTESTOPTS); \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS); \
 	fi
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
