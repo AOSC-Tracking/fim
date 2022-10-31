@@ -948,6 +948,7 @@ else
 	AC_MSG_NOTICE([Disabling BMP file format support.])
 	AC_DEFINE(FIM_WITH_BMP, 0, [BMP file support.])
 fi
+AM_CONDITIONAL(ENABLE_BMP, test x$fim_handle_bmp = xyes)
 dnl ================================================================================
 fim_handle_pcx=yes
 AC_ARG_ENABLE(pcx, AS_HELP_STRING([--disable-pcx],[Disable PCX file support (enabled by default).]),

@@ -125,6 +125,20 @@ tests:	all
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=24 -c 'stdout _last_file_loader;quit'` == Bit24 # mostly coverage
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --dump-reference-help | wc -l` -gt 100
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
+if ENABLE_BMP
+	if which convert; then \
+		convert $(top_srcdir)/media/icon_smile.gif -monochrome $(top_srcdir)/media/icon_smile.bmp && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` == bmp && rm -f $(top_srcdir)/icon_smile.bmp && \
+		if which ppmtobmp ; then \
+		convert $(top_srcdir)/media/icon_smile.gif ppm:- | ppmtobmp -bpp 8 > $(top_srcdir)/media/icon_smile.bmp && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` == bmp && rm -f $(top_srcdir)/icon_smile.bmp && \
+		convert $(top_srcdir)/media/icon_smile.gif ppm:- | ppmtobmp -bpp 4 > $(top_srcdir)/media/icon_smile.bmp && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` == bmp && rm -f $(top_srcdir)/icon_smile.bmp ; \
+		fi && \
+		convert $(top_srcdir)/media/icon_smile.gif -depth 8 -alpha Disassociate $(top_srcdir)/media/icon_smile.bmp && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` == bmp && rm -f $(top_srcdir)/icon_smile.bmp; \
+	fi
+endif
 	if which convert; then \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 8  $(top_srcdir)/media/icon_smile.ppm && \
 		sed -i 's/P6$$/P6\n# comment/g'                      $(top_srcdir)/media/icon_smile.ppm && \
