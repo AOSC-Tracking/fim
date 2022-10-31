@@ -257,11 +257,12 @@ struct fim_options_t fim_options[] = {
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
 "The \\fBaa\\fP option can be specified as \\fBaa[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['W']['M']['R'][width[:height]]['%']}\\fP,"
+"The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
 " where " FIM_MAN_fB("width") " and " FIM_MAN_fB("height") " are integer numbers specifying the desired resolution "
 " (if " FIM_MAN_fB("height") " not specified, it takes the value of " FIM_MAN_fB("width") ");"
 " the " FIM_MAN_fB("'w'") " character requests windowed mode;"
 " the " FIM_MAN_fB("'m'") " character requests mouse pointer display;"
+" the " FIM_MAN_fB("'h'") " character requests help grid map draw (option can be repeated);"
 " the " FIM_MAN_fB("'r'") " character requests support for window resize;"
 " the " FIM_MAN_fB("'%'") " character requests to treat " FIM_MAN_fB("width") " and " FIM_MAN_fB("height")
 " as percentage of possible window resolution."

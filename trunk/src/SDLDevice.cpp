@@ -114,6 +114,9 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 				case 'w': want_windowed=tv; break;
 				case 'm': want_mouse_display=tv; break;
 				case 'r': want_resize=tv; break;
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+				case 'h': toggle_draw_help_map(); if(!tv) fim_draw_help_map_=0; break;
+#endif
 				default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";goto err;
 			}
 			++os;
