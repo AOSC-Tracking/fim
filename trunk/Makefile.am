@@ -73,6 +73,10 @@ FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhllt' -K ':quit' -K ''
 
 .PHONY: aatests
 aatests: all
+if WITH_EXPECT
+	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) \
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/
+endif
 	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa   $(FIMVIDEOTESTOPTS)
 	if test -n "$(DISPLAY)"; then \
@@ -80,9 +84,12 @@ aatests: all
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
 	fi
 
-
 .PHONY: cacatests
 cacatests: all
+if WITH_EXPECT
+	$(TIMEOUT_SMALL) \
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o caca $(top_srcdir)/media/
+endif
 	$(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
 	if test -n "$(DISPLAY)"; then \

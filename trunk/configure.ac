@@ -196,6 +196,8 @@ AC_PATH_PROG([MAN],[man],[no])
 #AC_PATH_PROG([GPG],[gpg],[no])
 #AC_PATH_PROG([LS],[ls],[no])
 #AC_PATH_PROG([CD],[cd],[no])
+AC_PATH_PROG([EXPECT],[expect],[no])
+AM_CONDITIONAL(WITH_EXPECT, test x$ac_cv_path_EXPECT != xno)
 # FIXME: what if we have no grep and/or no sed ?
 # (echo is often a shell builtin)
 have_default_bindings=yes
