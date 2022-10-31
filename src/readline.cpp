@@ -249,7 +249,7 @@ static int fim_post_rl_getc(int c)
 	return c;
 }
 
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2)
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
 static int fim_rl_sdl_aa_getc_hook(void)
 {
 	//unsigned int c;
@@ -290,7 +290,7 @@ int fim_rl_sdl_aa_getc(FILE * fd)
 	FIM_PR("");
 	return 0;/* yes, a dummy function instead of getc() */
 }
-#endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2) */
+#endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2) */
 
 int fim_rl_getc(FILE * fd)
 {
@@ -424,7 +424,7 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 	        rl_event_hook=redisplay_hook;
 	        rl_pre_input_hook=redisplay_hook;
 	}
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2)
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
 	if(	false
 		|| g_fim_output_device.find(FIM_DDN_INN_SDL)==0
 		/* uncommenting the following may give problems; but commenting it will break X11-backed aalib input ..  */ 
