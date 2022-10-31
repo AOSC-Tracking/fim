@@ -422,7 +422,7 @@ nop:
 		loadCurrentImage();
 		flist_[flist_.cf()] = tmp;
 		viewport()->update_meta(true);
-		return FIM_CNS_EMPTY_RESULT;
+		return "Current image substituted with " + fn;
 	}
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 
