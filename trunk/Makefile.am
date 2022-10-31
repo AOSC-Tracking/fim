@@ -67,7 +67,7 @@ signed-dist: dist
 #	        gpg -sbav -u 0xE0E669C8EF1258B8 $@ $<
 
 
-FIMNORCOPTS=-N --no-etc-rc-file
+FIMNORCOPTS=-N --no-etc-rc-file --no-history
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
@@ -136,15 +136,15 @@ endif
 if ENABLE_SDL
 if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)' # pcx needs no library\
+		ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
 	fi
 endif
 endif
 if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
 endif
-	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
-	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
+	@top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/version.sh
+	@top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/font.sh
 	@test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex'`" == 3 # 3 and not 11
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit;'
@@ -166,7 +166,7 @@ endif
 if ENABLE_PNG
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
 endif
-	@test `$(FIM_EXE) --help -B | wc -l` -lt `$(FIM_EXE) --help -B -B | wc -l`
+	@test `$(FIM_EXE) $(FIMNORCOPTS) --help -B | wc -l` -lt `$(FIM_EXE) --help -B -B | wc -l`
 	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make ltests
