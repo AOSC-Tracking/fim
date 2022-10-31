@@ -1222,7 +1222,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 
 	    	for (;;) {
-		    c = getopt_long(argc, argv, "1C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
+		    c = getopt_long(argc, argv, "/:1C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
 #if FIM_WANT_RECURSE_FILTER_OPTION
 	   	"R::"
 #else /* FIM_WANT_RECURSE_FILTER_OPTION */
@@ -1713,9 +1713,8 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    cc.appendPostInitCommand( ( string (
 			FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) "=" FIM_VID_RE_SEARCH_OPTS ";\n"
 			FIM_SYM_CMD_SLSL ";\n"
-		    	FIM_SYM_FW_SEARCH_KEY_STR) + fim_shell_arg_escape(optarg,false) + string("\n"
-		    	FIM_SYM_FW_SEARCH_KEY_STR "\n"
-		    	FIM_VID_RE_SEARCH_OPTS "=" FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) ";\n") 
+		    	FIM_SYM_FW_SEARCH_KEY_STR) + fim_shell_arg_escape(optarg,false) + string(";\n"
+		    	FIM_VID_RE_SEARCH_OPTS "=" FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) "\n") 
 					    ).c_str()
 			    );
 		    appendedPostInitCommand=true;
