@@ -560,9 +560,6 @@ AC_CHECK_LIB([curses],[noecho])
 dnl ============= ncurses: optional
 AC_CHECK_LIB([ncurses],[noecho])
 
-dnl ============= cacalib : optional
-AC_CHECK_LIB(caca, caca_create_canvas,have_cacalib=yes,have_cacalib=no)
-
 dnl ============= GNU gpm, unofficial yet
 
 #    AC_CHECK_LIB(gpm,Gpm_Open,
@@ -1508,18 +1505,38 @@ dnl ==================
 
 dnl ==================
 
-fim_cv_cacalib=no
+AC_CHECK_LIB(caca, caca_create_canvas,fim_cv_libcaca=yes,fim_cv_libcaca=no)
+AC_ARG_ENABLE(caca, AS_HELP_STRING([--disable-caca],[Colour ASCII-Art (-o caca) support (via cacalib)]), [if test x$enableval != xno; then fim_cv_libcaca=yes; else fim_cv_libcaca=no; fi],[fim_cv_libcaca=yes;])
 
-AC_ARG_ENABLE(cacalib, AS_HELP_STRING([--enable-cacalib],[Turns on cacalib support]),
-	[if test x$enableval = xyes; then
-	if test x$have_cacalib = xyes; then
-	fim_cv_cacalib=yes
+if test x$fim_cv_libcaca != xno; then
+	if test x$ac_cv_lib_caca_caca_create_canvas = xyes; then
+      		AC_MSG_NOTICE([Enabling cacalib driver.])
+		fim_cv_cacalib=yes
+	        if test x$libcaca_config_prefix != x; then
+			LIBCACA_CONFIG="$libcaca_config_prefix/bin/caca-config"
+		else
+			# default path configurator
+			AC_PATH_PROG(LIBCACA_CONFIG, caca-config, no)
+		fi
+		if test "x$LIBCACA_CONFIG" = "xno"; then
+			# uhm
+	      		AC_MSG_WARN([***  no caca-config ? ***])
+			fim_cv_cacalib=no
+		else
+			CXXFLAGS="$CXXFLAGS `$LIBCACA_CONFIG --cflags`"
+			LIBS="$LIBS `$LIBCACA_CONFIG --libs`"
+			# finish this !
+		fi
 	else
-    AC_MSG_ERROR([Sorry, it does not seem like cacalib is installed or detectable.
-	Please run --disable-cacalib or install cacalib in a system-wide directory instead.
-	])
+		fim_cv_cacalib=no
 	fi
-	fi])
+else
+	fim_cv_cacalib=no
+	AC_MSG_WARN([Colour ASCII-Art (-o caca) support disabled.])
+        dnl AC_MSG_ERROR([Sorry, it does not seem like cacalib is installed or detectable.
+	dnl Please run --disable-caca or install cacalib in a system-wide directory instead.
+	dnl ])
+fi
 
 dnl ==================
 
@@ -1814,7 +1831,6 @@ dnl ==================
     AH_TEMPLATE([FIM_WITH_CACALIB])
             if test x$fim_cv_cacalib = xyes ; then
     		AC_DEFINE([FIM_WITH_CACALIB])
-    		LIBS="$LIBS -lcaca"
     	fi
 	AM_CONDITIONAL(ENABLE_CACA, test x$fim_cv_cacalib = xyes)
 
@@ -2062,8 +2078,8 @@ dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
+	Colour ASCII art (cacalib) support  : ${fim_cv_cacalib}
 	X        (Imlib2) support(-o imlib2):*${fim_handle_imlib2:-no}
-	coloured ASCII art (cacalib) support:*${fim_cv_cacalib}
 dnl
    	EXIF (JPEG) tags support (libexif)  : ${fim_cv_libexif}
 	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
