@@ -555,6 +555,9 @@ The system wide \fBfim\fP initialization file (executed at startup, after execut
 .B ~/.fimrc
 The personal \fBfim\fP initialization file (executed at startup, after the system wide initialization file).
 .TP 15
+.B ~/.fim_history
+File where to load from or save. See (man \fR\fIfimrc\fR(5),  man \fR\fIreadline\fR(3)).
+.TP 15
 .B ~/.inputrc
 If \fBfim\fP is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man \fR\fIreadline\fR(3)).
 .SH SEE ALSO
