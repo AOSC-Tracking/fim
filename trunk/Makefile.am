@@ -202,11 +202,6 @@ tests-all: tests
 test:	all
 	@$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/* #~/M*s/*g
 
-# this rule is deprecated, too
-.PHONY: aatest
-aatest:	all
-	@$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/* -o aa #~/M*s/*g
-
 # this rule is old and deprecated
 #tgz:	clean
 #	tar -czf ../fim.`date +%Y%m%d%H%M`.tgz ../fim/*

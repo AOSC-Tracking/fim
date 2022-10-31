@@ -1829,9 +1829,9 @@ dnl ==================
 
 dnl ==================
 
-    AH_TEMPLATE([FIM_WITH_CACALIB])
+    AH_TEMPLATE([FIM_WITH_LIBCACA])
             if test x$fim_cv_libcaca = xyes ; then
-    		AC_DEFINE([FIM_WITH_CACALIB])
+    		AC_DEFINE([FIM_WITH_LIBCACA])
     	fi
 	AM_CONDITIONAL(ENABLE_CACA, test x$fim_cv_libcaca = xyes)
 

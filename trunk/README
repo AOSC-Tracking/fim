@@ -23,9 +23,9 @@ at the users who are comfortable with software like the Vim text editor or the
 Mutt mail user agent, or keyboard oriented, full screen programs.
 FIM aims to be a "Swiss Army knife" for viewing images.
 
-FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries),
-it supports ASCII art output (via the aalib library), and since it derives from
-the Fbi image viewer (by Gerd Hoffmann), it can display images in the Linux
+FIM is multidevice: it has X support (via the SDL library), it supports 
+ASCII art output (via the aalib and libcaca libraries), and because it derives
+from the Fbi image viewer (by Gerd Hoffmann), it can display images in the Linux
 framebuffer console, too.
 
 FIM is free software; it ships under the GPL software license.
@@ -95,8 +95,9 @@ Implemented features:
  - standard input whole file read
  - standard input script file read
  - support for AAlib (Ascii Art rendering) (-o aa)
+ - support for libcaca (Colour Ascii Art rendering) (-o caca 
  - support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
- - experimental support for Imlib2 (-o imlib2) (X!)
+ - experimental (incomplete) support for Imlib2 (-o imlib2) (X!)
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
  - viewing any file as (rendered) text
@@ -147,7 +148,7 @@ Implemented features:
  standard input interaction                            *		    ?
  rotation		   *	?    ?           ?     *     ?    ?     *   *
  history                                               *		  
- multi-device (X/SDL, framebuffer, aalib)              *                   
+ multi-device (X/SDL, framebuffer, aalib, libcaca)     *                   
  mirroring                                             *                    *
  ...
 
@@ -183,12 +184,9 @@ You find all of these on any decent Linux distribution.
 
  Just after the  './configure'  and 'make' steps, you should:
  
- # test if fim works at all on this machine/user
+ # run fim in interactive mode
  make test
 
- # test if fim works at all on this machine/user (if you compiled aa support)
- make aatest
- 
  # run a pool of test scripts, which should validate most fim functionalities
  # for common usage (requires png and gif support).
  make tests
@@ -201,14 +199,14 @@ You find all of these on any decent Linux distribution.
  sudo apt-get install pkg-config                # to generate configure
  sudo apt-get install libreadline-dev libexif-dev
  sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
- sudo apt-get install libsdl1.2-dev libaa1-dev 
+ sudo apt-get install libsdl1.2-dev libaa1-dev libcaca-dev
  # experimental, not recommended:
  sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
  sudo apt-get install libarchive-dev
  svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
  sh autogen.sh
  cd fim
- ./configure --enable-poppler --enable-aa --enable-sdl
+ ./configure --enable-poppler --enable-aa --enable-caca --enable-sdl
  make
  
 ================================================================================
@@ -362,7 +360,7 @@ Earlier tested platforms (fim-0.3...):
  the following (overly complete) list:
   
  autoconf autoconf-archive autoheader automake autotools-dev bison ctags
- flex groff g++ libaa1-dev libdjvulibre-dev libgif4 libgif-dev libimlib2-dev
+ flex groff g++ libaa1-dev libcaca-dev libdjvulibre-dev libgif4 libgif-dev
  libjpeg-dev libncurses5-dev libpng-dev libpoppler-cpp-dev libpoppler-dev
  libreadline-dev libsdl-dev libspectre-dev libtiff-dev libtool m4 make svn
  txt2html libexif-dev
