@@ -70,6 +70,23 @@ signed-dist: dist
 FIMNORCOPTS=-N --no-etc-rc-file --no-history
 FIMVIDEOTESTOPTS=-K fmfmwsk--++hhllt -K ':quit' -K ''
 
+.PHONY: aatests
+aatests: all
+	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa   $(FIMVIDEOTESTOPTS)
+
+.PHONY: cacatests
+cacatests: all
+	$(TIMEOUT_SMALL) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
+
+.PHONY: sdltests
+sdltests: all
+	if test -n "$(DISPLAY)"; then \
+		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl  $(FIMVIDEOTESTOPTS); \
+	fi
+
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
 sanity-check:	all
@@ -91,6 +108,15 @@ tests:	all
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
 if ENABLE_JPEG
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; quit' -i < $(top_srcdir)/media/image.jpg | tail -1` != "00"  # mostly coverage
+endif
+if ENABLE_AA
+	@make aatests
+endif
+if ENABLE_CACA
+	@make cacatests
+endif
+if ENABLE_SDL
+	@make sdltests
 endif
 if ENABLE_AA
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'        -Kq | wc -l` -lt 100 # cover what happens hitting Tab in console mode
@@ -123,17 +149,6 @@ endif
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c "quit $$r" || test $$? = $$r ; done ;
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C "quit $$r" || test $$? = $$r ; done ;
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' -F "quit $$r" || test $$? = $$r ; done ;
-if ENABLE_CACA
-	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
-endif
-if ENABLE_AA
-	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa $(FIMVIDEOTESTOPTS)
-endif
-if ENABLE_SDL
-	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl $(FIMVIDEOTESTOPTS); \
-	fi
-endif
 if ENABLE_SDL
 if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \

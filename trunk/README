@@ -187,9 +187,17 @@ You find all of these on any decent Linux distribution.
  # run fim in interactive mode
  make test
 
- # run a pool of test scripts, which should validate most fim functionalities
- # for common usage (requires png and gif support).
+ # run the test suite
  make tests
+
+ # run only -o sdl tests (if disabled, fail)
+ make sdltests
+
+ # run only -o aa tests (if disabled, fail)
+ make aatests
+
+ # run only -o caca tests (if disabled, fail)
+ make cacatests
 
 --------------------------------------------------------------------------------
 	4.6		Example: compiling FIM from repository on Ubuntu/Debian:
