@@ -1810,7 +1810,10 @@ ok:
 	Viewport* CommandConsole::current_viewport(void)const
 	{
 #ifdef FIM_WINDOWS
-		return current_window().current_viewportp();
+		if(window_) // not yet there e.g. in init()
+			return current_window().current_viewportp();
+		else
+			return FIM_NULL;
 #else /* FIM_WINDOWS */
 		return viewport_;
 #endif /* FIM_WINDOWS */

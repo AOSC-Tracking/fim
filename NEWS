@@ -21,8 +21,8 @@
  * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
 # (r1707,r1711)
  * Fix: after 'quit' no command shall execute anymore (unless in -F).
-# (r1705)
- * With SDL one can specify window size as percentage of allowed size (-o sdl=w55%).
+# (r1705,r1759)
+ * With SDL one can specify window size as percentage of allowed size (-o sdl=w55%), or draw a help grid map (-o sdl=h).
 # (r1700)
  * With SDL (-o sdl), center window by default.
 # (r1693)
