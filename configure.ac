@@ -1505,13 +1505,14 @@ dnl ==================
 
 dnl ==================
 
-AC_CHECK_LIB(caca, caca_create_canvas,fim_cv_libcaca=yes,fim_cv_libcaca=no)
-AC_ARG_ENABLE(caca, AS_HELP_STRING([--disable-caca],[Colour ASCII-Art (-o caca) support (via cacalib)]), [if test x$enableval != xno; then fim_cv_libcaca=yes; else fim_cv_libcaca=no; fi],[fim_cv_libcaca=yes;])
+dnl ==== Notice the name difference: libcaca, as opposed to aalib.
+AC_CHECK_LIB(caca, caca_create_canvas,fim_cv_lib_caca=yes,fim_cv_lib_caca=no)
+AC_ARG_ENABLE(caca, AS_HELP_STRING([--disable-caca],[Colour ASCII-Art (-o caca) support (via libcaca)]), [if test x$enableval != xno; then fim_cv_lib_caca=yes; else fim_cv_lib_caca=no; fi],[fim_cv_lib_caca=yes;])
 
-if test x$fim_cv_libcaca != xno; then
+if test x$fim_cv_lib_caca != xno; then
 	if test x$ac_cv_lib_caca_caca_create_canvas = xyes; then
-      		AC_MSG_NOTICE([Enabling cacalib driver.])
-		fim_cv_cacalib=yes
+      		AC_MSG_NOTICE([Enabling libcaca driver.])
+		fim_cv_libcaca=yes
 	        if test x$libcaca_config_prefix != x; then
 			LIBCACA_CONFIG="$libcaca_config_prefix/bin/caca-config"
 		else
@@ -1521,20 +1522,20 @@ if test x$fim_cv_libcaca != xno; then
 		if test "x$LIBCACA_CONFIG" = "xno"; then
 			# uhm
 	      		AC_MSG_WARN([***  no caca-config ? ***])
-			fim_cv_cacalib=no
+			fim_cv_libcaca=no
 		else
 			CXXFLAGS="$CXXFLAGS `$LIBCACA_CONFIG --cflags`"
 			LIBS="$LIBS `$LIBCACA_CONFIG --libs`"
 			# finish this !
 		fi
 	else
-		fim_cv_cacalib=no
+		fim_cv_libcaca=no
 	fi
 else
-	fim_cv_cacalib=no
+	fim_cv_libcaca=no
 	AC_MSG_WARN([Colour ASCII-Art (-o caca) support disabled.])
-        dnl AC_MSG_ERROR([Sorry, it does not seem like cacalib is installed or detectable.
-	dnl Please run --disable-caca or install cacalib in a system-wide directory instead.
+        dnl AC_MSG_ERROR([Sorry, it does not seem like libcaca is installed or detectable.
+	dnl Please run --disable-caca or install libcaca in a system-wide directory instead.
 	dnl ])
 fi
 
@@ -1829,10 +1830,10 @@ dnl ==================
 dnl ==================
 
     AH_TEMPLATE([FIM_WITH_CACALIB])
-            if test x$fim_cv_cacalib = xyes ; then
+            if test x$fim_cv_libcaca = xyes ; then
     		AC_DEFINE([FIM_WITH_CACALIB])
     	fi
-	AM_CONDITIONAL(ENABLE_CACA, test x$fim_cv_cacalib = xyes)
+	AM_CONDITIONAL(ENABLE_CACA, test x$fim_cv_libcaca = xyes)
 
 dnl ==================
     AH_TEMPLATE([FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING])
@@ -2078,7 +2079,7 @@ dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
-	Colour ASCII art (cacalib) support  : ${fim_cv_cacalib}
+	Colour ASCII art (libcaca) support  : ${fim_cv_libcaca}
 	X        (Imlib2) support(-o imlib2):*${fim_handle_imlib2:-no}
 dnl
    	EXIF (JPEG) tags support (libexif)  : ${fim_cv_libexif}

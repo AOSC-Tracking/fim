@@ -29,8 +29,8 @@
  * fix: pressing keys "1n1n" will not execute 'n' 11 times but twice.
 # (r1689)
  * configure --enable-debug is developer option now.
-# (r1679-r1688,r1721-r1722)
- * libcaca (-o caca) mode is working again, with limitations.
+# (r1679-r1688,r1721-r1722,r1753-r1754)
+ * libcaca (-o caca) mode is now working.
 # (r1677,r1678,r1725)
  * Slideshow function (e.g `fim --slideshow=5 *.jpg`) now more responsive.
 # (r1662)
