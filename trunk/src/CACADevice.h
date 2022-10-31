@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- CACADevice.h : cacalib device Fim driver header file
+ CACADevice.h : libcaca device Fim driver header file
 
  (c) 2008-2022 Michele Martone
 
@@ -20,7 +20,7 @@
 */
 #ifndef FIM_CACADEVICE_H
 #define FIM_CACADEVICE_H
-#ifdef FIM_WITH_CACALIB
+#ifdef FIM_WITH_LIBCACA
 
 #include "DisplayDevice.h"
 
@@ -31,7 +31,7 @@
 #include <caca.h>
 #endif
 
-#define FIM_CACALIB_FONT_HEIGHT 1
+#define FIM_LIBCACA_FONT_HEIGHT 1
 class CACADevice FIM_FINAL:public DisplayDevice 
 {
 	private:
@@ -92,5 +92,5 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE;
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 };
-#endif /* FIM_WITH_CACALIB */
+#endif /* FIM_WITH_LIBCACA */
 #endif /* FIM_CACADEVICE_H */

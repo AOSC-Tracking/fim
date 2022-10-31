@@ -651,9 +651,9 @@ class fim_mipmap_t FIM_FINAL
 #ifdef FIM_WITH_LIBSDL
 #include "SDLDevice.h"
 #endif /* FIM_WITH_LIBSDL */
-#ifdef FIM_WITH_CACALIB
+#ifdef FIM_WITH_LIBCACA
 #include "CACADevice.h"
-#endif /* FIM_WITH_CACALIB */
+#endif /* FIM_WITH_LIBCACA */
 #ifdef FIM_WITH_AALIB
 #include "AADevice.h"
 #endif /* FIM_WITH_AALIB */
@@ -896,11 +896,11 @@ namespace fim
 
 #define FIM_DDN_INN_CACA	 "caca"
 #define FIM_DDN_VAR_CACA	 "caca"
-#ifdef FIM_WITH_CACALIB
+#ifdef FIM_WITH_LIBCACA
 #define FIM_DDN_ICI_CACA	 "|caca"
-#else /* FIM_WITH_CACALIB */
+#else /* FIM_WITH_LIBCACA */
 #define FIM_DDN_ICI_CACA	 ""
-#endif /* FIM_WITH_CACALIB */
+#endif /* FIM_WITH_LIBCACA */
 
 #define FIM_DDN_INN_DUMB	 "dumb"
 //#define FIM_DDN_VAR_DUMB	 "dummy"

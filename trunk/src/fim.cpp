@@ -270,10 +270,10 @@ struct fim_options_t fim_options[] = {
 //#ifdef FIM_WITH_LIBIMLIB2
 "The \\fB" "imlib2" "\\fP option requests imlib2.\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
-//#ifdef FIM_WITH_CACALIB
+//#ifdef FIM_WITH_LIBCACA
 "The \\fBcaca\\fP option can be specified as \\fBcaca[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
 "The command line functionality in \\fB" "caca" "\\fP and \\fB" "aa" "\\fP modes is limited.\n"
-//#endif /* FIM_WITH_CACALIB */
+//#endif /* FIM_WITH_LIBCACA */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
 	"open at specified byte offset",
@@ -1879,9 +1879,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_WITH_AALIB
 				g_fim_output_device=FIM_DDN_INN_AA;
 	#endif /* FIM_WITH_AALIB */
-	#ifdef FIM_WITH_CACALIB
+	#ifdef FIM_WITH_LIBCACA
 				g_fim_output_device=FIM_DDN_INN_CACA;
-	#endif /* FIM_WITH_CACALIB */
+	#endif /* FIM_WITH_LIBCACA */
 			}
 			else
 			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2)
@@ -1903,11 +1903,11 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_WITH_AALIB
 			g_fim_output_device=FIM_DDN_INN_AA;
 	#else /* FIM_WITH_AALIB */
-	#ifdef FIM_WITH_CACALIB
+	#ifdef FIM_WITH_LIBCACA
 			g_fim_output_device=FIM_DDN_INN_CACA;
-	#else /* FIM_WITH_CACALIB */
+	#else /* FIM_WITH_LIBCACA */
 			g_fim_output_device=FIM_DDN_INN_DUMB ;
-	#endif /* FIM_WITH_CACALIB */
+	#endif /* FIM_WITH_LIBCACA */
 	#endif /* FIM_WITH_AALIB */
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 		}
@@ -2080,9 +2080,9 @@ extern "C" {
 	#ifdef FIM_WITH_AALIB
 		" " FIM_DDN_INN_AA
 	#endif /* FIM_WITH_AALIB */
-	#ifdef FIM_WITH_CACALIB
+	#ifdef FIM_WITH_LIBCACA
 		" " FIM_DDN_INN_CACA
-	#endif /* FIM_WITH_CACALIB */
+	#endif /* FIM_WITH_LIBCACA */
 	#ifdef FIM_WITH_LIBIMLIB2
 		" " FIM_DDN_INN_IL2
 	#endif /* FIM_WITH_LIBIMLIB2 */

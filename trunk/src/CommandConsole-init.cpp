@@ -175,7 +175,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
 		#endif /* FIM_WITH_LIBSDL */
 
-		#ifdef FIM_WITH_CACALIB
+		#ifdef FIM_WITH_LIBCACA
 		if(device.find(FIM_DDN_INN_CACA)==0)
 		{
 			DisplayDevice *cacad=FIM_NULL;
@@ -195,7 +195,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			else
 				device_failure=true;
 		}
-		#endif /* FIM_WITH_CACALIB */
+		#endif /* FIM_WITH_LIBCACA */
 
 		#ifdef FIM_WITH_AALIB
 		if(device.find(FIM_DDN_INN_AA)==0)
@@ -264,9 +264,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#ifndef FIM_WITH_LIBIMLIB2
 					|| device==FIM_DDN_VAR_IL2
 		#endif /* FIM_WITH_LIBIMLIB2 */
-		#ifndef FIM_WITH_CACALIB
+		#ifndef FIM_WITH_LIBCACA
 					|| device==FIM_DDN_INN_CACA
-		#endif /* FIM_WITH_CACALIB */
+		#endif /* FIM_WITH_LIBCACA */
 				)
 					std::cerr << "Device string \""<<device<<"\" has been configured out (disabled) at build time.\n";
 				else

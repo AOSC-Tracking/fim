@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- CACADevice.cpp : cacalib device Fim driver file
+ CACADevice.cpp : libcaca device Fim driver file
 
  (c) 2008-2022 Michele Martone
 
@@ -21,7 +21,7 @@
 
 #include "fim.h"
 
-#ifdef FIM_WITH_CACALIB
+#ifdef FIM_WITH_LIBCACA
 
 #include "CACADevice.h"
 
@@ -260,12 +260,12 @@ err:
 	fim_coo_t CACADevice::get_chars_per_column(void)const{return txt_height();}
 	fim_coo_t CACADevice::font_height(void)const
 	{
-		return FIM_CACALIB_FONT_HEIGHT;
+		return FIM_LIBCACA_FONT_HEIGHT;
 	}
 
 	fim_coo_t CACADevice::status_line_height(void)const
 	{
-		return FIM_CACALIB_FONT_HEIGHT;
+		return FIM_LIBCACA_FONT_HEIGHT;
 	}
 
 	fim_sys_int CACADevice::get_input(fim_key_t * c, bool want_poll)
@@ -353,4 +353,4 @@ err:
 #endif
 		return FIM_ERR_NO_ERROR;
 	}
-#endif /* FIM_WITH_CACALIB */
+#endif /* FIM_WITH_LIBCACA */
