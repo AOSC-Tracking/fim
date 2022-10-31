@@ -21,7 +21,7 @@
  * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
 # (r1707,r1711)
  * Fix: after 'quit' no command shall execute anymore (unless in -F).
-# (r1705,r1759)
+# (r1705,r1759-r1760)
  * With SDL one can specify window size as percentage of allowed size (-o sdl=w55%), or draw a help grid map (-o sdl=h).
 # (r1700)
  * With SDL (-o sdl), center window by default.
@@ -29,7 +29,7 @@
  * fix: pressing keys "1n1n" will not execute 'n' 11 times but twice.
 # (r1689)
  * configure --enable-debug is developer option now.
-# (r1679-r1688,r1721-r1722,r1753-r1758)
+# (r1679-r1688,r1721-r1722,r1753-r1758,r1760)
  * libcaca (-o caca) mode is now working.
 # (r1677,r1678,r1725)
  * Slideshow function (e.g `fim --slideshow=5 *.jpg`) now more responsive.
