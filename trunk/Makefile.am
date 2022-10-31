@@ -68,6 +68,7 @@ signed-dist: dist
 
 
 FIMNORCOPTS=-N --no-etc-rc-file --no-history
+FIMVIDEOTESTOPTS=-K fmfmwsk--++hhllt -K ':quit' -K ''
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
@@ -123,14 +124,14 @@ endif
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C "quit $$r" || test $$? = $$r ; done ;
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' -F "quit $$r" || test $$? = $$r ; done ;
 if ENABLE_CACA
-	$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o caca -K ':quit' -K ''
+	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
 endif
 if ENABLE_AA
-	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o aa   -K ':quit' -K ''
+	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa $(FIMVIDEOTESTOPTS)
 endif
 if ENABLE_SDL
 	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K ''; \
+		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl $(FIMVIDEOTESTOPTS); \
 	fi
 endif
 if ENABLE_SDL
