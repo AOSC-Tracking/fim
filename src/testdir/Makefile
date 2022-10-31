@@ -29,7 +29,7 @@ clean:
 	cp $*.ok test.ok
 	# Sleep a moment to avoid that the xterm title is messed up
 	@-sleep .2
-	-$(VALGRIND) $(FIMPROG) -o dumb                                           -c "quit;" -X -N --no-etc-rc-file -E $*.in $(BASE)/media/*jpg $(BASE)/media/fim.png $(BASE)/media/image.png > test.out
+	-$(VALGRIND) $(FIMPROG) -o dumb                                           -c "quit;" -X -N --no-etc-rc-file --no-history -E $*.in $(BASE)/media/*jpg $(BASE)/media/fim.png $(BASE)/media/image.png > test.out
 #	-$(VALGRIND) $(FIMPROG) -u unix.fim -U NONE --noplugin -s dotest.in $*.in
 	@/bin/sh -c "if test -f test.out; then\
                   if diff $*.ok test.out; \

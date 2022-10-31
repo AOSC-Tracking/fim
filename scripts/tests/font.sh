@@ -8,6 +8,7 @@ if test x != "$top_srcdir"; then true ; else top_srcdir=./ ; fi
 ff="$top_srcdir/media/fim.png media/icon_smile.gif"
 fa="-b -c quit $ff "
 fv="-V "
+fq="$FIMNORCOPTS"
 
 fail()
 {
@@ -38,13 +39,13 @@ $f $fv 2>&1 | $g 'supported file formats:'   | $g '\(png\|gif\)' | resign "missi
 
 if test x"$SSH_TTY" = x"" ; then
 export FBFONT=/dev/null
-if $f $fa -o dumb ; then fail "$f $fa does not fail as it should on wrong font file" ; 
-else echo "$f $fa correctly recognizes an invalid FBFONT variable and exits" ; fi
+if $f $fq $fa -o dumb ; then fail "$f $fa does not fail as it should on wrong font file" ; 
+else echo "$f $fq $fa correctly recognizes an invalid FBFONT variable and exits" ; fi
 else echo "Skipping FBFONT=/dev/null because seems we're running under ssh" ; fi
 
 export FBFONT=$top_srcdir/var/fonts/Lat15-Terminus16.psf
-if ! $f $fa -o dumb ; then fail "$f $fa fails, but it should not, as a correct font was provided" ; 
-else echo "$f $fa correctly recognizes a valid font file" ; fi
+if ! $f $fq $fa -o dumb ; then fail "$f $fq $fa fails, but it should not, as a correct font was provided" ; 
+else echo "$f $fq $fa correctly recognizes a valid font file" ; fi
 
 succeed "Font environment variables check PASSED"
 exit 0
