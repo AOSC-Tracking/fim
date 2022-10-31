@@ -215,7 +215,7 @@ STRINGC_DQ {STRINGC}|\'
 		return *yytext;
 	}
 
-^"/".+  {  
+^"/"([^;])+  {  
 		astrcpy(yylval.sValue,yytext+1);;
 		return SLASH_AND_REGEXP;
 	}
