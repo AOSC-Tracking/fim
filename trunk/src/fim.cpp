@@ -1007,6 +1007,12 @@ FIM_MAN_fB("fim")
 " initialization file (executed at startup, after the system wide initialization file).\n"
 
 ".TP 15\n"
+".B " FIM_CNS_HIST_COMPLETE_FILENAME "\n"
+"File where to load from or save. See"
+" (man " FIM_MAN_fR("fimrc") "(5),"
+"  man " FIM_MAN_fR("readline") "(3))."
+"\n"
+	".TP 15\n"
 ".B ~/.inputrc\n"
 "If "
 FIM_MAN_fB("fim")
