@@ -1871,7 +1871,7 @@ with_offset:
     {
       if(fr == 0)
       {
-        std::cout << "Reading an empty file ?\n";
+        std::cerr << "Reading an empty file ?\n";
         // FIXME: need to handle this case.
 	//goto ret;
       }

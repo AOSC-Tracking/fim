@@ -830,8 +830,8 @@ namespace fim
 #define FIM_KBD_PAGEDOWN			"PageDown"
 #define FIM_KBD_COLON			":"
 #define FIM_KBD_SEMICOLON			";"
-#define FIM_KBD_MOUSE_LEFT			"MouseLeft"
-#define FIM_KBD_MOUSE_RIGHT			"MouseRight"
+#define FIM_KBD_MOUSE_LEFT			"MouseLeft" /* still unused */
+#define FIM_KBD_MOUSE_RIGHT			"MouseRight" /* still unused */
 #define FIM_KBD_PLUS			"+"
 #define FIM_KBD_MINUS			"-"
 #define FIM_KBD_SLASH			"/"
