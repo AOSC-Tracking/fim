@@ -85,7 +85,7 @@ class Image FIM_FINAL
 	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
 	const struct ida_image *get_ida_image(void)const{ return img_; }
 	private:
-        mutable struct ida_image *img_     ;     /* local (eventually) copy images */
+        mutable struct ida_image *img_     ;     /* local (possibly) copy images */
 #if FIM_WANT_MIPMAPS
 	fim_mipmap_t mm_;
 #endif /* FIM_WANT_MIPMAPS */

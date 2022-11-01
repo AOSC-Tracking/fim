@@ -116,7 +116,7 @@ err:
 	fim_cxr CommandConsole::fcmd_unbind(const args_t& args)
 	{
 		/*
-		 * 	unbinds the action eventually bound to the first key name specified in args..
+		 * 	unbinds the action possibly bound to the first key name specified in args..
 		 * 	what about multiple unbindings ?
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */

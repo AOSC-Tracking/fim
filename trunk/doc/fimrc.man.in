@@ -381,7 +381,7 @@ With '+/'C or '-/'C will jump to next or previous file according to C: if 's' if
 .fi
 If {identifier|identifier2...}] is encountered after a '+' or '-' sign, jump to next or previous image having a different value for any corresponding i:{identifier} (a trailing '+' will require a non empty value).
 .fi
-Match will occur on both file name and description, eventually loaded via desc or --load-image-descriptions-file; see also '_lastgotodirection' and '_re_search_opts'.
+Match will occur on both file name and description, possibly loaded via desc or --load-image-descriptions-file; see also '_lastgotodirection' and '_re_search_opts'.
 .fi
  You can specify multiple arguments to goto: those after the first triggering a jump will be ignored.
 .fi
@@ -441,11 +441,11 @@ limit  {'-list'|'-listall'} 'variable'|['-further'|'-merge'|'-subtract'] [{expre
 .fi
  if '~$\:', to the last of the files with duplicate basename.
 .fi
- On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX.
+ On '~i' [MINIDX][-][MAXIDX], (each a number possibly followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX.
 .fi
  On '~z' will limit to files having the current file's size.
 .fi
- on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits.
+ on '~z' [MINSIZE][-][MAXSIZE], (each a number possibly followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits.
 .fi
  on '~d' will limit to files having the current file's date +- one day.
 .fi
