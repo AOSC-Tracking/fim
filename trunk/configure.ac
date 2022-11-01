@@ -281,7 +281,7 @@ if test x$fim_handle_framebuffer = xno ; then
 fi
 AM_CONDITIONAL(ENABLE_FRAMEBUFFER, test x$fim_handle_framebuffer != xno)
 
-AC_CHECK_INCLUDES_DEFAULT
+m4_if(m4_version_compare(m4_defn([AC_AUTOCONF_VERSION]),[2.72]),-1, [],[AC_CHECK_INCLUDES_DEFAULT])
 AC_PROG_EGREP
 
 AC_FUNC_MMAP
