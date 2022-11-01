@@ -7,7 +7,7 @@
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
  * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1784)
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
@@ -306,7 +306,7 @@
 # (r1021,r1228)
  * Switch -k --keysym-press <keysym> to execute simulated press of keysym at startup.
    Keysym can be prefixed by a repetition count number.
-# (r1018,r1761)
+# (r1018,r1761,r1785)
  * New switch  -/  <pattern> as short for -c /<pattern>.
  * New switch --// <pattern> as short for -c /<pattern> with _re_search_opts='f'.
 # (r1015)

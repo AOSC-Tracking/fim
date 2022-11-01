@@ -1594,7 +1594,7 @@ ok:
 		if ( autocmds_[event].find(pat) != autocmds_[event].end() )
 		if ( autocmds_[event][pat].size() )
 		{
-			const int sz = autocmds_[event][pat].size();
+			const size_t sz = autocmds_[event][pat].size();
 			const autocmds_p_t autocmds = autocmds_[event];
 			for (size_t i=0;i<sz;++i) // autocmd_ may change here, therefore the copies
 			{
