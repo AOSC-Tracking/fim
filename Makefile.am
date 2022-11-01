@@ -84,14 +84,10 @@ endif
 fbtests: all
 if WITH_EXPECT
 	$(TIMEOUT_SMALL) \
-		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fbdev $(top_srcdir)/media/; test $$? == 124 # aka broken
-	$(TIMEOUT_SMALL) \
-		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fbdev $(top_srcdir)/media/ -k q # workaround
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fbdev $(top_srcdir)/media/
 endif
 	$(TIMEOUT_SMALL) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fbdev   $(FIMVIDEOTESTOPTS) -k q # workaround
-	$(TIMEOUT_SMALL) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fbdev   $(FIMVIDEOTESTOPTS); test $$? == 124 # aka broken
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fbdev   $(FIMVIDEOTESTOPTS) 
 
 .PHONY: aatests
 aatests: all
