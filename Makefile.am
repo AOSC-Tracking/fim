@@ -210,7 +210,7 @@ if ENABLE_SDL
 	@make sdltests
 endif
 if ENABLE_AA
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'        -Kq | wc -l` -lt 100 # cover what happens hitting Tab in console mode
+	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
 endif
 if HAVE_RUNNABLE_TESTS
 if ENABLE_GIF
