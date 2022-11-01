@@ -25,7 +25,7 @@ _TERM _all_file_loaders _cache_control _command_expansion _console_buffer_free _
 bind "C-a" "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}" # scale to height
 bind "C-b" "goto '-//'"
 bind "C-e" "recording 'execute'"
-bind "C-g" "system 'fbgrab fim.png'"
+bind "C-g" "system 'fbgrab' 'fim_'._device_string.'.png'"
 bind "C-h" "help"
 bind "Tab" "toggleVerbosity"
 bind "Enter" "list 'mark';goto _lastgotodirection"
