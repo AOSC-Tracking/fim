@@ -19,7 +19,7 @@
  * man fimrc: added a section with default aliases,
 # (r1724,r1738)
  * If possible, use 'timeout' in 'make tests'.
-# (r1718-r1720,r1726)
+# (r1718-r1720,r1726,r1777-r1778)
  * Switch -K aka --chars-press <chars> simulates input of characters at startup.
 # (r1709,r1710)
  * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).

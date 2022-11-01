@@ -365,21 +365,28 @@ int fim_search_rl_startup_hook(void)
 	return 0;
 }
 
-static int redisplay_hook(void)
+static int fim_pre_input_hook(void)
 {
-	redisplay();
 #if FIM_WANT_CMDLINE_KEYPRESS
-		if ( ! cc.clkpv_.empty() )
-		{
-			fim_key_t c;
-			c = cc.clkpv_.front();
-			cc.clkpv_.pop();
-			rl_stuff_char(c);
-			return 1;
-		}
+	if ( ! cc.clkpv_.empty() )
+	{
+		fim_key_t c;
+		c = cc.clkpv_.front();
+		cc.clkpv_.pop();
+		rl_stuff_char(c);
+		return 1;
+	}
 #endif
 	return 0;
 }
+
+/*
+static int redisplay_hook(void)
+{
+	redisplay();
+	return 0;
+}
+*/
 
 /*
  * ?!
@@ -426,13 +433,13 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 		rl_outstream = fopen("/dev/null","w"); /* FIXME: seems like rl_erase_empty_line is not always working :-( */
 	}
 #endif /* FIM_WANT_COOKIE_STREAM */
+	rl_pre_input_hook=fim_pre_input_hook;
 	if(with_no_display_device==0)
 	{
 		rl_catch_signals=0;
 		rl_catch_sigwinch=0;
 		rl_redisplay_function=redisplay;
-	        rl_event_hook=redisplay_hook;
-	        rl_pre_input_hook=redisplay_hook;
+	        rl_event_hook=fim_pre_input_hook;
 	}
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
 	if(	false
