@@ -995,6 +995,7 @@ namespace fim
 #define FIM_FLT_SET_INTERACTIVE_MODE	"set_interactive_mode" /* not in vim */
 #define FIM_FLT_SET_CONSOLE_MODE	"set_commandline_mode" /* not in vim */
 #define FIM_FLT_STATUS			"status" /* not in vim */
+#define FIM_FLT_STDERR			"stderr" /* not in vim */
 #define FIM_FLT_STDOUT			"stdout" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
 #define FIM_FLT_RECORDING		"recording" /* not in vim */
@@ -1083,6 +1084,7 @@ namespace fim
 #define FIM_CMD_HELP_SET_INTERACTIVE_MODE FIM_FLT_SET_INTERACTIVE_MODE ": set interactive mode."
 #define FIM_CMD_HELP_SLEEP FIM_FLT_SLEEP " [" FIM_CNS_EX_NUM_STRING "=1]: sleep for the specified (default 1) number of seconds."
 #define FIM_CMD_HELP_STATUS FIM_FLT_STATUS ": set the status line to the collation of the given arguments."
+#define FIM_CMD_HELP_STDERR FIM_FLT_STDERR " " FIM_CNS_EX_ARGS_STRING ": writes to stderr its arguments " FIM_CNS_EX_ARGS_STRING "."
 #define FIM_CMD_HELP_STDOUT FIM_FLT_STDOUT " " FIM_CNS_EX_ARGS_STRING ": writes to stdout its arguments " FIM_CNS_EX_ARGS_STRING "."
 #define FIM_CMD_HELP_VARIABLES FIM_FLT_VARIABLES ": display the existing variables."
 #define FIM_CMD_HELP_UNALIAS FIM_FLT_UNALIAS " " FIM_CNS_EX_ID_STRING " | '-a': delete the alias " FIM_CNS_EX_ID_STRING " or all aliases (use '-a', not -a)."
