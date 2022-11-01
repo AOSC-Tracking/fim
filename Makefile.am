@@ -70,6 +70,7 @@ signed-dist: dist
 
 FIMNORCOPTS=-N --no-etc-rc-file --no-history
 FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhlltW' -K ':quit' -K ''
+NO_ASAN=ASAN_OPTIONS=detect_leaks=0
 
 if ENABLE_CACA
 FIM_USE_ASCII_ART_DEFAULT=caca
@@ -82,17 +83,17 @@ endif
 .PHONY: aatests
 aatests: all
 if WITH_EXPECT
-	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) \
+	$(NO_ASAN) $(TIMEOUT_SMALL) \
 		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/
 endif
-	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_SMALL) \
+	$(NO_ASAN) $(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa   $(FIMVIDEOTESTOPTS)
 	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
+		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
 	fi
-	test `SSH_TTY=1       ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
-	test `(unset SSH_TTY; ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 
 .PHONY: cacatests
 cacatests: all
@@ -103,17 +104,17 @@ endif
 	$(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
 	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
+		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca=w $(FIMVIDEOTESTOPTS); \
 	fi
-	test `SSH_TTY=1       ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
-	test `(unset SSH_TTY; ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 
 
 .PHONY: sdltests
 sdltests: all
 	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
+		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS); \
 	fi
 
@@ -227,7 +228,7 @@ endif
 if ENABLE_SDL
 if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \
-		ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
+		$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
 	fi
 endif
 endif
