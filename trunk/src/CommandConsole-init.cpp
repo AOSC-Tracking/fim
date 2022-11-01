@@ -336,6 +336,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			execute_internal(FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_X_QUIET);
     #endif		/* FIM_DEFAULT_CONFIGURATION */
 		}
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,""); 
   #endif /* FIM_WANT_NOSCRIPTING */
 
 #ifndef FIM_NOFIMRC
@@ -343,7 +344,6 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		fim_char_t rcfile[FIM_PATH_MAX];
 		const fim_char_t * const e = fim_getenv(FIM_CNS_HOME_VAR);
 
-	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,""); 
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREGFIMRC,""); 
 
 		if((getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )

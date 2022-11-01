@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1781)
+ * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc
 # (r1771-r1773,r1776-r1777,r1781)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
