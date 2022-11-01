@@ -443,6 +443,7 @@ ret:		return key;
 		addCommand(Command(FIM_FLT_SET_INTERACTIVE_MODE,FIM_CMD_HELP_SET_INTERACTIVE_MODE,this,&CommandConsole::fcmd_set_interactive_mode));
 		addCommand(Command(FIM_FLT_SLEEP,FIM_CMD_HELP_SLEEP,this,&CommandConsole::fcmd_foo));
 		addCommand(Command(FIM_FLT_STATUS,FIM_CMD_HELP_STATUS,this,&CommandConsole::fcmd_status));
+		addCommand(Command(FIM_FLT_STDERR,FIM_CMD_HELP_STDERR,this,&CommandConsole::fcmd__stderr));
 		addCommand(Command(FIM_FLT_STDOUT,FIM_CMD_HELP_STDOUT ,this,&CommandConsole::fcmd__stdout));
 #ifndef FIM_NO_SYSTEM
 		addCommand(Command(FIM_FLT_SYSTEM,FIM_CMD_HELP_SYSTEM,this,&CommandConsole::fcmd_system));

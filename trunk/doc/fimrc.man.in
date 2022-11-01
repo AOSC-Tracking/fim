@@ -707,6 +707,13 @@ status: set the status line to the collation of the given arguments.
 
 .na
 .B
+stderr
+.fi
+stderr {args}: writes to stderr its arguments {args}.
+.fi
+
+.na
+.B
 stdout
 .fi
 stdout {args}: writes to stdout its arguments {args}.

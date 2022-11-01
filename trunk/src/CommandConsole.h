@@ -239,6 +239,7 @@ class CommandConsole FIM_FINAL :
 	fim::string do_echo(const args_t& args)const;
 	fim_cxr fcmd_help(const args_t& args);
 	fim_cxr fcmd_quit(const args_t& args);
+	fim_cxr fcmd__stderr(const args_t& args);
 	fim_cxr fcmd__stdout(const args_t& args);
 	fim_cxr fcmd_foo (const args_t& args);
 	fim_cxr fcmd_status(const args_t& args);

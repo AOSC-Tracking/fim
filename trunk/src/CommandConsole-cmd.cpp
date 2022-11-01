@@ -308,6 +308,18 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+	fim_cxr CommandConsole::fcmd__stderr(const args_t& args)
+	{
+		/*
+		 * a command to echo to stdout arguments, for debug and learning purposes
+		 */
+		if(args.size()==0)
+			std::cerr<<"echo command\n";
+		for(size_t i=0;i<args.size();++i)
+			std::cerr << (args[i].c_str()) << "\n";
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
 	fim_cxr CommandConsole::fcmd__stdout(const args_t& args)
 	{
 		/*
