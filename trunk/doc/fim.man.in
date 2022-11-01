@@ -219,8 +219,8 @@ Interruptible slideshow mode. Wait for {number} of seconds (assigned to the _wan
 Perform a quick sanity check, just after the initialization, and terminate.
 .TP
 .B -t, --no-framebuffer
-\fBfim\fP will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).
-If aalib was not enabled at tompile time, fim will work without displaying images at all.
+\fBfim\fPUse an ASCII art driver if possible. If built in, either of libcaca (coloured) or aalib (monochrome). For more, see (man fimrc), (info aalib) or (apropos caca)).
+If no ASCII Art driver was enabled at compile time, fim will not display any image at all.
 .TP
 .B -T {terminal}, --vt {terminal}
 The \fBterminal\fP will be used as virtual terminal device file (as in fbi).

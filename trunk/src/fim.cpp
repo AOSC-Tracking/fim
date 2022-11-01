@@ -304,8 +304,8 @@ struct fim_options_t fim_options[] = {
     },	/* NEW */
     {"no-framebuffer",      no_argument,       FIM_NULL, 't',
 	"display images in text mode (as -o " FIM_DDN_INN_AA ")",FIM_NULL,
-	FIM_MAN_fB("fim") " will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).\n"
-	"If aalib was not enabled at tompile time, fim will work without displaying images at all."
+	FIM_MAN_fB("fim") "Use an ASCII Art driver. If present, use either of libcaca (coloured), or aalib (monochrome). For more, see (man fimrc), (info aalib) or (apropos caca)).\n"
+	"If no ASCII Art driver was enabled at compile time, fim will not display any image at all."
     },
     {"vt",         required_argument, FIM_NULL, 'T',
 	"specify a virtual terminal for the framebufer", "{terminal}",
@@ -1641,12 +1641,12 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_HISTORY */
 		case 't':
 		    //fim's
-			#ifdef FIM_WITH_AALIB
-		    	g_fim_output_device=FIM_DDN_INN_AA;
-			#else /* FIM_WITH_AALIB */
-			std::cerr << "you should recompile fim with aalib support!\n";
+			#ifdef FIM_USE_ASCII_ART_DEFAULT
+		    	g_fim_output_device=FIM_USE_ASCII_ART_DEFAULT;
+			#else /* FIM_USE_ASCII_ART_DEFAULT */
+			std::cerr << "you should recompile fim with aalib or libcaca support!\n";
 			g_fim_output_device=FIM_DDN_INN_DUMB;
-			#endif /* FIM_WITH_AALIB */
+			#endif /* FIM_USE_ASCII_ART_DEFAULT */
 		    break;
 		case 'o':
 		    //fim's
