@@ -16,7 +16,7 @@ The long command options of fim are: --autozoom --binary --as-text --cd-and-read
 --help is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: print program invocation help and exit
 
 *
-alias align autocmd autocmd_del basename bind cd clear commands color desc display dump_key_codes echo else eval exec font getenv goto help if info limit list load pan popen pread prefetch pwd quit recording redisplay reload rotate scale scroll set set_commandline_mode set_interactive_mode sleep status stdout system variables unalias unbind while window
+alias align autocmd autocmd_del basename bind cd clear commands color desc display dump_key_codes echo else eval exec font getenv goto help if info limit list load pan popen pread prefetch pwd quit recording redisplay reload rotate scale scroll set set_commandline_mode set_interactive_mode sleep status stderr stdout system variables unalias unbind while window
 *
 
 *

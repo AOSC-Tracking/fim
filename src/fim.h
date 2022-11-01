@@ -604,6 +604,17 @@ inline auto FIM_MAX(T x, S y)
 "!" FIM_CNS_EX_SYSC_STRING "		executes the " FIM_CNS_EX_SYSC_STRING " quoted string as an argument to the  \"" FIM_FLT_SYSTEM "\" fim command.\n"\
 ""
 
+#ifdef FIM_WITH_LIBCACA
+#define FIM_USE_ASCII_ART_DEFAULT FIM_DDN_INN_CACA
+#else /* FIM_WITH_LIBCACA */
+#ifdef FIM_WITH_AALIB
+#define FIM_USE_ASCII_ART_DEFAULT FIM_DDN_INN_AA
+#else /* FIM_WITH_AALIB */
+#undef FIM_USE_ASCII_ART_DEFAULT /*undefined */
+#endif /* FIM_WITH_AALIB */
+#endif /* FIM_WITH_LIBCACA */
+
+
 #define FIM_MAX_MIPMAPS 32 /* pretty large ;-) */
 #define FIM_HYPOTHENUSE_OF(C1,C2) sqrt( (C1)*(C1) + (C2)*(C2) )
 #define FIM_HYPOTHENUSE_OF_INT(C1,C2) ceil( FIM_HYPOTHENUSE_OF(((double)(C1)),((double)(C2))) + 1.0 )
