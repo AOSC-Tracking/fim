@@ -118,6 +118,8 @@
 		struct caca_dither *dither = caca_create_dither(32, width(), height(), 4 * width(), 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
 		caca_set_dither_algorithm(dither, caca_get_dither_algorithm_list(NULL)[4]);
 		char * dst = (char*)fim_calloc(width()*height(),4);
+		if (!dst)
+			goto err;
 		if(!mirror && !flip)
 		for (int r=oroff; r < oroff+orows; ++r )
 		for (int c=ocoff; c < ocoff+ocols; ++c )
@@ -139,6 +141,7 @@
 			dst[(r*width() + c)*4 + p] = sp;
 		}
 		caca_dither_bitmap(cv_, 0, 0, txt_width(), txt_height(), dither, dst);
+err:
 		fim_free(dst);
 #else
     		struct caca_dither *dither = caca_create_dither(24, icols, irows, 3 * icols , 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
