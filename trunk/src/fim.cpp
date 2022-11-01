@@ -1566,7 +1566,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 'c':
 		    //fim's
-		    cc.appendPostInitCommand(std::string(optarg)+"\n");
+		    cc.appendPostInitCommand(std::string(optarg));
 		    appendedPostInitCommand=true;
 		    break;
 		case 'C':
