@@ -279,6 +279,7 @@ fi
 if test x$fim_handle_framebuffer = xno ; then
 	AC_DEFINE(FIM_WITH_NO_FRAMEBUFFER, 1, [Defined when framebuffer device support is turned off.])
 fi
+AM_CONDITIONAL(ENABLE_FRAMEBUFFER, test x$fim_handle_framebuffer != xno)
 
 AC_CHECK_INCLUDES_DEFAULT
 AC_PROG_EGREP

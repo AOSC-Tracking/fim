@@ -196,6 +196,9 @@ endif
 if ENABLE_CACA
 	@make cacatests
 endif
+if ENABLE_FRAMEBUFFER
+	@if test -z "$(DISPLAY)$(SSH_TTY)"; then make fbtests; fi
+endif
 if ENABLE_SDL
 	@make sdltests
 endif
