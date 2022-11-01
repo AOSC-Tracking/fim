@@ -662,7 +662,6 @@ done:
 				it_buf = -1,
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
-			if( show_must_go_on_ > 0 )
 				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 		}
 
@@ -1562,6 +1561,9 @@ ok:
 		 * we want to prevent from looping autocommands; this rudimentary mechanism shall avoid them.
 		 */
 		autocmds_loop_frame_t frame(event,fname);
+
+		if( show_must_go_on_ == 0 )
+			return FIM_CNS_EMPTY_RESULT;
 
 		if(! autocmd_in_stack( frame ))
 		{
