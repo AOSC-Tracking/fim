@@ -2368,13 +2368,14 @@ ret:
 
 	fim_sys_int CommandConsole::get_displaydevice_input(fim_key_t * c, bool want_poll)
 	{
+		// Note: get_displaydevice_input not used in fbdev command line mode (bad; see also fim_pre_input_hook).
 #if FIM_WANT_CMDLINE_KEYPRESS
 		if ( ! cc.clkpv_.empty() )
 		{
 			*c = cc.clkpv_.front();
 			cc.clkpv_.pop();
-			// std::cout << "emitting " << (fim_char_t)*c << " ("  << cc.clkpv_.size() << " chars left)\n";
 			return 1;
+			// std::cout << "emitting " << (fim_char_t)*c << " ("  << cc.clkpv_.size() << " chars left)\n";
 		}
 #endif
 		return displaydevice_->get_input(c, want_poll);
