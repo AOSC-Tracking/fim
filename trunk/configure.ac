@@ -1913,6 +1913,7 @@ AC_ARG_ENABLE(raw-bits-rendering, AS_HELP_STRING([--disable-raw-bits-rendering],
 if test x$fim_want_rbr = xyes ; then
 	AC_DEFINE_UNQUOTED([FIM_WANT_RAW_BITS_RENDERING], 1, [Enables raw bits rendering])
 fi
+AM_CONDITIONAL(ENABLE_RAW_BITS_RENDERING, test x$fim_want_rbr == xyes)
 dnl ==================
 AH_TEMPLATE([FIM_ALLOW_LOADER_STRING_SPECIFICATION])
 fim_want_lss=yes
