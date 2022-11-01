@@ -445,7 +445,7 @@ rerr:
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_FREE, (bsize_-(bp_-buffer_)));
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_USED, (bp_-buffer_));
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_LINES,cline_);
-			// we eventually update internal variables now
+			// we possibly update internal variables now
 			setRows(ls);
 			if( lw > 0 && lw!=lwidth_ )
 				reformat(lw);

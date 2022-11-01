@@ -160,7 +160,7 @@ namespace fim
 	fim::string CommandConsole::unbind(const fim::string& kfstr)
 	{
 		/*
-		 * 	unbinds the action eventually bound to the first key name specified in args..
+		 * 	unbinds the action possibly bound to the first key name specified in args..
 		 */
 		fim_key_t key=FIM_SYM_NULL_KEY;
 #ifdef FIM_WANT_RAW_KEYS_BINDING
@@ -226,7 +226,7 @@ ret:		return key;
 	fim::string CommandConsole::unbind(fim_key_t c)
 	{
 		/*
-		 * unbinds the action eventually bound to the key combination code c
+		 * unbinds the action possibly bound to the key combination code c
 		 */
 		std::ostringstream oss;
 		const bindings_t::const_iterator bi=bindings_.find(c);
@@ -410,10 +410,10 @@ ret:		return key;
 		FIM_CNS_CMDSEP " if '~^', to the first of the files with duplicate basename."
 		FIM_CNS_CMDSEP " if '~$', to the last of the files with duplicate basename."
 #endif /* FIM_WANT_LIMIT_DUPBN */
-		FIM_CNS_CMDSEP " On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX."
+		FIM_CNS_CMDSEP " On '~i' [MINIDX][-][MAXIDX], (each a number possibly followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX."
 #if FIM_WANT_FLIST_STAT 
 		FIM_CNS_CMDSEP " On '~z' will limit to files having the current file's size."
-		FIM_CNS_CMDSEP " on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits."
+		FIM_CNS_CMDSEP " on '~z' [MINSIZE][-][MAXSIZE], (each a number possibly followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits."
 		FIM_CNS_CMDSEP " on '~d' will limit to files having the current file's date +- one day."
 		FIM_CNS_CMDSEP " on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's 'st_mtime', in seconds) within this interval."
 #endif /* FIM_WANT_FLIST_STAT */
@@ -1968,7 +1968,7 @@ ok:
 	}
 
 	/*
-	 * insert desc text into the textual console; eventually display it
+	 * insert desc text into the textual console; possibly display it
 	 */
 	void CommandConsole::status_screen(const fim_char_t *desc)
 	{
