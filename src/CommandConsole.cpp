@@ -1774,8 +1774,8 @@ ok:
 		 * make cmd dumpable
 		 */
 		if(cmd.c_str()[strlen(cmd.c_str())-1]!=FIM_SYM_SEMICOLON)
-			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING);
-		return cmd;
+			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING FIM_CNS_NEWLINE);	
+		return cmd+fim::string(FIM_CNS_NEWLINE);	
 	}
 #endif /* FIM_RECORDING */
 	void CommandConsole::appendPostInitCommand(const fim::string& cmd)
