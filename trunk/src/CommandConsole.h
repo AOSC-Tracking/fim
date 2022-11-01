@@ -282,12 +282,13 @@ class CommandConsole FIM_FINAL :
 	autocmds_stack_t autocmds_stack;
 	fim_cxr fcmd_bind(const args_t& args);
 	fim_key_t kstr_to_key(const fim_char_t * kstr)const;
-#if FIM_WANT_CMDLINE_KEYPRESS
 	public:
+	int pop_key_press(fim_key_t *cp);
+#if FIM_WANT_CMDLINE_KEYPRESS
 	std::vector<fim::string > clkcv_; /* command line key-bound commands vector*/
 	void push_key_press(const char *cp);
-	std::queue<char,std::list<char>> clkpv_; /* command line key presses vector*/
 	private:
+	std::queue<char,std::list<char>> clkpv_; /* command line key presses vector*/
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	fim::string getAliasesList(FimDocRefMode refmode=DefRefMode)const;
 	fim::string dummy(const args_t& args);

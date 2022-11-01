@@ -933,14 +933,7 @@ ok:
 		if ( exitBinding_ == 0 )
 		       	goto err;	/* any key triggers an exit */
 
-#if FIM_WANT_CMDLINE_KEYPRESS
-		if ( ! cc.clkpv_.empty() )
-		{
-			c = cc.clkpv_.front();
-			cc.clkpv_.pop();
-		}
-		else
-#endif
+		if ( ! pop_key_press(&c) )
 			c = displaydevice_->catchInteractiveCommand(seconds);
 		while(c!=-1)
 		{
@@ -2369,15 +2362,8 @@ ret:
 	fim_sys_int CommandConsole::get_displaydevice_input(fim_key_t * c, bool want_poll)
 	{
 		// Note: get_displaydevice_input not used in fbdev command line mode (bad; see also fim_pre_input_hook).
-#if FIM_WANT_CMDLINE_KEYPRESS
-		if ( ! cc.clkpv_.empty() )
-		{
-			*c = cc.clkpv_.front();
-			cc.clkpv_.pop();
+		if ( pop_key_press(c) )
 			return 1;
-			// std::cout << "emitting " << (fim_char_t)*c << " ("  << cc.clkpv_.size() << " chars left)\n";
-		}
-#endif
 		return displaydevice_->get_input(c, want_poll);
 	}
 
@@ -2692,14 +2678,28 @@ fim_int CommandConsole::show_must_go_on(void) const
 	return show_must_go_on_;
 }
 
+int CommandConsole::pop_key_press(fim_key_t *cp)
+{
 #if FIM_WANT_CMDLINE_KEYPRESS
-	void CommandConsole::push_key_press(const char *cp)
+	if ( ! cc.clkpv_.empty() )
 	{
-		if ((!clkpv_.empty()) || !cp || !*cp) 
-			clkpv_.push(FIM_SYM_ENTER);
-		for (; cp && *cp; ++cp)
-			clkpv_.push(*cp);
+		*cp = cc.clkpv_.front();
+		cc.clkpv_.pop();
+		return 1;
+		// std::cout << "emitting " << (fim_char_t)*cp << " ("  << cc.clkpv_.size() << " chars left)\n";
 	}
+#endif
+	return 0;
+}
+
+#if FIM_WANT_CMDLINE_KEYPRESS
+void CommandConsole::push_key_press(const char *cp)
+{
+	if ((!clkpv_.empty()) || !cp || !*cp) 
+		clkpv_.push(FIM_SYM_ENTER);
+	for (; cp && *cp; ++cp)
+			clkpv_.push(*cp);
+}
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 
 } /* namespace fim */
