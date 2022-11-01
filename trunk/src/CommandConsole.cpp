@@ -983,7 +983,7 @@ err:
 #ifdef	FIM_USE_GPM
 		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,FIM_NULL);
 #endif	/* FIM_USE_GPM */
-		fim::string initial = browser_.current();
+		const fim::string initial = browser_.current();
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLE,initial);
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
 		*prompt_=FIM_SYM_PROMPT_NUL;
@@ -1491,8 +1491,7 @@ ret:
 		{
 			/* deletion of all autocmd's */
 			n = autocmds_.size();
-			for( ai=autocmds_.begin();ai!=autocmds_.end();++ai )
-				autocmds_.erase(ai);
+			autocmds_.erase(autocmds_.begin(),autocmds_.end());
 		}
 		else
 		if(action==FIM_CNS_EMPTY_STRING   && pattern==FIM_CNS_EMPTY_STRING    )
@@ -1567,8 +1566,12 @@ ok:
 		if(! autocmd_in_stack( frame ))
 		{
 			autocmd_push_stack( frame );
-			for( api=autocmds_[event].begin();api!=autocmds_[event].end();++api )
- 				autocmd_exec(event,(*api).first,fname);
+			if ( autocmds_.find(event) != autocmds_.end() )
+			{
+				const autocmds_p_t ea = autocmds_[event]; // need copy because autocmd_ may be changed
+				for( api=ea.begin();api!=ea.end();++api )
+ 					autocmd_exec(event,(*api).first,fname);
+			}
 			autocmd_pop_stack( frame );
 		}
 		else
@@ -1586,16 +1589,21 @@ ok:
 
 		if(getIntVariable(FIM_VID_DBG_AUTOCMD_TRACE_STACK)!=0)
 			autocmd_trace_stack();
-			
-		if(regexp_match(fname.c_str(),pat.c_str(),getIntVariable(FIM_VID_IGNORECASE)))
+		if ( regexp_match(fname.c_str(),pat.c_str(),getIntVariable(FIM_VID_IGNORECASE)) )
+		if ( autocmds_.find(event) != autocmds_.end() )
+		if ( autocmds_[event].find(pat) != autocmds_[event].end() )
+		if ( autocmds_[event][pat].size() )
 		{
-			for (size_t i=0;i<autocmds_[event][pat].size();++i)
+			const int sz = autocmds_[event][pat].size();
+			const autocmds_p_t autocmds = autocmds_[event];
+			for (size_t i=0;i<sz;++i) // autocmd_ may change here, therefore the copies
 			{
-				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),(autocmds_[event][pat][i]).c_str());
+				const fim_fn_t acmd = autocmds.find(pat)->second[i].c_str();
+				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),acmd);
 				if(getVariable(FIM_VID_DBG_COMMANDS).find('a') >= 0)
-					std::cout << FIM_CNS_DBG_CMDS_PFX << "autocmd: '"<<event<<"'->'"<<fim_shell_arg_escape(autocmds_[event][pat][i])<<"'\n";
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "autocmd: '"<<event<<"'->'"<<fim_shell_arg_escape(acmd)<<"'\n";
 				autocmds_stack.push_back(frame);
-				execute_internal((autocmds_[event][pat][i]).c_str(),FIM_X_QUIET);
+				execute_internal(acmd.c_str(),FIM_X_QUIET);
 				autocmds_stack.pop_back();
 			}
 		}

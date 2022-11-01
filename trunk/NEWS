@@ -3,9 +3,11 @@
 
                 Version 0.6-trunk
 
+# (r1784)
+ * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
- * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc
-# (r1771-r1773,r1776-r1777,r1781,r1783)
+ * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1784)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
