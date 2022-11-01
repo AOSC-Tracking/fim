@@ -80,6 +80,19 @@ FIM_USE_ASCII_ART_DEFAULT=aa
 endif
 endif
 
+.PHONY: fbtests
+fbtests: all
+if WITH_EXPECT
+	$(TIMEOUT_SMALL) \
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fbdev $(top_srcdir)/media/; test $$? == 124 # aka broken
+	$(TIMEOUT_SMALL) \
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fbdev $(top_srcdir)/media/ -k q # workaround
+endif
+	$(TIMEOUT_SMALL) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fbdev   $(FIMVIDEOTESTOPTS) -k q # workaround
+	$(TIMEOUT_SMALL) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fbdev   $(FIMVIDEOTESTOPTS); test $$? == 124 # aka broken
+
 .PHONY: aatests
 aatests: all
 if WITH_EXPECT
