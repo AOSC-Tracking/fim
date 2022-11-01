@@ -367,16 +367,12 @@ int fim_search_rl_startup_hook(void)
 
 static int fim_pre_input_hook(void)
 {
-#if FIM_WANT_CMDLINE_KEYPRESS
-	if ( ! cc.clkpv_.empty() )
+	fim_key_t c;
+	if ( cc.pop_key_press(&c) )
 	{
-		fim_key_t c;
-		c = cc.clkpv_.front();
-		cc.clkpv_.pop();
 		rl_stuff_char(c);
 		return 1;
 	}
-#endif
 	return 0;
 }
 
