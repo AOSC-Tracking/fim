@@ -1726,10 +1726,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_WANT_CMDLINE_KEYPRESS
 		case 'K':
-			if ((!cc.clkpv_.empty()) || !optarg || !*optarg) 
-				cc.clkpv_.push(FIM_SYM_ENTER);
-			for (char * cp = optarg; cp && *cp; ++cp)
-				cc.clkpv_.push(*cp);
+			cc.push_key_press(optarg);
 		    break;
 		case 'k':
 			cc.clkcv_.push_back(optarg);

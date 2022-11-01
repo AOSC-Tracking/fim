@@ -2691,4 +2691,15 @@ fim_int CommandConsole::show_must_go_on(void) const
 {
 	return show_must_go_on_;
 }
+
+#if FIM_WANT_CMDLINE_KEYPRESS
+	void CommandConsole::push_key_press(const char *cp)
+	{
+		if ((!clkpv_.empty()) || !cp || !*cp) 
+			clkpv_.push(FIM_SYM_ENTER);
+		for (; cp && *cp; ++cp)
+			clkpv_.push(*cp);
+	}
+#endif /* FIM_WANT_CMDLINE_KEYPRESS */
+
 } /* namespace fim */
