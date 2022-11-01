@@ -1102,16 +1102,15 @@ done:
 	    return code;
 }
 
-static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t pf)
+static fim_err_t fim_load_filelist(const char *fn, const char sac, fim_flags_t pf)
 {
 			/* TODO: move to CommandConsole */
 	    		/*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
+			const char sa [2] = { sac ? sac : FIM_SYM_CHAR_ENDL, FIM_SYM_CHAR_NUL };
 			fim_char_t *lineptr=FIM_NULL;
 			size_t bs=0;
 			int fc=0;
 			FILE * fd = FIM_NULL;
-			
-			sa = sa ? sa : "\n";
 		
 			if(fn)
 				fd = fim_fopen(fn,"r");
@@ -1692,16 +1691,18 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    //fim's
 		    FIM_SROC(read_stdin_choice,FilesList);
 		    break;
+	#endif /* FIM_READ_STDIN */
 		case 0x72667373:
 		    sac = *optarg;
 		    break;
+	#ifdef FIM_READ_STDIN
 		case 0:
 		    //fim's
 		    FIM_SROC(read_stdin_choice,FilesList);
 		    break;
 	#endif /* FIM_READ_STDIN */
 		case 'L':
-			fim_load_filelist(optarg,&sac,pf);
+			fim_load_filelist(optarg,sac,pf);
 		    break;
 		case '/':
 		    //fim's
@@ -1793,7 +1794,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		 * */
 		if( read_stdin_choice == FilesList )
 		{
-			fim_load_filelist(FIM_NULL,&sac,pf);
+			fim_load_filelist(FIM_NULL,sac,pf);
 			close(0);
 			ndd=dup(2);
 		}

@@ -191,6 +191,10 @@ endif
 	fi # cover-test FbiStuffPpm.cpp
 if ENABLE_PCX
 	cd $(top_srcdir)/media/numbers_pcx/; ls ; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS)                            --read-from-file ../special/images.list   -c 'if(_filelistlen!=2)quit 255; quit'
+if WANT_READ_STDIN_IMAGE
+	cd $(top_srcdir)/media/numbers_pcx/; ls ; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --read-from-stdin-elds '!' --read-from-file ../special/images.list   -c 'if(_filelistlen!=0)quit 255; quit'
+	cd $(top_srcdir)/media/numbers_pcx/; ls ; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --read-from-stdin-elds '!' --read-from-file ../special/collated.list -c 'if(_filelistlen!=2)quit 255; quit'
+endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --mark-from-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'l=_filelistlen;toggleLimitMarked;if(_filelistlen!=l/2)quit 255; quit'
