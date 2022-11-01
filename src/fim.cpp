@@ -74,23 +74,25 @@ struct fim_options_t fim_options[] = {
 	"scale according to a best fit",FIM_NULL,
 	"Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image (as in fbi)."
     },
-#if FIM_WANT_RAW_BITS_RENDERING
     {FIM_OSW_BINARY,     optional_argument,       FIM_NULL, 'b',
 	"view any file as either a 1 or 24 bpp bitmap", "[=24|1]",
 	"Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.\n" 
 	"Image width will not exceed the value of the " FIM_VID_PREFERRED_RENDERING_WIDTH " variable.\n"
 	"Regard this as an easter bunny option.\n"
-    },
+#if !FIM_WANT_RAW_BITS_RENDERING
+	// "(disabled)"
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
-#if FIM_WANT_TEXT_RENDERING
+    },
     {FIM_OSW_TEXT,     no_argument,       FIM_NULL, 0x74657874,
 	"view any file as rendered text characters", FIM_NULL,
 	"Display (any filetype) files contents as they were text.\n" 
 	"Image width will not exceed the value of the " FIM_VID_PREFERRED_RENDERING_WIDTH " variable.\n"
 	"Non-printable characters will be displayed as \"" FIM_SYM_UNKNOWN_STRING "\".\n"
 	"Regard this as an easter bunny option.\n"
-    },
+#if !FIM_WANT_RAW_BITS_RENDERING
+	// "(disabled)"
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
+    },
     {"cd-and-readdir", no_argument,       FIM_NULL, 0x4352,
 	    "step in first loaded directory and push other files", FIM_NULL,
 	    "Step into the first loaded directory and, then push other files."
@@ -1270,14 +1272,10 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'b':
 		    //fim's
 		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
-			{
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,1);
-			}
 		    else
 		    if(optarg && strstr(optarg,"24")==optarg && !optarg[2])
-			{
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,24);
-			}
                     else
 		    {
 			if(optarg)
@@ -1286,7 +1284,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
                     }
 		    break;
 #else /* FIM_WANT_RAW_BITS_RENDERING */
+		case 'b':
 			std::cerr<<"Warning: the --" FIM_OSW_BINARY " option was disabled at compile time.\n";
+		    break;
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
 		case 'A':
 		    //fbi's
