@@ -368,6 +368,16 @@ int fim_search_rl_startup_hook(void)
 static int redisplay_hook(void)
 {
 	redisplay();
+#if FIM_WANT_CMDLINE_KEYPRESS
+		if ( ! cc.clkpv_.empty() )
+		{
+			fim_key_t c;
+			c = cc.clkpv_.front();
+			cc.clkpv_.pop();
+			rl_stuff_char(c);
+			return 1;
+		}
+#endif
 	return 0;
 }
 
