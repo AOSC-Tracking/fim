@@ -91,7 +91,8 @@ endif
 		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
 	fi
-	test `ASAN_OPTIONS=detect_leaks=0 SSH_TTY=1 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `SSH_TTY=1       ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `(unset SSH_TTY; ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 
 .PHONY: cacatests
 cacatests: all
@@ -105,7 +106,8 @@ endif
 		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca=w $(FIMVIDEOTESTOPTS); \
 	fi
-	test `ASAN_OPTIONS=detect_leaks=0 SSH_TTY=1 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `SSH_TTY=1       ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
+	test `(unset SSH_TTY; ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 
 
 .PHONY: sdltests
