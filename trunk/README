@@ -190,6 +190,9 @@ You find all of these on any decent Linux distribution.
  # run the test suite
  make tests
 
+ # run only -o fbdev tests (if disabled, fail)
+ make fbtests
+
  # run only -o sdl tests (if disabled, fail)
  make sdltests
 
