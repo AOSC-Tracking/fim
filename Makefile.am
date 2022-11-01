@@ -288,6 +288,7 @@ endif
 	@test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man | wc -c` -gt 60000
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'exec "src/fimrc"; echo; stdout; pwd; status "status" unalias' -c quit #; cover test misc corner cases (note: no functionality check here)
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd; autocmd "PostDisplay";autocmd "PostDisplay" "pattern";autocmd "1" "2" "toomuch"' -c quit #; cover test misc corner cases (note: no functionality check here)
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3"' -c quit #; cover test misc corner cases (note: no functionality check here)
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unbind; unbind "?"; bind "~"; bind "n"; bind "n" ""' -c quit
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'color "desaturate";color "negate";color "identity";color "colorblind" "daltonize";color "deuteranopia" "daltonize";color "protanopia" "daltonize";color "tritanopia" "daltonize";color "colorblind"' -c quit # only cover test
 	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi
