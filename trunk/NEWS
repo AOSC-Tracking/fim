@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1771)
+ * internal: considerably expanded 'make tests'.
 # (r1770)
  * Add command 'stderr', similar to 'stdout'.
 # (r1739,TODO)

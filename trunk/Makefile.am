@@ -83,6 +83,7 @@ endif
 		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
 	fi
+	test `ASAN_OPTIONS=detect_leaks=0 SSH_TTY=1 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq 2>&1 > /dev/null` == aa #
 
 .PHONY: cacatests
 cacatests: all
@@ -96,6 +97,9 @@ endif
 		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca=w $(FIMVIDEOTESTOPTS); \
 	fi
+if ENABLE_AA
+	test `ASAN_OPTIONS=detect_leaks=0 SSH_TTY=1 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq 2>&1 > /dev/null` == aa #
+endif
 
 
 .PHONY: sdltests
@@ -104,6 +108,9 @@ sdltests: all
 		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS); \
 	fi
+if ENABLE_AA
+	test `ASAN_OPTIONS=detect_leaks=0 SSH_TTY=1 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq 2>&1 > /dev/null` == aa #
+endif
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
