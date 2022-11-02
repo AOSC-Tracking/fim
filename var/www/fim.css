@@ -8,7 +8,7 @@
 /* h2 { color: #fff; font-weight: bolder; font-size: 20pt; line-height: 20pt; background-color: #363636; text-align: center; text-transform: uppercase; text-indent: 0pt; letter-spacing: 15pt; margin: 0pt; padding-top: 0pt; padding-bottom: 0pt; border-bottom: none } */
 h2 { color: white; font-size: 24pt; line-height: 24pt; background: #2c2c2c fixed; padding: 8pt 0pt 8pt 50pt; }
 h3 { color: white; font-size: 20pt; line-height: 20pt; background: #2c2c2c fixed; padding: 4pt 0pt 4pt 50pt; }
-h4 { color: white; font-style: oblique; font-weight: bolder; font-size: 10pt; line-height: 10pt; background-color: #222; text-align: right; text-transform: lowercase; word-spacing: 5pt; margin: 0pt 0pt 0pt 0pt; border: 0pt 0pt 0pt 0pt; padding: 4pt 20pt 4pt 20pt; }
+h4 { color: white; font-style: oblique; font-weight: bolder; font-size: 16pt; line-height: 16pt; background-color: #222; text-align: right; text-transform: lowercase; word-spacing: 5pt; margin: 0pt 0pt 0pt 0pt; border: 0pt 0pt 0pt 0pt; padding: 4pt 20pt 4pt 20pt; }
 h5 { color: white; font-weight: normal; font-size: 14pt; line-height: 17pt; background-color: #0B0B0B; text-indent: 0pt; margin: 0pt 0pt 0pt 0pt; padding: 10pt 10pt 10pt 10pt; }
 /* h6 { color: white; font-weight: lighter; font-size: 11pt; line-height: 12pt; background-color: gray; text-indent: 10pt; margin: 10pt; padding: 10pt; text-indent: 0pt ; } */
 A:hover { text-decoration: /* line-through */ overline; background-color: #2e2e2e; color: lime; }

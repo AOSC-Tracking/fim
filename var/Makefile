@@ -111,7 +111,7 @@ site:	pages
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -
 	#cd $(FIMDIR)/doc && make htmldocs
 	cd $(FIMDIR) && make dox
-	for i in $(FIMHTMLDOCS) ; do cp $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
+	for i in $(FIMHTMLDOCS) ; do cp -v $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
 	grep -v '^#' $(FIMDIR)/NEWS | txt2html -  > $(SITEDIR)/NEWS.html
 	txt2html $(FIMDIR)/BUGS > $(SITEDIR)/BUGS.html
@@ -156,10 +156,12 @@ up_old:
 FIMCVSDIR=~/src/fim_cvs_www/fbi-improved/
 
 up:
-	cd $(SITEDIR) && cp * $(FIMCVSDIR)
+	cd $(SITEDIR) && cp -v * $(FIMCVSDIR)
 	ls -l $(FIMCVSDIR)
 
 cp:
-	cp -v ../$(TGZ) ../$(SIG) $(FIMCVSDIR)/../mirror
-	ls -l $(FIMCVSDIR)/../mirror
+	cp -v ../$(TGZ) ../$(SIG) $(FIMCVSDIR)/
+	ls -l $(FIMCVSDIR)/
+#	cp -v ../$(TGZ) ../$(SIG) $(FIMCVSDIR)/../mirror
+#	ls -l $(FIMCVSDIR)/../mirror
 

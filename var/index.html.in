@@ -50,7 +50,7 @@ dnl
 <head>
 <meta name="generator" content="vim">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ASCII art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
+<meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ASCII art image viewer, aalib, libcaca, sdl image viewer, framebuffer console image viewer">
 <meta name="description" content="">
 <title>FIM: fbi improved (lightweight customizable image viewer) home page</title>
 
@@ -61,15 +61,16 @@ dnl
 SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer program homepage,top)
 <tr>
 <td align="center">
-<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="45%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
-<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="45%" ALT="A screenshot of an ASCII Art FIM run"></A>
+<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="30%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
+<A HREF="#screenshots_ca"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_ca.png" WIDTH="30%" ALT="A screenshot of a monochrome ASCII Art FIM run"></A>
+<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="30%" ALT="A screenshot of a coloured ASCII Art FIM run"></A>
 </td>
 </tr>
 
 <tr>
 <td>
 <h5>
-FIM_ABBR is a lightweight universal image viewer, mostly for Linux (but not only).
+FIM_ABBR is a lightweight universal image viewer, conceived when working in Linux.
      &nbsp;<br>
 FIM_ABBR aims to be a highly customizable and scriptable
 image viewer for users who are comfortable with software
@@ -91,13 +92,12 @@ It is universal: it can open many file formats and it can display pictures in th
    <a href="https://www.kernel.org/doc/Documentation/fb/framebuffer.txt">framebuffer device</a> (see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   Graphically, under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a> (see <a href="#screenshots">screenshots</a>).
+   Graphically, under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a> (see <a href="#screenshots">screenshots</a>)
+   (or very limitedly using <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2</a>).
 </LI>
 <LI>
-   Graphically, under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a> (see <a href="#screenshots">screenshots</a>).
-</LI>
-<LI>
-   Rendered as ASCII_ABBR Art in any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> library (see <a href="#screenshots">screenshots</a>).
+   As coloured ASCII_ABBR Art using the <a href="https://caca.zoy.org/">libcaca</a> library,
+   or as monochrome ASCII_ABBR Art using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> library (see <a href="#screenshots">screenshots</a>).
 </LI>
 </UL>
 <BR>
@@ -557,8 +557,23 @@ A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same)
 <tr>
 <td>
 <h5>
+<A NAME="screenshots_ca"></A>
+A screenshot of a color ASCII_ABBR Art FIM_ABBR run:
+</h5>
+</td>
+</tr>
+<tr>
+<td align="center">
+<!--<a href="fim-shot-aa.png"><img src="fim-shot-ca-mini.png" alt=""></a>-->
+<A HREF="fim_diana_ca.png"><IMG CLASS="SCREENSHOTB" SRC="fim_diana_ca.png" WIDTH="80%" ALT=""></A>
+</td>
+</tr>
+
+<tr>
+<td>
+<h5>
 <A NAME="screenshots_aa"></A>
-A screenshot of an ASCII_ABBR Art FIM_ABBR run:
+A screenshot of a monochrome ASCII_ABBR Art FIM_ABBR run:
 </h5>
 </td>
 </tr>
@@ -568,6 +583,7 @@ A screenshot of an ASCII_ABBR Art FIM_ABBR run:
 <A HREF="fim_diana_aa.png"><IMG CLASS="SCREENSHOTB" SRC="fim_diana_aa.png" WIDTH="80%" ALT=""></A>
 </td>
 </tr>
+
 <tr>
 <td>
 <h5>
@@ -579,10 +595,10 @@ comment contained in the file;
 EXIF_ABBR
 metadata is being displayed in the bottom textual line.
 <br>
-If you are curious, there are also a 
-<a href="fim_diana_aa.txt">textual</a>
-and 
-<a href="fim_diana_aa.txt.html">HTML</a> screenshots.
+If you are curious, there are also 
+<a href="fim_diana_aa.txt">textual</a> and <a href="fim_diana_aa.txt.html">HTML</a> renderings of the monochrome screenshots,
+and
+<a href="fim_diana_ca.txt">textual</a> and <a href="fim_diana_ca.txt.html">HTML</a> renderings of the coloured screenshots.
 </h5>
 
 
