@@ -190,10 +190,10 @@ endif
 		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` == pgm && rm -f $(top_srcdir)/icon_smile.pgm; \
 	fi # cover-test FbiStuffPpm.cpp
 if ENABLE_PCX
-	cd $(top_srcdir)/media/numbers_pcx/; ls ; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS)                            --read-from-file ../special/images.list   -c 'if(_filelistlen!=2)quit 255; quit'
+	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --dumb                            --read-from-file ../special/images.list   -c 'if(_filelistlen!=2)quit 255; quit'
 if WANT_READ_STDIN_IMAGE
-	cd $(top_srcdir)/media/numbers_pcx/; ls ; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --read-from-stdin-elds '!' --read-from-file ../special/images.list   -c 'if(_filelistlen!=0)quit 255; quit'
-	cd $(top_srcdir)/media/numbers_pcx/; ls ; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --read-from-stdin-elds '!' --read-from-file ../special/collated.list -c 'if(_filelistlen!=2)quit 255; quit'
+	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --dumb --read-from-stdin-elds '!' --read-from-file ../special/images.list   -c 'if(_filelistlen!=0)quit 255; quit'
+	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) --dumb --read-from-stdin-elds '!' --read-from-file ../special/collated.list -c 'if(_filelistlen!=2)quit 255; quit'
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'

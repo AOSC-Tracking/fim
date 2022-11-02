@@ -1518,7 +1518,7 @@ Part of the default configuration comes from the _fim_default_config_file_conten
 One can skip its loading by using the _no_default_configuration variable.
 
 .nf
-# $LastChangedDate: 2022-10-30 20:36:45 +0100 (Sun, 30 Oct 2022) $
+# $LastChangedDate: 2022-11-01 18:02:46 +0100 (Tue, 01 Nov 2022) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.

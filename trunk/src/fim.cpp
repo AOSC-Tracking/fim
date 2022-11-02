@@ -1132,15 +1132,15 @@ static fim_err_t fim_load_filelist(const char *fn, const char sac, fim_flags_t p
 					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
 				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
+				fim_getline(&lineptr,FIM_NULL,FIM_NULL,0); // proper free
 				lineptr=FIM_NULL;
 				if(false)
 					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
 			}
 
-			if(lineptr)
-				fim_free(lineptr);
+			fim_getline(&lineptr,FIM_NULL,FIM_NULL,0); // proper free
 			if(fn && fd)
-					fim_fclose(fd);
+				fim_fclose(fd);
 ret:
 			return 0;
 }

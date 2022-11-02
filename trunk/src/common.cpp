@@ -916,14 +916,25 @@ double fim_atof(const fim_char_t *nptr)
 ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 {
 #ifdef HAVE_GETDELIM
-	return getdelim(lineptr,n,delim,stream);
+	if (!n)
+		free(*lineptr), *lineptr = FIM_NULL;
+	else
+		return getdelim(lineptr,n,delim,stream);
+	return EINVAL;
 #else /* HAVE_GETDELIM */
 	/* the man page depends on this */
 #endif /* HAVE_GETDELIM */
 #ifdef HAVE_GETLINE
-	return getline(lineptr,n,stream);
+	if (!n)
+		free(*lineptr), *lineptr = FIM_NULL;
+	else
+		return getline(lineptr,n,stream);
+	return EINVAL;
 #endif /* HAVE_GETLINE */
 #ifdef HAVE_FGETLN
+	if (!n)
+		fim_free(*lineptr), *lineptr = FIM_NULL;
+	else
 	{	
 		/* for BSD (in cstdlib) */
 		fim_char_t *s,*ns;
