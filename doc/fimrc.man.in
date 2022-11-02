@@ -139,6 +139,7 @@ A VARIABLE shall be an already declared or undeclared variable identifier (see
 command.
 The "=~" operator treats the right expression as a STRING, and uses it as a regular expression for matching purposes.
 The SLASH_AND_REGEXP is a slash ("/") followed by a STRING, interpreted as a regular expression.
+If 'INTEGER , INTEGER IDENTIFIER arguments' is encountered, command IDENTIFIER will be repeated on each file in the interval between the two INTERGERs, and substituting the given file name to any '{}' found in the commands arguments (which must be quoted in order to be treated as strings).
 See \fR\fIregex\fR(1) for regular expression syntax.
 
 The way some one-line statements are evaluated:
@@ -156,6 +157,9 @@ The way some one-line statements are evaluated:
 /{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
+
+2,4 stdout '{}'	print three filenames to standard output.
+
 
 !{syscmd}		executes the {syscmd} quoted string as an argument to the  "system" fim command.
 

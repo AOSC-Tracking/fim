@@ -280,7 +280,7 @@ Var ex(NodeType p)
 				          		for(fim_size_t i=0;i<na.size();++i)
 							{
 								fim::string ss = na[i].c_str();
-								ss.substitute( "\\{\\}", fl[fi] );
+								ss.substitute( "[{][}]", fl[fi] );
 								na[i] = ss;
 #if FIM_USE_CXX11
 								fargs.emplace_back(std::move(na[i]));

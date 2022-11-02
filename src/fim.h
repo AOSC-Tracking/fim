@@ -606,6 +606,9 @@ inline auto FIM_MAX(T x, S y)
 "/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'\n"\
 "/png		 a shortcut for /.*png.*\n"\
 "\n"\
+"2,4 " FIM_FLT_STDOUT " '{}'	print three filenames to standard output.\n"\
+"\n"\
+"\n"\
 "!" FIM_CNS_EX_SYSC_STRING "		executes the " FIM_CNS_EX_SYSC_STRING " quoted string as an argument to the  \"" FIM_FLT_SYSTEM "\" fim command.\n"\
 ""
 
