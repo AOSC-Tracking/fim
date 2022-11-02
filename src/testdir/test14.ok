@@ -3,9 +3,11 @@ so it is temporary :)
 #executing: echo 'ciao'
 #executing: goto '+1'
 #executing: reload 
+#executing: getenv 'DISPLAY'
 #executing: redisplay 
 #executing: scale 'b'
 #executing: reload 
+#executing: getenv 'DISPLAY'
 #executing: redisplay 
 #executing: scale 'b'
 #executing: quit 
