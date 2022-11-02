@@ -354,7 +354,7 @@ font 'info': print current font filename.
 .B
 getenv
 .fi
-getenv {identifier}: display the value of the '{identifier}' environment variable.
+getenv {identifier}: create a variable with the same value as the '{identifier}' environment variable, but with an identifier prefixed by 'ENV_'. So e.g. getenv 'DISPLAY' creates 'ENV_DISPLAY'. Nothing is being printed; no variable is created if {identifier} is empty.
 .fi
 
 .na

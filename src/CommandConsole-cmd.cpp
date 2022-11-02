@@ -848,20 +848,19 @@ err:
 
 	fim_cxr CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
-		string help="usage: " FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " will create a fim variable named " FIM_CNS_EX_ID_STRING " with value $" FIM_CNS_EX_ID_STRING " (if nonempty), from the current shell."
+		string help="usage: " FIM_CMD_HELP_GETENV;
 #ifndef HAVE_GETENV
-		" (note that getenv call was not available at build time, so it won't work)\n"
+		help="sorry, no getenv call was not available at build time\n";
 #endif /* HAVE_GETENV */
-		;
+
 		if( ! args.size())
 			return help;
 #ifdef HAVE_GETENV
 		if(1==args.size())
 		{
 			if(fim_getenv(args[0].c_str()))
-				return setVariable( fim::string("ENV_")+args[0], fim_getenv(args[0].c_str()) );
-			else
-				return FIM_CNS_EMPTY_RESULT;
+				setVariable( fim::string("ENV_")+args[0], fim_getenv(args[0].c_str()) );
+			return FIM_CNS_EMPTY_RESULT;
 		}
 		else
 			return help;

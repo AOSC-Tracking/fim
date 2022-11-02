@@ -203,9 +203,10 @@ Command.o: Command.h
 Viewport.o: Viewport.h
 Browser.o: Browser.h
 Image.o: Image.h
-CommandConsole.o: defaultConfiguration.o
-CommandConsole-init.o: conf.h defaultConfiguration.o
+CommandConsole.o: defaultConfiguration.o fim.h
+CommandConsole-cmd.o: fim.h
 CommandConsole-help.o: conf.h defaultConfiguration.o
+CommandConsole-init.o: conf.h defaultConfiguration.o
 help.o: conf.h defaultConfiguration.o
 fim.o: version.h help.cpp grammar.h examples.h
 Var.o: help.cpp

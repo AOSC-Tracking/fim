@@ -1081,7 +1081,7 @@ namespace fim
 	FIM_CNS_CMDSEP FIM_FLT_FONT " 'next'/'prev': load next/previous font in the internal fonts list."\
 	FIM_CNS_CMDSEP FIM_FLT_FONT " 'info': print current font filename."
 #define FIM_CMD_HELP_CD			FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING ": change the current directory to " FIM_CNS_EX_PATH_STRING "." FIM_CNS_CMDSEP FIM_FLT_CD " '-' will change to the previous current directory (before the last ':" FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING "' command)."
-#define FIM_CMD_HELP_GETENV FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING ": display the value of the '" FIM_CNS_EX_ID_STRING "' environment variable."
+#define FIM_CMD_HELP_GETENV FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING ": create a variable with the same value as the '" FIM_CNS_EX_ID_STRING "' environment variable, but with an identifier prefixed by 'ENV_'. So e.g. " FIM_FLT_GETENV " 'DISPLAY' creates 'ENV_DISPLAY'. Nothing is being printed; no variable is created if " FIM_CNS_EX_ID_STRING " is empty."
 #define FIM_CMD_HELP_IFELSE  FIM_CNS_IFELSE ": see '" FIM_FLT_ELSE "'."
 #define FIM_CMD_HELP_INFO   FIM_FLT_INFO ": display information about the current file."
 // #define FIM_CMD_HELP_LIMIT   // missing
