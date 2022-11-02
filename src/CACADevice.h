@@ -44,15 +44,27 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	fim_char_t *bitmap;
 #endif
 #if ( FIM_WANTS_CACA_VERSION == 1 )
-	caca_canvas_t *cv_{};
-	caca_display_t *dp_{};
+#if FIM_USE_CXX11
+	caca_canvas_t *cv_; // {} pending
+	caca_display_t *dp_; // {} pending
+#else /* FIM_USE_CXX11 */
+	caca_canvas_t *cv_;
+	caca_display_t *dp_;
+#endif /* FIM_USE_CXX11 */
 #endif
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	CACADevice(MiniConsole& mc_, fim::string dopts_):DisplayDevice(mc_),dopts{dopts_}{}
+	CACADevice(MiniConsole& mc_, fim::string dopts_):DisplayDevice(mc_),dopts(dopts_)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	CACADevice(fim::string dopts_):DisplayDevice(),dopts{dopts_}{}
+	CACADevice(fim::string dopts_):DisplayDevice(),dopts(dopts_)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	{
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+		// use default initializers as soon as C++03 is phased out
+		cv_=FIM_NULL;
+		dp_=FIM_NULL;
+#endif /* FIM_WANTS_CACA_VERSION */
+	}
 
 	fim_err_t display(
 		const void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)

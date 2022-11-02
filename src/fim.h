@@ -301,7 +301,12 @@ namespace rl
 #ifndef FIM_IS_SLOWER_THAN_FBI
 	#define FIM_UNLIKELY(expr) __builtin_expect(!!(expr),0)
 	#define FIM_LIKELY(expr)   __builtin_expect(!!(expr),1)
+
+#if FIM_USE_CXX17 && defined(__cpp_aligned_new)
 	#define FIM_ALIGNED __attribute__((aligned (64)))
+#else /* FIM_USE_CXX17 */
+	#define FIM_ALIGNED
+#endif /* FIM_USE_CXX17 */
 #else /* FIM_IS_SLOWER_THAN_FBI */
 	#define FIM_UNLIKELY(expr)  (expr)
 	#define FIM_LIKELY(expr)   (expr)
