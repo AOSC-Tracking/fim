@@ -94,9 +94,9 @@ Implemented features:
  - standard input file list read
  - standard input whole file read
  - standard input script file read
+ - support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  - support for AAlib (Ascii Art rendering) (-o aa)
  - support for libcaca (Colour Ascii Art rendering) (-o caca 
- - support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  - experimental (incomplete) support for Imlib2 (-o imlib2) (X!)
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
