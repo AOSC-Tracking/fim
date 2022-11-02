@@ -245,7 +245,10 @@ err:
 #endif
 #if ( FIM_WANTS_CACA_VERSION == 1 )
 		caca_set_color_ansi(cv_, CACA_WHITE, CACA_BLACK);
-		caca_put_str(cv_, x, y, str);
+		const int tw = txt_width();
+		const int nl = FIM_INT_FRAC(strlen(str),tw);
+		for (int l = 0; l < nl; ++l )
+			caca_put_str(cv_, x, y + l, str + l * tw); // let libcaca cut off at tw
 		caca_refresh_display(dp_);
 		return FIM_ERR_NO_ERROR;
 #endif
