@@ -27,6 +27,7 @@
 #ifndef FIM_STUFF_LOADER_H
 #define FIM_STUFF_LOADER_H
 
+#include "fim_string.h"
 #include "fim_types.h"
 #include "FbiStuffList.h"
 

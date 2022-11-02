@@ -870,11 +870,13 @@ err:
 #endif /* HAVE_GETENV */
 	}
 
+#if FIM_WANT_PIC_CMTS_RELOAD
 #if FIM_USE_CXX11
 	/* */
 #else /* FIM_USE_CXX11 */
 	static void fim_cc_fetch(const std::pair<string,fim_char_t> & dfp){cc.id_.fetch(dfp.first,dfp.second);}
 #endif /* FIM_USE_CXX11 */
+#endif /* FIM_WANT_PIC_CMTS_RELOAD */
 
 	fim_cxr CommandConsole::fcmd_desc(const args_t& args)
 	{
