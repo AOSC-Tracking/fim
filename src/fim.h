@@ -526,6 +526,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #else /* SVN_REVISION_NUMBER */
 #define FIM_REVISION_NUMBER (-1)
 #endif /* SVN_REVISION_NUMBER */
+#define FIM_CNS_MAGIC_DESC	"#!fim:desc"
 #define FIM_CNS_EX_KSY_STRING	"{keysym}"
 #define FIM_CNS_EX_CMD_STRING	"{command}"
 #define FIM_CNS_EX_FN_STRING	"{filename}"
@@ -684,6 +685,7 @@ namespace fim
 {
 	extern fim_stream cout;
 	extern fim_stream cerr;
+	extern fim_char_t g_sc;
 }
 
 #define FIM_I2BI(VID) VID "_" /* identifier to backup identifier */
