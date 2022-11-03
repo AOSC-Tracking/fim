@@ -1735,17 +1735,20 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 		default:
+			retcode=FIM_PERR_NO_SUCH_OPTION;
 		case 'h':
 #if FIM_WANT_HELP_ARGS
 		    if(optind < argc)
 		    {
 		    	for (i = optind; i < argc; i++)
 		    		std::cout << cc.get_help(argv[i]) << std::endl;
-	    		std::exit(FIM_PERR_NO_ERROR);
+	    		std::exit(retcode);
 		    }
 #endif /* FIM_WANT_HELP_ARGS */
 		    else
-		    	help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
+		    {
+		    	return help_and_exit(argv[0],retcode,optarg);
+		    }
 		}
 	    }
 		// fim_fms_t dt;
