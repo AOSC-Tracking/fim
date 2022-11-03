@@ -1957,21 +1957,11 @@ with_offset:
 probe_loader:
     /* pick loader */
 #if FIM_WANT_MAGIC_FIMDESC
-    if (FIM_NULL == loader && (*blk=='#')
-		    && (*(fim_byte_t*)(blk+1)=='!') 
-		    && (*(fim_byte_t*)(blk+2)=='f') 
-		    && (*(fim_byte_t*)(blk+3)=='i') 
-		    && (*(fim_byte_t*)(blk+4)=='m') 
-		    && (*(fim_byte_t*)(blk+5)==':') 
-		    && (*(fim_byte_t*)(blk+6)=='d') 
-		    && (*(fim_byte_t*)(blk+7)=='e') 
-		    && (*(fim_byte_t*)(blk+8)=='s') 
-		    && (*(fim_byte_t*)(blk+9)=='c') 
-	)
+    if (FIM_NULL == loader && 0 == strncmp(blk, FIM_CNS_MAGIC_DESC, strlen(FIM_CNS_MAGIC_DESC)) )
     {
         if(vl>0)FIM_VERB_PRINTF("Seems like a FIM file list ..\n");
 	cc.set_status_bar("ok, a file list...", "*");
-	cc.id_.fetch(filename ,'\t');
+	cc.id_.fetch(filename, fim::g_sc);
 	cc.push_from_id();
 	cc.setVariable(FIM_VID_COMMENT_OI,FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 	goto shall_skip_header;

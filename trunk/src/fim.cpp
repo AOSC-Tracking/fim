@@ -47,6 +47,7 @@ namespace fim
 	ssize_t g_allocs_n{0};
 	std::map<void*,size_t> g_allocs;
 #endif
+	fim_char_t g_sc = '\t'; /* separation character for --load-image-descriptions-file */
 	fim::CommandConsole cc;
 	fim_char_t *default_fbdev=FIM_NULL,*default_fbmode=FIM_NULL;
 	int default_vt=-1;
@@ -194,6 +195,7 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_WANT_PIC_LBFL */
 #endif /* FIM_WANT_PIC_LVDN */
       " This option sets " FIM_VID_COMMENT_OI "=" FIM_XSTRINGIFY(FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL) ", so that a caption will be displayed over the image."
+      " A description file beginning with \"" FIM_CNS_MAGIC_DESC "\" can be loaded without specifying this switch."
     },
     {FIM_OSW_IMG_DSC_FILE_SEPC,       required_argument,       FIM_NULL, /*0x69646673*/'S',
 	    "image descriptions file separator character", "{sepchar}",
@@ -1200,7 +1202,6 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_PIC_LISTUNMARK */
 #if ( FIM_WANT_PIC_CMTS || FIM_WANT_PIC_LISTUNMARK )
 		/* TODO: shall merge the above in a FIM_WANT_PIC_DSCFILEREAD  */
-		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
 #endif /* FIM_WANT_PIC_CMTS */
 		int load_verbosity=0;
 		int font_verbosity=0;
@@ -1670,18 +1671,18 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 #if FIM_WANT_PIC_LISTUNMARK
 		case 0x6d666466:
-		    fim_args_from_desc_file(argsc,optarg,sc);
+		    fim_args_from_desc_file(argsc,optarg,g_sc);
 		    break;
 #endif /* FIM_WANT_PIC_LISTUNMARK */
 #if FIM_WANT_PIC_CMTS
 		case /*0x69646673*/'S': /* FIM_OSW_IMG_DSC_FILE_SEPC */
 		    if(optarg)
-			    sc = *optarg;
+			    g_sc = *optarg;
 		    break;
 		case /*0x6c696466*/'D': /* FIM_OSW_LOAD_IMG_DSC_FILE */
-		    cc.id_.fetch(optarg,sc);
+		    cc.id_.fetch(optarg,g_sc);
 #if FIM_WANT_PIC_CMTS_RELOAD
-		    cc.browser_.dfl_.push_back({optarg,sc});
+		    cc.browser_.dfl_.push_back({optarg,g_sc});
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */
 		    cc.setVariable(FIM_VID_COMMENT_OI,FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 		    break;
