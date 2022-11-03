@@ -1056,7 +1056,7 @@ dnl ============================================================================
 
 fim_handle_archive=no
 
-AC_ARG_ENABLE(archive, AS_HELP_STRING([--enable-archive],[Enable libarchive support (please provide ARCHIVE_LIBS, ARCHIVE_CXXFLAGS) (EXPERIMENTAL, UNFINISHED).]),
+AC_ARG_ENABLE(archive, AS_HELP_STRING([--enable-archive],[Enable libarchive support to view archive files as multipage documents (please provide ARCHIVE_LIBS, ARCHIVE_CXXFLAGS) (EXPERIMENTAL, INCOMPLETE).]),
 [       if test x$enableval = xno ; then
 		fim_handle_archive=no
 	else
@@ -1068,9 +1068,10 @@ if test x$fim_handle_archive = xyes; then
 	# support for custom library configurator path
 	CXXFLAGS="$CXXFLAGS $ARCHIVE_CXXFLAGS"
 	LIBS="$LIBS $ARCHIVE_LIBS -larchive"
-	AC_DEFINE(FIM_WITH_ARCHIVE, 1, [Defined, if (EXPERIMENTAL, UNFINISHED) libarchive support is enabled])
+	AC_DEFINE(FIM_WITH_ARCHIVE, 1, [Defined, if (EXPERIMENTAL, INCOMPLETE) libarchive support is enabled])
 	AC_MSG_NOTICE([Enabling libarchive.])
 fi
+AM_CONDITIONAL(ENABLE_ARCHIVE, test x$fim_handle_archive = xyes)
 
 dnl ================================================================================
 

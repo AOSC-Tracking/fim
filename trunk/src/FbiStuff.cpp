@@ -1822,7 +1822,6 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 			//archive_read_data_skip(a);
 		}
 	}
-ena:
 	archive_read_close(a);
 	archive_read_free(a);
 noa:	1;
