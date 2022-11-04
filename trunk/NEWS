@@ -7,7 +7,7 @@
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
  * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-1806)
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
@@ -232,7 +232,7 @@
 # (r1126)
 # * Makefile: added a stand-alone `make ltests' goal to test fim' language only.
 # (r1113)
- * Switch -P/--text-reading fixed. Seems to be broken in version 0.5. (FIXME)
+ * Switch -P/--text-reading fixed. Seems to be broken in version 0.5.
 # (r1108)
  * Command "color": "color 'negate'" and "color 'desaturate'" introduced.
  * Commands 'negate' and 'desaturate' deleted.
@@ -370,7 +370,6 @@
 # * Mipmap computing (controlled by _use_mipmaps) is now faster.
 # (r941,1804)
  * description files beginning with "#!fim:desc" (whatever extension) can now be detected and loaded as they were normal image files.
-# * FIXME: did something with --enable-unicode ?
 # (r936)
  * New switch --reverse to reverse the file list.
 # (r933)
