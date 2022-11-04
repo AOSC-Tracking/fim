@@ -2250,8 +2250,23 @@ ret:
 		FIM_PR('*');
 		if( args.size() < 1 )
 			goto err;
-		if( !args[0].c_str() || !args[0].re_match("^(bottom|top|left|right|center)") )
+		if( !args[0].c_str() || !args[0].re_match("^(bottom|top|left|right|center|info)") )
 			goto err;
+
+		if(args[0].re_match("info"))
+		{
+			ViewportState viewportState = *viewport();
+			std::ostringstream oss;
+			oss << "alignment info:";
+			oss << " steps:" << viewportState.steps_;
+			oss << " hsteps:" << viewportState.hsteps_;
+			oss << " vsteps:" << viewportState.vsteps_;
+			oss << " top:" << viewportState.top_;
+			oss << " left:" << viewportState.left_;
+			oss << " panned:" << viewportState.panned_;
+			result = oss.str();
+		}
+		else
 		if( c_getImage() )
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());

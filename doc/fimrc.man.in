@@ -185,9 +185,11 @@ With three, also assigns a help string.
 .B
 align
 .fi
-align 'bottom': align to the lower side the current image.
+align['bottom'|'top'|'left'|right']: align to one side of the drawing area.
 .fi
-align 'top': align to the upper side the current image.
+align 'info': print alignment information.
+.fi
+align 'center': align equally far from all sides.
 .fi
 
 .na

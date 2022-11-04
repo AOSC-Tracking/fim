@@ -281,6 +281,10 @@ if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \
 		$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl -r w $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
 	fi
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17 -P $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit (_autotop!=1) || (i:swidth!=_screen_width)'; fi # --text-reading
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17    $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit (_autotop!=1) || (i:swidth!=_screen_width)'; test $$? = 1; fi # --text-reading
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17:16 -q -P $(top_srcdir)/media/numbers_pcx/?.pcx -c 'align "info";a1=_last_cmd_output; scroll "forward";align "info";a2=_last_cmd_output; next; align "info";a3= _last_cmd_output; goto _lastfileindex; align "info";a4=_last_cmd_output; quit !(a1==a3 && a2==a4 && a1!=a2)' -kq ; fi # --text-reading
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17:16 -q    $(top_srcdir)/media/numbers_pcx/?.pcx -c 'align "info";a1=_last_cmd_output; scroll "forward";align "info";a2=_last_cmd_output; next; align "info";a3= _last_cmd_output; goto _lastfileindex; align "info";a4=_last_cmd_output; quit !(a1==a3 && a2==a4 && a1==a2)' -kq ; fi # --text-reading
 endif
 endif
 if ENABLE_GIF

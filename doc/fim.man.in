@@ -213,7 +213,7 @@ Enable textreading mode.  This has the effect that fim will display images scale
 Set scroll steps for internal variable \fB_steps\fP (default is 20%).
 .TP
 .B  --slideshow {number}
-Interruptible slideshow mode. Wait for {number} of seconds (assigned to the \fB_want_sleep_seconds\fP variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex<=_filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys will execute accordingly to their function but will not interrupt the slideshow. Like in fbi, this will cycle forever, unless --once is specified.
+Interruptible slideshow mode. Wait for {number} of seconds (assigned to the \fB_want_sleep_seconds\fP variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex<=_filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys will execute accordingly to their function but will not interrupt the slideshow. Like in fbi, this will cycle forever, unless \fB--once\fP is specified.
 .TP
 .B  --sanity-check
 Perform a quick sanity check, just after the initialization, and terminate.
@@ -283,7 +283,7 @@ Scale the image according to the screen height.
 All the characters that you type are recorded in the file {scriptout}, until you exit \fBfim\fP.  This is useful if you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
 .TP
 .B -L {fileslistfile}, --read-from-file {fileslistfile}
-Read file list from a file: each line one file to load (similar to --read-from-stdin; use --read-from-stdin-elds to control line breaking).
+Read file list from a file: each line one file to load (similar to \fB--read-from-stdin\fP; use \fB--read-from-stdin-elds\fP to control line breaking).
 
 
 .TP
