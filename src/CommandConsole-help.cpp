@@ -99,7 +99,7 @@ manmode:
 			"\n"
 		".SH DESCRIPTION\n"
 			"This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line {options}.\n"
-			"This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \"" FIM_SYM_CONSOLE_KEY_STR "\" key (or rather, the key code specified by the \"" FIM_VID_CONSOLE_KEY "\" variable).\n"
+			"This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \"" FIM_SYM_CONSOLE_KEY_STR "\" key (or rather, the key code specified by the \"" FIM_MAN_fB(FIM_VID_CONSOLE_KEY) "\" variable).\n"
 			"One may exit from command line mode by pressing the " FIM_KBD_ENTER " key on an empty line (a non empty command line would be submitted for execution), or the " FIM_KBD_ESC " key "
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
 		       	" (in non-SDL mode, it is required to press the " FIM_KBD_ESC " key twice).\n"
@@ -108,7 +108,7 @@ manmode:
 #endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 			"The general form of a fim command/program is shown in the next section.\n"
 #ifndef FIM_COMMAND_AUTOCOMPLETION
-			"\nInterpretation of commands or aliases may use autocompletion (if enabled; see the " FIM_VID_CMD_EXPANSION " variable description), in a way to allow the user to type only the beginning of the command of interest.\n"
+			"\nInterpretation of commands or aliases may use autocompletion (if enabled; see the " FIM_MAN_fB(FIM_VID_CMD_EXPANSION) " variable description), in a way to allow the user to type only the beginning of the command of interest.\n"
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
 			"\n"
 			"\n"
@@ -172,9 +172,9 @@ manmode:
 			+FIM_DEFAULT_EXAMPLE_FILE_CONTENTS+
 			"\n"
 		".SH CONFIGURATION FILE EXAMPLE\n"
-			"Part of the default configuration comes from the " FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS " variable, shown here."
+			"Part of the default configuration comes from the " FIM_MAN_fB(FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS) " variable, shown here."
 			"\n.nf\n"
-			"One can skip its loading by using the " FIM_VID_NO_DEFAULT_CONFIGURATION " variable.\n"
+			"One can skip its loading by using the " FIM_MAN_fB(FIM_VID_NO_DEFAULT_CONFIGURATION) " variable.\n"
 			"\n.nf\n"
 			+FIM_DEFAULT_CONFIG_FILE_CONTENTS+
 			"\n"
