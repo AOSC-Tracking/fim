@@ -40,7 +40,7 @@ PACKAGE=fim
 FIMHTMLDOCS= FIM.html fimrc.man.html fim.man.html fimgs.man.html
 PAGES= $(SITEDIR)/index.html $(FIMHTMLDOCS)
 CP=cp -p
-N2H=he --escape --use-named-refs
+N2H=he --escape --use-named-refs # in package "node-he"
 
 help:
 	@echo

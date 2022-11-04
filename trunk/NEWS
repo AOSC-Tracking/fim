@@ -314,7 +314,6 @@
  * Key space (' ') now assigned to 'scrollforward' (earlier was 's').
 # (r1013)
  * Introduced context prepend/append shebang syntax "#!fim:^=" and "#!fim:+=" in description files.
-   (FIXME: undocumented)
 # (r1008,r1795-1796)
  * Switch --read-from-stdin-elds supports now the ASCII NUL terminator (via '').
 # (r1007)

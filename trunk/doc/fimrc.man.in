@@ -29,7 +29,7 @@ This page explains the
 language, which is used for the 
 .B fimrc
 configuration files, {scriptfile}s, or {commands} passed via command line {options}.
-This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "_console_key" variable).
+This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "\fB_console_key\fP" variable).
 One may exit from command line mode by pressing the Enter key on an empty line (a non empty command line would be submitted for execution), or the Esc key  (only in SDL mode).
 The general form of a fim command/program is shown in the next section.
 
@@ -1517,9 +1517,9 @@ $;
 !"date";
 
 .SH CONFIGURATION FILE EXAMPLE
-Part of the default configuration comes from the _fim_default_config_file_contents variable, shown here.
+Part of the default configuration comes from the \fB_fim_default_config_file_contents\fP variable, shown here.
 .nf
-One can skip its loading by using the _no_default_configuration variable.
+One can skip its loading by using the \fB_no_default_configuration\fP variable.
 
 .nf
 # $LastChangedDate: 2022-11-02 14:35:10 +0100 (Wed, 02 Nov 2022) $
