@@ -21,6 +21,12 @@
 
 #ifndef FIM_WRAPPERS_H
 #define FIM_WRAPPERS_H
+
+#if FIM_WITH_DEBUG 
+#include <map>
+#include <cassert>
+#endif
+
 namespace fim
 {
 /* symbolic wrappers for memory handling calls */
