@@ -174,7 +174,7 @@ struct fim_options_t fim_options[] = {
 	"Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless a different character is specified via " FIM_MAN_fB("--" FIM_OSW_IMG_DSC_FILE_SEPC) "), then the description text. "
 	"The description text will be put in the " FIM_MAN_fB(FIM_VID_COMMENT) " variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_DESC_VEXP
-	" If a '@' followed by a " FIM_CNS_EX_VAR_STRING " (made by alphabetic and '_' characters) is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value will be substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
+	" If a '@' followed by identifier " FIM_CNS_EX_VAR_STRING " is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value will be substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
 #endif /* FIM_WANT_DESC_VEXP */
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time (cached variable); i:var will not be assigned if var starting with underscore ('_')."
@@ -464,6 +464,7 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_BGREC, no_argument, FIM_NULL, 'B',
 	    "push paths recursively in background", FIM_NULL,
 	    "Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored)."
+	    " Experimental feature, unfinished."
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
 #if FIM_EXPERIMENTAL_SHADOW_DIRS
