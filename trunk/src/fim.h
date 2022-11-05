@@ -32,9 +32,9 @@
 #include "../config.h"
 #endif /* HAVE_CONFIG_H */
 
-#define FIM_USE_CXX11 ( (FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L) ) /* */
-#define FIM_USE_CXX14 ( (FIM_USE_CXX_STD >= 2014 ) || ( __cplusplus> 201402L) ) /* */
-#define FIM_USE_CXX17 ( (FIM_USE_CXX_STD >= 2017 ) || ( __cplusplus> 201707L) ) /* */
+#define FIM_USE_CXX11 ( __cplusplus>=201103L ) /* */
+#define FIM_USE_CXX14 ( __cplusplus> 201402L ) /* */
+#define FIM_USE_CXX17 ( __cplusplus> 201707L ) /* */
 
 #if FIM_WITH_DEBUG 
 #else

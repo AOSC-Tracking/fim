@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1816)
+ * Removed configure options --enable-c++11 -- use CXXFLAGS instead.
 # (r1784,r1801)
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
@@ -323,7 +325,7 @@
 # (r1003)
  * The -B switch is now short for --background-recursive.
 # (r1097)
- * If compiled without --enable-c++11, -B / --background-recursive will behave as -R.
+ * If compiled in pre-C++11 flags, -B / --background-recursive will behave as -R.
 # (r1002)
  * Switch -S is now short for --image-descriptions-file-separator (not anymore for --sanity-check).
 # (r1001)
@@ -355,13 +357,13 @@
 # (r1037, also in branches/0.5)
  * fix: ./configure --disable-pcx was not properly disabling PCX format support
 # (r963)
- * With --enable-c++11, --background-recursive loads images in the background recursively (experimental, unfinished).
+ * With C++11 flags, --background-recursive loads images in the background recursively (experimental, unfinished).
 #  (TODO: not completely finished)
 # (r948)
 # * configure --enable-c++11 enables background image loading.
 #  (TODO: need better handling of failed loads)
 # (r961)
- * configure switch --enable-cxx11 : renamed to --enable-c++11
+# * configure switch --enable-cxx11 : renamed to --enable-c++11
 # (r955)
  * Variable i:_file_load_time will store the time taken to load the file and decode the image.
 # (r952)
