@@ -323,8 +323,9 @@ if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help -B | wc -l` -lt `$(FIM_EXE) --help -B -B | wc -l`
-	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kK -kq -F 'if(_filelistlen==1)quit 255'; fi # -kK triggers a yield
-	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen!=1)quit 255'; fi # no -kK -> no background images in batch mode
+#	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kK -kq -F 'if(_filelistlen==1)quit 255'; fi # -kK triggers a yield (often, not always)
+#	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen!=1)quit 255'; fi # no -kK -> no background images in batch mode (often, not always)
+	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen<=1)quit 255'; fi # difficult to write a reliable test for -B
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help /a /q | wc -c` -gt 900
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help help magnify _TERM jfngjfngjfn | wc -c` -gt 500
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'dump_key_codes; stdout _last_cmd_output; quit' | wc -c` -gt 1000
