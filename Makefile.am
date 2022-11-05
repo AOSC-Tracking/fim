@@ -39,6 +39,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/icon_smile_gif_at_7.bin \
 	$(top_srcdir)/media/special/images.desc \
 	$(top_srcdir)/media/special/images.list \
+	$(top_srcdir)/media/special/dir.desc \
 	$(top_srcdir)/media/special/collated.list \
 	$(top_srcdir)/media/special/loadable.desc \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
@@ -208,6 +209,7 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --mark-from-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'l=_filelistlen;toggleLimitMarked;if(_filelistlen!=l/2)quit 255; quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator $$'\t' $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator '?'    $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit 255;quit'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/dir.desc -c 'quit !(_filelistlen==2)'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator $$'\t' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator '?'    --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit 255;quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/1.pcx;if(i:prime=="no")quit 255;quit;'
@@ -321,6 +323,8 @@ if ENABLE_PNG
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
 endif
 	@test `$(FIM_EXE) $(FIMNORCOPTS) --help -B | wc -l` -lt `$(FIM_EXE) --help -B -B | wc -l`
+	@if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kK -kq -F 'if(_filelistlen==1)quit 255'; fi # -kK triggers a yield
+	@if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen!=1)quit 255'; fi # no -kK -> no background images in batch mode
 	@test `$(FIM_EXE) $(FIMNORCOPTS) --help /a /q | wc -c` -gt 900
 	@test `$(FIM_EXE) $(FIMNORCOPTS) --help help magnify _TERM jfngjfngjfn | wc -c` -gt 500
 	@test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'dump_key_codes; stdout _last_cmd_output; quit' | wc -c` -gt 1000

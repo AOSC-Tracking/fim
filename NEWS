@@ -7,7 +7,7 @@
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
  * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808)
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
@@ -242,9 +242,9 @@
  * Command "color 'identity'": populate the image with 'RGB identity' pixels.
 # (r1104)
 # * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
-# (r1079) (FIXME: man fimrc ?)
- * Introduced a "#!fim:/=dir" special description line to specify dir prepended to basename.
- * Introduced a "#!fim:\=dir" special description line to specify dir prepended to filepath.
+# (r1079,r1809)
+ * Introduced a "#!fim:/=dir" special description line to specify directory prepended to basename.
+ * Introduced a "#!fim:\=dir" special description line to specify directory prepended to filepath.
 # (r1072)
 # * Documented the %k expando for _info_fmt_str.
 # (r1127,r1128)
@@ -293,7 +293,7 @@
  * To ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
 # (r1035,r1762)
  * New switch --mark-from-image-descriptions-file: read file names from a description file and use them to mark current list files.
-# (r1030) (FIXME: to document better)
+# (r1030,r1809)
  * Introduced alphanumeric restriction in the descriptions shebang variables: must begin with underscore or alphabetic, continue with underscore or alphanumeric.
 # (r1027)
  * Keys '(' and ')' are now bound respectively to "goto '^p'" and "goto '$p'"; that is jump to first or last page.
@@ -355,17 +355,17 @@
 # (r1037, also in branches/0.5)
  * fix: ./configure --disable-pcx was not properly disabling PCX format support
 # (r963)
- * If configure'ing with --enable-c++11, the --background-recursive switch will load images in the background recursively, allowing viewing in the order they appear.
-#  (FIXME: so far synchronization during loading is missing.)
+ * With --enable-c++11, --background-recursive loads images in the background recursively (experimental, unfinished).
+#  (TODO: not completely finished)
+# (r948)
+# * configure --enable-c++11 enables background image loading.
+#  (TODO: need better handling of failed loads)
 # (r961)
  * configure switch --enable-cxx11 : renamed to --enable-c++11
 # (r955)
  * Variable i:_file_load_time will store the time taken to load the file and decode the image.
 # (r952)
  * Variable _use_mipmaps=2 will compute the mipmaps faster, using every fourth source pixel.  This can be a good solution for speeding up large photographs scaling.
-# (r948)
- * configure --enable-c++11 makes background image loading available.
-#  (FIXME: need controlling variable, need to handle failed loads)
 # (r947)
 # * Mipmap computing (controlled by _use_mipmaps) is now faster.
 # (r941,1804)
@@ -448,7 +448,7 @@
  * when repeating search with 'repeat_last', will use last direction
  * '?' key is now assigned to backward search (goto '-//')
  * default 'C-p' key is now assigned to repeat last backward search (goto '-//')
-# (TODO)
+# (r623)
  * image cache will remember alignment within viewport
 # (r667*)
  * jump back and forth from the last viewed image with the ' (single quote aka apostrophe)
@@ -545,11 +545,9 @@
  * variable i:pagecount is now replaced by i:pages
 # (r807*)
  * put aside (disabled) the v: b: and w: namespaces until they make more sense
-# (TODO; FIXME)
 # * improved the 'align' command
-#  (TODO)
+# (r104)
 # * viewport info cache size
-# (TODO: FIXME: disable this)
  * panning on mouse movement in SDL mode
  * `make fim' goal has been deleted
 # (r848)
