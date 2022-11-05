@@ -53,7 +53,9 @@ version.h:	../config.h
 	$(ECHO) "\"\n\"" >> $@
 	$(GREP) define $< | $(GREP) FIM.*'"' | LC_ALL=C $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> $@
 	$(GREP) undef $< | $(GREP) FIM | LC_ALL=C $(SORT) | $(SED) 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> $@
+if WITH_DEBUG
 	$(ECHO)  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> $@
+endif
 
 help.cpp: fim.h
 	$(ECHO) -e "#ifdef FIM_WANT_INLINE_HELP\n" > $@

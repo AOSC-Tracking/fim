@@ -79,7 +79,6 @@ AM_INIT_AUTOMAKE
 #AM_INIT_AUTOMAKE(fim, $fim_cv_version)
 #AM_INIT_AUTOMAKE(fim, 1.0)
 AC_SUBST([CONFIG_STATUS_DEPENDENCIES], ['$(top_srcdir)/VERSION'])
-CPPFLAGS=''
 
 
 AC_SUBST(FIM_LIBS)
@@ -1959,6 +1958,7 @@ if test "x$fim_cv_debug" = xyes; then
 else
 	true;
 fi
+AM_CONDITIONAL(WITH_DEBUG, test "x$fim_cv_debug" = xyes)
 AH_TEMPLATE([FIM_ITERATED_COMMANDS])
 AC_DEFINE([FIM_ITERATED_COMMANDS])
 AH_TEMPLATE([FIM_SKIP_KNOWN_FILETYPES])
