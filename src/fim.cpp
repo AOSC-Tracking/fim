@@ -2070,6 +2070,7 @@ extern "C" {
 	#ifdef FIM_CONFIGURATION
 			"Configuration invocation: " FIM_CONFIGURATION "\n" 
 	#endif /* FIM_CONFIGURATION */
+#if FIM_WITH_DEBUG
 	#ifdef CXXFLAGS
 			"Compile flags: CXXFLAGS=" CXXFLAGS
 	#ifdef CFLAGS
@@ -2077,6 +2078,7 @@ extern "C" {
 	#endif /* CFLAGS */
 			"\n"
 	#endif /* CXXFLAGS */
+#endif /* FIM_WITH_DEBUG */
 			"Fim options (features included (+) or not (-)):\n"
 	#include "version.h"
 	/* i think some flags are missing .. */
