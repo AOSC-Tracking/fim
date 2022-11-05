@@ -2022,6 +2022,7 @@ probe_loader:
 #ifdef HAVE_LIBGRAPHICSMAGICK
     /* FIXME: with this scheme, this is the only 0-mlen loader allowed */
     if (FIM_NULL == loader
+		    && read_offset_l == 0
 #if 1
 		    && filename && is_file_nonempty(filename) /* FIXME: need an appropriate error/warning printout in this case */
 #endif /* */
