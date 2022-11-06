@@ -2,7 +2,7 @@
 /*
  FbiStuffMagick.cpp : fim functions for decoding image files using libGraphicsMagick
 
- (c) 2011-2018 Michele Martone
+ (c) 2011-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,8 +44,7 @@
  fim: magick/semaphore.c:531: LockSemaphoreInfo: Assertion `semaphore_info != (SemaphoreInfo *) ((void *)0)' failed.
  Aborted
 */
-#define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG 1
-#else
+#else /* MagickLibVersion */
 #define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG 1
 #endif /* MagickLibVersion */
 
