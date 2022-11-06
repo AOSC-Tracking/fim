@@ -132,10 +132,21 @@ fim::string fim_key_escape(const fim::string uk)
 fim::string fim_man_to_text(const fim::string ms)
 {
 	fim::string ts = ms;
+#if FIM_USE_CXX_REGEX
 	ts.substitute("(\\\\fB)(.*?)(\\\\fP)", "$2", 0);
 	ts.substitute("(\n\\.B)(.*?)(\n)", "$2 ", 0);
 	ts.substitute("(\\\\fR\\\\fI)(.*?)(\\\\fR)", "$2 ", 0);
 	ts.substitute("(\n)", " ", 0);
+#else /* FIM_USE_CXX_REGEX */
+	/* workaround */
+	ts.substitute("\\\\fB", "", 0);
+	ts.substitute("\\\\fP", "", 0);
+	ts.substitute("\\\\fR", "", 0);
+	ts.substitute("\\\\fI", "", 0);
+	ts.substitute("\\.B", " ", 0);
+	ts.substitute("(\n)", " ");
+#endif /* FIM_USE_CXX_REGEX */
+	ts.substitute("\\\\:", "");
 	return ts;
 }
 

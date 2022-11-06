@@ -77,7 +77,11 @@ namespace fim
 	string::string(size_t i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
+#if FIM_USE_OLDCXX
+		snprintf(buf,FIM_CHARS_FOR_INT-1,"%u",(unsigned)i);
+#else
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%zd",i);
+#endif
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
 	}
@@ -197,7 +201,10 @@ namespace fim
 		if (flags & FIM_REG_ICASE)
 			mf |= REG_ICASE;
 		if( regcomp(&regex,r, 0 | mf ) != 0 )
+		{
+			std::cerr << "Warning: " << r << "  made regcomp fail!\n";
 			return;
+		}
 
 		//sl=strlen(s);
 		//const int s_len=strlen(s);
