@@ -191,8 +191,12 @@ namespace fim
 		int off=0;//,sl=0;
 		std::string rs =FIM_CNS_EMPTY_STRING;
 		int ts=this->size();
-
-		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) != 0 )
+		int mf = 0;
+		if (flags & FIM_REG_EXTENDED)
+			mf |= REG_EXTENDED;
+		if (flags & FIM_REG_ICASE)
+			mf |= REG_ICASE;
+		if( regcomp(&regex,r, 0 | mf ) != 0 )
 			return;
 
 		//sl=strlen(s);
