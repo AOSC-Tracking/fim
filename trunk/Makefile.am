@@ -322,6 +322,7 @@ endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
 endif
+	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'identifier /*path...' -k q # parser leak fixed with destructor lines in yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -hs -h | grep h.s -q
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help   | wc -c` -eq `$(FIM_EXE) $(FIMNORCOPTS) --help=s | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=s | wc -l` -eq `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -l`
