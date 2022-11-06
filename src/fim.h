@@ -32,6 +32,7 @@
 #include "../config.h"
 #endif /* HAVE_CONFIG_H */
 
+#define FIM_USE_OLDCXX ( __cplusplus<201103L ) /* */
 #define FIM_USE_CXX11 ( __cplusplus>=201103L ) /* */
 #define FIM_USE_CXX14 ( __cplusplus> 201402L ) /* */
 #define FIM_USE_CXX17 ( __cplusplus> 201707L ) /* */
@@ -318,6 +319,7 @@ namespace rl
 #define FIM_WANT_FBI_PRINTF 0
 #define FIM_FBI_PRINTF( ... ) {}
 #define FIM_VERB_PRINTF printf
+#define FIM_VERB_COUT std::cout
 
 namespace fim{
 enum fim_image_source_t FIM_ENUM_BASE { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */

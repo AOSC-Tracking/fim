@@ -1833,7 +1833,7 @@ noa:	1;
     if(vl)
     {
 	    if(read_offset_l||read_offset_u)
-		    FIM_VERB_PRINTF("file seek range specified: %lld:%lld\n",(long long int)read_offset_l,(long long int)read_offset_u);
+		    FIM_VERB_COUT << "..found at " << read_offset_l << ":" << read_offset_u << "\n";
 	    else
 		    FIM_VERB_PRINTF("no file seek range specified\n");
     }
@@ -1854,7 +1854,8 @@ with_offset:
 		{
 			read_offset_l=regexp_offset;
 			read_offset_u=read_offset_l+sl;
-        		if(vl>0)FIM_VERB_PRINTF("..found at %lld:%lld\n",(long long int)read_offset_l,(long long int)read_offset_u);
+        		if(vl>0)
+				FIM_VERB_COUT << "..found at " << read_offset_l << ":" << read_offset_u << "\n";
 			fim_fseek(fp,read_offset_l,SEEK_SET);
 			cc.setVariable(FIM_VID_SEEK_MAGIC,"");
 		}
@@ -2285,7 +2286,8 @@ head_not_found: /* no appropriate loader found for this image */
     if( read_offset_u > read_offset_l )
     {
 	    read_offset_l++;
-	    if(vl)FIM_VERB_PRINTF("file seek range adjusted to: %lld:%lld\n",(long long int)read_offset_l,(long long int)read_offset_u);
+	    if(vl)
+		    FIM_VERB_COUT << "file seek range adjusted to: " << read_offset_l << ":" << read_offset_u << "\n";
 	    goto with_offset;
     }
 errl:
