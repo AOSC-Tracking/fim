@@ -138,7 +138,7 @@ err:
 	}
 #endif
 
-	fim_cxr CommandConsole::get_help(const fim_cmd_id& item)const
+	fim_cxr CommandConsole::get_help(const fim_cmd_id& item, const char dl)const
 	{
 		if(item.size())
 		{
@@ -222,7 +222,7 @@ err:
 
 		{
 			std::ostringstream oss;
-			const fim::string sws = fim_help_opt(item.c_str());
+			const fim::string sws = fim_help_opt(item.c_str(), dl);
 			// consider using fim_shell_arg_escape or a modification of it here.
 			if( sws != FIM_CNS_EMPTY_STRING )
 				oss << sws << "\n";
@@ -250,7 +250,7 @@ err:
 		fim_cxr retval;
 
 		if( !args.empty() && args[0].length()>0 )
-			retval = get_help(args[0]);
+			retval = get_help(args[0],'l');
 
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
 

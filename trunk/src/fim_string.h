@@ -29,6 +29,8 @@
 #include <string>
 #include "fim_types.h"
 
+#define FIM_REG_EXTENDED 0x1
+#define FIM_REG_ICASE 0x2
 namespace fim
 {
 	class string /*FIM_FINAL*/ :public std::string
@@ -62,7 +64,7 @@ namespace fim
 		/* copy constructor */
 		string(const string& rhs);
 		bool re_match(const fim_char_t*r)const;
-		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
+		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=FIM_REG_EXTENDED | FIM_REG_ICASE);
 		fim::string line(int ln)const;
 		size_t lines(void)const;
 //		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;

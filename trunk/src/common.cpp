@@ -129,6 +129,16 @@ fim::string fim_key_escape(const fim::string uk)
 	return oss.str();
 }
 
+fim::string fim_man_to_text(const fim::string ms)
+{
+	fim::string ts = ms;
+	ts.substitute("(\\\\fB)(.*?)(\\\\fP)", "$2");
+	ts.substitute("(\n\\.B)(.*?)(\n)", "$2 ");
+	ts.substitute("(\\\\fR\\\\fI)(.*?)(\\\\fR)", "$2 ");
+	ts.substitute("(\n)", " ");
+	return ts;
+}
+
 void fim_perror(const fim_char_t *s)
 {
 #if 1
