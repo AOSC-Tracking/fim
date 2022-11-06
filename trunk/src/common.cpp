@@ -1080,7 +1080,11 @@ int fim_snprintf_fim_int(char *r, fim_int n)
 {
 	// this does not pass g++ -pedantic-errors
 	if(FIM_LARGE_FIM_INT)
+#if FIM_USE_OLDCXX
+		return sprintf(r,"%ld",(long int)n);
+#else
 		return sprintf(r,"%lld",(long long int)n);
+#endif
 		//return sprintf(r,"%jd",(intmax_t)n);
 		//return sprintf(r,"%zd",(signed size_t)n);
 		//return sprintf(r,"%lld",(long long int)n);
@@ -1109,7 +1113,11 @@ int fim_snprintf_XB(char *str, size_t size, size_t q)
 	if(q/d<10)
 		src = snprintf(str, size, "%1.1f%c%c",((float)q)/((float)d),u,b);
 	else
+#if FIM_USE_OLDCXX
+		src = snprintf(str, size, "%d%c%c",(int)(q/d),u,b);
+#else
 		src = snprintf(str, size, "%zd%c%c",q/d,u,b);
+#endif
 	return src;
 }
 
