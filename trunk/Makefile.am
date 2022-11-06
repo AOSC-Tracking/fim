@@ -166,6 +166,8 @@ if ENABLE_RAW_BITS_RENDERING
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --dump-reference-help | wc -l` -gt 100
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c` -gt 28000 # man dump
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | grep fB | wc -l` -gt 40 # lots of troff
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | grep fB | wc -l` -eq 0  # no troff left (hopefully)
 	test `$(FIM_EXE) $(FIMNORCOPTS) --NON-existent-OPTIONNN | wc -l` -gt 70 # help function
 	$(FIM_EXE) $(FIMNORCOPTS)       --NON-existent-OPTIONNN; test $$? == 240 # help function failing
 if ENABLE_BMP
