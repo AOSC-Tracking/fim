@@ -127,7 +127,7 @@ manmode:
 			"A VARIABLE shall be an already declared or undeclared variable identifier (see \n.B VARIABLES REFERENCE\n) or a valid alias, created using the \n.B alias\ncommand.\n"
 			"The \"=~\" operator treats the right expression as a STRING, and uses it as a regular expression for matching purposes.\n"
 			"The SLASH_AND_REGEXP is a slash (\"/\") followed by a STRING, interpreted as a regular expression.\n"
-			"If 'INTEGER , INTEGER IDENTIFIER arguments' is encountered, command IDENTIFIER will be repeated on each file in the interval between the two INTERGERs, and substituting the given file name to any '{}' found in the commands arguments (which must be quoted in order to be treated as strings).\n"
+			"If 'INTEGER , INTEGER IDENTIFIER arguments' is encountered, command IDENTIFIER will be repeated on each file in the interval between the two INTEGERs, and substituting the given file name to any '{}' found in the commands arguments (which must be quoted in order to be treated as strings).\n"
 			"See ""\\fR\\fI""regex""\\fR""(1) for regular expression syntax.\n"
 			"\n"
 			"The way some one-line statements are evaluated:\n\n"

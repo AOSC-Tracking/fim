@@ -1130,7 +1130,7 @@ namespace fim
 #define FIM_FLT_HELP_DISPLAY FIM_FLT_DISPLAY " ['reinit' {string}]|'resize' {w} {h}]: display the current file contents." FIM_CNS_CMDSEP "If 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device." FIM_CNS_CMDSEP "See documentation for the --" FIM_OSW_OUTPUT_DEVICE " command line switch for allowed values of {string}." FIM_CNS_CMDSEP "If 'resize' and no argument, will ask the window manager to size the window like the image." FIM_CNS_CMDSEP "If 'resize' and two arguments, these will be used as width and height of window, to set."
 
 /*  */
-#define FIM_CNS_SLIDESHOW_CMD FIM_FLT_RELOAD "; i:fresh=1; while(" FIM_VID_FILEINDEX "<=" FIM_VID_FILELISTLEN "-" FIM_VID_LOOP_ONCE "){sleep " FIM_VID_WANT_SLEEPS "; next;} sleep " FIM_VID_WANT_SLEEPS "; "
+#define FIM_CNS_SLIDESHOW_CMD FIM_FLT_RELOAD "; i:fresh=1; while(" FIM_VID_FILEINDEX " <= " FIM_VID_FILELISTLEN "-" FIM_VID_LOOP_ONCE "){sleep " FIM_VID_WANT_SLEEPS "; next;} sleep " FIM_VID_WANT_SLEEPS "; "
 #define FIM_CNS_QUIET_CMD FIM_VID_DISPLAY_STATUS "=0;" FIM_VID_DISPLAY_BUSY "=0;"
 
 /*
@@ -1226,5 +1226,6 @@ namespace fim
 #define FIM_MAN_Bn(X) ".B " X "\n.fi \n" /* bold newline */
 #define FIM_MAN_fB(X) "\\fB" X "\\fP" /* bold inline */
 #define FIM_MAN_fR(X) "\\fR\\fI" X "\\fR"
+#define FIM_MAN_iB "\\:" /* invisible break */
 
 #endif /* FIM_FIM_H */
