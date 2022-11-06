@@ -9,14 +9,14 @@ bin_PROGRAMS = fim
 bin_SCRIPTS = fimgs
 doc_DATA = fimrc
 
-LFLAGS = -+ --nounistd
+LFLAGS = -+ # --nounistd
 YFLAGS = -v -d
 
 #lex.yy.cc : lex.lex
 lex.yy.cc: lex.lex yacc.tab.cpp
 	$(LEX) $(LFLAGS) $<
-	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
-	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
+#	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
+#	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.hpp: yacc.tab.cpp
 yacc.tab.cpp: yacc.ypp lex.lex
