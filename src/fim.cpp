@@ -76,7 +76,7 @@ struct fim_options_t fim_options[] = {
 	"Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image (as in fbi)."
     },
     {FIM_OSW_BINARY,     optional_argument,       FIM_NULL, 'b',
-	"view any file as either a 1 or 24 bpp bitmap", "[=24|1]",
+	"view any file as either a 1 or 24 bpp bitmap", "24|1",
 	"Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.\n" 
 	"Image width will not exceed the value of the " FIM_MAN_fB(FIM_VID_PREFERRED_RENDERING_WIDTH) " variable.\n"
 	"Regard this as an easter bunny option.\n"
@@ -124,7 +124,7 @@ struct fim_options_t fim_options[] = {
 	"Framebuffer device to use. Default is the one your vc is mapped to (as in fbi)."
     },
     {"dump-reference-help",      optional_argument /*no_argument*/,       FIM_NULL, 0x6472690a,
-	"dump reference info","[=man]",
+	"dump reference info","man",
 	"Will dump to stdout the language reference help."
     },
     {"dump-default-fimrc",      no_argument,       FIM_NULL, 0x64646672,
@@ -146,7 +146,7 @@ struct fim_options_t fim_options[] = {
     {"help",       optional_argument,       FIM_NULL, 'h',
 	"print program invocation help and exit"
 		    ,FIM_HELP_EXTRA_OPTS,
-	"Print (short, descriptive, long, or complete man) program invocation help, and exit."
+	"Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man."
 #if FIM_WANT_HELP_ARGS
 	    " If further arguments follow, individual help messages will be shown instead."
 #endif /* FIM_WANT_HELP_ARGS */
@@ -442,7 +442,7 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_WANT_R_SWITCH */
 #if FIM_WANT_RECURSE_FILTER_OPTION
     {FIM_OSW_RECURSIVE, optional_argument, FIM_NULL, 'R',
-	"push paths recursively", "[={exp}]",
+	"push paths recursively", "{exp}",
 	"Push files/directories to the files list recursively. "
 	"The expression in variable " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which will be loaded in the list. "
 	"You can overwrite its value by optionally passing an expression {exp} here as argument. "
@@ -467,12 +467,12 @@ struct fim_options_t fim_options[] = {
 	    " Experimental feature, unfinished."
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
-#if FIM_EXPERIMENTAL_SHADOW_DIRS
+//#if FIM_EXPERIMENTAL_SHADOW_DIRS
     {"load-shadow-dir",   required_argument, FIM_NULL, 0x68696768,
 	    "add shadow directory for 'scale \"shadow\"'", "{dir}",
 	    "Add {dir} to the shadow directory list. Then 'scale \"shadow\"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved."
     },
-#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+//#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
     { "/",   required_argument,       FIM_NULL, '/',
 	    "jump to file name matching pattern", "{pattern}",
 	    "After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'."
@@ -483,7 +483,7 @@ struct fim_options_t fim_options[] = {
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
     {"once",       no_argument,       FIM_NULL, '1',
 	    "if running --slideshow, loop only once", FIM_NULL,
-	    "If running --slideshow, loop only once (s in fbi)." },  /* loop only once */ /* fbi's and fim's */
+	    "If running --slideshow, loop only once (as in fbi)." },  /* loop only once */ /* fbi's and fim's */
 /*    {"font",       required_argument, FIM_NULL, 'f',"",FIM_NULL},*/  /* font */
 /*    {"edit",       no_argument,       FIM_NULL, 'e',"",FIM_NULL},*/  /* enable editing */	/* fbi's */
 /*    {"list",       required_argument, FIM_NULL, 'l',"",FIM_NULL},*/
@@ -557,7 +557,7 @@ struct fim_options_t fim_options[] = {
 FIM_CONSTEXPR int fim_options_count=sizeof(fim_options)/sizeof(fim_options_t);
 struct option options[fim_options_count];
 
-fim::string fim_help_opt(const char*qs)
+fim::string fim_help_opt(const char*qs, const char dl)
 {
 	std::ostringstream oss;
 
@@ -590,27 +590,38 @@ fim::string fim_help_opt(const char*qs)
 
 	for(size_t i=0;i<fim_options_count-1;++i)
 		if(
-				( ( static_cast<int>(qs[1]) ) == fim_options[i].val ) ||
-				( qs[1] == '-' && 0 == strcmp(qs+2,fim_options[i].name) )
+				( qs[0] == '-' && isascii( fim_options[i].val ) && !qs[2] && qs[1] == fim_options[i].val ) ||
+				( qs[1] == '-' && *fim_options[i].name && 0 == strcmp(qs+2,fim_options[i].name) )
 		  )
 		{
-			oss << qs << " is a fim command option: ";
+			oss << qs << " is a fim command line option: ";
 			if( isascii( fim_options[i].val ) )
 			{
 				oss << "-" << fim_options[i].cVal();
-				if( fim_options[i].optdesc )
-			       		oss << " =" << fim_options[i].optdesc;
+				if( fim_options[i].optdesc && fim_options[i].has_arg == optional_argument )
+			       		oss << "[" << fim_options[i].optdesc << "]";
+				if( fim_options[i].optdesc && fim_options[i].has_arg != optional_argument )
+			       		oss << " " << fim_options[i].optdesc << "";
 				oss << ", ";
 			}
 			if( ( fim_options[i].name ) )
 			{
 				oss << "--" << fim_options[i].name;
-				if( fim_options[i].optdesc )
-			       		oss << " =" << fim_options[i].optdesc;
+				if( fim_options[i].optdesc && fim_options[i].has_arg == optional_argument )
+			       		oss << "[=" << fim_options[i].optdesc << "]";
+				if( fim_options[i].optdesc && fim_options[i].has_arg != optional_argument )
+			       		oss << "=" << fim_options[i].optdesc << "";
 				//oss << " ";
 			}
-			oss << ": " << fim_options[i].desc;
-			// oss << fim_options[i].mandesc; // man/groff markup should be cleaned up before printing
+
+			if (dl == 's')
+				; // enough
+			if (dl == 'd')
+				oss << ": " << fim_options[i].desc;
+			if (dl == 'l')
+				oss << std::endl << fim_man_to_text(fim_options[i].mandesc);
+			if (dl == 'm')
+				oss << std::endl << fim_options[i].mandesc;
 			goto ret;
 		}
 		//oss << fim_options[i].cVal() << "\n";
@@ -664,9 +675,10 @@ string fim_dump_man_page_snippets(void)
 	   		if((fim_options[i].val)!='-')
 			{
 				oss << slol << "-" << fim_options[i].cVal();
-				if(fim_options[i].has_arg==required_argument)
-					if(fim_options[i].optdesc)
-						oss << " " << fim_options[i].optdesc;
+				if( fim_options[i].optdesc && fim_options[i].has_arg == optional_argument )
+			       		oss << "[" << fim_options[i].optdesc << "]";
+				if( fim_options[i].optdesc && fim_options[i].has_arg == required_argument )
+			       		oss << " " << fim_options[i].optdesc << "";
 				oss << ",";
 			}
 	 	  	else
@@ -683,15 +695,15 @@ string fim_dump_man_page_snippets(void)
 			case required_argument:
 			//std::cout << " <arg>";
 			if(fim_options[i].optdesc)
-			       	oss << " " << fim_options[i].optdesc;
+			      	oss << " " << fim_options[i].optdesc << "";
 			else
 			       	oss << " <arg>";
 			break;
 			case optional_argument:
 			if(fim_options[i].optdesc)
-			       	oss << fim_options[i].optdesc;
+			       	oss << "[=" << fim_options[i].optdesc << "]";
 			else
-			       	oss << "[=arg]";
+			       	oss << "[=" << "arg" << "]";
 			break;
 			default:
 			;
@@ -740,7 +752,7 @@ int fim_dump_man_page(void)
 			string(FIM_MAN_Bn("fim --" FIM_OSW_SCRIPT_FROM_STDIN " [{options}] < {scriptfile}"))+
 #endif /* FIM_READ_STDIN */
 #if FIM_WANT_HELP_ARGS
-			string(FIM_MAN_Bn("fim --help" FIM_HELP_EXTRA_OPTS " [{help-item} ...] "))+
+			string(FIM_MAN_Bn("fim --help[=" FIM_HELP_EXTRA_OPTS "] [{help-item} ...] "))+
 #endif /* FIM_WANT_HELP_ARGS */
 			string("\n"
 			".SH DESCRIPTION\n"
@@ -1067,8 +1079,6 @@ FIM_NORETURN fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=F
 	}
 	    cc.printHelpMessage(argv0);
 	    std::cout << " where OPTIONS are taken from:\n";
-	    if(helparg&&*helparg=='l')
-		    std::cout << "(EXPERIMENTAL: long help ('l') printout still unsupported)\n";
 	    for(size_t i=0;i<fim_options_count-1;++i)
 	    {	
 		if(isascii(fim_options[i].val)){
@@ -1094,6 +1104,8 @@ FIM_NORETURN fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=F
 		};
 		if(helparg&&*helparg=='d')
 			std::cout << "\t\t " << fim_options[i].desc;
+		if(helparg&&*helparg=='l')
+			std::cout << "\t\t " << fim_man_to_text(fim_options[i].mandesc);
 		std::cout << FIM_SYM_ENDL;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
@@ -1723,11 +1735,13 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			    );
 		    appendedPostInitCommand=true;
 		    break;
-#if FIM_EXPERIMENTAL_SHADOW_DIRS
 		case 0x68696768:
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
 			cc.browser_.push_shadow_dir(std::string(optarg));
-		    break;
+#else /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+		    std::cerr<< "warning: shadow dir is not supported (need to compile with C++11 enabled for this).\n";
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+		    break;
 #if FIM_WANT_CMDLINE_KEYPRESS
 		case 'K':
 			cc.push_key_press(optarg);
@@ -1743,7 +1757,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    if(optind < argc)
 		    {
 		    	for (i = optind; i < argc; i++)
-		    		std::cout << cc.get_help(argv[i]) << std::endl;
+		    		std::cout << cc.get_help(argv[i], optarg?*optarg:'l') << std::endl;
 	    		std::exit(retcode);
 		    }
 #endif /* FIM_WANT_HELP_ARGS */

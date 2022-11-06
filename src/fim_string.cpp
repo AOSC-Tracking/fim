@@ -19,6 +19,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "fim.h"
+#include "fim_string.h"
 #include <string>
 
 #define FIM_WANT_DEBUG_REGEXP 0
@@ -172,7 +173,13 @@ namespace fim
 #if FIM_USE_CXX_REGEX
 		std::string os;
 		try {
-			os = std::regex_replace( *this, std::regex(r, ( std::regex_constants::extended | std::regex_constants::icase /*| std::regex_constants::format_sed*/) ), s);
+			std::regex_constants::syntax_option_type mf{};
+			if (flags & FIM_REG_EXTENDED)
+				mf |= std::regex_constants::extended;
+			if (flags & FIM_REG_ICASE)
+				mf |= std::regex_constants::icase;
+			//mf |= std::regex_constants::format_sed;
+			os = std::regex_replace( *this, std::regex(r, mf), s);
 		} catch (const std::exception &) { }
 		if(os!=*this)
 			*this=os.c_str();
