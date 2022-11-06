@@ -896,7 +896,7 @@ fim::string Image::getInfo(void)const
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 {
 	/* FIXME: for cleanup, shall eliminate this branch and introduce a default string. */
-	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim_char_t pagesinfobuffer[FIM_PRINTFNUM_BUFSIZE*2+3];
 	fim_char_t imagemode[3],*imp;
 	const fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
@@ -916,7 +916,7 @@ fim::string Image::getInfo(void)const
 	const size_t ms = fbi_img_pixel_bytes(fimg_); /* memory size */
 #endif /* FIM_WANT_DISPLAY_MEMSIZE */
 
-	snprintf(linebuffer, sizeof(linebuffer),
+	snprintf(linebuffer, sizeof(linebuffer)-1,
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
 #if FIM_WANT_DISPLAY_FILESIZE
 	     " %dkB"
@@ -1209,7 +1209,8 @@ void Image::get_irs(char *imp)const
 		break;
 		case Image::FIM_NO_ROT:
 		default:
-			FIM_NO_OP_STATEMENT;
+			/**/
+		break;
 	}
 	*imp=FIM_SYM_CHAR_NUL;
 }

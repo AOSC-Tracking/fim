@@ -2447,6 +2447,10 @@ ret:
 #endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 	}
 
+#if FIM_EXPERIMENTAL_VAR_EXPANDOS 
+extern "C" { int sscanf(const char *format, ...); } /* c++11's sscanf does not support %m */
+#endif /* FIM_EXPERIMENTAL_VAR_EXPANDOS */
+
 fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 {
 	// see FIM_VID_INFO_FMT_STR FIM_VID_COMMENT_OI 	FIM_VID_COMMENT_OI_FMT
@@ -2634,7 +2638,7 @@ strdone:
 					if(fcp)std::free(fcp);
 					if(vip)std::free(vip);
 				}
-#else
+#else /* 1 */
 				if(strlen(sp+1)>=3)
 				{
 					char *fcp = FIM_NULL, *vip = FIM_NULL, *bcp = FIM_NULL;
@@ -2649,7 +2653,7 @@ strdone:
 					if(bcp)std::free(bcp);
 					if(vip)std::free(vip);
 				}
-#endif
+#endif /* 1 */
 				break;
 #endif /* FIM_EXPERIMENTAL_VAR_EXPANDOS */
 				// default:
