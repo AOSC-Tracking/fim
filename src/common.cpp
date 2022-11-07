@@ -328,12 +328,9 @@ ret:
 	fim_char_t* slurp_binary_fd(int fd,int *rs)
 	{
 			/*
-			 * If badly tuned, this code is a true allocator grinder :)
-			 *
-			 * slurps a binary file (possibly a stream) and returns the allocated memory.
-			 *
-			 * FIXME : use stat if possible.
-			 * FIXME : it is not throughly tested
+			 * slurps a string.
+			 * puts length of non-NUL bytes in *rs.
+			 * TODO: rename to slurp_string().
 			 * */
 			fim_char_t	*buf=FIM_NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
@@ -345,11 +342,11 @@ ret:
 				fim_char_t *tb;
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
-				tb=(fim_char_t*)fim_realloc(buf,rb+=nrb);
+				tb=(fim_char_t*)fim_realloc(buf,(rb+=nrb)+1);
 				if(tb!=FIM_NULL)
 					buf=tb;
 				else
-					{rb-=nrb;continue;}
+					{rb-=nrb;buf[rb]=FIM_SYM_CHAR_NUL;continue;}
 			}
 			if(rs)
 				*rs=rb;
