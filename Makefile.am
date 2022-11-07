@@ -304,6 +304,9 @@ endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c 'next'   -c quit # leak fixed
+if WITH_INKSCAPE
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb    $(top_srcdir)/media/sample.svg -c 'quit !(i:width>0 && i:height>0)' #
+endif
 endif
 if ENABLE_TIFF
 	if $(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep tiff && which convert ; then \

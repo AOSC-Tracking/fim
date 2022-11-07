@@ -1735,6 +1735,7 @@ dnl      		AC_MSG_WARN([Fim will try to invoke 'inkscape' to handle SVG format f
 	else
 		fim_cv_inkscape=no
 	fi
+AM_CONDITIONAL(WITH_INKSCAPE, test x$fim_cv_inkscape = xyes)
 
 AC_CHECK_PROG(have_xfig,fig2dev,yes,no)
         if test x$have_xfig = xyes -a x$fim_cv_xfig = xyes ; then
