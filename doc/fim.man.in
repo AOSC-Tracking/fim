@@ -34,6 +34,7 @@ For '.FIG' vectorial images, fim will try to use 'fig2dev'.
 For '.DIA' vectorial images, fim will try to use 'dia'.
 For '.SVG' vectorial images, fim will try to use 'inkscape'.
 For other formats fim will try to use ImageMagick's 'convert' executable.
+The converter is given 15 seconds for the conversion before a timeout.
 
 
 If \fB{imagepath}\fP is a file, its format is guessed not by its name but by its contents (see e.g. the \fB_file_loader\fP variable to change this default).
