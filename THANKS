@@ -1,6 +1,6 @@
 	Thanks go to (in temporal order, newer to older):
 
-Rafael Laboissiere, for compatibility and correctnes fixes
+Rafael Laboissiere, for compatibility and correctness fixes
 Martin Klaiber, for pointing out problems and testing
 Mohammed Isam, for having provided PCX reading support
 Matthieu Crapet, for enabling out-of-tree builds
