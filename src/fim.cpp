@@ -1897,7 +1897,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		/* output device guess */
 		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )
 		{
-			if( fim_getenv(FIM_ENV_SSH) ) /* is this a ssh session ? */
+			if( fim_getenv(FIM_ENV_SSH) && *fim_getenv(FIM_ENV_SSH) ) /* is this a ssh session ? */
 			{
 	#ifdef FIM_WITH_AALIB
 				g_fim_output_device=FIM_DDN_INN_AA;
@@ -1909,7 +1909,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			else
 			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2)
 			/* check to see if we are under X */
-			if( fim_getenv(FIM_ENV_DISPLAY) )
+			if( fim_getenv(FIM_ENV_DISPLAY) && *fim_getenv(FIM_ENV_DISPLAY) )
 			{
 	#ifdef FIM_WITH_LIBIMLIB2
 				g_fim_output_device=FIM_DDN_INN_IL2;
