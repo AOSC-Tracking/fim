@@ -71,6 +71,7 @@
 #define FIM_FB_SWITCH_IF_NEEDED() /* */
 #endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 #define FIM_MSG_WAIT_PIPING(CP) "please wait while piping through" " '" CP "'..."
+#define FIM_MSG_FAILED_PIPE(CP) "piping through" " '" CP "' failed."
 #define FIM_TEXTURED_ROTATION 0
 
 namespace fim
@@ -2065,8 +2066,11 @@ probe_loader:
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn.c_str(),"r")))
+		{
 			/* this could happen in case dia was removed from the system */
+			cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_DIA), "*");
 			goto shall_skip_header;
+		}
 		else
 		{
 			unlink(tpfn.c_str());
@@ -2084,7 +2088,10 @@ probe_loader:
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_FIG2DEV), "*");
 	/* a xfig file was found, and we try to use fig2dev (fim) */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,FIM_NULL)))
+	{
+		cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_FIG2DEV), "*");
 		goto shall_skip_header;
+	}
 	loader = &ppm_loader;
     }
 #endif /* FIM_TRY_XFIG */
@@ -2095,7 +2102,10 @@ probe_loader:
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_XCFTOPNM), "*");
 	/* a gimp xcf file was found, and we try to use xcftopnm (fim) */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,FIM_NULL)))
+    	{
+		cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_XCFTOPNM), "*");
 		goto shall_skip_header;
+	}
 	loader = &ppm_loader;
     }
 #endif /* FIM_TRY_XCFTOPNM */
@@ -2135,7 +2145,10 @@ probe_loader:
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",tpfn.c_str(),FIM_NULL))&&0==fim_fclose(fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
+		{
+			cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_INKSCAPE), "*");
 			goto shall_skip_header;
+		}
 		else
 		{
 			unlink(tpfn);
@@ -2169,7 +2182,10 @@ probe_loader:
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_CONVERT), "*");
 	/* no loader found, try to use ImageMagick's convert */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
+	{
+		cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_CONVERT), "*");
 		goto shall_skip_header;
+	}
 	loader = &ppm_loader;
     }
 #endif /* FIM_TRY_CONVERT */
