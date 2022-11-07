@@ -1520,7 +1520,12 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 	        	rc=execvp(cmd,argv);
 			exit(rc);
 		default:/* parent */
+#if FIM_HAS_TIMEOUT
+			waitpid(pid,NULL,0);
+#else /* FIM_HAS_TIMEOUT */
 			waitpid(pid,NULL,WNOHANG);
+			sleep(1); // to avoid parent process to find e.g. no result file
+#endif /* FIM_HAS_TIMEOUT */
 			close(p[1]);
 			fp = fdopen(p[0],"r");
 			if(FIM_NULL==fp)
@@ -2063,7 +2068,7 @@ probe_loader:
     {
 	/* a gimp xcf file was found, and we try to use xcftopnm (fim) */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_DIA), "*");
-	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
+	if(FIM_NULL!=(fp=FIM_TIMED_EXECLP(FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn.c_str(),"r")))
 		{
@@ -2087,7 +2092,7 @@ probe_loader:
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_FIG2DEV), "*");
 	/* a xfig file was found, and we try to use fig2dev (fim) */
-	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,FIM_NULL)))
+	if(FIM_NULL==(fp=FIM_TIMED_EXECLP(FIM_EPR_FIG2DEV,"-L","ppm",filename,FIM_NULL)))
 	{
 		cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_FIG2DEV), "*");
 		goto shall_skip_header;
@@ -2101,7 +2106,7 @@ probe_loader:
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_XCFTOPNM), "*");
 	/* a gimp xcf file was found, and we try to use xcftopnm (fim) */
-	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,FIM_NULL)))
+	if(FIM_NULL==(fp=FIM_TIMED_EXECLP(FIM_EPR_XCFTOPNM,filename,FIM_NULL)))
     	{
 		cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_XCFTOPNM), "*");
 		goto shall_skip_header;
@@ -2128,21 +2133,9 @@ probe_loader:
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_INKSCAPE), "*");
 	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"", filename,tpfn);
 	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --without-gui --export-png \"%s\"", filename,tpfn);
-#if 0
-	/* FIXME : the following code should work, but it doesn't */
-	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",FIM_NULL)))
-	{
-		fp=fim_fread_tmpfile(fp);
-		if(fp==FIM_NULL) return FIM_NULL;
-		else
-		{
-			loader = &png_loader;
-		}
-	}
-#else
 	// The following are the arguments to inkscape in order to convert an SVG into PNG:
         if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_INKSCAPE " ..\n");
-	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",tpfn.c_str(),FIM_NULL))&&0==fim_fclose(fp))
+	if(FIM_NULL!=(fp=FIM_TIMED_EXECLP(FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",tpfn.c_str(),FIM_NULL))&&0==fim_fclose(fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
 		{
@@ -2157,7 +2150,6 @@ probe_loader:
 		}
 	}
     }
-#endif /* FIM_WITH_LIBPNG  */
 #endif /* FIM_TRY_INKSCAPE */
 #if 0
 /*
@@ -2181,7 +2173,7 @@ probe_loader:
         if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_CONVERT " ..\n");
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_CONVERT), "*");
 	/* no loader found, try to use ImageMagick's convert */
-	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
+	if(FIM_NULL==(fp=FIM_TIMED_EXECLP(FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
 	{
 		cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_CONVERT), "*");
 		goto shall_skip_header;

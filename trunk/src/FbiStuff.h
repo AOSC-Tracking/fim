@@ -2,7 +2,7 @@
 /*
  FbiStuff.h : Misc fbi functionality routines, modified for fim
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -39,6 +39,13 @@
 #include <cstdlib>//free()
 #include <cerrno>//free()
 #include <cstring>//memset,strerror,..
+
+#if FIM_HAS_TIMEOUT
+#define FIM_EXECLP_TIMEOUT "15"
+#define FIM_TIMED_EXECLP(CMD,...) FbiStuff::fim_execlp("timeout","timeout",FIM_EXECLP_TIMEOUT,CMD,__VA_ARGS__)
+#else /* FIM_HAS_TIMEOUT */
+#define FIM_TIMED_EXECLP(CMD,...) FbiStuff::fim_execlp(CMD,CMD,__VA_ARGS__)
+#endif /* FIM_HAS_TIMEOUT */
 
 // WARNING : THIS IS PURE REDUNDANCE !
 /*

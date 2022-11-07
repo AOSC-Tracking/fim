@@ -155,7 +155,7 @@ static int probe_font_file(const fim_char_t *fontfilename)
 	{
 		#ifdef FIM_USE_ZCAT
 		/* FIXME */
-		fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,FIM_NULL);
+		fp = FIM_TIMED_EXECLP(FIM_EPR_ZCAT,fontfilename,FIM_NULL);
 		#endif /* FIM_USE_ZCAT */
 	}
 	else
@@ -291,9 +291,9 @@ openhardcodedfont:
     h = fontfilename+strlen(fontfilename)-3;
     if ( h>fontfilename && 0 == strcmp(h,".gz")) {
 	#ifdef FIM_USE_ZCAT
-    	FIM_FDS << "uncompressing by piping through " << FIM_EPR_ZCAT << "\n";
+    	FIM_FDS << "uncompressing by piping " << fontfilename << " through " << FIM_EPR_ZCAT << "\n";
 	/* FIXME */
-	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,FIM_NULL);
+	fp = FIM_TIMED_EXECLP(FIM_EPR_ZCAT,fontfilename,FIM_NULL);
 	#else /* FIM_USE_ZCAT */
 	if(vl)
 	FIM_FPRINTF(ff_stderr, "built with no gzip decoder!\n");

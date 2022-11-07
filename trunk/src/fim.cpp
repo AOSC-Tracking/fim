@@ -761,6 +761,11 @@ int fim_dump_man_page(void)
 			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not). Graphical file formats " FIM_CNS_DSFF_SN " are supported natively, while " FIM_CNS_DSFF_SL " are supported via third party libraries. \n"
 			"Further formats are supported via external converters. \n"
 			"For 'XCF' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.FIG' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.DIA' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.SVG' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
+#if FIM_HAS_TIMEOUT
+			"The converter is given " FIM_EXECLP_TIMEOUT " seconds for the conversion before a timeout.\n"
+#else /* FIM_HAS_TIMEOUT */
+			"During conversion fim pauses for a second.\n"
+#endif /* FIM_HAS_TIMEOUT */
 			"\n")+
 			string("\n""If " FIM_MAN_fB("{imagepath}") " is a file, its format is guessed not by its name but by its contents (see e.g. the " FIM_MAN_fB(FIM_VID_FILE_LOADER) " variable to change this default).\n\n")+
 #ifdef FIM_READ_DIRS
