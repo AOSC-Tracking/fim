@@ -203,6 +203,16 @@ if ENABLE_PCX
 if WANT_READ_STDIN_IMAGE
 	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin-elds '!' --read-from-file ../special/images.list   -c 'if(_filelistlen!=0)quit 255; quit'
 	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin-elds '!' --read-from-file ../special/collated.list -c 'if(_filelistlen!=2)quit 255; quit'
+	cat $(top_srcdir)/media/numbers_pcx/1.pcx | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin -c 'quit !(i:width>0 && i:height>0)'
+	echo | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin -kq
+	echo | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin ; test $$? = 248
+	echo $(top_srcdir)/media/numbers_pcx/* | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin --read-from-stdin-elds ' ' -c 'quit !(_filelistlen==9)'
+	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin              ; test $$? = 33
+	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin -Kq          ; test $$? = 33
+	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin -kq          ; test $$? = 33
+	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin -C 'quit 22' ; test $$? = 22
+	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin -c 'quit 22' ; test $$? = 22
+	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin -F 'quit 22' ; test $$? = 22
 endif
 if ENABLE_ARCHIVE
 	tar czf archive.tgz $(top_srcdir)/media/numbers_pcx/ && $(TIMEOUT_SMALL) $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb archive.tgz -c 'stdout i:pages." pages";if(i:pages==1)quit 255;quit' && rm -f archive.tgz
@@ -230,9 +240,6 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --/                    4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.___ -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
-endif
-if WANT_READ_STDIN_IMAGE
-	echo 'quit 33' | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --script-from-stdin ; test $$? = 33
 endif
 if ENABLE_JPEG
 if WANT_READ_STDIN_IMAGE
