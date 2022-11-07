@@ -2447,10 +2447,6 @@ ret:
 #endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 	}
 
-#if FIM_EXPERIMENTAL_VAR_EXPANDOS 
-extern "C" { int sscanf(const char *format, ...); } /* c++11's sscanf does not support %m */
-#endif /* FIM_EXPERIMENTAL_VAR_EXPANDOS */
-
 fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 {
 	// see FIM_VID_INFO_FMT_STR FIM_VID_COMMENT_OI 	FIM_VID_COMMENT_OI_FMT
@@ -2576,6 +2572,8 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 #if 1
 				if(strlen(sp+1)>=4)
 				{
+					/* NOTE: C++ sscanf does not support %m; expect broken -pedantic builds */
+					/* TODO: improve portability of this */
 					char *fcp = FIM_NULL, *vip = FIM_NULL;
 					if( 2 == sscanf(sp,"?%m[A-Z_a-z]?%m[^?]?",&vip,&fcp) )
 					if(fcp && vip)

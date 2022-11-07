@@ -72,7 +72,9 @@ namespace fim
 #if FIM_WANT_LONG_INT
 		fim_stream& fim_stream::operator<<(fim_int i)
 		{
-			*this<<i;
+			fim_char_t s[FIM_ATOX_BUFSIZE];
+			fim_snprintf_fim_int(s,i);
+			*this<<s;
 			return *this;
 		}
 #endif /* FIM_WANT_LONG_INT */
