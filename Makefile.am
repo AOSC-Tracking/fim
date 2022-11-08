@@ -94,9 +94,8 @@ endif
 	$(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) 
 	if test "$(TERM)" != screen.linux && which screen; then \
-		screen $(TIMEOUT_SMALL) \
-			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS); test $$? = 255; \
-	fi
+		test `screen -q $(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS) -c 'stdout "fail"' | wc -l` == 0; \
+	fi # screen does not propagate commands's return code, therefore the stdout-based trick
 	if test "$(TERM)" == screen.linux ; then \
 		$(TIMEOUT_SMALL) \
 			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS); test $$? = 255; \
