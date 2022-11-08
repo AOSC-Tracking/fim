@@ -234,7 +234,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	struct fb_var_screeninfo  fb_ovar_;
 
 	public:
-	fim_err_t framebuffer_init(void);
+	fim_err_t framebuffer_init(const bool try_boz_patch);
 
 	private:
 	struct DEVS *devices_;

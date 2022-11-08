@@ -197,6 +197,7 @@ Will read commands from stdin prior to entering in interactive mode.
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.
 The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim --version\fP.
+The \fBfb\fP option selects the Linux framebuffer. Presence with option S (like e.g. \fBfb=S\fP) makes \fBfim\fP a bit more picky: it will not tolerate running in a screen session.
 The \fBaa\fP option can be specified as \fBaa[={['w'|'W']}]\fP ; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
 The \fBsdl\fP option may be specified as  \fBsdl\:={['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\fP, where \fBwidth\fP and \fBheight\fP are integer numbers specifying the desired resolution  (if \fBheight\fP not specified, it takes the value of \fBwidth\fP); the \fB'w'\fP character requests windowed mode; the \fB'm'\fP character requests mouse pointer display; the \fB'h'\fP character requests help grid map draw (option can be repeated); the \fB'r'\fP character requests support for window resize; the \fB'%'\fP character requests to treat \fBwidth\fP and \fBheight\fP as percentage of possible window resolution. The same letters uppercase request explicit negation of the mentioned features.
 The \fBimlib2\fP option requests imlib2.
