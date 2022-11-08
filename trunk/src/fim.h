@@ -918,10 +918,10 @@ namespace fim
 #define FIM_DDN_ICI_AA	 ""
 #endif /* FIM_WITH_AALIB */
 
-#define FIM_DDN_INN_CACA	 "caca"
-#define FIM_DDN_VAR_CACA	 "caca"
+#define FIM_DDN_INN_CACA	 "ca"
+#define FIM_DDN_VAR_CACA	 "ca"
 #ifdef FIM_WITH_LIBCACA
-#define FIM_DDN_ICI_CACA	 "|caca"
+#define FIM_DDN_ICI_CACA	 "|ca"
 #else /* FIM_WITH_LIBCACA */
 #define FIM_DDN_ICI_CACA	 ""
 #endif /* FIM_WITH_LIBCACA */

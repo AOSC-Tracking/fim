@@ -1505,7 +1505,7 @@ dnl ==================
 
 dnl ==== Notice the name difference: libcaca, as opposed to aalib.
 AC_CHECK_LIB(caca, caca_create_canvas,fim_cv_lib_caca=yes,fim_cv_lib_caca=no)
-AC_ARG_ENABLE(caca, AS_HELP_STRING([--disable-caca],[Colour ASCII-Art (-o caca) support (via libcaca)]), [if test x$enableval != xno; then fim_cv_lib_caca=yes; else fim_cv_lib_caca=no; fi],[fim_cv_lib_caca=yes;])
+AC_ARG_ENABLE(caca, AS_HELP_STRING([--disable-caca],[Colour ASCII-Art (-o ca) support (via libcaca)]), [if test x$enableval != xno; then fim_cv_lib_caca=yes; else fim_cv_lib_caca=no; fi],[fim_cv_lib_caca=yes;])
 
 if test x$fim_cv_lib_caca != xno; then
 	if test x$ac_cv_lib_caca_caca_create_canvas = xyes; then
@@ -1531,7 +1531,7 @@ if test x$fim_cv_lib_caca != xno; then
 	fi
 else
 	fim_cv_libcaca=no
-	AC_MSG_WARN([Colour ASCII-Art (-o caca) support disabled.])
+	AC_MSG_WARN([Colour ASCII-Art (-o ca) support disabled.])
         dnl AC_MSG_ERROR([Sorry, it does not seem like libcaca is installed or detectable.
 	dnl Please run --disable-caca or install libcaca in a system-wide directory instead.
 	dnl ])
