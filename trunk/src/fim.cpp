@@ -260,10 +260,18 @@ struct fim_options_t fim_options[] = {
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks.\n"
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
-"The \\fBfb\\fP option selects the Linux framebuffer. Presence with option S (like e.g. \\fBfb=S\\fP) makes " FIM_MAN_fB("fim") " a bit more picky: it will not tolerate running in a screen session.\n"
-"The \\fBaa\\fP option can be specified as \\fBaa[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+// #ifndef FIM_WITH_NO_FRAMEBUFFER
+"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("S") " (e.g. " FIM_MAN_fB("fb=S") ") makes framebuffer initialization more picky: it will not tolerate running in a screen session.\n"
+// #endif /* FIM_WITH_NO_FRAMEBUFFER */
+//#ifdef FIM_WITH_LIBCACA
+"The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option (coloured Ascii Art) can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+//#endif /* FIM_WITH_LIBCACA */
+//#ifdef FIM_WITH_AALIB
+"The " FIM_MAN_fB(FIM_DDN_INN_AA) " (monochrome Ascii Art) option can be specified as " FIM_MAN_fB(FIM_DDN_INN_AA "[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+//#endif /* FIM_WITH_AALIB */
+"Please note that the readline (internal command line) functionality in " FIM_MAN_fB(FIM_DDN_INN_CACA) " and " FIM_MAN_fB(FIM_DDN_INN_AA) " modes is limited.\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
+"The \\fBsdl\\fP option (graphical windowed mode) may be specified as  \\fBsdl" FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
 " where " FIM_MAN_fB("width") " and " FIM_MAN_fB("height") " are integer numbers specifying the desired resolution "
 " (if " FIM_MAN_fB("height") " not specified, it takes the value of " FIM_MAN_fB("width") ");"
 " the " FIM_MAN_fB("'w'") " character requests windowed mode;"
@@ -275,12 +283,9 @@ struct fim_options_t fim_options[] = {
 " The same letters uppercase request explicit negation of the mentioned features.\n"
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
 //#ifdef FIM_WITH_LIBIMLIB2
-"The \\fB" "imlib2" "\\fP option requests imlib2.\n"
+"The \\fB" "imlib2" "\\fP option requests imlib2 and is unfinished -- do not use it.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_DUMB) " test mode is not interactive.\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
-//#ifdef FIM_WITH_LIBCACA
-"The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
-"The command line functionality in " FIM_MAN_fB(FIM_DDN_INN_CACA) " and \\fB" "aa" "\\fP modes is limited.\n"
-//#endif /* FIM_WITH_LIBCACA */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
 	"open at specified byte offset",
