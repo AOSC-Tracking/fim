@@ -78,7 +78,7 @@ FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhlltW' -K ':quit' -K ''
 NO_ASAN=ASAN_OPTIONS=detect_leaks=0
 
 if ENABLE_CACA
-FIM_USE_ASCII_ART_DEFAULT=caca
+FIM_USE_ASCII_ART_DEFAULT=ca
 else
 if ENABLE_AA
 FIM_USE_ASCII_ART_DEFAULT=aa
@@ -120,13 +120,13 @@ endif
 cacatests: all
 if WITH_EXPECT
 	$(TIMEOUT_SMALL) \
-		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o caca $(top_srcdir)/media/
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o ca $(top_srcdir)/media/
 endif
 	$(TIMEOUT_SMALL) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS)
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca  $(FIMVIDEOTESTOPTS)
 	if test -n "$(DISPLAY)"; then \
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca=w $(FIMVIDEOTESTOPTS); \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w $(FIMVIDEOTESTOPTS); \
 	fi
 	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #

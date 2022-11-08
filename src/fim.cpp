@@ -278,8 +278,8 @@ struct fim_options_t fim_options[] = {
 "The \\fB" "imlib2" "\\fP option requests imlib2.\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
 //#ifdef FIM_WITH_LIBCACA
-"The \\fBcaca\\fP option can be specified as \\fBcaca[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
-"The command line functionality in \\fB" "caca" "\\fP and \\fB" "aa" "\\fP modes is limited.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+"The command line functionality in " FIM_MAN_fB(FIM_DDN_INN_CACA) " and \\fB" "aa" "\\fP modes is limited.\n"
 //#endif /* FIM_WITH_LIBCACA */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
@@ -1670,6 +1670,13 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 'o':
 		    //fim's
+#ifdef FIM_WITH_LIBCACA
+			if(optarg && optarg == strstr(optarg,"caca"))
+			{
+				std::cerr << "ehm, it's 'ca', not 'caca', but fine for now.\n";
+				optarg += 2;
+			}
+#endif /* FIM_WITH_LIBCACA */
 		    	g_fim_output_device=optarg;
 #if FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE
 			{
