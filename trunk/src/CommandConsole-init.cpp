@@ -105,7 +105,17 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 					mc_
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					);
-			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init()){cleanup();return FIM_ERR_GENERIC;}
+			const bool do_boz_patch = (dopts.size() && dopts[0]=='S')?0:(0xbabebabe==0xbabebabe);
+			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init(do_boz_patch))
+			{
+				if(do_boz_patch) // if not, allow for reinit
+					cleanup();
+				ffdp=((FramebufferDevice*)displaydevice_);
+				displaydevice_=NULL;
+				if(ffdp)
+					delete ffdp;
+				return FIM_ERR_GENERIC;
+			}
 			ffdp=((FramebufferDevice*)displaydevice_);
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_FB);
 			if(default_fbdev)ffdp->set_fbdev(default_fbdev);

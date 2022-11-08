@@ -89,11 +89,18 @@ endif
 fbtests: all
 if WITH_EXPECT
 	$(TIMEOUT_SMALL) \
-		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fbdev $(top_srcdir)/media/
+		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fb $(top_srcdir)/media/
 endif
 	$(TIMEOUT_SMALL) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fbdev   $(FIMVIDEOTESTOPTS) 
-
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) 
+	if test "$(TERM)" != screen.linux && which screen; then \
+		screen $(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS); test $$? = 255; \
+	fi
+	if test "$(TERM)" == screen.linux ; then \
+		$(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS); test $$? = 255; \
+	fi
 .PHONY: aatests
 aatests: all
 if WITH_EXPECT

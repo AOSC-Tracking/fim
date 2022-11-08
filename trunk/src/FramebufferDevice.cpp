@@ -284,7 +284,7 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 }
 
 
-	fim_err_t FramebufferDevice::framebuffer_init(void)
+	fim_err_t FramebufferDevice::framebuffer_init(const bool try_boz_patch)
 	{
 		int rc=0;
 
@@ -297,8 +297,10 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 		 *  - virtual terminal
 		 * */
 		fd_ = fb_init(fbdev_, fbmode_, vt_);
+		if(fd_==-1 && !try_boz_patch)
+    			return FIM_ERR_GENERIC;
 		if(fd_==-1)
-			fd_ = fb_init(fbdev_, fbmode_, vt_,0xbabebabe==0xbabebabe);//maybe we are under screen..
+			fd_ = fb_init(fbdev_, fbmode_, vt_, try_boz_patch);//maybe we are under screen..
 		if(fd_==-1)
 			exit(1);
 			//return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
