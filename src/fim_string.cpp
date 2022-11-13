@@ -236,6 +236,7 @@ namespace fim
 		return;
 	}
 
+#if FIM_WANT_OBSOLETE
 	size_t string::lines(void)const
 	{
 		/*
@@ -273,5 +274,6 @@ namespace fim
 		}
 		return "";
 	}
+#endif /* FIM_WANT_OBSOLETE */
 }
 

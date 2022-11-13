@@ -863,6 +863,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	*/
 	FILE *tfd=FIM_NULL;
 
+	errno=0; // shield form previous errors'
 	if( ( tfd=tmpfile() )!=FIM_NULL )
 	{
 		/* todo : read errno in case of error and print some report.. */

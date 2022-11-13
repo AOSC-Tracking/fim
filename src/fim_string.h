@@ -66,8 +66,10 @@ namespace fim
 		string(const string& rhs);
 		bool re_match(const fim_char_t*r)const;
 		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=FIM_REG_EXTENDED | FIM_REG_ICASE);
+#if FIM_WANT_OBSOLETE
 		fim::string line(int ln)const;
 		size_t lines(void)const;
+#endif /* FIM_WANT_OBSOLETE */
 //		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
 	}; /* fim::string */
 

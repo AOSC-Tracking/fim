@@ -224,6 +224,8 @@ if ENABLE_ARCHIVE
 	tar czf archive.tgz $(top_srcdir)/media/numbers_pcx/ && $(TIMEOUT_SMALL) $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb archive.tgz -c 'stdout i:pages." pages";if(i:pages==1)quit 255;quit' && rm -f archive.tgz
 	echo 'not an archive' > archive.tgz; $(TIMEOUT_SMALL) $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb archive.tgz -c 'stdout i:pages." pages";if(i:pages!=0)quit 255;quit' && rm -f archive.tgz
 endif
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'pread "cat $(top_srcdir)/media/numbers_pcx/1.pcx"; reload' -c 'quit !(i:width>0 && i:height>0)'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(abs_srcdir)/media/numbers_pcx/1.pcx"; pwd;stdout _last_cmd_output;  cd "-"; pwd;stdout _last_cmd_output;  cd "$(abs_srcdir)/media/numbers_pcx/";pwd;stdout _last_cmd_output; quit' | tr -d '\n'` == "$(abs_srcdir)/media/numbers_pcx""$(abs_srcdir)""$(abs_srcdir)/media/numbers_pcx"
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --mark-from-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'l=_filelistlen;toggleLimitMarked;if(_filelistlen!=l/2)quit 255; quit'
@@ -238,6 +240,8 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/4.pcx;quit (i:_comment)'; test $$? == 44 
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/0.pcx;quit (i:_comment)'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "vars"; if(! _last_cmd_output =~ "vals.*files") quit 255;;quit;'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -c 'desc "load" "$(top_srcdir)/media/special/images.desc"; desc "reload" "$(top_srcdir)/media/special/images.desc"; desc "save" "tmp.desc"; quit;' && test `wc -w < tmp.desc` == 15 && rm tmp.desc # need proper 'reload' test
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -c 'desc "load" "$(top_srcdir)/media/special/images.desc" "\t"; desc "reload" "$(top_srcdir)/media/special/images.desc" "\t"; desc "save" "tmp.desc" "X"; quit;' && test `grep X tmp.desc |  wc -w` == 10 && rm tmp.desc # need proper 'load' with separator test
 	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-shadow-directory $(top_srcdir)/media/../ -c 'scale "shadow"; if (_last_cmd_output =~ "image substituted")quit 0; else quit 255;'; fi
 	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-shadow-directory $(top_srcdir)/var/  -c 'scale "shadow"; if (_last_cmd_output =~ "image substituted")quit 0; else quit 255;'; test $$? = 255; fi
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*  -/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
@@ -249,9 +253,9 @@ endif
 endif
 if ENABLE_JPEG
 if WANT_READ_STDIN_IMAGE
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; quit' -i < $(top_srcdir)/media/image.jpg | tail -1` != "00" # mostly coverage
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; eval "quit"' -i < $(top_srcdir)/media/image.jpg | tail -1` != "00" # mostly coverage
 endif
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -K++++ -c 'flip;mirror;pan_left;pan_right;pan_up;pan_down;pan_ne;pan_sw;pan_se;pan_nw "100%"' -c q # mostly coverage
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -K++++ -c 'flip;mirror;pan_left;pan_right;pan_up;pan_down;pan_ne;pan_sw;pan_se;pan_nw "100%"' -c 'popen "echo quit"' # mostly coverage
 endif
 if ENABLE_AA
 	@make aatests
@@ -380,7 +384,10 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man | wc -c` -gt 60000
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'exec "src/fimrc"; echo; stdout; pwd; status "status" unalias' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd; autocmd "PostDisplay";autocmd "PostDisplay" "pattern";autocmd "1" "2" "toomuch"' -c quit #; cover test misc corner cases (note: no functionality check here)
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3"' -c quit #; cover test misc corner cases (note: no functionality check here)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3";autocmd_del "1" "2" "3" "4"' -c quit #; cover test misc corner cases (note: no functionality check here)
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set; stdout _last_cmd_output; quit' | wc -w` -ge 50 # test set
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM"; stdout _last_cmd_output; quit' | wc -w` -eq 1 # test set
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n'` == WhatWhatSetSetSet
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unbind; unbind "?"; bind "~"; bind "n"; bind "n" ""' -c quit
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'color "desaturate";color "negate";color "identity";color "colorblind" "daltonize";color "deuteranopia" "daltonize";color "protanopia" "daltonize";color "tritanopia" "daltonize";color "colorblind"' -c quit # only cover test
 	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi

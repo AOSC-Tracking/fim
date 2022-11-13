@@ -196,6 +196,7 @@
 #define FIM_WANT_FBI_INNER_DIAGNOSTICS false
 #define FIM_WANT_FBI_FBDEV_DIAGNOSTICS false
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* from C++11 onwards, use smart pointers over Image* */
+#define FIM_WANT_OBSOLETE 0
 
 /* shadow list of high-res images to jump on demand */
 #ifndef FIM_EXPERIMENTAL_SHADOW_DIRS
