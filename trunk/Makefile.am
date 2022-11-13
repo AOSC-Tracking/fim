@@ -238,8 +238,8 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/4.pcx;quit (i:_comment)'; test $$? == 44 
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/0.pcx;quit (i:_comment)'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "vars"; if(! _last_cmd_output =~ "vals.*files") quit 255;;quit;'
-	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-shadow $(top_srcdir)/media/../ -c 'scale "shadow"; if (_last_cmd_output =~ "image substituted")quit 0; else quit 255;'; fi
-	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-shadow $(top_srcdir)/var/  -c 'scale "shadow"; if (_last_cmd_output =~ "image substituted")quit 0; else quit 255;'; test $$? = 255; fi
+	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-shadow-directory $(top_srcdir)/media/../ -c 'scale "shadow"; if (_last_cmd_output =~ "image substituted")quit 0; else quit 255;'; fi
+	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-shadow-directory $(top_srcdir)/var/  -c 'scale "shadow"; if (_last_cmd_output =~ "image substituted")quit 0; else quit 255;'; test $$? = 255; fi
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*  -/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*  -/                    4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
