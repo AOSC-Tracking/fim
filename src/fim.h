@@ -453,6 +453,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_OSW_EXECUTE_SCRIPT	"execute-script"
 #define FIM_OSW_FINAL_COMMANDS	"final-commands"
 #define FIM_OSW_SCRIPT_FROM_STDIN	"script-from-stdin"
+#define FIM_OSW_READ_FROM_STDIN	"read-from-stdin"
 #define FIM_OSW_IMAGE_FROM_STDIN	"image-from-stdin"
 #define FIM_OSW_DUMP_SCRIPTOUT "write-scriptout"
 #define FIM_OSW_LOAD_IMG_DSC_FILE	"load-image-descriptions-file"
@@ -930,8 +931,9 @@ namespace fim
 //#define FIM_DDN_VAR_DUMB	 "dummy"
 #define FIM_DDN_VAR_DUMB	 "dumb"
 
-#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA  "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_CACA	"|" FIM_DDN_INN_DUMB "]" 
-#define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_AA FIM_DDN_ICI_IL2 FIM_DDN_ICI_CACA FIM_DDN_INN_DUMB "]" 
+#define FIM_DDN_VARS_NB	 FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_CACA "|" FIM_DDN_INN_AA  "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_DUMB
+#define FIM_DDN_VARS	 "[" FIM_DDN_VARS_NB "]" 
+#define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_CACA FIM_DDN_ICI_AA FIM_DDN_ICI_IL2 FIM_DDN_INN_DUMB "]" 
 
 #define FIM_HELP_EXTRA_OPTS "s|d|l|m"
 
