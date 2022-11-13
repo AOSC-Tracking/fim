@@ -475,7 +475,7 @@ struct fim_options_t fim_options[] = {
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
 //#if FIM_EXPERIMENTAL_SHADOW_DIRS
-    {"load-shadow-dir",   required_argument, FIM_NULL, 0x68696768,
+    {"load-shadow-directory",   required_argument, FIM_NULL, 0x68696768,
 	    "add shadow directory for 'scale \"shadow\"'", "{dir}",
 	    "Add " FIM_MAN_fB("{dir}") " to the shadow directory list. Then 'scale \"shadow\"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved."
     },

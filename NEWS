@@ -13,7 +13,7 @@
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
  * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836)
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
@@ -65,8 +65,8 @@
  * correct configure script check for regcomp() -- could lead to false negatives.
 # (r1621)
  * Don't break build on missing 'gs'.
-# (r1616,r1659,r1660,r1667,r1762)
- * Using --load-shadow-dir <dir> adds a shadow directory (experimental).
+# (r1616,r1659,r1660,r1667,r1762,r1839)
+ * Using --load-shadow-directory <dir> adds a shadow directory (experimental).
    Then 'scale "shadow"' (bound to key '"') will substitute the current displayed image with that 
    of the first same-named file located under a shadow directory.
 # (r1615)

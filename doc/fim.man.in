@@ -324,7 +324,7 @@ Do not load via external converter programs: only use built-in file decoders.
 \fB-B\fP, \fB--background-recursive\fP
 Push files/directories to the files list recursively, in background during program execution. Any sorting options will be ignored. Experimental feature, unfinished.
 .TP
-\fB--load-shadow-dir {dir}\fP
+\fB--load-shadow-directory {dir}\fP
 Add \fB{dir}\fP to the shadow directory list. Then 'scale "shadow"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved.
 .TP
 \fB-/ {pattern}\fP, \fB--/ {pattern}\fP
