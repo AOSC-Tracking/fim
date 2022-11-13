@@ -23,8 +23,8 @@
  * Refresh configure and Makefile templates.
 # (r1729)
  * Build fixes for the MinGW environment.
-# (r1752)
- * man fim: improve manual contents (on ~/.fim_history, etc.).
+# (r1752,r1838)
+ * man fim: improve manual contents (on ~/.fim_history, individual options, wording, etc.).
 # (r1727)
  * man fimrc: added a section with default aliases,
 # (r1724,r1738)
