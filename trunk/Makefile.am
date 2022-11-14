@@ -385,6 +385,16 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'exec "src/fimrc"; echo; stdout; pwd; status "status" unalias' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd; autocmd "PostDisplay";autocmd "PostDisplay" "pattern";autocmd "1" "2" "toomuch"' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3";autocmd_del "1" "2" "3" "4"' -c quit #; cover test misc corner cases (note: no functionality check here)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'alias "a" "quit 11"; unalias "a"; alias "a" "quit 23"; a; quit 13' -c quit ; test $$? == 23
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'alias "a" "quit 23"; unalias "-a"; a; quit 13' -c quit ; test $$? == 13
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unalias; stdout _last_cmd_output; unalias "NotExistent"; stdout _last_cmd_output;quit' | sed 's/unalias.*$$/Un/g' | tr -d '\n'` == UnUn
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -gt 70
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;                        "; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -lt 70
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` == 2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` == 1
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr; stdout; quit' 2>&1 > /dev/null | grep echo`" == "echo command" # stdout vs stderr
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr "out:due";stdout "out:uno";quit' 2>&1 > /dev/null | grep out` == "out:due" # stdout vs stderr
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C set_commandline_mode -K 'stdout "cli"; quit;' -K ''` = cli
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set; stdout _last_cmd_output; quit' | wc -w` -ge 50 # test set
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM"; stdout _last_cmd_output; quit' | wc -w` -eq 1 # test set
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n'` == WhatWhatSetSetSet
