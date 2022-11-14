@@ -61,7 +61,7 @@ namespace fim
 
 		string operator+(const char * s)const;
 		string operator+(const string rhs)const;
-		fim_char_t operator[](int i)const {return this->std::string::operator[](0);} // to avoid ambiguity with operator[] of std::string and char*
+		fim_char_t operator[](int i)const {return this->std::string::operator[](i);} // to avoid ambiguity with operator[] of std::string and char*
 		/* copy constructor */
 		string(const string& rhs);
 		bool re_match(const fim_char_t*r)const;

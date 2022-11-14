@@ -345,6 +345,7 @@ if ENABLE_JPEG
 	      	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.jpg -c quit && \
 	       	rm -f $(top_srcdir)/media/icon_smile.jpg ; \
 	fi # only cover test exif
+	cp $(top_srcdir)/media/image.jpg $(abs_srcdir)/media/upc_abs.JPG && $(FIM_EXE) $(FIMNORCOPTS) -o dumb --no-stat-push $(abs_srcdir)/media/upc_abs.JPG -c 'quit !(i:width>0 && i:height>0)' && rm -f $(abs_srcdir)/media/upc_abs.JPG # not really jpg-specific, exploits regexps & co
 endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
