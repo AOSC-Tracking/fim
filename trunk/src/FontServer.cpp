@@ -254,12 +254,15 @@ scanlistforafontfile:
 		goto oops;
 
 	while( ( de = readdir(dir) ) != FIM_NULL )
+	if( de->d_type == DT_REG )
+	if( regexp_match(de->d_name,"8x.*\\.psf") )
 	{
-		if(is_file(de->d_name) && regexp_match(de->d_name,"8x.*\\.psf") && access(de->d_name,R_OK))
+		nf = FIM_LINUX_CONSOLEFONTS_DIR;
+		nf+="/";
+		nf+=de->d_name;
+
+		if( 0 == access(nf.c_str(),R_OK) )
     		{
-			nf = FIM_LINUX_CONSOLEFONTS_DIR;
-			nf+="/";
-			nf+=de->d_name;
 			strncpy(fontfilenameb,nf.c_str(),FIM_PATH_MAX-1);
 			fontfilename=fontfilenameb;
 			if(probe_font_file(fontfilename)==0)
