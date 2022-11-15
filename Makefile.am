@@ -151,7 +151,7 @@ check:	tests
 # this is the official way of testing fim
 .PHONY: tests
 tests:	all
-	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb --sanity-check
+	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb --sanity-check
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
@@ -169,7 +169,7 @@ if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~i" "4"; b=_filelistlen; limit "~i" "4-4"; c=_filelistlen; limit "~i" "4-5"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit'` == 10.1.1.2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~z" "0-900"; b=_filelistlen; limit "~z" "0-909"; c=_filelistlen; stdout a.".".b.".".c;quit'` == 10.0.7 # needs stat
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "!"; b=_filelistlen; stdout a.".".b;quit'` == 10.0 # needs stat
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~d" "01/01/1970-01/01/2007"; b=_filelistlen; limit "~d" "01/01/2007-01/01/2100"; c=_filelistlen; stdout a.".".b.".".c;quit'` == 10.0.10
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~d" "01/01/1970-01/01/2007"; b=_filelistlen; limit "~d" "01/01/2007-19/01/2038"; c=_filelistlen; stdout a.".".b.".".c;quit'` == 10.0.10
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "prime" "yes"; b=_filelistlen; limit "prime" "no" ; c=_filelistlen; limit "prime" "zzz" ; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` == 10.3.2.0
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "uno"; b=_filelistlen;limit "due"; c=_filelistlen; limit "boh"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` = 10.1.1.0
 endif
@@ -256,7 +256,9 @@ if ENABLE_ARCHIVE
 	tar czf archive.tgz $(top_srcdir)/media/numbers_pcx/ && $(TIMEOUT_SMALL) $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb archive.tgz -c 'stdout i:pages." pages";if(i:pages==1)quit 255;quit' && rm -f archive.tgz
 	echo 'not an archive' > archive.tgz; $(TIMEOUT_SMALL) $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb archive.tgz -c 'stdout i:pages." pages";if(i:pages!=0)quit 255;quit' && rm -f archive.tgz
 endif
+if WANT_READ_STDIN_IMAGE
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'pread "cat $(top_srcdir)/media/numbers_pcx/1.pcx"; reload' -c 'quit !(i:width>0 && i:height>0)'
+endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(abs_srcdir)/media/numbers_pcx/1.pcx"; pwd;stdout _last_cmd_output;  cd "-"; pwd;stdout _last_cmd_output;  cd "$(abs_srcdir)/media/numbers_pcx/";pwd;stdout _last_cmd_output; quit' | tr -d '\n'` == "$(abs_srcdir)/media/numbers_pcx""$(abs_srcdir)""$(abs_srcdir)/media/numbers_pcx"
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'
@@ -430,7 +432,9 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` == 1
 	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr; stdout; quit' 2>&1 > /dev/null | grep echo`" == "echo command" # stdout vs stderr
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr "out:due";stdout "out:uno";quit' 2>&1 > /dev/null | grep out` == "out:due" # stdout vs stderr
+if WANT_READLINE
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C set_commandline_mode -K 'stdout "cli"; quit;' -K ''` = cli
+endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set; stdout _last_cmd_output; quit' | wc -w` -ge 50 # test set
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM"; stdout _last_cmd_output; quit' | wc -w` -eq 1 # test set
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n'` == WhatWhatSetSetSet
