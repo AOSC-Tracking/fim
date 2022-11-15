@@ -59,7 +59,9 @@ namespace fim
 #endif /* FIM_NAMESPACES */
 		psteps_(rhs.psteps_)
 		,displaydevice_(rhs.displaydevice_)
+#ifdef FIM_WINDOWS
 		,corners_(rhs.corners_)
+#endif /* FIM_WINDOWS */
 		,image_(FIM_NULL)
 		,commandConsole_(rhs.commandConsole_)
 	{
@@ -185,7 +187,7 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		return corners_.width();
-#else
+#else /* FIM_WINDOWS */
 		return displaydevice_->width();
 #endif /* FIM_WINDOWS */
 	}
@@ -232,7 +234,7 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		const fim_coo_t vph = corners_.height();
-#else
+#else /* FIM_WINDOWS */
 		const fim_coo_t vph = displaydevice_->height();
 #endif /* FIM_WINDOWS */
 		return vph;
@@ -255,13 +257,21 @@ namespace fim
 	fim_coo_t Viewport::xorigin(void)const
 	{
 		// horizontal origin coordinate (upper)
+#ifdef FIM_WINDOWS
 		return corners_.xorigin();
+#else /* FIM_WINDOWS */
+		return 0;
+#endif/* FIM_WINDOWS */
 	}
 
 	fim_coo_t Viewport::yorigin(void)const
 	{
 		// vertical origin coordinate (upper)
+#ifdef FIM_WINDOWS
 		return corners_.yorigin();
+#else /* FIM_WINDOWS */
+		return 0;
+#endif/* FIM_WINDOWS */
 	}
 
 	bool Viewport::shall_negate(void)const
@@ -374,7 +384,7 @@ namespace fim
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 #ifdef FIM_WINDOWS
 			if(displaydevice_ )
-#endif					
+#endif /* FIM_WINDOWS */
 			displaydevice_->display(
 					image_->get_ida_image(),
 					top_,

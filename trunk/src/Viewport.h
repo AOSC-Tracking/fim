@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,11 @@ class Viewport FIM_FINAL
         void reset(void);
         void steps_reset(void);
 	public:
+#ifdef FIM_WINDOWS
 	explicit Viewport(CommandConsole& commandConsole_, DisplayDevice *dd, const Rect &rect); 
+#else /* FIM_WINDOWS */
+	explicit Viewport(CommandConsole& commandConsole_, DisplayDevice *dd); 
+#endif /* FIM_WINDOWS */
 	explicit Viewport(const Viewport& rhs);
 	~Viewport(void);
 	private:

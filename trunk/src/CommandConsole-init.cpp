@@ -315,7 +315,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #else /* FIM_WINDOWS */
 		try
 		{
-			viewport_ = new Viewport(*this);
+			viewport_ = new Viewport(*this, displaydevice_);
 		}
 		catch(FimException e)
 		{

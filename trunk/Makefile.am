@@ -137,9 +137,9 @@ endif
 sdltests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS); \
-	FBFONT=       \
+	$(NO_ASAN) FBFONT=       \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
-	FBFONT=fim:// \
+	$(NO_ASAN) FBFONT=fim:// \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)

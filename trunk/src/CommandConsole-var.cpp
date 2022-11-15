@@ -70,10 +70,15 @@ namespace fim
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
+#if FIM_WINDOWS
 				if(window_ &&
 				   window_->current_viewportp() && 
 				   window_->current_viewportp()->getImage())
 					nsp = window_->current_viewportp()->getImage();
+#else /* FIM_WINDOWS */
+				if ( viewport_->getImage() )
+					nsp = viewport_->getImage();
+#endif /* FIM_WINDOWS */
 				goto err;
 			}
 			else
