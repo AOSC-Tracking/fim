@@ -1304,6 +1304,7 @@ if test x$fim_cv_fimrc = xyes; then
 else
 	AC_DEFINE([FIM_NOFIMRC])
 fi
+AM_CONDITIONAL(WANT_DEFAULT_FIMRC, test x$fim_cv_fimrc = xyes)
 
 dnl ==================
 AH_TEMPLATE([FIM_NOHISTORY])
