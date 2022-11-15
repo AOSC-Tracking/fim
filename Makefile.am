@@ -135,10 +135,12 @@ endif
 
 .PHONY: sdltests
 sdltests: all
-	if test -n "$(DISPLAY)"; then \
-		$(NO_ASAN) $(TIMEOUT_LARGE) \
+	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS); \
-	fi
+	FBFONT=       \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -cquit
+	FBFONT=fim:// \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -cquit
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
@@ -301,7 +303,7 @@ if ENABLE_FRAMEBUFFER
 	@if test -z "$(DISPLAY)$(SSH_TTY)"; then make fbtests; fi
 endif
 if ENABLE_SDL
-	@make sdltests
+	@if test -n "$(DISPLAY)"; then make sdltests; fi
 endif
 if ENABLE_AA
 	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
