@@ -232,7 +232,7 @@ err:
 				oss << "\"" << item << "\" is an alias, and was declared as:\n" << get_alias_info(item) << "\n";
 			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
 				oss << "\"" << item << "\" key is bound to command: " << getBoundAction(kstr_to_key(item))<<"\n";
-			if(isVariable(item))
+			if(isVariable(item) || fim_var_help_db_query(item).size())
 				oss << "\"" << item << "\" is a variable, with value:\n" 
 					<< getStringVariable(item) << "\nand description:\n" 
 					<< fim_var_help_db_query(item) << "\n";

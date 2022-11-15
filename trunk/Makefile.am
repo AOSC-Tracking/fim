@@ -391,6 +391,8 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=l | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | wc -l` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -l`
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help _last_cmd_output | wc -l` == 5
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help _LAST_CMD_OUTPUT | wc -l` == 2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -hs -h | wc -l` = 2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -hd -h | wc -l` = 2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -hl -h | wc -l` = 3
