@@ -1667,8 +1667,12 @@ ok:
 	{
 		bool needed_redisplay=false;
 
+#ifdef FIM_WINDOWS
 		if(window_)
 			needed_redisplay = window_->recursive_redisplay();
+#else /* FIM_WINDOWS */
+		needed_redisplay = viewport_->redisplay();
+#endif /* FIM_WINDOWS */
 		return needed_redisplay;
 	}
 
