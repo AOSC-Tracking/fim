@@ -1861,7 +1861,7 @@ parsed_idx:
 						is >> min_mtime_str.tm_year;
 						min_mtime_str.tm_year-=1900;
 
-						min_mtime=mktime(&min_mtime_str);
+						min_mtime=mktime(&min_mtime_str); // TODO: add check if 4-bytes time_t and after 20380119
 					}
 					else
 						; // -MAX
@@ -1892,7 +1892,7 @@ parsed_idx:
 						is >> max_mtime_str.tm_year;
 						max_mtime_str.tm_year-=1900;
 
-						max_mtime=mktime(&max_mtime_str);
+						max_mtime=mktime(&max_mtime_str); // TODO: add check if 4-bytes time_t and after 20380119
 					}
 					// std::cout << min_mtime << " .. "  << max_mtime << "\n";
 

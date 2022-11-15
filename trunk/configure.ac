@@ -617,6 +617,7 @@ if test x$have_readline = xyes; then
       )
   fi
 fi
+AM_CONDITIONAL(WANT_READLINE, test x$have_readline = xyes)
 
 dnl ============= jpeg file handling
 
