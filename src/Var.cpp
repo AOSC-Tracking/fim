@@ -2,7 +2,7 @@
 /*
  Var.cpp : 
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,11 +34,12 @@ namespace fim
 
 	fim::string fim_var_help_db_query(const fim::string& id)
 	{
-		string hs = fim_var_help_db[id];
-		if(hs==FIM_CNS_EMPTY_STRING)
-			return "the help system for variables is still incomplete";
-		else
-			return hs;
+		fim_var_help_t::const_iterator hi = fim_var_help_db.find(id);
+		fim::string hs;
+
+		if(hi != fim_var_help_db.end())
+			hs = hi->second;
+		return hs;
 	}
 
 	fim::string fim_get_variables_reference(FimDocRefMode refmode)
