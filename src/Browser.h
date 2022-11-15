@@ -230,7 +230,9 @@ class Browser FIM_FINAL
 	fim::string do_push(const args_t& args);
 	fim::string prev(int n=1);
 	fim_cxr fcmd_info(const args_t& args);
+#if FIM_WANT_OBSOLETE
 	fim::string info(void);
+#endif /* FIM_WANT_OBSOLETE */
 	std::ostream& print(std::ostream& os)const;
 	fim_cxr fcmd_load(const args_t& args);
 	const fim::string pop_current(void);
