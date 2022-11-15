@@ -2057,7 +2057,7 @@ parsed_limits:
 			// if(wom) commandConsole_.set_status_bar("limiting matching...", "*");
 			if(wom)
 			{
-				const char * msg = "";
+				fim::string msg = "";
 				switch( rm )
 				{
 					case(FullFileNameMatch   ): msg = "limiting to full filename match..."; break;
@@ -2212,10 +2212,12 @@ nop:
 		return r;
 	}
 
+#if FIM_WANT_OBSOLETE
 	fim::string Browser::info(void)
 	{
 		return fcmd_info(args_t(0));
 	}
+#endif /* FIM_WANT_OBSOLETE */
 
 	fim_cxr Browser::fcmd_rotate(const args_t& args)
 	{
