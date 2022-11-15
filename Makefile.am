@@ -138,9 +138,9 @@ sdltests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS); \
 	FBFONT=       \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -cquit
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
 	FBFONT=fim:// \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -cquit
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
@@ -201,10 +201,14 @@ endif
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdir"      ;stdout l;if(l==_filelistlen)quit 255; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdirr"     ;stdout l;if(l==_filelistlen)quit 255; quit'
 if ENABLE_RAW_BITS_RENDERING
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text   -c 'stdout _last_file_loader;quit'` == Text  # mostly coverage
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=1  -c 'stdout _last_file_loader;quit'` == Bit1  # mostly coverage
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=24 -c 'stdout _last_file_loader;quit'` == Bit24 # mostly coverage
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
+if WANT_READ_STDIN_IMAGE
+	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=1  -c 'magnify;stdout i:height."."._last_file_loader;quit'` == 1.Bit1  # coverage of tiny case; TODO: remove necessity of magnify
+	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=24 -c 'magnify;stdout i:height."."._last_file_loader;quit'` == 1.Bit24 # coverage of tiny case; TODO: remove necessity of magnify
+endif
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --dump-reference-help | wc -l` -gt 100
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c` -gt 28000 # man dump
@@ -422,6 +426,9 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help     | wc -c` -gt 30000
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help     | wc -c` -lt 60000
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man | wc -c` -gt 60000
+if WANT_DEFAULT_FIMRC
+	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-default-fimrc      | wc -c` -gt 15000
+endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'exec "src/fimrc"; echo; stdout; pwd; status "status" unalias' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd; autocmd "PostDisplay";autocmd "PostDisplay" "pattern";autocmd "1" "2" "toomuch"' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3";autocmd_del "1" "2" "3" "4"' -c quit #; cover test misc corner cases (note: no functionality check here)
