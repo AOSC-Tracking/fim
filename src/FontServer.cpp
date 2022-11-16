@@ -21,6 +21,7 @@
 */
 /*
  * This file derives from fbi, and deserves a severe reorganization.
+ * Really.
  * */
 
 #include <dirent.h>
@@ -61,8 +62,9 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f, fim
     {
     	//FIM_FDS << "before consolefont: " << "(0x"<<((void*)*_f) <<")\n";
 	*_f = fs_consolefont(font ? fonts : FIM_NULL, vl);
-	if(_f)
-    		FIM_FDS << "loaded a font\n";
+	if(_f && *_f)
+	{ FIM_FDS << "loaded a font\n"; return; } else
+	{ if(_f)*_f=NULL;FIM_FDS << "NOT loaded a font\n"; }
     	//FIM_FDS << "after consolefont : " << "(0x"<<((void*)*_f) <<")\n";
     }
 #if FIM_WANT_HARDCODED_FONT
@@ -148,9 +150,35 @@ fim::string get_default_font_list(void)
 }
 #endif
 
+static int probe_font_file_fd(FILE *fp, const fim_char_t *fontfilename, int vl)
+{
+    const int m0=fgetc(fp);
+    const int m1=fgetc(fp);
+
+    if (m0 == EOF     || m1 == EOF     ) {
+	if(vl)
+	FIM_FPRINTF(ff_stderr, "problems reading two first bytes from %s.\n",fontfilename);
+	goto oops;
+    }
+    if (m0 == FIM_PSF2_MAGIC0     && m1 == FIM_PSF2_MAGIC1     ) {
+	if(vl>1)
+	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) conform to PSF version 2, which is unsupported.\n",fontfilename,m0,m1);
+	goto oops;
+    }
+    if (m0 != FIM_PSF1_MAGIC0     || m1 != FIM_PSF1_MAGIC1     ) {
+	if(vl>1)
+	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) not conforming to PSF version 1\n",fontfilename,m0,m1);
+	goto oops;
+    }
+    return 0;
+oops:
+    return -1;
+}
+
 static int probe_font_file(const fim_char_t *fontfilename)
 {
     	FILE *fp=FIM_NULL;
+
 	if ( strlen(fontfilename)>3 && 0 == strcmp(fontfilename+strlen(fontfilename)-3,".gz"))
 	{
 		#ifdef FIM_USE_ZCAT
@@ -164,18 +192,13 @@ static int probe_font_file(const fim_char_t *fontfilename)
 	}
 
 	if (FIM_NULL == fp)
-		goto no;
+		return -1;
 
-	if (fgetc(fp) != 0x36 || fgetc(fp) != 0x04)
-		goto no;
- 
-     	/* this is enough */
+	const int rc = probe_font_file_fd(fp,fontfilename,1);
+
 	if(fp)
 		fclose(fp);
-	return 0;
-no:
-	if(fp)fclose(fp);
-	return -1;
+	return rc;
 }
 
 void fim_free_fs_font(struct fs_font *f)
@@ -266,8 +289,9 @@ scanlistforafontfile:
 			strncpy(fontfilenameb,nf.c_str(),FIM_PATH_MAX-1);
 			fontfilename=fontfilenameb;
 			if(probe_font_file(fontfilename)==0)
-				break;
-			/* FIXME */
+				break; // found
+			else
+				fontfilename = FIM_NULL;
 		}
 	}
 	closedir(dir);
@@ -313,27 +337,9 @@ openhardcodedfont:
 #if FIM_WANT_HARDCODED_FONT
 gotafp:
 #endif /* FIM_WANT_HARDCODED_FONT */
-{
-    int m0=0,m1=0;
-    m0=fgetc(fp);
-    m1=fgetc(fp);
-    if (m0 == EOF     || m1 == EOF     ) {
-	if(vl)
-	FIM_FPRINTF(ff_stderr, "problems reading two first bytes from %s.\n",fontfilename);
-	goto oops;
-    }
-    if (m0 == FIM_PSF2_MAGIC0     && m1 == FIM_PSF2_MAGIC1     ) {
-	if(vl>1)
-	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) conform to PSF version 2, which is unsupported.\n",fontfilename,m0,m1);
-	goto oops;
-    }
-    if (m0 != FIM_PSF1_MAGIC0     || m1 != FIM_PSF1_MAGIC1     ) {
-	if(vl>1)
-	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) not conforming to PSF version 1\n",fontfilename,m0,m1);
-	goto oops;
-    }
-}
 //    FIM_FPRINTF(ff_stderr, "using linux console font \"%s\"\n",filename[i]);
+    if ( 0 != probe_font_file_fd(fp,fontfilename,vl) )
+    	goto oops;
 
     f_ =(struct fs_font*) fim_calloc(1,sizeof(*f_));
     if(!f_)goto aoops;
