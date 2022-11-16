@@ -174,6 +174,8 @@ if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~d" "01/01/1970-01/01/2007"; b=_filelistlen; limit "~d" "01/01/2007-19/01/2038"; c=_filelistlen; stdout a.".".b.".".c;quit'` == 10.0.10
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "prime" "yes"; b=_filelistlen; limit "prime" "no" ; c=_filelistlen; limit "prime" "zzz" ; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` == 10.3.2.0
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "uno"; b=_filelistlen;limit "due"; c=_filelistlen; limit "boh"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` = 10.1.1.0
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'limit "-list";stdout _last_cmd_output;limit "-listall";stdout _last_cmd_output; quit;' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep there.are.*variable > /dev/null # TODO: need better test here
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'limit "-list" "prime";stdout _last_cmd_output;limit "-listall" "prime";stdout _last_cmd_output; quit;' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep there.are.*value > /dev/null # TODO: need better test here
 endif
 if ENABLE_PCX
 if ENABLE_PNG
@@ -376,6 +378,10 @@ if ENABLE_TIFF
 		convert $(top_srcdir)/media/image.png $(top_srcdir)/image.tiff && \
 		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/image.tiff -c 'next' -c quit; fi # leak fixed
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/ -c 'echo i:*' -k Tab -c quit # bogus test: should rather exercise MiniConsole
+	if which convert ; then \
+		convert $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/image.tiff && \
+		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/multi.tiff -c 'quit !(i:pages == 10)'; fi # multipage code in Image and load
+	rm $(top_srcdir)/image.tiff
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'info;stdout _last_cmd_output;quit' | grep 'media.*KB' # cover info
 if ENABLE_JPEG

@@ -226,9 +226,7 @@ class FimWindow FIM_FINAL
 #endif
 
 	~FimWindow(void);
-#if !FIM_DISABLE_WINDOW_SPLITTING
 	virtual size_t byte_size(void)const;
-#endif
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY); /* FIXME: this is a wrapper to Viewport's, until multiple windows get introduced again. */
 #if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_bool_t need_redraw(void)const;

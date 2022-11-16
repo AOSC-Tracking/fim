@@ -35,12 +35,14 @@
 
 #define FIM_WANT_ASCALE_FRIENDLY_ROTATION 1
 
+#if FIM_CACHE_DEBUG
 #if FIM_WANT_PIC_CMTS
 	std::ostream& operator<<(std::ostream& os, const ImgDscs & id)
 	{
 		return id.print(os);
 	}
 #endif /* FIM_WANT_PIC_CMTS */
+#endif /* FIM_CACHE_DEBUG */
 
 namespace fim
 {
@@ -144,11 +146,13 @@ namespace fim
 #endif /* FIM_USE_CXX11 */
 	}
 
+#if FIM_WANT_IMG_SHRED 
 	static void fim_shred(fim_byte_t * data, fim_pxc_t howmany)
 	{
 		fim_desaturate_rgb(data, howmany);
 		fim_negate_rgb(    data, howmany);
 	}
+#endif /* FIM_WANT_IMG_SHRED  */
 
 	fim_coo_t Image::original_width(void)const
 	{
@@ -576,8 +580,10 @@ ret:
         void Image::free(void)
         {
 		FIM_PR('*');
-        	if(false) /* activate this only for debug purposes */
+#if FIM_WANT_IMG_SHRED 
+        	if(FIM_WANT_IMG_SHRED ) /* activate this only for debug purposes */
         		this->shred();
+#endif /* FIM_WANT_IMG_SHRED  */
                 if(fimg_!=img_ && img_ )
 		       	FbiStuff::free_image(img_ );
                 if(fimg_     )
@@ -589,6 +595,7 @@ ret:
 		FIM_PR('.');
         }
 
+#if FIM_WANT_IMG_SHRED 
         void Image::shred(void)
         {
 		FIM_PR('*');
@@ -602,6 +609,7 @@ ret:
 		}
 		FIM_PR('.');
         }
+#endif /* FIM_WANT_IMG_SHRED  */
 
 	fim_err_t Image::do_rotate( void )
 	{
