@@ -1247,7 +1247,6 @@ namespace fim
 		return FIM_ERR_NO_ERROR;
 	}
 
-#if !FIM_DISABLE_WINDOW_SPLITTING
 	size_t FimWindow::byte_size(void)const
 	{
 		size_t bs = 0;
@@ -1255,6 +1254,7 @@ namespace fim
 		return bs;
 	}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& FimWindow ::operator= (const FimWindow& w){return *this;/* a disabled assignment */}
 
 	fim_bool_t FimWindow::need_redraw(void)const

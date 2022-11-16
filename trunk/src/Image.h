@@ -32,6 +32,8 @@
 #endif /* FIM_WANT_PIC_CMTS */
 #include <memory>
 
+#define FIM_WANT_IMG_SHRED 0
+
 namespace fim
 {
 enum fim_cvd_t /* color vision deficiency  */ {
@@ -145,7 +147,9 @@ class Image FIM_FINAL
 	size_t get_pixelmap_byte_size(void)const;
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale(void)const{ return (ascale_>0.0?ascale_:1.0); }
+#if FIM_WANT_IMG_SHRED 
 	void shred(void);
+#endif /* FIM_WANT_IMG_SHRED  */
 	fim_err_t negate (void);
 	fim_err_t identity (void);
 	fim_err_t desaturate (void);
@@ -562,11 +566,13 @@ public:
 #endif /* FIM_WANT_PIC_LVDN */
 		return bs;
 	}
+#if FIM_CACHE_DEBUG
 	std::ostream& print(std::ostream& os)const
 	{
 		os << (size()) << " entries in " << byte_size() << " bytes";
 		return os;
 	}
+#endif /* FIM_CACHE_DEBUG */
 #if FIM_WANT_PIC_LVDN
 	string get_variables_id_list(size_t up_to_max)const
 	{
@@ -638,6 +644,8 @@ public:
 	}
 	*/
 }; /* ImgDscs */
+#if FIM_CACHE_DEBUG
 	std::ostream& operator<<(std::ostream& os, const ImgDscs & id);
+#endif /* FIM_CACHE_DEBUG */
 #endif /* FIM_WANT_PIC_CMTS */
 #endif /* FIM_IMAGE_H */
