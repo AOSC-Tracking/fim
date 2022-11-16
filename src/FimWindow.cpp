@@ -1,5 +1,6 @@
 /* $LastChangedDate$ */
 /* FimWindow.cpp : Fim's own windowing system 
+
  (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
@@ -29,8 +30,8 @@ namespace fim
 		unsigned int i=0;
 		fim_err_t rc=0;/*return code*/
 #if FIM_DISABLE_WINDOW_SPLITTING
-		return "Warning: window control (splitting, etc.) is disabled. It shall be re-enabled in a future version.\n";
-#endif /* FIM_DISABLE_WINDOW_SPLITTING */
+		return "Warning: window control (splitting, etc.) is disabled. It may be re-enabled in a future version.\n";
+#else /* FIM_DISABLE_WINDOW_SPLITTING */
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
@@ -114,6 +115,7 @@ namespace fim
 		// note that an autocommand on a transient object is lethal
 		if(amroot_)
 		{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTWINDOW,c); }
+#endif /* FIM_DISABLE_WINDOW_SPLITTING */
                 return FIM_CNS_EMPTY_RESULT;
         }
 
@@ -145,6 +147,7 @@ namespace fim
 	}
 
 //#ifdef FIM_UNDEFINED
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow::FimWindow(const FimWindow& root):
 #ifdef FIM_NAMESPACES
 			Namespace(root),
@@ -164,7 +167,9 @@ namespace fim
 		       	throw FIM_E_NO_MEM;
 	}
 //#endif
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::issplit(void)const
 	{
 		/*
@@ -172,7 +177,9 @@ namespace fim
 		 * */
 		return ( first_ && second_ ) ;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::isleaf(void)const
 	{
 		/*
@@ -194,7 +201,9 @@ namespace fim
 		 */
 		return ( ! first_ && ! second_ ) ;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::isvalid(void)const
 	{	
 		/*
@@ -202,7 +211,9 @@ namespace fim
 		 * */
 		return !(( first_ && ! second_ ) || ( ! first_ && second_ ) );
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::ishsplit(void)const
 	{
 		/*
@@ -215,7 +226,9 @@ namespace fim
 		 */
 		return ( issplit() && focused().corners_.x_==shadowed().corners_.x_ ) ;
 	}
+#endif
 	
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::isvsplit(void)const
 	{
 		/*
@@ -241,7 +254,9 @@ namespace fim
 			return first_->c_focused();
 		else return second_->c_focused();
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& FimWindow::focused(void)const
 	{
 		/*
@@ -254,7 +269,9 @@ namespace fim
 			return *first_;
 		else return *second_;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& FimWindow::upper(void)
 	{
 		/*
@@ -294,7 +311,9 @@ namespace fim
 		if(!isvsplit())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 		return *second_;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& FimWindow::shadowed(void)const
 	{
 		/*
@@ -307,7 +326,9 @@ namespace fim
 			return *first_;
 		else return *second_;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	const FimWindow& FimWindow::c_shadowed(void)const
 	{
 		/*
@@ -320,6 +341,7 @@ namespace fim
 			return first_->c_shadowed();
 		else return second_->c_shadowed();
 	}
+#endif
 
 	void FimWindow::setroot(void)
 	{
@@ -329,6 +351,7 @@ namespace fim
 		amroot_=true;
 	}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	void FimWindow::split(void)
 	{
 		/*
@@ -336,6 +359,7 @@ namespace fim
 		 * */
 		hsplit();
 	}
+#endif
 
 #if 0
 	void FimWindow::print_focused(void)
@@ -364,6 +388,7 @@ namespace fim
 	}
 #endif
 	
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	void FimWindow::hsplit(void)
 	{
 		/*
@@ -418,7 +443,9 @@ namespace fim
 		}
 		else focused().vsplit();
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::swap(void)
 	{
 		/*
@@ -558,7 +585,9 @@ namespace fim
 			return Up;
 		return move;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow::Moves FimWindow::move_focus(Moves move)
 	{
 		/*
@@ -645,6 +674,7 @@ namespace fim
 		 */
 		return focus_ = !focus_;
 	}
+#endif
 
 	fim_coo_t Rect::height(void)const
 	{
@@ -656,6 +686,7 @@ namespace fim
 		return h_ ;
 	}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_coo_t Rect::setwidth(fim_coo_t w)
 	{
 		/*
@@ -676,6 +707,7 @@ namespace fim
 		 */
 		return h_=h;
 	}
+#endif
 
 	fim_coo_t Rect::width(void)const
 	{
@@ -688,6 +720,7 @@ namespace fim
 		return w_ ;
 	}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_coo_t Rect::setxorigin(fim_coo_t x)
 	{
 		/*
@@ -707,6 +740,7 @@ namespace fim
 		 */
 		return y_=y ;
 	}
+#endif
 
 	fim_coo_t Rect::xorigin(void)const
 	{
@@ -728,6 +762,7 @@ namespace fim
 		return y_ ;
 	}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::can_vgrow(const FimWindow& window, fim_coo_t howmuch)const
 	{
 		/*
@@ -758,7 +793,9 @@ namespace fim
 		 * +--------+
 		 */		return window.corners_.width() + howmuch + hspacing   < corners_.width();
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::operator==(const FimWindow&window)const
 	{
 		/*
@@ -768,7 +805,9 @@ namespace fim
 		 */
 		return corners_==window.corners_;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	int FimWindow::count_hdivs(void)const
 	{
 		/*
@@ -791,7 +830,9 @@ namespace fim
 		 * */
 		return (isleaf()|| !isvsplit())?1: first_->count_vdivs()+ second_->count_vdivs();
 	}
+#endif /* FIM_DISABLE_WINDOW_SPLITTING */
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::normalize(void)
 	{
 		/*
@@ -906,7 +947,9 @@ namespace fim
 			return FIM_ERR_NO_ERROR;
 		}
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t FimWindow::venlarge(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 #if FIM_BUGGED_ENLARGE
@@ -956,7 +999,9 @@ namespace fim
 			}
 			return FIM_ERR_NO_ERROR;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t FimWindow::henlarge(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 		/*
@@ -1032,8 +1077,9 @@ namespace fim
 			// isleaf(void)
 			return FIM_ERR_NO_ERROR;
 	}
+#endif
 
-
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t FimWindow::vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vlgrow(  units); } 
 	fim_err_t FimWindow::vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vlshrink(units); }
 	fim_err_t FimWindow::vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vugrow(  units); } 
@@ -1043,6 +1089,7 @@ namespace fim
 	fim_err_t FimWindow::hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hlshrink(units); }
 	fim_err_t FimWindow::hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hrgrow(  units); } 
 	fim_err_t FimWindow::hrshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hrshrink(units); }
+#endif /* FIM_DISABLE_WINDOW_SPLITTING */
 
 #if 0
 	void FimWindow::draw(void)const
@@ -1074,16 +1121,20 @@ namespace fim
 		bool re=false;//really redisplayed ? sometimes fim guesses it is not necessary
 		try
 		{
+#if !FIM_DISABLE_WINDOW_SPLITTING
 		if(isleaf())
+#endif
 		{
 			if(viewport_)
 				re=viewport_->redisplay();
 		}
+#if !FIM_DISABLE_WINDOW_SPLITTING
 		else
 		{
 			re |= focused().recursive_redisplay();
 			re |= shadowed().recursive_redisplay();
 		}
+#endif
 		}
 		catch(FimException e)
 		{
@@ -1094,6 +1145,7 @@ namespace fim
 	}
 
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool FimWindow::recursive_display(void)const
 	{
 		/*
@@ -1120,6 +1172,7 @@ namespace fim
 		}
 		return re;
 	}
+#endif
 
 	Viewport * FimWindow::current_viewportp(void)const
 	{
@@ -1133,12 +1186,15 @@ namespace fim
 		 * ||   ||     |
 		 * +#===#+-----+
 		 */
+#if !FIM_DISABLE_WINDOW_SPLITTING
 		if(!isleaf()) 
 			return focused().current_viewportp();
+#endif
 
 		return viewport_;
 	}	
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	Viewport& FimWindow::current_viewport(void)const
 	{
 		/*
@@ -1152,14 +1208,17 @@ namespace fim
 		 * ||   ||     |
 		 * +#===#+-----+
 		 */
+#if !FIM_DISABLE_WINDOW_SPLITTING
 		if(!isleaf())
 			return focused().current_viewport();
+#endif
 
 		if(!viewport_)/* temporarily, for security reasons throw FIM_E_TRAGIC*/ // isleaf(void)
 		    	std::cerr << FIM_WINDOW_PROBLEM << std::endl;
 
 		return *viewport_;
 	}	
+#endif
 
 #if 0
 	const Image* FimWindow::getImage(void)const
@@ -1188,6 +1247,7 @@ namespace fim
 		return FIM_ERR_NO_ERROR;
 	}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	size_t FimWindow::byte_size(void)const
 	{
 		size_t bs = 0;
@@ -1201,6 +1261,7 @@ namespace fim
 	{
 	       	return ( viewport_ && viewport_->need_redraw() );
 	}
+#endif
 
 	void FimWindow::should_redraw(enum fim_redraw_t sr)
        	{
@@ -1210,6 +1271,7 @@ namespace fim
 
 	/* Rect stuff */
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	Rect Rect::hsplit(Splitmode s){return split(s);}
 	Rect Rect::vsplit(Splitmode s){return split(s);}
 	Rect Rect::split(Splitmode s)
@@ -1236,6 +1298,7 @@ namespace fim
 	{
 		std::cout << x_ <<" " << y_  << " "<< w_ << " " << h_  << "\n";
 	}
+#endif
 
 	Rect::Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h):
 	x_(x), y_(y), w_(w), h_(h)
@@ -1245,6 +1308,7 @@ namespace fim
 
 	Rect::Rect(const Rect& rect): x_(rect.x_), y_(rect.y_), w_(rect.w_), h_(rect.h_){}
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool Rect::operator==(const Rect&rect)const
 	{
 		return x_==rect.x_ &&
@@ -1252,7 +1316,9 @@ namespace fim
 		w_==rect.w_ &&
 		h_==rect.h_;
 	}
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t Rect::vlgrow(fim_coo_t units)   { h_+=units; return FIM_ERR_NO_ERROR; } 
 	fim_err_t Rect::vlshrink(fim_coo_t units) { h_-=units; return FIM_ERR_NO_ERROR; }
 	fim_err_t Rect::vugrow(fim_coo_t units)   { y_-=units; h_+=units ; return FIM_ERR_NO_ERROR; } 
@@ -1262,6 +1328,7 @@ namespace fim
 	fim_err_t Rect::hrshrink(fim_coo_t units) { w_-=units; return FIM_ERR_NO_ERROR; }
 	fim_err_t Rect::hrgrow(fim_coo_t units)   { w_+=units; return FIM_ERR_NO_ERROR; } 
 	fim_err_t Rect::hlshrink(fim_coo_t units) { x_+=units; w_-=units ; return FIM_ERR_NO_ERROR; }
+#endif
 }
 #if 0
 /*
