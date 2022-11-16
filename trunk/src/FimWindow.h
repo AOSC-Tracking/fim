@@ -2,7 +2,7 @@
 /*
  FimWindow.h : Fim's own windowing system header file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,7 +55,9 @@ class Rect  FIM_FINAL
 {
 	public:
 	fim_coo_t x_,y_,w_,h_;	// units, not pixels
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	void print(void);
+#endif
 
 	Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h);
 
@@ -65,10 +67,13 @@ class Rect  FIM_FINAL
 
 	enum Splitmode{ Left,Right,Upper,Lower};
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	Rect hsplit(Splitmode s);
 	Rect vsplit(Splitmode s);
 	Rect split(Splitmode s);
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	fim_err_t vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	fim_err_t vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
@@ -79,11 +84,14 @@ class Rect  FIM_FINAL
 	fim_err_t hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	fim_err_t hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	bool operator==(const Rect&rect)const;
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_coo_t setwidth(fim_coo_t w);
 	fim_coo_t setheight(fim_coo_t h);
 	fim_coo_t setxorigin(fim_coo_t x);
 	fim_coo_t setyorigin(fim_coo_t y);
+#endif
 	fim_coo_t height(void)const;
 	fim_coo_t width(void)const;
 	fim_coo_t xorigin(void)const;
@@ -110,35 +118,52 @@ class FimWindow FIM_FINAL
 	FimWindow *first_,*second_;
 	bool amroot_;
 	
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	void split(void);
 	void hsplit(void);
 	void vsplit(void);
 	bool close(void);
 	bool swap(void); // new
 	void balance(void);
+#endif
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool chfocus(void);
 	Moves move_focus(Moves move);
+#endif
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	Moves reverseMove(Moves move);
 	bool normalize(void);
+#endif
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t enlarge(fim_coo_t units);
 	fim_err_t henlarge(fim_coo_t units);
 	fim_err_t venlarge(fim_coo_t units);
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool can_vgrow(const FimWindow& window, fim_coo_t howmuch)const;
 	bool can_hgrow(const FimWindow& window, fim_coo_t howmuch)const;
+#endif
 
 	private:
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	explicit FimWindow(const FimWindow& root);
 	bool isleaf(void)const;
 	bool isvalid(void)const;
 	bool issplit(void)const;
 	bool ishsplit(void)const;
+#endif
 	bool isvsplit(void)const;
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t hnormalize(fim_coo_t x, fim_coo_t w);
 	fim_err_t vnormalize(fim_coo_t y, fim_coo_t h);
+#endif
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	int count_hdivs(void)const;
 	int count_vdivs(void)const;
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_err_t vlgrow(fim_coo_t units);
 	fim_err_t vugrow(fim_coo_t units);
 	fim_err_t vushrink(fim_coo_t units);
@@ -148,26 +173,35 @@ class FimWindow FIM_FINAL
 	fim_err_t hrgrow(fim_coo_t units);
 	fim_err_t hlshrink(fim_coo_t units);
 	fim_err_t hrshrink(fim_coo_t units);
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& focused(void)const;
 	FimWindow& shadowed(void)const;
+#endif
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& upper(void);
 	FimWindow& lower(void);
 	FimWindow& left(void);
 	FimWindow& right(void);
 
 	bool operator==(const FimWindow&window)const;
+#endif
 
 	Viewport *viewport_;
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	const FimWindow& c_focused(void)const;
 	const FimWindow& c_shadowed(void)const;
 
 	Viewport& current_viewport(void)const;
+#endif
 	CommandConsole& commandConsole_;
 
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	FimWindow& operator= (const FimWindow& w);
+#endif
 
 	public:
 	void setroot(void);	// only one root window should exist
@@ -180,7 +214,9 @@ class FimWindow FIM_FINAL
 	Viewport * current_viewportp(void)const;
         fim_cxr fcmd_cmd(const args_t&args);
 	bool recursive_redisplay(void)const;	//exception safe
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	bool recursive_display(void)const;		//exception safe
+#endif
 
 	const Image* getImage(void)const;		//exception safe
 #if 0
@@ -190,9 +226,13 @@ class FimWindow FIM_FINAL
 #endif
 
 	~FimWindow(void);
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	virtual size_t byte_size(void)const;
+#endif
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY); /* FIXME: this is a wrapper to Viewport's, until multiple windows get introduced again. */
+#if !FIM_DISABLE_WINDOW_SPLITTING
 	fim_bool_t need_redraw(void)const;
+#endif
 };
 } /* namespace fim */
 #endif /* FIM_WINDOWS */
