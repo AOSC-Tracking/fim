@@ -27,11 +27,11 @@ namespace fim
 {
         fim_cxr FimWindow::fcmd_cmd(const args_t&args)
         {
-		unsigned int i=0;
-		fim_err_t rc=0;/*return code*/
 #if FIM_DISABLE_WINDOW_SPLITTING
 		return "Warning: window control (splitting, etc.) is disabled. It may be re-enabled in a future version.\n";
 #else /* FIM_DISABLE_WINDOW_SPLITTING */
+		unsigned int i=0;
+		fim_err_t rc=0;/*return code*/
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal

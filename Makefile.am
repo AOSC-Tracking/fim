@@ -380,7 +380,7 @@ if ENABLE_TIFF
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/ -c 'echo i:*' -k Tab -c quit # bogus test: should rather exercise MiniConsole
 	if which convert ; then \
 		convert $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/image.tiff && \
-		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/multi.tiff -c 'quit !(i:pages == 10)'; fi # multipage code in Image and load
+		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/image.tiff -c 'quit !(i:pages == 10)'; fi # multipage code in Image and load
 	rm $(top_srcdir)/image.tiff
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'info;stdout _last_cmd_output;quit' | grep 'media.*KB' # cover info
