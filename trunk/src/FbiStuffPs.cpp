@@ -177,7 +177,7 @@ ps_read(fim_byte_t *dst, unsigned int line, void *data)
 			dst[ds->w*i*3+3*j+0]=page_data[ds->row_stride*i+4*j+2];
 #endif
 		}
-	fim_free(page_data);
+	free(page_data);
 }
 
 static void

@@ -38,6 +38,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/multipage/Makefile \
 	$(top_srcdir)/media/special/icon_smile_gif_at_7.bin \
 	$(top_srcdir)/media/special/images.desc \
+	$(top_srcdir)/media/special/postscript.eps \
 	$(top_srcdir)/media/special/images.list \
 	$(top_srcdir)/media/special/dir.desc \
 	$(top_srcdir)/media/special/collated.list \
@@ -396,6 +397,11 @@ if ENABLE_JPEG
 	       	rm -f $(top_srcdir)/media/icon_smile.jpg ; \
 	fi # only cover test exif
 	cp $(top_srcdir)/media/image.jpg $(abs_srcdir)/media/upc_abs.JPG && $(FIM_EXE) $(FIMNORCOPTS) -o dumb --no-stat-push $(abs_srcdir)/media/upc_abs.JPG -c 'quit !(i:width>0 && i:height>0)' && rm -f $(abs_srcdir)/media/upc_abs.JPG # not really jpg-specific, exploits regexps & co
+endif
+if ENABLE_PS
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/postscript.eps -c 'quit !(i:width>0 && i:height>0)'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -C '_downscale_huge_at_load=-1;_preferred_rendering_dpi=100' $(top_srcdir)/media/special/postscript.eps -c 'quit !(i:width>0 && i:height>0)'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -C '_downscale_huge_at_load=-1;_preferred_rendering_dpi=100' $(top_srcdir)/media/special/postscript.eps -c 'stdout i:width;quit'` -lt `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -C '_downscale_huge_at_load=-1;_preferred_rendering_dpi=200' $(top_srcdir)/media/special/postscript.eps -c 'stdout i:width;quit'`
 endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
