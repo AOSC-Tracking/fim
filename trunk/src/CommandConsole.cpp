@@ -619,7 +619,7 @@ done:
 		{
 			if(it_buf>0)
 			{
-				fim_int nit_buf = it_buf;
+				const fim_int nit_buf = it_buf;
 				it_buf*=10;
 				it_buf+=c - FIM_KEY_OFFSET;
 				if( it_buf < nit_buf )
@@ -639,7 +639,7 @@ done:
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
-				fim_int mit = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
+				const fim_int mit = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
 				fim::string nc;
 
 				if(mit>0 && it_buf > mit)
