@@ -453,6 +453,8 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'z' 'stdout 1';_max_iterated_commands=2;" -k 10z -k q | tr -d '\n'` == 11 # test binding repeat
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'z' 'stdout 1';_max_iterated_commands=1;" -k 10z -k q | tr -d '\n'` == 1 # test binding repeat
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'z' 'stdout 1';_max_iterated_commands=0;" -k 10z -k q | tr -d '\n'` == 1111111111 # test binding repeat
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smile.ppm -K '' -K q -F "quit !(_fileindex==2);" # test slash search
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F "quit !(_fileindex==0);" # test slash search
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -gt 70
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;                        "; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -lt 70
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` == 2
