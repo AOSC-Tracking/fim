@@ -43,7 +43,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/dir.desc \
 	$(top_srcdir)/media/special/collated.list \
 	$(top_srcdir)/media/special/loadable.desc \
-	$(top_srcdir)/media/special/0_8bit.pcx \
+	$(top_srcdir)/media/special/0_8bit.pcx.bin \
 	$(top_srcdir)/media/special/0_gray.tiff \
 	$(top_srcdir)/media/special/0_rgba.tiff \
 	$(top_srcdir)/media/special/0_monochrome_white_polarity.tiff \
@@ -184,7 +184,7 @@ if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "uno"; b=_filelistlen;limit "due"; c=_filelistlen; limit "boh"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` = 10.1.1.0
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'limit "-list";stdout _last_cmd_output;limit "-listall";stdout _last_cmd_output; quit;' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep there.are.*variable > /dev/null # TODO: need better test here
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'limit "-list" "prime";stdout _last_cmd_output;limit "-listall" "prime";stdout _last_cmd_output; quit;' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep there.are.*value > /dev/null # TODO: need better test here
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_8bit.pcx -C 'stdout "Unsupported PCX file test.."' -c 'quit !(i:width==0)'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_8bit.pcx.bin -C 'stdout "Unsupported PCX file test.."' -c 'quit !(i:width==0)' # named so to not break dir-loading tests
 endif
 if ENABLE_PCX
 if ENABLE_PNG
