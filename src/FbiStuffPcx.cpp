@@ -53,10 +53,12 @@ typedef __u16 UWORD;		//define UNSIGNED WORD as 2 bytes
 typedef __u32 UDWORD;		//define UNSIGNED DOUBLE WORD as 4 bytes
 #endif /* HAVE_STDINT_H */
 
+#if BYTE_ORDER == BIG_ENDIAN
 UWORD swap_word(UWORD x) {
 	return ((x>>8)&0xff) |      // move byte 1 to byte 0
                ((x<<8)&0xff00);     // move byte 0 to byte 1
 }
+#endif /* BYTE_ORDER == BIG_ENDIAN */
 
 typedef struct {
 	unsigned char red;

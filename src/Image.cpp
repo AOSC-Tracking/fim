@@ -1148,12 +1148,8 @@ ret:
 	{
 		reset();
 
-		if( tii != FIM_TII_16M)
-		{
-			/* nevertheless this instance shall support all operations on it */
-			assert(!check_valid());
-		}
-		else
+#if FIM_WANT_OBSOLETE
+		if( tii == FIM_TII_16M)
 		{
 			fim_coo_t fourk=256*16;
 			img_  = fbi_image_black(fourk,fourk);
@@ -1163,6 +1159,12 @@ ret:
 				identity();
 			else
 				cout << "warning: problem generating an image\n";
+		}
+		else
+#endif /* FIM_WANT_OBSOLETE */
+		{
+			/* nevertheless this instance shall support all operations on it */
+			assert(!check_valid());
 		}
 	}
 

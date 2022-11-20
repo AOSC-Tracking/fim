@@ -189,6 +189,7 @@ err:
 
 /* ----------------------------------------------------------------------- */
 
+#if FIM_WANT_OBSOLETE
 static void
 op_grayscale(const struct ida_image *src, struct ida_rect *rect,
 	     fim_byte_t *dst, int line, void *data)
@@ -424,6 +425,7 @@ op_sharpe_free(void *data)
     fim_free(h->linebuf);
     fim_free(h);
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 /* ----------------------------------------------------------------------- */
 
@@ -464,8 +466,10 @@ op_resize_init(const struct ida_image *src, struct ida_rect *rect,
     return FIM_NULL;
 }
 
+#if FIM_WANT_OBSOLETE
 #define FIM_HAS_MISC_FBI_OPS 1
 #ifdef FIM_HAS_MISC_FBI_OPS
+static
 void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
@@ -513,6 +517,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 
 #ifndef FIM_WANTS_SLOW_RESIZE
@@ -732,8 +737,8 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
 #endif /* FIM_WANTS_SLOW_RESIZE */
-
 #endif /* FIM_HAS_MISC_FBI_OPS */
+
 static void
 op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
 	       fim_byte_t *FIM_RSTRCT dst, int line, void *FIM_RSTRCT data)
@@ -803,7 +808,9 @@ op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
 		}
 		else
 			op_resize_work_row_expand_i_unrolled( src, rect, dst, line, data, sr);
+#if FIM_WANT_OBSOLETE
 //			op_resize_work_row_expand( src, rect, dst, line, data);
+#endif /* FIM_WANT_OBSOLETE */
 
 #else /* FIM_WANTS_SLOW_RESIZE */
 		float fsx=0.0;
@@ -1053,6 +1060,7 @@ op_rotate_done(void *data)
 
 /* ----------------------------------------------------------------------- */
 void  op_none_done(void *data) {}
+#if FIM_WANT_OBSOLETE
 static fim_byte_t op_none_data;
 void* op_none_init(const struct ida_image *src,  struct ida_rect *sel,
 		   struct ida_image_info *i, void *parm)
@@ -1080,6 +1088,7 @@ struct ida_op desc_sharpe = {
     /*work:*/  op_sharpe_work,
     /*done:*/  op_sharpe_free,
 };
+#endif /* FIM_WANT_OBSOLETE */
 struct ida_op desc_resize = {
     /*name:*/  "resize",
     /*init:*/  op_resize_init,
@@ -1109,6 +1118,7 @@ struct ida_op desc_rotate = {
 
 static fim_byte_t op_none_data_;
 
+#if FIM_WANT_OBSOLETE
 static void
 op_flip_vert_(const struct ida_image *src, struct ida_rect *rect,
 	     fim_byte_t *dst, int line, void *data)
@@ -1135,6 +1145,7 @@ op_flip_horz_(const struct ida_image *src, struct ida_rect *rect,
 	dst += 3;
     }
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 static void*
 op_rotate_init_(const struct ida_image *src, struct ida_rect *rect,
@@ -1181,6 +1192,7 @@ op_rotate_ccw_(const struct ida_image *src, struct ida_rect *rect,
     }
 }
 
+#if FIM_WANT_OBSOLETE
 static void
 op_invert_(const struct ida_image *src, struct ida_rect *rect,
 	  fim_byte_t *dst, int line, void *data)
@@ -1345,9 +1357,11 @@ op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
 
 /* ----------------------------------------------------------------------- */
 void  op_free_done(void *data) { fim_free(data); }
+#endif /* FIM_WANT_OBSOLETE */
 
 /* ----------------------------------------------------------------------- */
 
+#if FIM_WANT_OBSOLETE
 struct ida_op desc_flip_vert = {
     /*name:*/  "flip-vert",
     /*init:*/  op_none_init,
@@ -1360,6 +1374,7 @@ struct ida_op desc_flip_horz = {
     /*work:*/  op_flip_horz_,
     /*done:*/  op_none_done,
 };
+#endif /* FIM_WANT_OBSOLETE */
 struct ida_op desc_rotate_cw = {
     /*name:*/  "rotate-cw",
     /*init:*/  op_rotate_init_,
@@ -1372,6 +1387,7 @@ struct ida_op desc_rotate_ccw = {
     /*work:*/  op_rotate_ccw_,
     /*done:*/  op_none_done,
 };
+#if FIM_WANT_OBSOLETE
 struct ida_op desc_invert = {
     /*name:*/  "invert",
     /*init:*/  op_none_init,
@@ -1390,6 +1406,7 @@ struct ida_op desc_autocrop = {
     /*work:*/  op_crop_work_,
     /*done:*/  op_none_done,
 };
+#endif /* FIM_WANT_OBSOLETE */
 
 // end op.c
 
@@ -2574,6 +2591,7 @@ err:
     return dest;
 }
 
+#if FIM_WANT_OBSOLETE
 struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h)
 {
 	// TODO: use fbi_image_black in fbi_image_clone !
@@ -2598,6 +2616,7 @@ struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h)
 err:
 	return nimg;
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 fim_pxc_t fbi_img_pixel_count(const struct ida_image *img)
 {
