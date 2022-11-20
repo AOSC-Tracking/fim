@@ -44,6 +44,10 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/collated.list \
 	$(top_srcdir)/media/special/loadable.desc \
 	$(top_srcdir)/media/special/0_8bit.pcx \
+	$(top_srcdir)/media/special/0_gray.tiff \
+	$(top_srcdir)/media/special/0_rgba.tiff \
+	$(top_srcdir)/media/special/0_monochrome_white_polarity.tiff \
+	$(top_srcdir)/media/special/0_16bps_msb.tiff \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim$(EXEEXT)
@@ -387,6 +391,10 @@ if ENABLE_TIFF
 		convert $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/image.tiff && \
 		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/image.tiff -c 'quit !(i:pages == 10)'; fi # multipage code in Image and load
 	rm $(top_srcdir)/image.tiff
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_gray.tiff                      -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -grayscale average media/special/0_gray.tiff
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_rgba.tiff                      -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -alpha transparent -depth 4 media/special/0_rgba.tiff
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_monochrome_white_polarity.tiff -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -monochrome -define quantum:polarity=min-is-white -depth 1 media/special/0_monochrome_white_polarity.tiff
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_16bps_msb.tiff -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -depth 16 -colorspace srgb -define tiff:endian=msb media/special/0_16bps_msb.tiff
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'info;stdout _last_cmd_output;quit' | grep 'media.*KB' # cover info
 if ENABLE_JPEG
