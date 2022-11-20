@@ -54,9 +54,10 @@ namespace fim
 		fim_err_t grow(void);
 		fim_err_t setRows(int nr);
 		fim_err_t add(const fim_char_t * cso);
+#if FIM_WANT_OBSOLETE
 		fim_err_t add(const fim_byte_t* cso);
+#endif /* FIM_WANT_OBSOLETE */
 		fim_err_t reformat(int newlsize);
-		fim_err_t do_dump(int amount)const;
 		fim_err_t clear(void);
 		fim_err_t scroll_down(void);
 		fim_err_t scroll_up(void);
@@ -86,9 +87,12 @@ namespace fim
 			{/* this constructor should not be used */}
 #endif /* FIM_USE_CXX11 */
 		private:
+#if FIM_WANT_OBSOLETE
 		int line_length(int li);
-		fim_err_t do_dump(int f, int l)const;
 		fim_err_t do_dump(void)const;
+		fim_err_t do_dump(int amount)const;
+#endif /* FIM_WANT_OBSOLETE */
+		fim_err_t do_dump(int f, int l)const;
 
 		fim_err_t grow_lines(int glines);
 		fim_err_t grow_buffer(int gbuffer);

@@ -449,6 +449,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				std::vector<char> hs(tbs,'?');
 				hs[tbs-1] = FIM_SYM_CHAR_NUL;
 				CommandConsole::status_screen(hs.data()); // TODO: this is to check if DebugConsole coped with that huge string, so a status check would be in order here.
+				displaydevice_->fb_status_screen_new("clear",false,0x01); // TODO: need to connect these to a command
+				displaydevice_->fb_status_screen_new("scroll_down",false,0x02);
+				displaydevice_->fb_status_screen_new("scroll_up",false,0x03);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 			}
 #endif /* FIM_WANT_BENCHMARKS */
