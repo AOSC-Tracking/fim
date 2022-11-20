@@ -443,6 +443,14 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			fim_bench_subsystem(displaydevice_);
 			fim_bench_subsystem(&browser_);
 			fim_bench_subsystem(this);
+			{
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+				const int tbs = 2 * mc_.byte_size();
+				std::vector<char> hs(tbs,'?');
+				hs[tbs-1] = FIM_SYM_CHAR_NUL;
+				CommandConsole::status_screen(hs.data()); // TODO: this is to check if DebugConsole coped with that huge string, so a status check would be in order here.
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+			}
 #endif /* FIM_WANT_BENCHMARKS */
 			quit(return_code_);
 			exit(return_code_);
