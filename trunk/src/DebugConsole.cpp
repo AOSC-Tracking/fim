@@ -24,6 +24,7 @@
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
+#if FIM_WANT_OBSOLETE
 		int MiniConsole::line_length(int li)
 		{
 			if(li<cline_)
@@ -36,6 +37,7 @@ namespace fim
 			// in the case li==cline_, ccol_==bp_-buffer_ will do the job:
 			return ccol_;
 		}
+#endif /* FIM_WANT_OBSOLETE */
 
 		fim_err_t MiniConsole::do_dump(int f, int l)const
 		{
@@ -283,6 +285,7 @@ rerr:
 			add(FIM_MSG_CONSOLE_FIRST_LINE_BANNER);
 		}
 
+#if FIM_WANT_OBSOLETE
 		fim_err_t MiniConsole::do_dump(int amount)const
 		{
 			/*
@@ -313,6 +316,7 @@ rerr:
 			}
 			return FIM_ERR_NO_ERROR;
 		}
+#endif /* FIM_WANT_OBSOLETE */
 
 		fim_err_t MiniConsole::grow_lines(int glines)
 		{
@@ -438,9 +442,9 @@ rerr:
 			 * We dump on screen the textual console contents.
 			 * We consider user set variables.
 			 * */
-			fim_int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
-			fim_int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
-			fim_int ls=getGlobalIntVariable(FIM_VID_CONSOLE_ROWS       );
+			const fim_int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
+			const fim_int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
+			const fim_int ls=getGlobalIntVariable(FIM_VID_CONSOLE_ROWS       );
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_TOTAL,bsize_);
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_FREE, (bsize_-(bp_-buffer_)));
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_USED, (bp_-buffer_));
@@ -462,6 +466,7 @@ rerr:
 			return FIM_ERR_GENERIC;
 		}
 
+#if FIM_WANT_OBSOLETE
 		fim_err_t MiniConsole::do_dump(void)const
 		{
 			/*
@@ -469,6 +474,7 @@ rerr:
 			 * */
 			return do_dump((cline_-rows_+1)>=0?(cline_-rows_+1):0,cline_);
 		}
+#endif /* FIM_WANT_OBSOLETE */
 
 		fim_err_t MiniConsole::clear(void)
 		{
@@ -494,7 +500,9 @@ rerr:
 			bs += bsize_ + lsize_;
 			return bs;
 		}
+#if FIM_WANT_OBSOLETE
 		fim_err_t MiniConsole::add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
+#endif /* FIM_WANT_OBSOLETE */
 
 	MiniConsole::~MiniConsole(void)
 	{
