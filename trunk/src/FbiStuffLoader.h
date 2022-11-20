@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.h : fbi functions for loading files, modified for fim
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -103,10 +103,14 @@ struct ida_op {
     void  (*done)(void *data);
 };
 
+#if FIM_WANT_OBSOLETE
 void* op_none_init(struct ida_image *src, struct ida_rect *rect,
 		   struct ida_image_info *i, void *parm);
+#endif /* FIM_WANT_OBSOLETE */
 void  op_none_done(void *data);
+#if FIM_WANT_OBSOLETE
 void  op_free_done(void *data);
+#endif /* FIM_WANT_OBSOLETE */
 
 #ifdef USE_X11
 /* save image files */

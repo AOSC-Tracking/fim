@@ -109,7 +109,9 @@ struct op_rotate_parm {
  * fim's functions
  * */
 struct ida_image * fbi_image_clone(const struct ida_image *img);
+#if FIM_WANT_OBSOLETE
 struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h);
+#endif /* FIM_WANT_OBSOLETE */
 fim_pxc_t fbi_img_pixel_count(const struct ida_image *img);
 fim_pxc_t fbi_img_pixel_bytes(const struct ida_image *img);
 
