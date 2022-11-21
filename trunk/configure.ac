@@ -1721,6 +1721,7 @@ dnl      		AC_MSG_WARN([Fim will try to invoke 'convert' to handle unknown forma
 	else
 		fim_cv_convert=no
 	fi
+AM_CONDITIONAL(WITH_CONVERT, test x$fim_cv_convert = xyes)
 
 AC_CHECK_PROG(have_xcftopnm,xcftopnm,yes,no)
         if test x$have_xcftopnm = xyes -a x$fim_cv_xcftopnm = xyes ; then

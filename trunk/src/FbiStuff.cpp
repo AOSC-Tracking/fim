@@ -1538,7 +1538,7 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 			exit(rc);
 		default:/* parent */
 #if FIM_HAS_TIMEOUT
-			waitpid(pid,NULL,0);
+			waitpid(pid,NULL,0); // TODO: pass int wstatus and check
 #else /* FIM_HAS_TIMEOUT */
 			waitpid(pid,NULL,WNOHANG);
 			sleep(1); // to avoid parent process to find e.g. no result file
@@ -2186,6 +2186,8 @@ probe_loader:
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 //#endif
 #ifdef FIM_TRY_CONVERT
+#if 0
+    // problem: pipe buffer is usually smaller than an entire ppm image :-(
     if (FIM_NULL == loader) {
         if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_CONVERT " ..\n");
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_CONVERT), "*");
@@ -2197,6 +2199,24 @@ probe_loader:
 	}
 	loader = &ppm_loader;
     }
+#else
+    // note: this solution happens a few times throghout the file, and should be factored
+    if (FIM_NULL == loader)
+	if(FIM_NULL!=(fp=FIM_TIMED_EXECLP(FIM_EPR_CONVERT,filename,(std::string("ppm:")+tpfn).c_str(),FIM_NULL))&&0==fim_fclose(fp))
+	{
+		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
+		{
+			cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_CONVERT), "*");
+			goto shall_skip_header;
+		}
+		else
+		{
+			unlink(tpfn);
+			loader = &ppm_loader;
+			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+		}
+	}
+#endif
 #endif /* FIM_TRY_CONVERT */
     if (FIM_NULL == loader)
 	    goto head_not_found;
