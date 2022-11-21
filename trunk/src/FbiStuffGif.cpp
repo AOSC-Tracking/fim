@@ -250,7 +250,6 @@ gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(h->gif)
     {
     	DGifCloseFile(h->gif FIM_DGifCloseFile_ARG);
-        fim_free(h->gif);
     }
     fclose(h->infile);
     if(h && h->il )fim_free(h->il );
