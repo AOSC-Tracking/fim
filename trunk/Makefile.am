@@ -114,8 +114,8 @@ if WITH_EXPECT
 	$(NO_ASAN) $(TIMEOUT_SMALL) \
 		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/
 endif
-	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o aa --sanity-check # differently than -o dumb, this stresses DebugConsole's grow() mechanism
-	$(FIM_EXE) $(top_srcdir)/media/ -t -c 'console_scroll_up;console_scroll_down;console_scroll_reset;quit' # placeholder for a better test
+	$(NO_ASAN) $(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o aa --sanity-check # differently than -o dumb, this stresses DebugConsole's grow() mechanism
+	$(NO_ASAN) $(FIM_EXE) $(top_srcdir)/media/ -t -c 'console_scroll_up;console_scroll_down;console_scroll_reset;quit' # placeholder for a better test
 	$(NO_ASAN) $(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa   $(FIMVIDEOTESTOPTS)
 	if test -n "$(DISPLAY)"; then \
