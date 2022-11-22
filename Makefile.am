@@ -383,6 +383,7 @@ if ENABLE_GIF
 endif
 	top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/font.sh
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'font; font "load" "non_existing"; font "next"; font "scan"; font "info"; font "prev"; quit' # TODO: test more than mere coverage (btw, this one leaks -- FIXME)
 	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex'`" == 3 # 3 and not 11
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit;'
