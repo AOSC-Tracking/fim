@@ -136,7 +136,7 @@ if test x"$fim_handle_graphicsmagick" = x"yes" ; then
   CXXFLAGS="$CXXFLAGS `GraphicsMagick-config --cppflags |tr '\n' ' '` ";
   AC_DEFINE([HAVE_LIBGRAPHICSMAGICK],[1],[We have libGraphicsMagick])
 fi
-  ], [])
+  ], [fim_handle_graphicsmagick=no;])
 AM_CONDITIONAL(WITH_LIBGRAPHICSMAGICK, test x$fim_handle_graphicsmagick = xyes)
 
 AC_ARG_ENABLE(imlib2, AS_HELP_STRING([--enable-imlib2],[Enable Imlib2 library support (EXPERIMENTAL,INCOMPLETE).]), [ if test x$enableval != xno ; then fim_handle_imlib2=yes ; fi ] )
