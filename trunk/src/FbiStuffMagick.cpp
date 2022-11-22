@@ -54,17 +54,19 @@ struct magick_state_t {
 	ImageInfo* image_info;
 	MagickPassFail mpf; 
 	ExceptionInfo exception;
+	struct fim::ida_image_info *i; 
 };
 
-static struct magick_state_t ms;
+static struct magick_state_t ms; // TODO: get rid of this
 
 namespace fim
 {
 
-static void magick_cleanup(void)
+static void magick_cleanup()
 {
 	if(ms.image)DestroyImageList(ms.image);
-	if(ms.cimage)DestroyImageList(ms.cimage);
+	if(ms.i->npages>1)
+		if(ms.cimage)DestroyImageList(ms.cimage);
 	if(ms.image_info)DestroyImageInfo(ms.image_info);
 	//DestroyExceptionInfo(ms.exception);
 	DestroyMagick();
@@ -76,6 +78,7 @@ magick_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 {
 	fim_bzero(&ms,sizeof(ms));
 	ms.mpf=MagickFail;
+    	ms.i = i;
 
 	if(!fp && !filename)
 		goto nocleanuperr;
@@ -146,7 +149,7 @@ nocleanuperr:
 static void
 magick_read(fim_byte_t *dst, unsigned int line, void *data)
 {
-	/* FIXME: this is extremely inefficient */
+	/* note: inefficient */
 	for(unsigned int c=0;c<(ms.cimage)->columns;++c)
 	{
 		PixelPacket pp=AcquireOnePixel( ms.cimage, c, line, &ms.exception );

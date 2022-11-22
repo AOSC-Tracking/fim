@@ -259,8 +259,12 @@ endif
 		convert $(top_srcdir)/media/icon_smile.gif -depth 16 $(top_srcdir)/media/icon_smile.pgm && \
 		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` == pgm && rm -f $(top_srcdir)/icon_smile.pgm; \
 	fi # cover-test FbiStuffPpm.cpp
+if WITH_LIBGRAPHICSMAGICK
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` == libGraphicsMagick
+else
 if WITH_CONVERT
 	if which convert; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` == ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
+endif
 endif
 if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '2,4 stdout  "{}";q' | wc -l` = 3
