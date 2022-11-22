@@ -493,6 +493,33 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'color "desaturate";color "negate";color "identity";color "colorblind" "daltonize";color "deuteranopia" "daltonize";color "protanopia" "daltonize";color "tritanopia" "daltonize";color "colorblind"' -c quit # only cover test
 	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
+#
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c 'a=../' -k q # TODO: test missing. for lex.lex
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c 'a=./'  -k q # TODO: test missing. for lex.lex
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c $$'\b' -k q # TODO: test missing. for lex.lex
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c 'stdout 0100' -k q # TODO: test missing. for lex.lex
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c 'stdout 0x10' -k q # TODO: test missing. for lex.lex
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c 'quit' -F '|'  # TODO: test missing. for lex.lex
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png -c 'i=3;do  { i=i-1; stdout i; } while (i>=1) stdout "ok";quit i;' # seldom used language feats (TODO): this is buggy anyways..)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c '-1;stdout _fileindex;quit!(_fileindex==10);' # FIXME
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c '-3;stdout _fileindex;quit!(_fileindex==8);'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c ' 0;stdout _fileindex;quit!(_fileindex==0);'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/-.pcx -c '3 stdout "y"; quit ((2+2)%(1+1))' | tr -d '\n'` == yyy # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '+"30.0"%;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '+ 30.0% ;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '*"30.0" ;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '* 30.0  ;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c ' "30.0"%;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c   '30.0 %;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '-"30.0"%;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '- 30.0% ;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '"30.0"%;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  ' 30.0 %;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '1,2a;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '1z;quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  'stdout exce.ption' -k q  # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '{1;;;}quit' # FIXME: add actual test # stress yacc.ypp
+#
 	make ltests
 if HAVE_VALGRIND
 	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
