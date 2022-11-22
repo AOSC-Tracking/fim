@@ -204,13 +204,13 @@ struct fim_options_t fim_options[] = {
 	    "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
     },
 #endif /* FIM_WANT_PIC_CMTS */
-#ifdef FIM_READ_STDIN_IMAGE
+//#ifdef FIM_READ_STDIN_IMAGE
     {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       FIM_NULL, 'i',
 	"read an image file from standard input", FIM_NULL,
 	"Read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats."
 	"\nIn the image list, this image takes the special name \"" FIM_STDIN_IMAGE_NAME "\".\n"
     },
-#endif /* FIM_READ_STDIN_IMAGE */
+//#endif /* FIM_READ_STDIN_IMAGE */
 #if FIM_WANT_PIC_CMTS
     {"mark-from-image-descriptions-file",       required_argument,       FIM_NULL, 0x6d666466,
 	    "mark files from descriptionos list file", "{filename}",

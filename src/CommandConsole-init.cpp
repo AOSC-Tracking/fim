@@ -369,13 +369,18 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/* execution of command line-set autocommands */
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTGFIMRC,""); 
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREUFIMRC,""); 
+  #endif /* FIM_WANT_NOSCRIPTING */
+#endif /* FIM_NOFIMRC */
 
 		{
+#ifndef FIM_WANT_NOSCRIPTING
 			#include "grammar.h"
 			setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
+#endif /* FIM_WANT_NOSCRIPTING */
 		}
-		setVariable(FIM_VID_ALL_FILE_LOADERS,Var(fim_loaders_to_string()));
 
+#ifndef FIM_NOFIMRC
+  #ifndef FIM_WANT_NOSCRIPTING
 		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/" FIM_CNS_USR_RC_FILEPATH)+2
 		{
 			strcpy(rcfile,e);
@@ -403,6 +408,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
   #endif		/* FIM_WANT_NOSCRIPTING */
 #endif		/* FIM_NOFIMRC */
+		setVariable(FIM_VID_ALL_FILE_LOADERS,Var(fim_loaders_to_string()));
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTUFIMRC,""); 
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTCONF,"");
 #ifndef FIM_WANT_NOSCRIPTING
