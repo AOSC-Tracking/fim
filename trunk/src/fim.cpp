@@ -293,6 +293,12 @@ struct fim_options_t fim_options[] = {
 	"{bytes-offset[{:upper-offset}|{+offset-range}]}",
 "Use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP will be probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files."
     },
+    {"pread-cmd",      required_argument,       FIM_NULL,  0x70726561, //prea(d)
+	"read image file in stdin from pipeline",
+	"{cmd-filter-pipeline}",
+	"Specify a shell command with " FIM_MAN_fB("{cmd-filter-pipeline}") ". The current filename will be substituted to any occurrence of '{}' and the output will be displayed.\n"
+	"This works by setting the internal " FIM_MAN_fB(FIM_VID_PREAD) " variable (empty by default)."
+    },
     {"text-reading",      no_argument,       FIM_NULL, 'P',
 	"enable space-based scrolling through the document", FIM_NULL,
 	"Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
@@ -1467,6 +1473,14 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			}
 		}
 	#endif /* FIM_AUTOCMDS */
+		    break;
+		case 0x70726561:
+		    //fim's
+#ifdef FIM_TRY_CONVERT
+		    cc.setVariable(FIM_VID_PREAD,optarg);
+#else /* FIM_TRY_CONVERT */
+		    std::cerr<< "warning: the use of the convert utility has been disabled at configure time\n";
+#endif /* FIM_TRY_CONVERT */
 		    break;
 		case 'g':
 		    //fbi's

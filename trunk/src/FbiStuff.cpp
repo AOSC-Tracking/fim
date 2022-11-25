@@ -1677,6 +1677,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
     fim_int read_offset_l = 0, read_offset_u = 0;
+    const fim::string pc = cc.getStringVariable(FIM_VID_PREAD);
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
@@ -1908,6 +1909,28 @@ with_offset:
     fim_rewind(fp);
     if(read_offset_l>0)
 	    fim_fseek(fp,read_offset_l,SEEK_SET);
+
+    if (FIM_NULL == loader)
+    if(strcmp(filename,FIM_STDIN_IMAGE_NAME)!=0) 
+    if( pc != FIM_CNS_EMPTY_STRING )
+    {
+		fim::string fpc = pc;
+		fpc.substitute("[{][}]",filename);
+		fpc += " | convert - ppm:" + tpfn;
+		if(vl)FIM_VERB_PRINTF("About to use: %s\n", fpc.c_str());
+
+		std::system(fpc);
+
+		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
+			cc.set_status_bar(FIM_MSG_FAILED_PIPE(+pc+), "*");
+		else
+		{
+			unlink(tpfn);
+			loader = &ppm_loader;
+			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+        		goto found_a_loader;
+		}
+    }
 
 #if FIM_WITH_UFRAW
     if (FIM_NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
