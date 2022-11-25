@@ -210,6 +210,10 @@ The \fBdumb\fP test mode is not interactive.
 \fB--offset {bytes-offset[{:upper-offset}|{+offset-range}]}\fP
 Use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper-offset\fP is specified, further bytes until \fBupper-offset\fP will be probed. If \fB+offset-range\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files.
 .TP
+\fB--pread-cmd {cmd-filter-pipeline}\fP
+Specify a shell command with \fB{cmd-filter-pipeline}\fP. The current filename will be substituted to any occurrence of '{}' and the output will be displayed.
+This works by setting the internal \fB_pread_cmd\fP variable (empty by default).
+.TP
 \fB-P\fP, \fB--text-reading\fP
 Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
 .TP
@@ -393,7 +397,6 @@ FBFONT		(just like in fbi) a Linux consolefont font file.
 If using a gzipped font, the zcat program will be used to uncompress it (via \fBexecvp(3)\fP).
 If not specified, the following files will be probed and the first existing will be selected:
 
-/usr/share/consolefonts/Lat15-Terminus16.psf.gz
 /usr/share/kbd/consolefonts/cp866-8x16.psf.gz
 /usr/share/consolefonts/Uni3-TerminusBoldVGA14.psf.gz
 /usr/lib/kbd/consolefonts/lat9-16.psf.gz

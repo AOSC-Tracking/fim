@@ -263,6 +263,11 @@ if WITH_LIBGRAPHICSMAGICK
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` == libGraphicsMagick
 else
 if WITH_CONVERT
+if ENABLE_JPEG
+if ENABLE_PNG
+	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg --pread-cmd="convert {} -background black -flop -fill white -pointsize 20 label:'mirrored {}' -gravity Center -append png:-" -c 'quit (i:width==320)' ; fi
+endif
+endif
 	if which convert && convert identify -list format | grep -i webp; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` == ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
 endif
 endif

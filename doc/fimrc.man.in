@@ -1181,6 +1181,11 @@ _orientation
 .fi
 .na
 .B
+_pread_cmd
+[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. The current filename will be substituted to any occurrence of '{}'.
+.fi
+.na
+.B
 _preferred_rendering_dpi
 [in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value).
 .fi
