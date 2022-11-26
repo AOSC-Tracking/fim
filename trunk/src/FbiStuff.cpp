@@ -1920,6 +1920,7 @@ with_offset:
 		fpc.substitute("[{][}]",filename);
 		fpc += " | convert - ppm:" + tpfn;
 		if(vl)FIM_VERB_PRINTF("About to use: %s\n", fpc.c_str());
+		cc.set_status_bar(FIM_MSG_WAIT_PIPING(+fpc+), "*");
 
 		std::system(fpc);
 
@@ -1937,7 +1938,7 @@ with_offset:
 
 #if FIM_WITH_UFRAW
     if (FIM_NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
-    if(regexp_match(filename,".*NEF$") || regexp_match(filename,".*nef$"))
+    if(regexp_match(filename,".*NEF$") || regexp_match(filename,".*nef$")) // FIXME: use case flag
     {
         if(vl>0)FIM_VERB_PRINTF("NEF name hook.\n");
 	loader = &nef_loader;
@@ -2226,6 +2227,8 @@ probe_loader:
 #else
     // note: this solution happens a few times throghout the file, and should be factored
     if (FIM_NULL == loader)
+    {
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_CONVERT), "*");
 	if(FIM_NULL!=(fp=FIM_TIMED_EXECLP(FIM_EPR_CONVERT,filename,(std::string("ppm:")+tpfn).c_str(),FIM_NULL))&&0==fim_fclose(fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
@@ -2240,6 +2243,7 @@ probe_loader:
 			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
 		}
 	}
+    }
 #endif
 #endif /* FIM_TRY_CONVERT */
     if (FIM_NULL == loader)

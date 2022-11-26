@@ -811,6 +811,8 @@ apf:		/* after prefetch */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPREFETCH);
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,wp);
+		if(wp != 2)
+			display_status("");
 ret:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;

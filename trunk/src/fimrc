@@ -171,7 +171,7 @@ autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
 autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
 autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
 autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
-autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";
+autocmd "PostInteractiveCommand"   "" "if(_want_prefetch>0){prefetch;}";
 autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "idempotent_cmd"; # Bug workaround: without it console scroll is broken.
 
