@@ -533,6 +533,8 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '1z;quit' # FIXME: add actual test # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  'stdout exce.ption' -k q  # FIXME: add actual test # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '{1;;;}quit' # FIXME: add actual test # stress yacc.ypp
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c           'cache; quit ! ( _want_prefetch && _cache_status =~ "count:1/5")'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'prefetch; cache; quit ! ( _want_prefetch && _cache_status =~ "count:3/5")'
 #
 	make ltests
 if HAVE_VALGRIND
