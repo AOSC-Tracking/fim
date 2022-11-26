@@ -352,8 +352,8 @@ static int gx,gy;
 		idr = iroff-oroff;
 		idc = icoff-ocoff;
 
-		lor = (FIM_MIN(orows-1,irows-1-iroff+oroff));
-		loc = (FIM_MIN(ocols-1,icols-1-icoff+ocoff));
+		lor = oroff+(FIM_MIN(orows,irows-iroff));
+		loc = ocoff+(FIM_MIN(ocols,icols-icoff));
 
 		fim_coo_t ii,ij;
 		fim_coo_t oi,oj;
@@ -926,7 +926,7 @@ err:
 							double py = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.y-by/2,vy-by,yres),yres);
 							px*=100.0/xres;
 							py*=100.0/yres;
-							cv->pan_to(px,py);
+							cv->pan_to(FIM_DELIMIT_TO_100(px),FIM_DELIMIT_TO_100(py));
 						}
 						else
 						{
