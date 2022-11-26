@@ -444,7 +444,13 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_USE_CXX11 */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
-
+			assert( fim::string("-file").re_match("^-"));
+			assert( fim::string("file ").re_match(" "));
+			assert(!fim::string("file").re_match(" "));
+			assert(!fim::string("file").re_match("^-"));
+			assert(!fim::string("-file").re_match(FIM_CNS_PIPEABLE_PATH_RE));
+			assert(!fim::string("file ").re_match(FIM_CNS_PIPEABLE_PATH_RE));
+			assert( fim::string("file-").re_match(FIM_CNS_PIPEABLE_PATH_RE));
 #if FIM_WANT_BENCHMARKS
 			fim_bench_subsystem(displaydevice_);
 			fim_bench_subsystem(&browser_);

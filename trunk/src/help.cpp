@@ -62,7 +62,7 @@ fim_var_help_db[FIM_VID_COMMENT_OI]= "[in,g:] if set not to 0, will display a cu
 fim_var_help_db[FIM_VID_COMMENT_OI_FMT]= "[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as " FIM_VID_INFO_FMT_STR"." ;
 fim_var_help_db[FIM_VID_EXIFTOOL_COMMENT]= "[out,g:] comment extracted via the exiftool interface; see " FIM_VID_EXIFTOOL "." ;
 fim_var_help_db[FIM_VID_STEPS]= "[in,g:] the default steps, in pixels, when panning images." ;
-fim_var_help_db[FIM_VID_PREAD]= "[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. The current filename will be substituted to any occurrence of '{}'." ;
+fim_var_help_db[FIM_VID_PREAD]= "[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it will be substituted to any occurrence of '{}'." ;
 fim_var_help_db[FIM_VID_VERSION]= "[out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  ;
 fim_var_help_db[FIM_VID_FBFONT]= "[out,g:] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." ;
 fim_var_help_db[FIM_VID_FBFMF]= "[in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is \"" FIM_XSTRINGIFY(FIM_FONT_MAGNIFY_FACTOR_MAX) "\". (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." ;
