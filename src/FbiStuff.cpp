@@ -1678,6 +1678,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     int want_retry=0;
     fim_int read_offset_l = 0, read_offset_u = 0;
     const fim::string pc = cc.getStringVariable(FIM_VID_PREAD);
+    const bool can_pipe = cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==0 && regexp_match(filename, FIM_CNS_PIPEABLE_PATH_RE);
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
@@ -1690,7 +1691,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)
-	    FIM_VERB_PRINTF("verbosely (level %d) loading page %d of \"%s\"\n",(int)vl,(int)page,filename);
+	    FIM_VERB_PRINTF("verbosely (level %d) loading page %d of %spipable filename \"%s\"\n",(int)vl,(int)page,(can_pipe?"":"un"),filename);
     //WARNING
     //new_image = 1;
 
@@ -1910,9 +1911,10 @@ with_offset:
     if(read_offset_l>0)
 	    fim_fseek(fp,read_offset_l,SEEK_SET);
 
-    if (FIM_NULL == loader)
+#ifdef FIM_TRY_CONVERT
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)!=0) 
     if( pc != FIM_CNS_EMPTY_STRING )
+    if( loader==FIM_NULL && can_pipe )
     {
 		fim::string fpc = pc;
 		fpc.substitute("[{][}]",filename);
@@ -1931,6 +1933,7 @@ with_offset:
         		goto found_a_loader;
 		}
     }
+#endif /* FIM_TRY_CONVERT */
 
 #if FIM_WITH_UFRAW
     if (FIM_NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
@@ -2094,9 +2097,7 @@ probe_loader:
     }
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 
-    if((loader==FIM_NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
-		goto head_not_found;
-    if( (loader==FIM_NULL) && read_offset_l > 0 )
+    if( loader==FIM_NULL && (!can_pipe || read_offset_l > 0) )
     {
     		if(vl>1)FIM_VERB_PRINTF("skipping external loading programs ..\n");
 		goto head_not_found;

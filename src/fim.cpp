@@ -296,7 +296,7 @@ struct fim_options_t fim_options[] = {
     {"pread-cmd",      required_argument,       FIM_NULL,  0x70726561, //prea(d)
 	"read image file in stdin from pipeline",
 	"{cmd-filter-pipeline}",
-	"Specify a shell command with " FIM_MAN_fB("{cmd-filter-pipeline}") ". The current filename will be substituted to any occurrence of '{}' and the output will be displayed.\n"
+	"Specify a shell command with " FIM_MAN_fB("{cmd-filter-pipeline}") ". If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it will be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which will be read and displayed.\n"
 	"This works by setting the internal " FIM_MAN_fB(FIM_VID_PREAD) " variable (empty by default)."
     },
     {"text-reading",      no_argument,       FIM_NULL, 'P',

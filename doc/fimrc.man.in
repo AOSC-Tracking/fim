@@ -1182,7 +1182,7 @@ _orientation
 .na
 .B
 _pread_cmd
-[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. The current filename will be substituted to any occurrence of '{}'.
+[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. If the current filename matches "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$\:", it will be substituted to any occurrence of '{}'.
 .fi
 .na
 .B

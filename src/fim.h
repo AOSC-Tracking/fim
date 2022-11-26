@@ -563,6 +563,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_PUSHDIR_RE	    "\\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|WEBP)$"
 #endif /* FIM_USE_CXX11 */
 #define FIM_CNS_ARCHIVE_RE	"\\.(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
+#define FIM_CNS_PIPEABLE_PATH_RE	"^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$"
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
 #define FIM_CNS_M (FIM_CNS_K*FIM_CNS_K)
@@ -765,7 +766,7 @@ namespace fim
 #define FIM_VID_COMMENT_OI_FMT 				"_caption_over_image_fmt"		/* "[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as " FIM_VID_INFO_FMT_STR"." */
 #define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out,g:] comment extracted via the exiftool interface; see " FIM_VID_EXIFTOOL "." */
 #define FIM_VID_STEPS 				"_steps"				/* "[in,g:] the default steps, in pixels, when panning images." */
-#define FIM_VID_PREAD 				"_pread_cmd"	/* "[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. The current filename will be substituted to any occurrence of '{}'." */
+#define FIM_VID_PREAD 				"_pread_cmd"	/* "[in,g:] a user-specified shell command emitting an image on stdout, in a format readable by the convert utility. If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it will be substituted to any occurrence of '{}'." */
 #define FIM_VID_VERSION				"_fim_version"	/* "[out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
 #define FIM_VID_FBFONT                           "_fbfont"       /* "[out,g:] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." */
 #define FIM_VID_FBFMF                           "_fbfont_magnify_factor"       /* "[in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is \"" FIM_XSTRINGIFY(FIM_FONT_MAGNIFY_FACTOR_MAX) "\". (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." */

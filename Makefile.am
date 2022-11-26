@@ -263,12 +263,14 @@ if WITH_LIBGRAPHICSMAGICK
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` == libGraphicsMagick
 else
 if WITH_CONVERT
-if ENABLE_JPEG
-if ENABLE_PNG
-	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg --pread-cmd="convert {} -background black -flop -fill white -pointsize 20 label:'mirrored {}' -gravity Center -append png:-" -c 'quit (i:width==320)' ; fi
-endif
-endif
 	if which convert && convert identify -list format | grep -i webp; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` == ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
+endif
+endif
+if WITH_CONVERT
+if ENABLE_JPEG
+	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd="convert {} -background black -flop -fill white -pointsize 20 label:'mirrored {}' -gravity Center -append ppm:-" -c 'quit !(i:width==320)' ; fi
+	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd="convert {} -rotate 90 -append ppm:-" -c 'quit !(i:width==240)' ; fi
+	if which convert && convert identify -list format | grep -i ppm; then cp $(top_srcdir)/media/image.jpg -- -image.jpg && $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' --pread-cmd="convert {} -rotate 90 -append ppm:-" -c 'quit !(i:width==320)' -- -image.jpg && rm -- -image.jpg ; fi
 endif
 endif
 if ENABLE_PCX
