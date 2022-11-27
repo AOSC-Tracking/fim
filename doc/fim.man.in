@@ -554,6 +554,7 @@ The SDL driver is quite inefficient, for a variety of reasons. In particular, it
 \fBfim\fP has bugs. Please read the 
 .B BUGS
 file shipped in the documentation directory to discover the known ones.
+There are also inconsistencies in the way the internal command line works across the different graphical devices.
 .SH  FILES
 
 .TP 15

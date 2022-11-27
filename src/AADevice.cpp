@@ -421,11 +421,26 @@ static bool aainvalid;
 
 #if 0
 		/* won't help in the ill X11-windowed aalib shipped with many distros case */
-		sym_keys["Left" ]=AA_LEFT;
-		sym_keys["Right"]=AA_RIGHT;
-		sym_keys["Up"   ]=AA_UP;
-		sym_keys["Down" ]=AA_DOWN;
-		sym_keys["Esc"  ]=AA_ESC;
+		sym_keys[FIM_KBD_LEFT]=AA_LEFT;
+		sym_keys[FIM_KBD_RIGHT]=AA_RIGHT;
+		sym_keys[FIM_KBD_UP]=AA_UP;
+		sym_keys[FIM_KBD_DOWN]=AA_DOWN;
+		sym_keys[FIM_KBD_ESC]=AA_ESC;
+#else
+		const int aa_f0 = 65870 - 1;
+		sym_keys[FIM_KBD_F1 ]=aa_f0+1;
+		sym_keys[FIM_KBD_F2 ]=aa_f0+2;
+		sym_keys[FIM_KBD_F3 ]=aa_f0+3;
+		sym_keys[FIM_KBD_F4 ]=aa_f0+4;
+		sym_keys[FIM_KBD_F5 ]=aa_f0+5;
+		sym_keys[FIM_KBD_F6 ]=aa_f0+6;
+		sym_keys[FIM_KBD_F7 ]=aa_f0+7;
+		sym_keys[FIM_KBD_F8 ]=aa_f0+8;
+		sym_keys[FIM_KBD_F9 ]=aa_f0+9;
+		sym_keys[FIM_KBD_F10]=aa_f0+10;
+		sym_keys[FIM_KBD_F11]=aa_f0+11;
+		sym_keys[FIM_KBD_F12]=aa_f0+12;
+		cc.key_syms_update();
 #endif
 
 	/*	The mulx and muly are not reliable */

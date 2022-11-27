@@ -1046,6 +1046,7 @@ FIM_MAN_fB("fim")
 " has bugs. Please read the \n"
 ".B BUGS\n"
 "file shipped in the documentation directory to discover the known ones.\n"
+"There are also inconsistencies in the way the internal command line works across the different graphical devices.\n"
 ".SH  FILES\n"
 "\n"
 ".TP 15\n"

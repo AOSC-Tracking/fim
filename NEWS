@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1879)
+ * Keys F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12 are now usable with 'bind' in with modes -o aa, -o ca, -o dumb.
 # (r1878)
  * Fix for -o sdl: when flipped or mirrored was drawing a smaller box by mistake.
 # (r1876)
@@ -19,7 +21,7 @@
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
  * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839-r1878)
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839-r1879)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.

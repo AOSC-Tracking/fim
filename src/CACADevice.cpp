@@ -197,6 +197,21 @@ err:
 		caca_refresh_display(dp_);
 err:
 #endif
+
+		sym_keys[FIM_KBD_F1 ]=CACA_KEY_F1;
+		sym_keys[FIM_KBD_F2 ]=CACA_KEY_F2;
+		sym_keys[FIM_KBD_F3 ]=CACA_KEY_F3;
+		sym_keys[FIM_KBD_F4 ]=CACA_KEY_F4;
+		sym_keys[FIM_KBD_F5 ]=CACA_KEY_F5;
+		sym_keys[FIM_KBD_F6 ]=CACA_KEY_F6;
+		sym_keys[FIM_KBD_F7 ]=CACA_KEY_F7;
+		sym_keys[FIM_KBD_F8 ]=CACA_KEY_F8;
+		sym_keys[FIM_KBD_F9 ]=CACA_KEY_F9;
+		sym_keys[FIM_KBD_F10]=CACA_KEY_F10;
+		sym_keys[FIM_KBD_F11]=CACA_KEY_F11;
+		sym_keys[FIM_KBD_F12]=CACA_KEY_F12;
+		cc.key_syms_update();
+
 		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
 
@@ -334,7 +349,7 @@ err:
 				case (CACA_KEY_PAGEDOWN):  rc=1;k=FIM_KKE_PAGE_DOWN; break;
 				case (CACA_KEY_RETURN):  rc=1;k=FIM_KKE_ENTER;  break;
 				case (CACA_KEY_BACKSPACE):  rc=1;k=FIM_KKE_BACKSPACE;  break;
-				//case (CACA_KEY_F1):  k=FIM_KKE_F1; break;
+				// case (CACA_KEY_F1):  rc=1;k=FIM_KKE_F1; break;
 		       	}
 			if (k)
 				*c = k;
