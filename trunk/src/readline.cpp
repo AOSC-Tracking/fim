@@ -37,6 +37,7 @@
 #define FIM_RL_DBG_COUT(OP) cout << "RL:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "()" <<  OP << "\n";
 #define FIM_RL_KEY_DBG(C) " pressed key: '" << (fim_char_t)C << "'  code: " << (int)(C) << "  is esc: " << (C==FIM_SYM_ESC)
 #define FIM_PR(OP) if (FIM_WANT_RL_VERBOSE) FIM_RL_DBG_COUT(OP) 
+#define FIM_DR(C) if (cc.getVariable(FIM_VID_DBG_COMMANDS).find('k') >= 0) std::cout << FIM_RL_KEY_DBG(C) << std::endl // TODO: add --verbose-keys option as _debug_commands="k"
 
 /*
  * This file is severely messed up :).
@@ -227,6 +228,7 @@ static int redisplay_hook_no_fb(void)
 static int fim_post_rl_getc(int c)
 {
 	FIM_PR(FIM_RL_KEY_DBG(c));
+	FIM_DR(c);
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	if(c==FIM_SYM_ESC && fim_want_rl_cl_with_esc)
 	{
@@ -370,6 +372,7 @@ static int fim_pre_input_hook(void)
 	fim_key_t c;
 	if ( cc.pop_key_press(&c) )
 	{
+		FIM_DR(c);
 		rl_stuff_char(c);
 		return 1;
 	}

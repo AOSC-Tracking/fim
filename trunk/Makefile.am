@@ -124,6 +124,7 @@ endif
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
 	fi
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w -C '_debug_commands="k"' -K:quit -K '' | grep pressed.key; fi # readline mode key verbosity
 	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
@@ -140,6 +141,7 @@ endif
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w $(FIMVIDEOTESTOPTS); \
 	fi
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w -C '_debug_commands="k"' -K:quit -K '' | grep pressed.key; fi # readline mode key verbosity
 	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
