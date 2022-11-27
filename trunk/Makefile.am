@@ -484,9 +484,9 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'alias "a" "quit 11"; unalias "a"; alias "a" "quit 23"; a; quit 13' -c quit ; test $$? == 23
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'alias "a" "quit 23"; unalias "-a"; a; quit 13' -c quit ; test $$? == 13
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unalias; stdout _last_cmd_output; unalias "NotExistent"; stdout _last_cmd_output;quit' | sed 's/unalias.*$$/Un/g' | tr -d '\n'` == UnUn
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'z' 'stdout 1';_max_iterated_commands=2;" -k 10z -k q | tr -d '\n'` == 11 # test binding repeat
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'z' 'stdout 1';_max_iterated_commands=1;" -k 10z -k q | tr -d '\n'` == 1 # test binding repeat
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'z' 'stdout 1';_max_iterated_commands=0;" -k 10z -k q | tr -d '\n'` == 1111111111 # test binding repeat
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=2;" -k 10F1 -k q | tr -d '\n'` == 11 # test binding repeat and F1 binding
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=1;" -k 10F1 -k q | tr -d '\n'` == 1 # test binding repeat and F1 binding
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=0;" -k 10F1 -k q | tr -d '\n'` == 1111111111 # test binding repeat and F1 binding
 if WANT_READLINE
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smile.ppm -K '' -K q -F "quit !(_fileindex==2);" # test slash search
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F "quit !(_fileindex==0);" # test slash search

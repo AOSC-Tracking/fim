@@ -158,6 +158,18 @@
 		sym_keys_[FIM_KBD_TAB] =9;
 		sym_keys_[FIM_KBD_ANY] =0;	/* EXPERIMENTAL */
 		sym_keys_[FIM_KBD_ESC] =FIM_KKE_ESC;
+		sym_keys_[FIM_KBD_F1]  =FIM_KKE_F1;
+		sym_keys_[FIM_KBD_F2]  =FIM_KKE_F2;
+		sym_keys_[FIM_KBD_F3]  =FIM_KKE_F3;
+		sym_keys_[FIM_KBD_F4]  =FIM_KKE_F4;
+		sym_keys_[FIM_KBD_F5]  =FIM_KKE_F5;
+		sym_keys_[FIM_KBD_F6]  =FIM_KKE_F6;
+		sym_keys_[FIM_KBD_F7]  =FIM_KKE_F7;
+		sym_keys_[FIM_KBD_F8]  =FIM_KKE_F8;
+		sym_keys_[FIM_KBD_F9]  =FIM_KKE_F9;
+		sym_keys_[FIM_KBD_F10] =FIM_KKE_F10;
+		sym_keys_[FIM_KBD_F11] =FIM_KKE_F11;
+		sym_keys_[FIM_KBD_F12] =FIM_KKE_F12;
 
 		exitBinding_ = sym_keys_[FIM_KBD_ENTER];	/*  Enter will terminate loops */
 //		sym_keys_[" "]=' ';

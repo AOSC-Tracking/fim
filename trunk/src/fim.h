@@ -866,7 +866,19 @@ namespace fim
 #define FIM_KBD_ASTERISK			"*"
 #define FIM_KBD_GT			">"
 #define FIM_KBD_LT			"<"
-#define FIM_KBD_UNDERSCORE			"_"
+#define FIM_KBD_UNDERSCORE		"_"
+#define FIM_KBD_F1			"F1"
+#define FIM_KBD_F2			"F2"
+#define FIM_KBD_F3			"F3"
+#define FIM_KBD_F4			"F4"
+#define FIM_KBD_F5			"F5"
+#define FIM_KBD_F6			"F6"
+#define FIM_KBD_F7			"F7"
+#define FIM_KBD_F8			"F8"
+#define FIM_KBD_F9			"F9"
+#define FIM_KBD_F10			"F10"
+#define FIM_KBD_F11			"F11"
+#define FIM_KBD_F12			"F12"
 
 /*
  * Fim Keyboard Keys Encodings
@@ -884,6 +896,18 @@ namespace fim
 #define FIM_KKE_HOME			2117163803
 #define FIM_KKE_END			2117360411
 #define FIM_KKE_DEL			2117294875
+#define FIM_KKE_F1			282
+#define FIM_KKE_F2			283
+#define FIM_KKE_F3			284
+#define FIM_KKE_F4			285
+#define FIM_KKE_F5			286
+#define FIM_KKE_F6			287
+#define FIM_KKE_F7			288
+#define FIM_KKE_F8			289
+#define FIM_KKE_F9			290
+#define FIM_KKE_F10			291
+#define FIM_KKE_F11			292
+#define FIM_KKE_F12			293
 
 /*
  * Fim Display Driver Names
