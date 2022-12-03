@@ -437,7 +437,7 @@ public:
 						else
 						{
 							// use last (cached) description
-							char sc = ds[csil];
+							const char sc = ds[csil];
 
 							switch(sc)
 							{
@@ -445,10 +445,10 @@ public:
 									ds = ld;
 								break;
 								case('+'): // #!fim:+
-									ds = ld + ds.substr(csil);
+									ds = ld + ds.substr(csil + 1);
 								break;
 								case('^'): // #!fim:^
-									ds = ds.substr(csil) + ld;
+									ds = ds.substr(csil + 1) + ld;
 								break;
 								case('s'): // #!fim:s/from/to '/' not allowed in from or to
 								{
