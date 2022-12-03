@@ -1097,7 +1097,7 @@ noplus:
 #endif
 					goto comeon;
 				}
-				goto nop;
+				goto nop; //unreachable (FIXME: this and a few others..)
 			}
 			if( sl )
 			{

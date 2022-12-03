@@ -85,6 +85,7 @@ signed-dist: dist
 
 CXX11TEST=test ` $(FIM_EXE) -V | grep standard | head -1  | tr -d -c '[:digit:]'` -gt 200301
 FIMNORCOPTS=-N --no-etc-rc-file --no-history
+FIMSCLTSTOPTS=-C '_downscale_huge_at_load=-1;_magnify_factor=2;_reduce_factor=2;' --no-auto-scale -o dumb -q 
 FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhlltW' -K ':quit' -K ''
 NO_ASAN=ASAN_OPTIONS=detect_leaks=0
 
@@ -558,7 +559,31 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c  '{1;;;}quit' # FIXME: add actual test # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c           'cache; quit ! ( _want_prefetch && _cache_status =~ "count:1/5")' # on all loadable files
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'prefetch; cache; quit ! ( _want_prefetch && _cache_status =~ "count:3/5")' # on all loadable files
-#
+if ENABLE_PNG
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale       ;          w2=i:swidth;   quit !(w1==w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "Z"   ;          w2=i:swidth;   quit !(w1==w2)' # Z is unknown
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "H"   ;          w2=i:swidth;   quit !(w1!=w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale ">"   ;          w2=i:swidth;   quit !(2*w1==w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "<"   ;          w2=i:swidth;   quit !(w1/2==w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "*0.5";          w2=i:swidth;   quit !(w1/2==w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "*0"  ;          w2=i:swidth;   quit !(w1 < w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "+"   ;          w2=i:swidth;   quit !(w1 < w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'm1=_magnify_factor;scale "++"; m2=_magnify_factor;quit !(m1 < m2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'm1=_magnify_factor;scale "+-"; m2=_magnify_factor;quit !(m1 > m2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'r1=_reduce_factor;scale "++"; r2=_reduce_factor;  quit !(r1 < r2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'r1=_reduce_factor;scale "+-"; r2=_reduce_factor;  quit !(r1 > r2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'm1=_magnify_factor;scale "+*"; m2=_magnify_factor;quit !(m1 < m2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'm1=_magnify_factor;scale "+/"; m2=_magnify_factor;quit !(m1 > m2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'r1=_reduce_factor;scale "+*"; r2=_reduce_factor;  quit !(r1 < r2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'r1=_reduce_factor;scale "+/"; r2=_reduce_factor;  quit !(r1 > r2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-0"   ;         w2=i:swidth;   quit !(w1==w2)' # cover
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "0"    ;         w2=i:swidth;   quit !(w1==w2)' # cover
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "*"    ;         w2=i:swidth;   quit !(w1==w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "+"    ;         w2=i:swidth;   quit !(w1 < w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-"    ;         w2=i:swidth;   quit !(w1 > w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-0.5";          w2=i:swidth;   quit !(w1 > w2)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-10%";          w2=i:swidth;   quit !(w1 > w2)'
+endif
 	make ltests
 if HAVE_VALGRIND
 	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
