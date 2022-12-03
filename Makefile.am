@@ -203,19 +203,19 @@ if ENABLE_PCX
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_8bit.pcx.bin -C 'stdout "Unsupported PCX file test.."' -c 'quit !(i:width==0)' # named so to not break dir-loading tests
 endif
 if ENABLE_PCX
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/0.pcx; quit !(i:_comment=="comment")'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/1.pcx; quit !(i:_comment=="pre_comment")'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/0.pcx; quit !(i:_comment=="comments")'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/1.pcx; quit !(i:_comment=="pre_comments")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/2.pcx; quit !(i:_comment=="comment")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/3.pcx; quit !(i:_comment=="comment_post")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/4.pcx; quit !(i:_comment=="komment")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/5.pcx; quit !(i:_comment=="kommentar")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/6.pcx; quit !(i:_comment=="comment_POST")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/7.pcx; quit !(i:_comment=="PRE_comment_POST")'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/7.pcx; quit !(i:common=="yes")'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/7.pcx; quit !(i:common=="s")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/8.pcx; quit !(i:_comment=="comment_POST")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/8.pcx; quit !(i:common=="")'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/9.pcx; quit !(i:common=="")'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/9.pcx; quit !(i:_comment=="comment")'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file media/special/modifiers.desc -c '/9.pcx; quit !(i:_comment=="comment@@@common@5_")'
 endif
 if ENABLE_PCX
 if ENABLE_PNG
