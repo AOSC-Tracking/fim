@@ -1315,6 +1315,7 @@ AC_ARG_ENABLE(history, AS_HELP_STRING([--disable-history],[Fim will by default l
 [if test x$enableval = xno; then
         fim_cv_history=no
 fi])
+AM_CONDITIONAL(ENABLE_HISTORY, test x$fim_cv_history != xno)
 
 AH_TEMPLATE([FIM_NOHISTORY])
 if test x$fim_cv_history = xyes; then
