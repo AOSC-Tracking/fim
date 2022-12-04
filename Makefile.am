@@ -50,7 +50,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/0_monochrome_white_polarity.tiff \
 	$(top_srcdir)/media/special/0_16bps_msb.tiff \
 	$(top_srcdir)/media/special/0_interlaced.gif \
-	$(top_srcdir)/media/special/0_truncated_bad.gif \
+	$(top_srcdir)/media/special/0_truncated_bad.gif.bin \
 	$(top_srcdir)/media/special/0.webp \
 	$(top_srcdir)/media/special/truncated_bad.png.bin \
 	$(top_srcdir)/media/special/0_gray.png \
