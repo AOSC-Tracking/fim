@@ -530,6 +530,10 @@ Executes autocommands for events PreLoad and PostLoad.
 .B
 pan
 .fi
+pan {vsteps}% {hsteps}%: pan the image to {vsteps} percentage steps from the top and {hsteps} percentage steps from left. 
+.fi
+pan {vsteps} {hsteps}: pan the image to {vsteps} pixels from the top and {hsteps} pixels from left. 
+.fi
 pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+-] [{steps}['%']]: pan the image {steps} pixels in the desired direction.
 .fi
 If the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions.
@@ -775,7 +779,7 @@ window {args}: this command is disabled.
 
 .SH KEYSYMS REFERENCE
 
-" "  "!"  """  "#"  "$"  "%"  "&"  "'"  "("  ")"  "*"  "+"  ","  "-"  "."  "/"  "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  ":"  ";"  "<"  "="  ">"  "?"  "@"  "A"  "Any"  "B"  "BackSpace"  "Backspace"  "C"  "C-a"  "C-b"  "C-c"  "C-d"  "C-e"  "C-f"  "C-g"  "C-h"  "C-i"  "C-j"  "C-k"  "C-l"  "C-m"  "C-n"  "C-o"  "C-p"  "C-q"  "C-r"  "C-s"  "C-t"  "C-u"  "C-v"  "C-w"  "C-x"  "C-y"  "C-z"  "D"  "Del"  "Down"  "E"  "End"  "Enter"  "Esc"  "F"  "G"  "H"  "Home"  "I"  "Ins"  "J"  "K"  "L"  "Left"  "M"  "N"  "O"  "P"  "PageDown"  "PageUp"  "Q"  "R"  "Right"  "S"  "T"  "Tab"  "U"  "Up"  "V"  "W"  "X"  "Y"  "Z"  "["  "\\"  "]"  "^"  "_"  "`"  "a"  "b"  "c"  "d"  "e"  "f"  "g"  "h"  "i"  "j"  "k"  "l"  "m"  "n"  "o"  "p"  "q"  "r"  "s"  "t"  "u"  "v"  "w"  "x"  "y"  "z"  "{"  "|"  "}"  "~"  
+" "  "!"  """  "#"  "$"  "%"  "&"  "'"  "("  ")"  "*"  "+"  ","  "-"  "."  "/"  "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  ":"  ";"  "<"  "="  ">"  "?"  "@"  "A"  "Any"  "B"  "BackSpace"  "Backspace"  "C"  "C-a"  "C-b"  "C-c"  "C-d"  "C-e"  "C-f"  "C-g"  "C-h"  "C-i"  "C-j"  "C-k"  "C-l"  "C-m"  "C-n"  "C-o"  "C-p"  "C-q"  "C-r"  "C-s"  "C-t"  "C-u"  "C-v"  "C-w"  "C-x"  "C-y"  "C-z"  "D"  "Del"  "Down"  "E"  "End"  "Enter"  "Esc"  "F"  "F1"  "F10"  "F11"  "F12"  "F2"  "F3"  "F4"  "F5"  "F6"  "F7"  "F8"  "F9"  "G"  "H"  "Home"  "I"  "Ins"  "J"  "K"  "L"  "Left"  "M"  "N"  "O"  "P"  "PageDown"  "PageUp"  "Q"  "R"  "Right"  "S"  "T"  "Tab"  "U"  "Up"  "V"  "W"  "X"  "Y"  "Z"  "["  "\\"  "]"  "^"  "_"  "`"  "a"  "b"  "c"  "d"  "e"  "f"  "g"  "h"  "i"  "j"  "k"  "l"  "m"  "n"  "o"  "p"  "q"  "r"  "s"  "t"  "u"  "v"  "w"  "x"  "y"  "z"  "{"  "|"  "}"  "~"  
 
 .SH AUTOCOMMANDS REFERENCE
 Available autocommands are: PreScale, PostScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PreReload, PostReload, PreLoad, PostLoad, PreGoto, PostGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PostExecutionCycle, PreExecutionCycleArgs, PreWindow, PostWindow,  and they are triggered on actions as suggested by their name.
