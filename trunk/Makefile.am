@@ -128,15 +128,19 @@ endif
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w $(FIMVIDEOTESTOPTS); \
 	fi
+if WANT_READLINE
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w -C '_debug_commands="k"' -K:quit -K '' | grep pressed.key; fi # readline mode key verbosity
+endif
 	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 # extras for readline and caption related:
+if WANT_READLINE
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'ne$$'\t'$$'\t' -K '' -Kq # completion_display_matches_hook
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'n=x$$'\t'$$'\t' -K '' -Kq # cover completion of variables
 	echo q | $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K : # cover fim_rl_getc
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -C '_caption_over_image=3;_caption_over_image_fmt="fim:%M";_display_status=1;display' -kn -kq # cover Viewport::extra_top_height 
+endif
 
 .PHONY: cacatests
 cacatests: all
@@ -150,7 +154,9 @@ endif
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w $(FIMVIDEOTESTOPTS); \
 	fi
+if WANT_READLINE
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w -C '_debug_commands="k"' -K:quit -K '' | grep pressed.key; fi # readline mode key verbosity
+endif
 	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
@@ -440,8 +446,10 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X -E          $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/quit_23.fim -kq; # no quit at init
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --no-internal-config -c 'width;quit !(i:width == 0)'
+if WANT_READLINE
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-commandline -K ':quit 10' # quits at second char
 	rm -f record.fim; $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -W record.fim -K ':quit 10' -K ''; grep -q quit.10 record.fim && rm record.fim
+endif
 if ENABLE_HISTORY
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-history --no-history-load --no-history-save -kq # FIXME: bogus test
 endif
