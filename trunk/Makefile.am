@@ -136,15 +136,15 @@ endif
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'ne$$'\t'$$'\t' -K '' -Kq # completion_display_matches_hook
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'n=x$$'\t'$$'\t' -K '' -Kq # cover completion of variables
 	echo q | $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K : # cover fim_rl_getc
-	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -C '_caption_over_image=3;_caption_over_image_fmt="fim:%M";_display_status=1;display' -kn -kq # cover Viewport::extra_top_height 
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -C '_caption_over_image=3;_caption_over_image_fmt="fim:%M";_display_status=1;display' -kn -kq # cover Viewport::extra_top_height 
 
 .PHONY: cacatests
 cacatests: all
 if WITH_EXPECT
-	$(TIMEOUT_SMALL) \
+	$(NO_ASAN) $(TIMEOUT_SMALL) \
 		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o ca $(top_srcdir)/media/
 endif
-	$(TIMEOUT_SMALL) \
+	$(NO_ASAN) $(TIMEOUT_SMALL) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS) # added caca falls back to ca
 	if test -n "$(DISPLAY)"; then \
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
