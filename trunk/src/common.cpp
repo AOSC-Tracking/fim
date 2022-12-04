@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- common.cpp : Miscellaneous stuff..
+ common.cpp : Miscellaneous stuff.
 
  (c) 2007-2022 Michele Martone
 
@@ -295,6 +295,7 @@ ret:
 	return;
 }
 
+#if FIM_SHALL_BUFFER_STDIN
 	fim_byte_t* slurp_binary_FD(FILE* fd, size_t  *rs)
 	{
 			/*
@@ -324,6 +325,7 @@ ret:
 ret:
 			return buf;
 	}
+#endif /* FIM_SHALL_BUFFER_STDIN */
 
 	fim_char_t* slurp_binary_fd(int fd,int *rs)
 	{
@@ -451,8 +453,10 @@ void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c)
 /*
  * cleans the input string terminating it when some non printable character is encountered
  * */
+
+#if FIM_WANT_OBSOLETE
 void sanitize_string_from_nongraph(fim_char_t *s, int c)
-{	
+{
 	const int n=c;
 	if(s)
 		while(*s && (c--||!n))
@@ -465,6 +469,7 @@ void sanitize_string_from_nongraph(fim_char_t *s, int c)
 		}
 	return;
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 /*
  *	Allocation of a small string for storing the 
@@ -671,6 +676,7 @@ ret:
 		return match;
 	}
 
+#if FIM_WANT_OBSOLETE
 int strchr_count(const fim_char_t*s, int c)
 {
 	int n=0;
@@ -694,6 +700,7 @@ int newlines_count(const fim_char_t*s)
 		++c;
 	return c;
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 const fim_char_t* next_row(const fim_char_t*s, int cols)
 {
@@ -736,8 +743,10 @@ int lines_count(const fim_char_t*s, int cols)
 	 * */
 	if(cols<=0)
 		return -1;
+#if FIM_WANT_OBSOLETE
 	if(cols==0)
 		return newlines_count(s);
+#endif /* FIM_WANT_OBSOLETE */
 
 	int n=0;
 	const fim_char_t*b;
@@ -769,16 +778,17 @@ int fim_common_test(void)
 	 * this function should test the correctness of the functions in this file.
 	 * it should be used for debug purposes, for Fim maintainance.
 	 * */
-	printf("%d\n",0==lines_count("" ,6));
-	printf("%d\n",0==lines_count("aab" ,6));
-	printf("%d\n",1==lines_count("aaaaba\nemk" ,6));
-	printf("%d\n",2==lines_count("aaaaba\nemk\n" ,6));
-	printf("%d\n",3==lines_count("aaaabaa\nemk\n" ,6));
-	printf("%d\n",*next_row("123\n",3)=='\0');
-	printf("%d\n",*next_row("123\n4",3)=='4');
-	printf("%d\n",*next_row("12",3)=='\0');
-	printf("%d\n",*next_row("1234",3)=='4');
-	return 0;
+	int score = 0;
+	score += ( 0==lines_count("" ,6));
+	score += ( 0==lines_count("aab" ,6));
+	score += ( 1==lines_count("aaaaba\nemk" ,6));
+	score += ( 2==lines_count("aaaaba\nemk\n" ,6));
+	score += ( 3==lines_count("aaaabaa\nemk\n" ,6));
+	score += ( *next_row("123\n",3)=='\0');
+	score += ( *next_row("123\n4",3)=='4');
+	score += ( *next_row("12",3)=='\0');
+	score += ( *next_row("1234",3)=='4');
+	return score - 9;
 }
 
 int swap_bytes_in_int(int in)
@@ -796,6 +806,7 @@ int swap_bytes_in_int(int in)
 	return out;
 }
 
+#if FIM_WANT_OBSOLETE
 int int2lsbf(int in)
 {
 	const int one=0x01;
@@ -803,6 +814,7 @@ int int2lsbf(int in)
 		return swap_bytes_in_int(in);
 	return in;
 }
+#endif /* FIM_WANT_OBSOLETE */
 
 int int2msbf(int in)
 {

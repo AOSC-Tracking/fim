@@ -79,7 +79,7 @@ namespace fim
 		 */
 		if(s==FIM_NULL)
 			return true;
-		while(*s && isspace(*s))
+		while(*s && fim_isspace(*s))
 			++s;
 		return *s=='\0'?true:false;
 	}

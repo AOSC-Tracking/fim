@@ -53,16 +53,22 @@ size_t fim_strlen(const fim_char_t *str);
 void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t);
 //void trhex(fim_char_t *str);
 void chomp(fim_char_t *s);
+#if FIM_WANT_OBSOLETE
 void sanitize_string_from_nongraph(fim_char_t *s, int c=0);
+#endif /* FIM_WANT_OBSOLETE */
 void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c=0);
 
 using namespace fim;
 
 int int2msbf(int in);
+#if FIM_WANT_OBSOLETE
 int int2lsbf(int in);
+#endif /* FIM_WANT_OBSOLETE */
 fim::string slurp_file(fim::string filename);
 fim_char_t* slurp_binary_fd(int fd,int *rs);
+#if FIM_SHALL_BUFFER_STDIN
 fim_byte_t* slurp_binary_FD(FILE* fd, size_t  *rs);
+#endif /* FIM_SHALL_BUFFER_STDIN */
 bool write_to_file(fim::string filename, fim::string lines, bool append = false);
 
 fim_char_t * dupstr (const fim_char_t* s);
@@ -74,9 +80,11 @@ fim_int fim_rand(void);
 
 bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase=1, int ignorenewlines=0, int globexception=1);
 
-int strchr_count(const fim_char_t*s, int c);
 int lines_count(const fim_char_t*s, int cols);
+#if FIM_WANT_OBSOLETE
+int strchr_count(const fim_char_t*s, int c);
 int newlines_count(const fim_char_t*s);
+#endif /* FIM_WANT_OBSOLETE */
 const fim_char_t* next_row(const fim_char_t*s, int cols);
 int fim_common_test(void);
 

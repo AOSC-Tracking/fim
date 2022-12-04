@@ -444,6 +444,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_USE_CXX11 */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
+			fim_err_t errval = FIM_ERR_NO_ERROR;
 			assert( fim::string("-file").re_match("^-"));
 			assert( fim::string("file ").re_match(" "));
 			assert(!fim::string("file").re_match(" "));
@@ -451,6 +452,32 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			assert(!fim::string("-file").re_match(FIM_CNS_PIPEABLE_PATH_RE));
 			assert(!fim::string("file ").re_match(FIM_CNS_PIPEABLE_PATH_RE));
 			assert( fim::string("file-").re_match(FIM_CNS_PIPEABLE_PATH_RE));
+			if ( fim_common_test() != 0 )
+				errval = FIM_ERR_GENERIC;
+			{
+				fim_char_t s[5] = {'\\','x','4','1',0};
+				trec(s,"o","o");
+				if ( *s != 'A' )
+					errval = FIM_ERR_GENERIC;
+			}
+			for (int si = 0; si < 3; ++si)
+			{
+				fim_stream stream(si);
+				const fim_str_t t = 1;
+				const fim_char_t*s = "s";
+				const fim_byte_t b = 'b';
+				const fim_byte_t S [] = { 'b', FIM_SYM_CHAR_NUL };
+				const fim_char_t c = 'c';
+				stream << s    << " ";
+				stream << b    << " ";
+				stream << S    << " ";
+				stream << t    << " ";
+				stream << 1    << " ";
+				stream << 1U   << " ";
+				stream << c    << " ";
+				stream << 99.f << " ";
+				stream << "\n";
+			}
 #if FIM_WANT_BENCHMARKS
 			fim_bench_subsystem(displaydevice_);
 			fim_bench_subsystem(&browser_);
