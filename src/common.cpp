@@ -223,6 +223,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 	 * 
 	 *	this function could be optimized.
 	 *	20090520 hex translation in
+	 *	20221204 not sure about whether hex translation is useful
 	 */
 	int tl;
 	fim_char_t*_p=FIM_NULL;
@@ -247,19 +248,13 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			 && _p[2] && isxdigit(toupper(_p[2])) 
 			 && _p[3] && isxdigit(toupper(_p[3]))  )
 		{
-			unsigned int hc;
-			fim_char_t hb[3];
-			fim_char_t *pp;
-			hb[2]=0;
-			hb[0]=toupper(_p[2]);
-			hb[1]=toupper(_p[3]);
-			hc=(fim_byte_t)strtol(hb,FIM_NULL,FIM_PRINTINUM_BUFSIZE);
+			unsigned int hc = (toupper(_p[2])-'0')*16 + (toupper(_p[3])-'0');
 			*_p=hc;
 			/*	
 				\xFF
 				^-_p^-_p+4
 			*/
-			pp=_p+4;
+			fim_char_t *pp=_p+4;
 			while(*pp){pp[-3]=*pp;++pp;}
 			pp[-3]='\0';
 		}
@@ -772,6 +767,21 @@ int lines_count(const fim_char_t*s, int cols)
 	return n;
 }
 
+int swap_bytes_in_int(int in)
+{
+	// to Most Significant Byte First
+	// FIXME : this function should be optimized
+	const int b=sizeof(int);
+	int out=0;
+	int i=-1;
+	while(i++<b/2)
+	{
+		((fim_byte_t*)&out)[i]=((fim_byte_t*)&in)[b-i-1];
+		((fim_byte_t*)&out)[b-i-1]=((fim_byte_t*)&in)[i];
+	}
+	return out;
+}
+
 int fim_common_test(void)
 {	
 	/*
@@ -788,22 +798,8 @@ int fim_common_test(void)
 	score += ( *next_row("123\n4",3)=='4');
 	score += ( *next_row("12",3)=='\0');
 	score += ( *next_row("1234",3)=='4');
-	return score - 9;
-}
-
-int swap_bytes_in_int(int in)
-{
-	// to Most Significant Byte First
-	// FIXME : this function should be optimized
-	const int b=sizeof(int);
-	int out=0;
-	int i=-1;
-	while(i++<b/2)
-	{
-		((fim_byte_t*)&out)[i]=((fim_byte_t*)&in)[b-i-1];
-		((fim_byte_t*)&out)[b-i-1]=((fim_byte_t*)&in)[i];
-	}
-	return out;
+	score += ( swap_bytes_in_int(0x01020304) == 0x04030201 );
+	return score - 10;
 }
 
 #if FIM_WANT_OBSOLETE

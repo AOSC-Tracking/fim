@@ -84,6 +84,7 @@ typedef nodeType * NodeType;
 #define FIM_EC(CMD,ARGS) fim::cc.execute(CMD,ARGS)
 typedef nodeType * NodeType;
 #endif /* FIM_INDEPENDENT_NAMESPACE */
+#define FIM_INTERPRETER_PARANOIA 0
 
 namespace fim
 {
@@ -290,10 +291,12 @@ Var ex(NodeType p)
 							}
 							break;
 						}
+#if FIM_INTERPRETER_PARANOIA
 						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
 						{
 							DBG(FIM_INTERPRETER_ERROR);
 						}
+#endif
 					}
 
 					if(p && FIM_OPRND(p,2))
@@ -340,11 +343,13 @@ Var ex(NodeType p)
 			     * execute.
 			     */
 				{
+#if FIM_INTERPRETER_PARANOIA
 			  		if( FIM_NOPS(p) < 1 )
 			  		{
 						DBG(FIM_INTERPRETER_ERROR);
 						goto err;
 					}
+#endif
 			  		if(FIM_NOPS(p)==2)	//int yacc.ypp we specified only 2 ops per x node
 		          		{
 						NodeType np=p;	
@@ -366,10 +371,13 @@ Var ex(NodeType p)
 							}
 							break;
 						}
+
+#if FIM_INTERPRETER_PARANOIA
 						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
 						{
 							DBG(FIM_INTERPRETER_ERROR);
 						}
+#endif
 					}
 					{
 						fim::string result;
@@ -499,7 +507,7 @@ nodeType *fcon(float fValue)
 	nodeType *p;
 	/* allocate node */
 	if ((p =(nodeType*) malloc(sizeof(nodeType))) == NULL)
-	yyerror(FIM_EMSG_OUT_OF_MEM);
+		yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = floatCon;
 	p->fid.f = fValue;
@@ -511,7 +519,7 @@ nodeType *con(fim_int value)
 	nodeType *p;
 	/* allocate node */
 	if ((p =(nodeType*) malloc(sizeof(nodeType))) == NULL)
-	yyerror(FIM_EMSG_OUT_OF_MEM);
+		yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = intCon;
 	p->con.value = value;
@@ -525,7 +533,7 @@ nodeType *opr(int oper, int nops, ...)
 	int i;
 	/* allocate node */
 	if ((p =(nodeType*) malloc(sizeof(nodeType) * nops)) == NULL)
-	yyerror(FIM_EMSG_OUT_OF_MEM);
+		yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = typeOpr;
 	p->opr.oper = oper;
