@@ -213,7 +213,7 @@ namespace fim
 
 		if(ds && image_ && displaydevice_->get_bpp())
 		{
-			fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI);
+			const fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI);
 #if FIM_WANT_PIC_CMTS
 			if(wcoi>=3)
 			{
@@ -692,6 +692,7 @@ namespace fim
 		const fim_char_t*const fs=args[0];
 		const fim_char_t*ss=FIM_NULL;
 		fim_bool_t prv = true;
+		fim_bool_t wpt = false;
 
 		if(args.size()<1 || (!fs))
 			goto ret;
@@ -703,8 +704,18 @@ namespace fim
 
 		if(args.size()>=2)
 		{
-			ps=((ss=args[1]) && *ss && ((ss[strlen(ss)-1])=='%'));
-			vs=hs=(int)(args[1]);
+			if ( isdigit(*args[0]) && isdigit(*args[1]) )
+			{
+				ps=((ss=args[0]) && *ss && ((ss[strlen(ss)-1])=='%') && (ss=args[1]) && *ss && ((ss[strlen(ss)-1])=='%'));
+				wpt = ps;
+				vs=(int)(args[0]);
+				hs=(int)(args[1]);
+			}
+			else
+			{
+				ps=((ss=args[1]) && *ss && ((ss[strlen(ss)-1])=='%'));
+				vs=hs=(int)(args[1]);
+			}
 		}
 		else
 		{
@@ -725,6 +736,11 @@ namespace fim
 			hs=-hs;
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 
+		if (wpt)
+		{
+			pan_to(hs,vs);
+		}
+		else
 		switch(f)
 		{
 			case('u'):

@@ -377,7 +377,7 @@ ret:
 				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 				if( c_getImage() && viewport() )
 				{
-					bool pr = viewport()->do_pan(args);
+					const bool pr = viewport()->do_pan(args);
 #if FIM_PAN_GOES_NEXT
 					fim_char_t s = FIM_SYM_CHAR_NUL;
 				       	s = tolower(args[0].end()[-1]);
