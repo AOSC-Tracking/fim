@@ -112,6 +112,7 @@ endif
 		$(TIMEOUT_SMALL) \
 			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS); test $$? = 255; \
 	fi
+
 .PHONY: aatests
 aatests: all
 if WITH_EXPECT
@@ -130,10 +131,11 @@ endif
 	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
 	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` == $(FIM_USE_ASCII_ART_DEFAULT) #
-# extras for: readline
+# extras for readline and caption related:
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'ne$$'\t'$$'\t' -K '' -Kq # completion_display_matches_hook
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'n=x$$'\t'$$'\t' -K '' -Kq # cover completion of variables
 	echo q | $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K : # cover fim_rl_getc
+	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -C '_caption_over_image=3;_caption_over_image_fmt="fim:%M";_display_status=1;display' -kn -kq # cover Viewport::extra_top_height 
 
 .PHONY: cacatests
 cacatests: all
@@ -157,6 +159,10 @@ endif
 sdltests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS);
+	$(NO_ASAN) $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=hhMR20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
+	$(NO_ASAN) $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=0:-1 ; test $$? = 252
 if FIM_WANT_HARDCODED_CONSOLEFONT
 	$(NO_ASAN) FBFONT=       \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
@@ -180,7 +186,8 @@ tests:	all
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
 	@ ! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c '_display_status_fmt="fim:%M%n%R%m%C%v"' -kn -kq # cover
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c '_display_status_fmt="fim:%M%n%R%m%C%v"' --verbose-interpreter --verbose-interpreter -kn -kq # cover modifiers and interpreter
+#
 if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit'` = 2.1
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit'` = 2.2

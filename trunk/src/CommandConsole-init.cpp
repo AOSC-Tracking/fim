@@ -455,9 +455,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			if ( fim_common_test() != 0 )
 				errval = FIM_ERR_GENERIC;
 			{
-				fim_char_t s[5] = {'\\','x','4','1',0};
-				trec(s,"o","o");
-				if ( *s != 'A' )
+				fim_char_t s[] = {'\\','x','4','1','\\','a','a','\\','x','4','2','b','\\','b',0};
+				trec(s,"ab","cd");
+				if ( strcmp(s, "AcaBbd") )
 					errval = FIM_ERR_GENERIC;
 			}
 			for (int si = 0; si < 3; ++si)
@@ -494,6 +494,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 			}
 #endif /* FIM_WANT_BENCHMARKS */
+			if ( errval == FIM_ERR_GENERIC )
+				return_code_ = -1;
 			quit(return_code_);
 			exit(return_code_);
 		}
