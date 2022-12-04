@@ -617,7 +617,7 @@ fim::string fim_help_opt(const char*qs, const char dl)
 			       		oss << " " << fim_options[i].optdesc << "";
 				oss << ", ";
 			}
-			if( ( fim_options[i].name ) )
+			if( fim_options[i].name )
 			{
 				oss << "--" << fim_options[i].name;
 				if( fim_options[i].optdesc && fim_options[i].has_arg == optional_argument )
@@ -638,8 +638,7 @@ fim::string fim_help_opt(const char*qs, const char dl)
 			goto ret;
 		}
 		//oss << fim_options[i].cVal() << "\n";
-ret:
-	return oss.str();
+ret:	return oss.str();
 }
 
 class FimInstance FIM_FINAL
@@ -804,11 +803,12 @@ int fim_dump_man_page(void)
 			string("\n""If " FIM_MAN_fB("{imagepath}") " is a file, its format is guessed not by its name but by its contents. "
 				"See the " FIM_MAN_fB(FIM_VID_FILE_LOADER) " variable to change this default.\n\n")+
 #ifdef FIM_READ_DIRS
-			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise this will be checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")+
+			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise this will be checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")
 #endif /* FIM_READ_DIRS */
+			;
 
 	//		string("Please note that a user guide of \n.B fim\nis in the " FIM_CNS_FIM_TXT " file distributed in the source package.\n\n")+
-			string("This man page describes \n.B fim\ncommand line options and usage.\n"
+			mp+=string("This man page describes \n.B fim\ncommand line options and usage.\n"
 			"See man " FIM_MAN_fR("fimrc") "(5) for a full specification of the \n.B\nfim\nlanguage, commands, keysyms, autocommands, variables, aliases, examples for a configuration file and readline usage samples.\n"
 			"\n"
 			".SH USAGE\n"
@@ -821,8 +821,8 @@ int fim_dump_man_page(void)
 			"\n.SH OPTIONS\n"
 			"Accepted command line " FIM_MAN_fB("{options}") ":\n");
 			mp+=fim_dump_man_page_snippets();
-			mp+=string(".SH PROGRAM RETURN STATUS\n"
-		     	"The program return status is ")+string(FIM_ERR_NO_ERROR)+string(" on correct operation; ");
+			mp+=string(".SH PROGRAM RETURN STATUS\n");
+			mp+=string("The program return status is ")+string(FIM_ERR_NO_ERROR)+string(" on correct operation; ");
 			mp+=string(FIM_PERR_UNSUPPORTED_DEVICE)+string(" on unsupported device specification; ");
 			mp+=string(FIM_PERR_BAD_PARAMS)+string(" on bad input; ");
 			mp+=string(FIM_PERR_GENERIC)+string(" on a generic error; ");
@@ -832,6 +832,7 @@ int fim_dump_man_page(void)
 			".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"
 "The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable " FIM_MAN_fB(FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS) ").\n\n"
+);
 //"cursor keys     scroll large images\n"
 //"h,j,k,l		scroll large images left,down,up,right\n"
 //"+, -            zoom in/out\n"
@@ -841,7 +842,6 @@ int fim_dump_man_page(void)
 //"PgDn,n            next image\n"
 //"Space  	        next image if on bottom, scroll down instead\n"
 //"Return          next image, write the filename of the current image to stdout on exit from the program.\n"
-);
 
 #define FIM_SROC(VAR,VAL) { if( VAR != VAL && VAR != Nothing ) std::cerr<<FIM_EMSG_DSMO; VAR = VAL; }
 #define FIM_ADD_DOCLINE_FOR_CMD(REP,CMD) if(!cc.find_key_for_bound_cmd(CMD).empty()){if(REP!=1)mp+=FIM_XSTRINGIFY(REP);else mp+=" ";mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";if(REP!=1)mp+=FIM_XSTRINGIFY(REP);mp+=CMD;mp+="\n";}
@@ -869,30 +869,38 @@ int fim_dump_man_page(void)
 			mp+="You can type a number before a command binding to iterate the assigned command:\n";
 			//FIM_ADD_DOCLINE_FOR_CMD(3,FIM_FLC_PAN_UP);
 			FIM_ADD_DOCLINE_FOR_CMD(3,FIM_FLC_SCROLL_UP);
-			mp+=string(
+//			mp+=string(
 //"d,x,D,X		diagonal scroll\n"
 //"C-w			scale to the screen width\n"
 //"H			scale to the screen heigth\n"
+//);
+			mp+=string(
 "\n"
 FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 "\n"
-//"C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename\n"
-//"C-c		 terminate instantaneously fim\n"
-//"T		 split horizontally the current window\n"
-//"V		 split vertically the current window\n"
-//"C		 close  the currently focused window\n"
-//"H		 change the currently focused window with the one on the left\n"
-//"J		 change the currently focused window with the lower\n"
-//"K		 change the currently focused window with the upper\n"
-//"L		 change the currently focused window with the one on the right\n"
-//"U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise: try V, m,  U and see by yourself)\n"
-//"d		move the image diagonally north-west\n"
-//"D		move the image diagonally south-east\n"
-//"x		move the image diagonally north-east\n"
-//"X		move the image diagonally south-west\n"
-//"m		mirror\n"
-//"f		flip\n"
-//"r		rotate\n"
+			);
+#if 0
+			mp+=string(
+"C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename\n"
+"C-c		 terminate instantaneously fim\n"
+"T		 split horizontally the current window\n"
+"V		 split vertically the current window\n"
+"C		 close  the currently focused window\n"
+"H		 change the currently focused window with the one on the left\n"
+"J		 change the currently focused window with the lower\n"
+"K		 change the currently focused window with the upper\n"
+"L		 change the currently focused window with the one on the right\n"
+"U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise: try V, m,  U and see by yourself)\n"
+"d		move the image diagonally north-west\n"
+"D		move the image diagonally south-east\n"
+"x		move the image diagonally north-east\n"
+"X		move the image diagonally south-west\n"
+"m		mirror\n"
+"f		flip\n"
+"r		rotate\n"
+			);
+#endif
+			mp+=string(
 "\n"
 "You can visualize all of the default bindings invoking fim --dump-default-fimrc | grep bind .\n"
 "You can visualize all of the default aliases invoking fim  --dump-default-fimrc | grep alias .\n"
@@ -906,8 +914,8 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 ".B fimrc\n"
 "file for examples on this, or read the complete manual: the FIM.TXT file\n"
 "distributed with fim.\n"
-					)+
-			string(
+				);
+			mp+=string(
 ".SH AFFECTING ENVIRONMENT VARIABLES\n"
 ".nf\n"
 //"" FIM_ENV_FBFONT "		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
@@ -1033,6 +1041,8 @@ FIM_MAN_Bn("fim\n" "-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;
 ".P\n"
 ".P\n"
 "\n"
+);
+mp+=string(
 ".SH NOTES\n"
 "This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.\n"
 #ifdef FIM_READ_STDIN_IMAGE
@@ -1041,6 +1051,8 @@ FIM_MAN_Bn("fim\n" "-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;
 #ifdef FIM_WITH_LIBSDL
 "The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
 #endif /* FIM_WITH_LIBSDL */
+);
+mp+=string(
 ".SH BUGS\n"
 FIM_MAN_fB("fim")
 " has bugs. Please read the \n"
@@ -1079,8 +1091,8 @@ FIM_MAN_fB("fim")
 " is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see"
 " (man " FIM_MAN_fR("readline") "(3))."
 "\n"
-			      )+
-string(
+);
+mp+=string(
 ".SH SEE ALSO\n"
 "Other " FIM_MAN_fB("fim") " man pages: " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("fimrc") "(1).\n"
 ".fi\n"
@@ -1092,7 +1104,9 @@ string(
 ".fi\n"
 ".SH AUTHOR\n"
 ".nf\n"
-FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
+);
+mp+=string(
+FIM_AUTHOR " is the author of fim, \"fbi improved\". \n"
 ".fi\n"
 ".SH COPYRIGHT\n"
 ".nf\n"
@@ -1105,8 +1119,8 @@ FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
 "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 ".P\n"
 "You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.\n"
-)+
-			string("\n");
+);
+	mp+=string("\n");
 	std::cout << mp;
 	return 0;
 }
@@ -1182,6 +1196,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char sac, fim_flags_t p
 			if(!fd)
 			{
 				// note: shall print a warning
+				std::cerr<<"Warning: the " << fn << " file could not be opened.\n";
 				goto ret;
 			}
 
@@ -1855,6 +1870,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* HAVE_FLEXLEXER_H */
 
 	#ifdef FIM_READ_STDIN	
+#if FIM_WANT_OBSOLETE
 		if( ( read_stdin_choice == FilesList ) +
 		#ifdef FIM_READ_STDIN_IMAGE
 		( read_stdin_choice == ImageFile ) + 
@@ -1870,6 +1886,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			retcode=help_and_exit(argv[0],FIM_PERR_NO_ERROR,"b");/* should return 0 or -1 ? */
 			goto ret;
 		}
+#endif /* FIM_WANT_OBSOLETE */
 		/*
 		 * this is Vim's solution for stdin reading
 		 * */

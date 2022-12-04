@@ -145,7 +145,7 @@ if WITH_EXPECT
 		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o ca $(top_srcdir)/media/
 endif
 	$(TIMEOUT_SMALL) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca  $(FIMVIDEOTESTOPTS)
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o caca  $(FIMVIDEOTESTOPTS) # added caca falls back to ca
 	if test -n "$(DISPLAY)"; then \
 		$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w $(FIMVIDEOTESTOPTS); \
@@ -255,6 +255,7 @@ if ENABLE_RAW_BITS_RENDERING
 if WANT_READ_STDIN_IMAGE
 	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=1  -c 'magnify;stdout i:height."."._last_file_loader;quit'` == 1.Bit1  # coverage of tiny case; TODO: remove necessity of magnify
 	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=24 -c 'magnify;stdout i:height."."._last_file_loader;quit'` == 1.Bit24 # coverage of tiny case; TODO: remove necessity of magnify
+	test `echo media | $(FIM_EXE) $(FIMNORCOPTS) -o dumb - --binary=23 -c 'magnify;stdout _last_file_loader;quit'` == Bit24 # coverage of - and fallback to 24
 endif
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c 'window;stdout _last_cmd_output;quit;' grep disabled > /dev/null
@@ -310,6 +311,7 @@ if ENABLE_PCX
 if WANT_READ_STDIN_IMAGE
 	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin-elds '!' --read-from-file ../special/images.list   -c 'if(_filelistlen!=0)quit 255; quit'
 	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin-elds '!' --read-from-file ../special/collated.list -c 'if(_filelistlen!=2)quit 255; quit'
+	$(TIMEOUT_SMALL) $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-file ../special/collated-NON-EXISTING.list ; test $$? = 248
 	cat $(top_srcdir)/media/numbers_pcx/1.pcx | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin -c 'quit !(i:width>0 && i:height>0)'
 	echo | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin -kq
 	echo | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin ; test $$? = 248
@@ -417,6 +419,7 @@ if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \
 		$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl -r w $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
 	fi
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17 -A $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit !(_autotop==1)'; fi # --autotop
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17 -P $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit (_autotop!=1) || (i:swidth!=_screen_width)'; fi # --text-reading
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17    $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit (_autotop!=1) || (i:swidth!=_screen_width)'; test $$? = 1; fi # --text-reading
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17:16 -q -P $(top_srcdir)/media/numbers_pcx/?.pcx -c 'align "info";a1=_last_cmd_output; scroll "forward";align "info";a2=_last_cmd_output; next; align "info";a3= _last_cmd_output; goto _lastfileindex; align "info";a4=_last_cmd_output; quit !(a1==a3 && a2==a4 && a1!=a2)' -kq ; fi # --text-reading
@@ -433,7 +436,15 @@ endif
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'font; font "load" "non_existing"; font "next"; font "scan"; font "info"; font "prev"; quit'; true; # TODO: test more than tis mere coverage (btw, this one leaks, and in debug or asan mode fails) -- FIXME)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit;'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X --execute-script $(top_srcdir)/scripts/example/oneline.fim -c quit 
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X -E          $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/quit_23.fim -kq; # no quit at init
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --no-internal-config -c 'width;quit !(i:width == 0)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-commandline -K ':quit 10' # quits at second char
+	rm -f record.fim; $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -W record.fim -K ':quit 10' -K ''; grep -q quit.10 record.fim && rm record.fim
+if ENABLE_HISTORY
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-history --no-history-load --no-history-save -kq # FIXME: bogus test
+endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c 'next'   -c quit # leak fixed
