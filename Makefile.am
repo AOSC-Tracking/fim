@@ -623,6 +623,9 @@ if HAVE_VALGRIND
 	fi
 endif
 endif
+if HAVE_FIMGS
+	make fimgstests
+endif
 
 .PHONY: ltests
 ltests:
@@ -630,6 +633,22 @@ if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
 	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
 endif
+
+.PHONY: fimgstests
+fimgstests:
+	$(FIMGS_EXE) --help -- $(FIMNORCOPTS) >/dev/null 2>&1 ; echo $$? = 255 # no fimgs --help option yet
+	test `$(FIMGS_EXE) -h -- $(FIMNORCOPTS) | wc -l` -gt 14
+	test `$(FIMGS_EXE) -m -- $(FIMNORCOPTS) | wc -w` -gt 53
+if HAVE_FIMGS
+	$(FIMGS_EXE) -- $(FIMNORCOPTS) -o dumb ./media/special/postscript.eps -c 'stdout _last_file_loader;quit 1' -K quit; test $$? = 0 # spaces not accepted by fimgs
+endif
+if ENABLE_PCX
+	if which tar                  ; then $(FIMGS_EXE) $(top_srcdir)/media/special/numbers_pcx.tar     -- $(FIMNORCOPTS) -o dumb -c 'quit !(_last_file_loader=="pcx")' ; fi
+	if which tar && which bunzip2 ; then $(FIMGS_EXE) $(top_srcdir)/media/special/numbers_pcx.tar.bz2 -- $(FIMNORCOPTS) -o dumb -c 'quit !(_last_file_loader=="pcx")' ; fi
+	if which tar && which gunzip  ; then $(FIMGS_EXE) $(top_srcdir)/media/special/numbers_pcx.tar.gz  -- $(FIMNORCOPTS) -o dumb -c 'quit !(_last_file_loader=="pcx")' ; fi
+	if which tar && which unxz    ; then $(FIMGS_EXE) $(top_srcdir)/media/special/numbers_pcx.tar.xz  -- $(FIMNORCOPTS) -o dumb -c 'quit !(_last_file_loader=="pcx")' ; fi
+endif
+
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
