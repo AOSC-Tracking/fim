@@ -1,7 +1,7 @@
 #!/bin/bash
 # $Id$
 
-# (c) 2007-2018 Michele Martone
+# (c) 2007-2022 Michele Martone
 
 # This is a modified version of the original fbgs script by Gerd Hoffman.
 # Note: it probably won't work on bash version < 3.0.
@@ -74,6 +74,7 @@ check_in_path find  || die "no find in \$PATH"
 check_in_path wget  || die "no wget in \$PATH"
 check_in_path gs    || die "no gs (ghostscript) in \$PATH"
 check_in_path xz    || die "no xz               in \$PATH"
+check_in_path bunzip2 || die "no bunzip2 in \$PATH"
 check_in_path tar   || die "no tar in \$PATH"
 check_in_path basename   || die "no basename in \$PATH"
 check_in_path md5sum   || die "no md5sum in \$PATH"
@@ -131,7 +132,7 @@ do
 			;;
 		-m)	shift
 cat << EOF
-.TH fimgs 1 "(c) 2007-2018 Michele Martone"
+.TH fimgs 1 "(c) 2007-2022 Michele Martone"
 .SH NAME
 fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer based on fim
 .SH SYNOPSIS
@@ -146,7 +147,7 @@ In this case, only images contained in the archive will be displayed (no nested 
 The temporary directory name will be of the form \$TMPDIR/$FIMTDPFX-\$\$.
 If the \$TMPDIR environment variable is unset, $FIMSHMEM and $FIMVARTD will be checked for existence and permissions. 
 The \$\$ above is the script process ID.
-The script shall delete the temporary directory when \fB fim\fP terminates.
+The script deletes the temporary directory when \fB fim\fP terminates.
 
 In order to uncompress RAR archives, fimgs will use 'unrar-nonfree' or 'rar' or 'unrar-free'.
 
@@ -161,7 +162,7 @@ In case of a CBZ, CBR, PDF, PS, or DVI file, will invoke \fB fim\fP with '$fbi_r
 .SH OPTIONS
 To pass through options to \fB fim\fP, you may specify them after "--".
 
-Defaut options are '$fbi_default_opts'.
+Default options are '$fbi_default_opts'.
 
 .B -r {resolution}
 Specify resolution for the 'gs' -r option (e.g.: 96x96; default $GSRESOLUTION). 
@@ -190,9 +191,11 @@ EOF
 		-h)	
 			#help text
 			echo "$0 [{fimgs-options}] {files} [-- [fim-options]] "
-			echo -e "\nNote that any file in {files} may be a (correctly named) :"
+			echo -e "\nNote that any file in {files} may be a (appropriately named) :"
 			echo -e " PDF (.pdf) file"
 			echo -e " Postscript (.ps) file"
+			echo -e " Encapsulated Postscript (.eps) file"
+			echo -e " DeVice Independent (.dvi) file"
 			echo -e " TAR (.tar) archive"
 			echo -e " BZ2 (.bz2) archive"
 			echo -e " XZ (.xz) archive"
@@ -343,7 +346,7 @@ done
 #echo "options are $fbiopts"
 
 # there should be some filter to avoid feed garbage to fim ... 
-find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.gif' -or -iname '*.bmp' -or -iname '*.tiff' -or -iname '*.tif' | sort -n | $FBI $fbiopts  -- -
+find $DIR/ -type f -iname '*.bmp' -or -iname '*.gif' -or -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.pcx' -or -iname '*.pbm' -or -iname '*.pgm' -or -iname '*.ppm' -or -iname '*.png' -or -iname '*.tif' -or -iname '*.tiff' -or -iname '*.webp' | sort -n | $FBI $fbiopts  -- -
 
 # when no framebuffer device is available, we could invoke another console viewer, couldn't we ?
 # cacaview $DIR/*

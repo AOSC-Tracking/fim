@@ -1257,6 +1257,7 @@ dnl ==================
 
 AC_CHECK_PROG(have_gs,gs,yes,no)
 AM_CONDITIONAL(HAVE_GS, test x$have_gs = xyes)
+AM_CONDITIONAL(HAVE_FIMGS, test x$have_gs = xyes)
 
 dnl ==================
 
