@@ -614,6 +614,7 @@ if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-0.5";          w2=i:swidth;   quit !(w1 > w2)'
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-10%";          w2=i:swidth;   quit !(w1 > w2)'
 endif
+	if $(FIM_EXE) --help crop | grep -q is.a.command; then make croptests; fi
 	make ltests
 if HAVE_VALGRIND
 	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
@@ -625,6 +626,16 @@ endif
 endif
 if HAVE_FIMGS
 	make fimgstests
+endif
+
+.PHONY: croptests
+croptests:
+if ENABLE_GIF
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop            ;w2=i:width;quit !(w1+w2==23)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 10         ;w2=i:width;quit !(w1+w2==17)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 40 40 60 60;w2=i:width;quit !(w1+w2==18)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 25 25      ;w2=i:width;quit !(w1+w2==19)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 50 50      ;w2=i:width;quit !(w1+w2==23)'
 endif
 
 .PHONY: ltests

@@ -221,6 +221,9 @@ class Browser FIM_FINAL
 	fim_cxr fcmd_rotate(const args_t& args);
 	fim::string display_status(const fim_char_t *l);
 	fim_cxr fcmd_color(const args_t& args);
+#if FIM_WANT_CROP
+	fim_cxr fcmd_crop(const args_t& args);
+#endif /* FIM_WANT_CROP */
 
 #if FIM_WANT_PIC_LBFL
 	fim_cxr fcmd_limit(const args_t& args);

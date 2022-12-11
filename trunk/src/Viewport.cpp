@@ -992,6 +992,51 @@ nop:
 		return false;
 	}
 
+#if FIM_WANT_CROP
+	fim_cxr Viewport::img_crop(const args_t& args, const string &current)
+	{
+		ida_rect prect {25,25,75,75};
+
+		if(args.size() == 1)
+		{
+			const int ap = (int)(args[0]);
+			const int x1 = (100-ap)/2;
+			const int y1 = (100-ap)/2;
+			const int x2 = 100-x1;
+			const int y2 = 100-y1;
+			prect = {x1,y1,x2,y2};
+		}
+
+		if(args.size() == 2)
+		{
+			const int xs = (int)(args[0]);
+			const int ys = (int)(args[1]);
+			const int x1 = (100-xs)/2;
+			const int y1 = (100-ys)/2;
+			const int x2 = 100-x1;
+			const int y2 = 100-y1;
+			prect = {x1,y1,x2,y2};
+		}
+
+		if(args.size() == 4)
+		{
+			const int x1 = (int)(args[0]);
+			const int y1 = (int)(args[1]);
+			const int x2 = (int)(args[2]);
+			const int y2 = (int)(args[3]);
+			prect = {x1,y1,x2,y2};
+		}
+
+		if ( image_ )
+		{
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current);
+			image_->do_crop(prect);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
+		}
+		return FIM_CNS_EMPTY_RESULT;
+	}
+#endif /* FIM_WANT_CROP */
+
 	fim_cxr Viewport::img_scale(const args_t& args, const string &current)
 	{
 		/*
