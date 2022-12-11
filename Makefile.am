@@ -54,6 +54,10 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/0.webp \
 	$(top_srcdir)/media/special/truncated_bad.png.bin \
 	$(top_srcdir)/media/special/0_gray.png \
+	$(top_srcdir)/media/special/numbers_pcx.tar \
+	$(top_srcdir)/media/special/numbers_pcx.tar.bz2 \
+	$(top_srcdir)/media/special/numbers_pcx.tar.gz \
+	$(top_srcdir)/media/special/numbers_pcx.tar.xz \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim$(EXEEXT)
