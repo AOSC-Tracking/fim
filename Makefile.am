@@ -632,11 +632,11 @@ endif
 croptests:
 if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;_crop_once="0 0 10 10";crop;w2=i:width;quit !(w1+w2==25)'
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop            ;w2=i:width;quit !(w1+w2==23)'
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 10         ;w2=i:width;quit !(w1+w2==17)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop            ;w2=i:width;quit !(w1+w2==22)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 10         ;w2=i:width;quit !(w1+w2==16)'
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 40 40 60 60;w2=i:width;quit !(w1+w2==18)'
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 25 25      ;w2=i:width;quit !(w1+w2==19)'
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 50 50      ;w2=i:width;quit !(w1+w2==23)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 25 25      ;w2=i:width;quit !(w1+w2==18)'
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif $(FIMSCLTSTOPTS) -c 'w1=i:width;crop 50 50      ;w2=i:width;quit !(w1+w2==22)'
 endif
 
 .PHONY: ltests
