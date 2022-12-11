@@ -117,6 +117,9 @@ class Viewport FIM_FINAL
 	std::string get_caption_text(void)const;
 	public:
 	fim_cxr img_color(const args_t& args);
+#if FIM_WANT_CROP
+	fim_cxr img_crop(const args_t& args, const string &current);
+#endif /* FIM_WANT_CROP */
 	fim_err_t img_rotate(fim_angle_t angle);
 	bool img_goto_page(fim_page_t j);
 	fim_cxr img_scale(const args_t& args, const string &current);

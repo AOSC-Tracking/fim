@@ -611,6 +611,41 @@ ret:
         }
 #endif /* FIM_WANT_IMG_SHRED  */
 
+#if FIM_WANT_CROP
+	fim_err_t Image::do_crop(const ida_rect prect)
+	{
+		struct ida_image * img = fimg_;
+		const int x1 = FIM_INT_PCNT(prect.x1, img->i.width);
+		const int y1 = FIM_INT_PCNT(prect.y1, img->i.height);
+		const int x2 = FIM_INT_PCNT(prect.x2, img->i.width);
+		const int y2 = FIM_INT_PCNT(prect.y2, img->i.height);
+
+		if ( x2 > x1 && y2 > y1 )
+		if ( x1 >= 0 && x2 < (int) img->i.width )
+		if ( y1 >= 0 && y2 < (int) img->i.height )
+		{
+			struct ida_image *rb = NULL;
+			const ida_rect rect { x1, y1, x2, y2 };
+			rb  = FbiStuff::crop_image(img,rect);
+			if(rb)
+			{
+				img = rb;
+				setVariable(FIM_VID_HEIGHT ,img->i.height);
+				setVariable(FIM_VID_WIDTH  ,img->i.width );
+				setVariable(FIM_VID_SHEIGHT,img->i.height);
+				setVariable(FIM_VID_SWIDTH ,img->i.width );
+				FbiStuff::free_image(fimg_);
+				if( img_ != fimg_ )
+				       	FbiStuff::free_image(img_);
+				fimg_ = img_ = img;
+				mm_make();
+		       		should_redraw();
+			}
+		}
+		return FIM_ERR_NO_ERROR;
+	}
+#endif /* FIM_WANT_CROP */
+
 	fim_err_t Image::do_rotate( void )
 	{
 		if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))

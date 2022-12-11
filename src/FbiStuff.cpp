@@ -1214,7 +1214,9 @@ op_invert_(const struct ida_image *src, struct ida_rect *rect,
 	dst += 3;
     }
 }
+#endif /* FIM_WANT_OBSOLETE */
 
+#if FIM_WANT_CROP
 static void*
 op_crop_init_(const struct ida_image *src, struct ida_rect *rect,
 	     struct ida_image_info *i, void *parm)
@@ -1244,7 +1246,9 @@ op_crop_work_(const struct ida_image *src, struct ida_rect *rect,
 	dst += 3;
     }
 }
+#endif /* FIM_WANT_CROP */
 
+#if FIM_WANT_OBSOLETE
 static void*
 op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
 		 struct ida_image_info *i, void *parm)
@@ -1394,12 +1398,16 @@ struct ida_op desc_invert = {
     /*work:*/  op_invert_,
     /*done:*/  op_none_done,
 };
+#endif /* FIM_WANT_OBSOLETE */
+#if FIM_WANT_CROP
 struct ida_op desc_crop = {
     /*name:*/  "crop",
     /*init:*/  op_crop_init_,
     /*work:*/  op_crop_work_,
     /*done:*/  op_none_done,
 };
+#endif /* FIM_WANT_CROP */
+#if FIM_WANT_OBSOLETE
 struct ida_op desc_autocrop = {
     /*name:*/  "autocrop",
     /*init:*/  op_autocrop_init_,
@@ -2375,6 +2383,39 @@ ret:
     FIM_PR('.');
     return img;
 }
+
+/*
+ * crop the image to a rectangle
+ * */
+#if FIM_WANT_CROP
+struct ida_image*
+FbiStuff::crop_image(struct ida_image *src, ida_rect rect)
+{
+    struct ida_image *dest;
+    void *data;
+    unsigned int y;
+    struct ida_op *desc_p;
+
+    dest =(ida_image*) fim_malloc(sizeof(*dest));
+    /* fim: */ if(!dest)goto err;
+    fim_bzero(dest,sizeof(*dest));
+    
+    desc_p=&desc_crop;
+
+    data = desc_p->init(src,&rect,&dest->i,NULL);
+    dest->data = fim_pm_alloc(dest->i.width, dest->i.height);
+    /* fim: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
+    for (y = 0; y < dest->i.height; y++) {
+	FIM_FB_SWITCH_IF_NEEDED();
+	desc_p->work(src,&rect,
+			 dest->data + 3 * dest->i.width * y,
+			 y, data);
+    }
+    desc_p->done(data);
+err:
+    return dest;
+}
+#endif /* FIM_WANT_CROP */
 
 /*
  * rotate the image 90 degrees (M_PI/2) at a time (fim)

@@ -471,6 +471,18 @@ nop:
 		return result;
 	}
 	
+#if FIM_WANT_CROP
+	fim_cxr Browser::fcmd_crop(const args_t& args)
+	{
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+		FIM_PR('*');
+		if(viewport())
+			result = viewport()->img_crop(args,current());
+		FIM_PR('.');
+		return result;
+	}
+#endif /* FIM_WANT_CROP */
+
 	fim_cxr Browser::fcmd_color(const args_t& args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;

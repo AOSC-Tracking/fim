@@ -127,6 +127,9 @@ class Image FIM_FINAL
 	Image(enum fim_tii_t tii=FIM_TII_NUL);
 #endif	/* FIM_WANT_BDI */
 	fim_err_t do_scale_rotate( fim_scale_t ns=0.0 );
+#if FIM_WANT_CROP
+	fim_err_t do_crop(const ida_rect prect);
+#endif /* FIM_WANT_CROP */
 	private:
 	fim_err_t do_rotate( void );
 	public:

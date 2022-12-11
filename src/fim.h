@@ -174,6 +174,11 @@
 #define FIM_WANT_FLIST_STAT ( HAVE_SYS_STAT_H && 1 ) /* stat() info in the file list */
 #define FIM_WANT_SORT_BY_STAT_INFO FIM_WANT_FLIST_STAT /* using stat() info for sorting (FIXME: shall cache this info at first sort or on -R) */
 #define FIM_WANT_MAGIC_FIMDESC 1
+#if FIM_USE_CXX11
+#define FIM_WANT_CROP 1 /* experimental, unfinished */
+#else /* FIM_USE_CXX11 */
+#define FIM_WANT_CROP 0 /* experimental, unfinished */
+#endif /* FIM_USE_CXX11 */
 #define FIM_EXPERIMENTAL_IMG_NMSPC 1
 #define FIM_EXPERIMENTAL_VAR_EXPANDOS 1
 #define FIM_FONT_MAGNIFY_FACTOR FIM_WANT_FONT_MAGNIFY_FACTOR /* Framebuffer font magnifying factor, >=1 (EXPERIMENTAL). Useful with very high resolutions and small fonts. */
@@ -1017,6 +1022,7 @@ namespace fim
 #define FIM_FLT_CLEAR			"clear" /* not in vim */
 #define FIM_FLT_COLOR	              	"color" /* not in vim */
 #define FIM_FLT_COMMANDS		"commands" /* not in vim */
+#define FIM_FLT_CROP			"crop" /* not in vim */
 #define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning */
 #define FIM_FLT_DUMP_KEY_CODES		"dump_key_codes" /* not in vim */
 #define FIM_FLT_DESC			"desc" /* not in vim */
@@ -1098,6 +1104,13 @@ namespace fim
 #define FIM_CMD_HELP_BIND FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]]: bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "." FIM_CNS_CMDSEP FIM_CNS_RAW_KEYS_MESG FIM_CNS_CMDSEP "Key binding is dynamical, so you can rebind keys even during program's execution." FIM_CNS_CMDSEP "You can get a list of valid symbols (keysyms) by invoking " FIM_FLT_DUMP_KEY_CODES " or in the man page."
 #define FIM_CMD_HELP_LIST	FIM_FLT_LIST ": display the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'reverse': reverse the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'clear': clear the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort': sort the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_basename': sort the file list according to base name." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_comment': sort the file list according to the value of the " FIM_VID_COMMENT " variable." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_var' " FIM_CNS_EX_VAR_STRING ": sort the file list according to the value of the i:" FIM_CNS_EX_VAR_STRING " variable." FIM_CNS_CMDSEP FIM_FLT_LIST " 'vars|variables': list variables in all i:* read from description file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_fsize': sort the file list according to file size." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_mtime': sort the file list according to modification date. " FIM_CNS_CMDSEP FIM_FLT_LIST " 'pop': pop the last file from the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "]: remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified." FIM_CNS_CMDSEP FIM_FLT_LIST " 'push' " FIM_CNS_EX_FNS_STRING ": push " FIM_CNS_EX_FNS_STRING " to the back of the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'filesnum': display the number of files in the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'mark' [{args}]: mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'unmark' [{args}]: unmark marked image file names, with {args} unmark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'marked': show which files have been marked so far." FIM_CNS_CMDSEP FIM_FLT_LIST " 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards)." FIM_CNS_CMDSEP FIM_FLT_LIST " 'markall': mark all the current list files." FIM_CNS_CMDSEP FIM_FLT_LIST " 'unmarkall': unmark all the marked files." FIM_CNS_CMDSEP FIM_FLT_LIST " 'pushdir' {dirname}: will push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression '" FIM_CNS_PUSHDIR_RE "'." FIM_CNS_CMDSEP FIM_FLT_LIST " 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively." FIM_CNS_CMDSEP FIM_FLT_LIST " 'swap': will move the current image filename to the first in the list (you'll have to invoke " FIM_FLT_RELOAD " to see the effect)." FIM_CNS_CMDSEP "Of the above commands, several will be temporarily non available for the duration of a background load (enabled by --" FIM_OSW_BGREC "), which will last until " FIM_VID_LOADING_IN_BACKGROUND " is 0."
 #define FIM_CMD_HELP_CLEAR FIM_FLT_CLEAR ": clear the virtual console."
+#define FIM_CMD_HELP_CROP \
+	FIM_FLT_CROP ": crop image to a centered rectangle, half the width and half the height.\n" \
+	FIM_FLT_CROP " {p}: crop image to the middle {p} horizontal percent and {p} vertical percent of the image.\n" \
+	FIM_FLT_CROP " {w} {h}: crop image to the middle {w} horizontal percent and {h} vertical percent of the image.\n" \
+	FIM_FLT_CROP " {x1} {y1} {x2} {y2}: crop image to the area between the upper left ({x1},{y1}) and lower right ({x2},{y2}) corner.\n"\
+	"Units are intended as percentage (0 to 100).\n" \
+	"Note: still experimental functionality."
 #define FIM_CMD_HELP_COMMANDS FIM_FLT_COMMANDS ": display the existing commands."
 #define FIM_CMD_HELP_COLOR \
 			FIM_FLT_COLOR " [desaturate]: desaturate the displayed image colors."\

@@ -282,6 +282,21 @@ To get back the original you will have to reload the image.
 
 .na
 .B
+crop
+.fi
+crop: crop image to a centered rectangle, half the width and half the height.
+.fi
+crop {w} {h}: crop image to the middle {w} horizontal percent and {h} vertical percent of the image.
+.fi
+crop {x1} {y1} {x2} {y2}: crop image to the area between the upper left ({x1},{y1}) and lower right ({x2},{y2}) corner.
+.fi
+Units are intended as percentage (0 to 100).
+.fi
+Note: still experimental functionality.
+.fi
+
+.na
+.B
 desc
 .fi
 desc 'load' {filename} [{sepchar}]: load description file {filename}, using the optional {sepchar} character as separator.

@@ -368,6 +368,9 @@ ret:		return key;
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		addCommand(Command(FIM_FLT_COMMANDS,FIM_CMD_HELP_COMMANDS,this,&CommandConsole::fcmd_commands_list));
 		addCommand(Command(FIM_FLT_COLOR,FIM_CMD_HELP_COLOR,&browser_,&Browser::fcmd_color));
+#if FIM_WANT_CROP 
+		addCommand(Command(FIM_FLT_CROP,FIM_CMD_HELP_CROP ,&browser_,&Browser::fcmd_crop));
+#endif /* FIM_WANT_CROP */
 		addCommand(Command(FIM_FLT_DESC,FIM_FLT_HELP_DESC,this,&CommandConsole::fcmd_desc));
 		addCommand(Command(FIM_FLT_DISPLAY,FIM_FLT_HELP_DISPLAY,this,&CommandConsole::fcmd_display));
 		addCommand(Command(FIM_FLT_DUMP_KEY_CODES,FIM_CMD_HELP_DUMP_KEY_CODES,this,&CommandConsole::fcmd_dump_key_codes));
