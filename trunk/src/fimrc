@@ -254,6 +254,7 @@ alias "rotate10_ccw" "rotate -10  ;display" "rotate 10 degrees clockwise";
 ###alias "wr" "window 'right'" "selects the window at right of the current";
 ####bind 'K' "wu";
 bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}';
+bind 'C-k' 'crop' # still experimental
 #### Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
 ####bind 'C-j' "wd";
 ####bind 'J' "wd";
