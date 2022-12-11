@@ -386,7 +386,7 @@ struct fim_options_t fim_options[] = {
 	"scale fitting to screen width",FIM_NULL,
 	"Scale the image according to the screen width."
     },
-    {"no-auto-scale",   no_argument,   FIM_NULL, 0x4E4053,
+    {"no-auto-scale",   no_argument,   FIM_NULL, '=' /*0x4E4053*/,
 	"do not use any auto-scaling", FIM_NULL,
 	"Do not scale the images after loading (will set '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"';)."
     },
@@ -1299,7 +1299,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 
 	    	for (;;) {
-		    c = getopt_long(argc, argv, "/:1C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
+		    c = getopt_long(argc, argv, "=/:1C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
 #if FIM_WANT_RECURSE_FILTER_OPTION
 	   	"R::"
 #else /* FIM_WANT_RECURSE_FILTER_OPTION */
@@ -1442,7 +1442,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    //fim's
 		    cc.setVariable(FIM_VID_PRELOAD_CHECKS,0);
 		    break;
-		case 0x4E4053:
+		case '=': /*0x4E4053*/
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");

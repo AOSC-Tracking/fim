@@ -617,8 +617,8 @@ ret:
 		struct ida_image * img = fimg_;
 		const int x1 = FIM_INT_PCNT(prect.x1, img->i.width);
 		const int y1 = FIM_INT_PCNT(prect.y1, img->i.height);
-		const int x2 = FIM_INT_PCNT(prect.x2, img->i.width);
-		const int y2 = FIM_INT_PCNT(prect.y2, img->i.height);
+		const int x2 = FIM_INT_PCNT(prect.x2, img->i.width-1);
+		const int y2 = FIM_INT_PCNT(prect.y2, img->i.height-1);
 
 		if ( x2 > x1 && y2 > y1 )
 		if ( x1 >= 0 && x2 < (int) img->i.width )

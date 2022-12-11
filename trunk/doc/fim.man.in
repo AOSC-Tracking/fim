@@ -275,7 +275,7 @@ Print to stdout program version, compile flags, enabled features, linked librari
 \fB-w\fP, \fB--autowidth\fP
 Scale the image according to the screen width.
 .TP
-\fB--no-auto-scale\fP
+\fB-=\fP, \fB--no-auto-scale\fP
 Do not scale the images after loading (will set '\fB_scale_style\fP=" "';).
 .TP
 \fB--autowindow\fP
