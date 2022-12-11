@@ -3,7 +3,7 @@
 help {identifier}: provides help for {identifier}, if it is a variable, alias, or command. Use Tab in commandline mode to get a list of commands. Command line mode can be entered with the default key ':', and left pressing Enter.
 
 *
-The short command options of fim are: -a -b -c -C -d -E -f -F -h -k -K -D -S -i -m -N -p -o -P -s -t -T -u -v -V -w -H -W -L - -A -q -r -R -X -B -/ -1 
+The short command options of fim are: -a -b -c -C -d -E -f -F -h -k -K -D -S -i -m -N -p -o -P -s -t -T -u -v -V -w -= -H -W -L - -A -q -r -R -X -B -/ -1 
 "-" key is bound to command: reduce
 
 *
@@ -18,7 +18,7 @@ The long command options of fim are: --autozoom --binary --as-text --cd-and-read
 Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. If further arguments follow, individual help messages will be shown instead.
 
 *
-alias align autocmd autocmd_del basename bind cd clear commands color desc display dump_key_codes echo else eval exec font getenv goto help if info limit list load pan popen pread prefetch pwd quit recording redisplay reload rotate scale scroll set set_commandline_mode set_interactive_mode sleep status stderr stdout system variables unalias unbind while window
+alias align autocmd autocmd_del basename bind cd clear commands color crop desc display dump_key_codes echo else eval exec font getenv goto help if info limit list load pan popen pread prefetch pwd quit recording redisplay reload rotate scale scroll set set_commandline_mode set_interactive_mode sleep status stderr stdout system variables unalias unbind while window
 *
 
 *
@@ -31,6 +31,7 @@ bind "C-g" "system 'fbgrab' 'fim_'._device_string.'.png'"
 bind "C-h" "help"
 bind "Tab" "toggleVerbosity"
 bind "Enter" "list 'mark';goto _lastgotodirection"
+bind "C-k" "crop" # 0
 bind "C-m" "list 'mark'"
 bind "C-n" "goto '+//'"
 bind "C-p" "goto '-//'"

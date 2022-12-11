@@ -366,7 +366,7 @@ if ENABLE_JPEG
 if WANT_READ_STDIN_IMAGE
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; eval "quit"' -i < $(top_srcdir)/media/image.jpg | tail -1` != "00" # mostly coverage
 endif
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' --no-auto-scale -c 'pan "0%" "100%"' -cq # pan_to; TODO: test properly
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -= -c 'pan "0%" "100%"' -cq # pan_to; TODO: test properly
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -K++++ -c 'flip;mirror;pan_left;pan_right;pan_up;pan_down;pan_ne;pan_sw;pan_se;pan_nw "100%"' -c 'popen "echo quit"' # mostly coverage
 endif
 if ENABLE_AA
