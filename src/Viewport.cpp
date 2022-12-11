@@ -996,6 +996,30 @@ nop:
 	fim_cxr Viewport::img_crop(const args_t& args, const string &current)
 	{
 		ida_rect prect {25,25,75,75};
+#if FIM_WANT_MOUSE_CROP
+		const std::string rsv = cc.getStringVariable(FIM_VID_CROP_ONCE);
+
+		if( args.size() == 0 && ! rsv.empty() )
+		{
+			std::istringstream is(rsv);
+			int x1, y1, x2, y2;
+			is >> x1;
+			is >> y1;
+			is >> x2;
+			is >> y2;
+
+			const int ye = image_->height();
+			const int xe = image_->width();
+
+			x1 = x1 / ( xe / 100.0 );
+			x2 = x2 / ( xe / 100.0 );
+			y1 = y1 / ( ye / 100.0 );
+			y2 = y2 / ( ye / 100.0 );
+
+			cc.setVariable(FIM_VID_CROP_ONCE, 0);
+			prect = {x1,y1,x2,y2};
+		}
+#endif /* FIM_WANT_MOUSE_CROP */
 
 		if(args.size() == 1)
 		{

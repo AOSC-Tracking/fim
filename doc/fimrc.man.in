@@ -286,6 +286,8 @@ crop
 .fi
 crop: crop image to a centered rectangle, half the width and half the height.
 .fi
+crop {p}: crop image to the middle {p} horizontal percent and {p} vertical percent of the image.
+.fi
 crop {w} {h}: crop image to the middle {w} horizontal percent and {h} vertical percent of the image.
 .fi
 crop {x1} {y1} {x2} {y2}: crop image to the area between the upper left ({x1},{y1}) and lower right ({x2},{y2}) corner.
@@ -1764,6 +1766,7 @@ alias "rotate10"     "rotate  '10';display" "rotate 10 degrees counter clockwise
 alias "rotate10_ccw" "rotate -10  ;display" "rotate 10 degrees clockwise";
 
 bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}';
+bind 'C-k' 'crop' # still experimental
 
 alias 'cache' 'echo _cache_status' "displays cached images status";
 bind 'c' 'align "center"';

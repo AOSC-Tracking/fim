@@ -22,6 +22,7 @@
 #define FIM_IMAGE_H
 
 #include "FbiStuff.h"
+#include "FbiStuffLoader.h"
 #include "fim.h"
 #if FIM_WANT_PIC_CMTS
 #include <fstream>

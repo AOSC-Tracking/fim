@@ -55,6 +55,13 @@ namespace fim
 #define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1 && FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 #define FIM_WANT_SDL_CLICK_MENU FIM_WANT_SDL_CLICK_MOUSE_SUPPORT && 1
 
+#if FIM_WANT_MOUSE_CROP
+	fim_coo_t g_last_click_x{-1};
+	fim_coo_t g_last_click_y{-1};
+	SDL_Rect lastsrcrect;
+	SDL_Rect lastdstrect;
+#endif /* FIM_WANT_MOUSE_CROP */
+
 #ifdef FIM_SDL_DEBUG
 #define FIM_SDL_INPUT_DEBUG(C,MSG)  \
 /* i miss sooo much printf() :'( */ \
@@ -395,6 +402,10 @@ static int gx,gy;
 				dstrect.y=oroff;
 				dstrect.w=ocols;
 				dstrect.h=orows;
+#if FIM_WANT_MOUSE_CROP
+				lastsrcrect = srcrect;
+				lastdstrect = dstrect;
+#endif /* FIM_WANT_MOUSE_CROP */
 				SDL_UpperBlit(src,&srcrect,screen_,&dstrect);
 				SDL_FreeSurface(src);
 				/* FIXME: shall check error codes */
@@ -803,7 +814,41 @@ err:
 				if( wmc.size()>=9 && strncpy(key_char_grid,wmc.c_str(),9) )
 				{
 					fim_coo_t x,y;
-					Uint8 ms=SDL_GetMouseState(&x,&y);
+					const Uint8 ms = SDL_GetMouseState(&x,&y);
+#if FIM_WANT_MOUSE_CROP
+					const SDLMod mod = SDL_GetModState();
+					const bool shift_on = ( (mod & KMOD_LSHIFT) || (mod & KMOD_LSHIFT) );
+
+					if( cc.find_keycode_for_bound_cmd(FIM_FLT_CROP) )
+					if(shift_on)
+					{
+						if ( g_last_click_x >= 0 && g_last_click_y >= 0 )
+						{
+							x = x - lastdstrect.x + lastsrcrect.x;
+							y = y - lastdstrect.y + lastsrcrect.y;
+							const fim_coo_t x1 = FIM_MIN(x, g_last_click_x );
+							const fim_coo_t x2 = FIM_MAX(x, g_last_click_x );
+							const fim_coo_t y1 = FIM_MIN(y, g_last_click_y );
+							const fim_coo_t y2 = FIM_MAX(y, g_last_click_y );
+
+							if (x2>x1)
+							if (y2>y1)
+							{
+								std::ostringstream oss;
+								oss << x1 << " " << y1 << " " << x2 << " " << y2;
+								cc.setVariable(FIM_VID_CROP_ONCE, oss.str());
+								*c=1+('k'-'a');
+								g_last_click_x = g_last_click_y = -1;
+								return 1;
+							}
+							g_last_click_x = g_last_click_y = -1;
+						}
+						g_last_click_x = x - lastdstrect.x + lastsrcrect.x;
+						g_last_click_y = y - lastdstrect.y + lastsrcrect.y;
+						break;
+					}
+#endif /* FIM_WANT_MOUSE_CROP */
+
 #if FIM_WANT_SDL_CLICK_MOUSE_SUPPORT
 					Viewport* cv = cc.current_viewport();
 					fim_coo_t xt = cv->viewport_width()/3;
