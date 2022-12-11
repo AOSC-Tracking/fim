@@ -246,6 +246,7 @@ do
 	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/ssh:/}" "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
+	if ! [[ -e "$f" ]] ; then exit 255; fi
 	#while [[ ! -f "$f" ]] ; do shift ; [[ "$#" -lt 0 ]] && break 2 ; done
 ###############################################################################
 ##		HANDLING OF DVI,PS AND PDF FILES
