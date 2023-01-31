@@ -274,9 +274,9 @@ ret:		return key;
 		
 		if(refmode==Man)
 			oss << FIM_FLT_ALIAS << "\n.B\n\"" << aname << "\"\n\"";
+			//oss << ".na\n" /* No output-line adjusting; inelegant way to avoid man --html=cat's: cannot adjust line */
 		else
-			oss << ".na\n" /* No output-line adjusting; inelegant way to avoid man --html=cat's: cannot adjust line */
-			    << FIM_FLT_ALIAS" \"" << aname << "\" \"";
+			oss << FIM_FLT_ALIAS" \"" << aname << "\" \"";
 
 		if(ai!=aliases_.end())
 			oss << ai->second.first;
@@ -1099,7 +1099,7 @@ skip_ac:
 						/*
 						 * <0x20 ? print ^ 0x40+..
 						 * */
-						sprintf(buf,"got: 0x%x (%d)\n",c,c);
+						sprintf(buf,"got: 0x%x (%d) %s\n",c,c,fim_key_escape(key_syms_[c]).c_str());
 						cout << buf ;
 					}
 					if(getVariable(FIM_VID_DBG_COMMANDS).find('k') >= 0)
@@ -2149,7 +2149,8 @@ ok:
 			coffset=(*prompt_!=FIM_SYM_CHAR_NUL)+(statusline_cursor%(chars));
 		
 			sprintf(str, "%s%-*.*s | %s",prompt_, chars, chars, desc+offset, hk.c_str());
-			str[coffset]='_';
+			if (prompt_[0])
+				str[coffset]='_';
 		}
 #endif /* FIM_USE_READLINE */
 

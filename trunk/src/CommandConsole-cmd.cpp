@@ -255,7 +255,7 @@ err:
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
 
 		if(retval.empty())
-			retval = "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
+			retval = "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, key, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of aliases and commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
 		return retval;
 
 	}
