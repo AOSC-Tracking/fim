@@ -329,6 +329,7 @@ bind "'" "goto _lastfileindex";
 bind '"' "scale 'shadow';i:fresh=1;redisplay;"; 
 bind '(' "goto '^p'";
 bind ')' "goto '$p'";
+bind 'Z' "sleep 1";
 _display_status=1; # lower status line
 _want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
 _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
