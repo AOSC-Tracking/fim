@@ -935,8 +935,9 @@ ok:
 		if ( exitBinding_ == 0 )
 		       	goto err;	/* any key triggers an exit */
 
-		if ( ! pop_key_press(&c) )
-			c = displaydevice_->catchInteractiveCommand(seconds);
+		// note: truly honouring input with "if ( ! pop_key_press(&c) )" here  would consume also -K keys -- which we don't want
+		c = displaydevice_->catchInteractiveCommand(seconds);
+
 		while(c!=-1)
 		{
 			/* while characters read */
