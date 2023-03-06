@@ -554,6 +554,9 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;                        "; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -lt 70
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` == 2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` == 1
+if ENABLE_GIF
+	test "`$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers/* -K 2n.q -F 'stdout i:_filename;'`" == $(top_srcdir)/media/numbers/3.gif
+endif
 	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr; stdout; quit' 2>&1 > /dev/null | grep echo`" == "echo command" # stdout vs stderr
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr "out:due";stdout "out:uno";quit' 2>&1 > /dev/null | grep out` == "out:due" # stdout vs stderr
 if WANT_READLINE
