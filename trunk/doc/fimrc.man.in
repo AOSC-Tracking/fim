@@ -1624,7 +1624,7 @@ bind 'C-h' "help";
 #bind '/' "help"; # assigned to forward-search
 bind '=' "scale '100%'";
 #bind 'p' "prev_file";
-bind 'Del' "list 'pop';reload";
+bind 'Del' "list 'remove';reload";
 #bind 's' "list 'sort'";
 bind ' ' "scroll 'forward'";
 bind 'S' "toggleDisplayStatus";

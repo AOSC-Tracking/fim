@@ -254,7 +254,7 @@ if ENABLE_PCX
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx                                              -c 'list "remove"; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'next;list "pop";reload;quit    !(i:_filename == "$(top_srcdir)/media/numbers_pcx/0.pcx")'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'next;list "remove";reload;quit !(i:_filename == "$(top_srcdir)/media/numbers_pcx/2.pcx")'
-	test `$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -k n -k Del -k q -F 'stdout i:_filename'` == "$(top_srcdir)/media/numbers_pcx/0.pcx"
+	test `$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -k n -k Del -k q -F 'stdout i:_filename'` == "$(top_srcdir)/media/numbers_pcx/2.pcx"
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'a=1' -c 'a=a+1;' -c 'quit (1-(a==2))'
 endif
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdir"  _pwd;stdout l;if(l==_filelistlen)quit 255; quit'
