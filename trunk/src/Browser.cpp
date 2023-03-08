@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -2653,7 +2653,6 @@ void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
 	{
 		if( this->size() <= 0 )
 			return false;
-		assert(cf()); // FIXME
 		this->erase( this->begin() + cf() );
 		return true;
 	}

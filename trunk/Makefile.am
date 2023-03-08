@@ -251,6 +251,7 @@ if ENABLE_PCX
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort"; next;f=i:_filename;list "swap";     reload;if(f==i:_filename)quit 255; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/media/numbers_pcx/*.pcx --sort -c 'list "pop"; if(_filelistlen!= 9) quit 255;quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/media/numbers_pcx/*.pcx        -c 'list "pop"; if(_filelistlen!=19) quit 255;quit'
+	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx                                              -c 'list "remove"; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'a=1' -c 'a=a+1;' -c 'quit (1-(a==2))'
 endif
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdir"  _pwd;stdout l;if(l==_filelistlen)quit 255; quit'
