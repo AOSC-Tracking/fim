@@ -509,7 +509,7 @@ list 'sort_fsize': sort the file list according to file size.
 .fi
 list 'sort_mtime': sort the file list according to modification date. 
 .fi
-list 'pop': pop the last file from the files list.
+list 'pop': remove the current file from the files list, and step back.
 .fi
 list 'remove' [{filename(s)}]: remove the current file, or the {filename(s)}, if specified.
 .fi
