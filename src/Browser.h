@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 	void _set_union(const flist_t & clist);
 	void get_stat(void);
 	void set_cf(size_type cf){cf_=FIM_MOD(cf,size());}
-	const fim::string pop(const fim::string& filename);
+	const fim::string pop(const fim::string& filename, bool advance);
 	private:
 	void adj_cf(void){cf_ = size() ? size()-1:0; }
 };
@@ -147,7 +147,7 @@ class Browser FIM_FINAL
 	Viewport* viewport(void)const;
 
 	int current_n(int ccp)const;
-	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
+	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING, bool advance=false);
 	
 	fim_int current_image(void)const;
 	public:

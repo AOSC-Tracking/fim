@@ -211,10 +211,12 @@ namespace fim
 			else if(args[0]=="swap")
 				result = _swap();
 			else if(args[0]=="pop")
-				/* deletes the last image from the files list.  someday may add filename matching based remove..  */
 				pop(),
 				result = this->n_files();
-			else if(args[0]=="remove")
+			else if(args[0]=="remove" && args.size()==1)
+				pop(FIM_CNS_EMPTY_STRING,true),
+				result = this->n_files();
+			else if(args[0]=="remove" && args.size()>=2)
 				result = do_filter(args_t(args.begin()+1,args.end())/*,FullFileNameMatch,false,Delete*/);
 				//result = flist_.pop(args.begin()[1]), // example for alternative
 				//result = this->n_files();
@@ -347,14 +349,14 @@ ret:
 		return nofile_;
 	}
 
-	const fim::string Browser::pop(fim::string filename)
+	const fim::string Browser::pop(fim::string filename, bool advance)
 	{	
 		fim::string s = nofile_;
 
 		if( flist_.size() <= 1 )
 			goto ret;
 
-		s = flist_.pop(filename);
+		s = flist_.pop(filename,advance);
 
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
@@ -2564,7 +2566,7 @@ ret:
 #endif /* FIM_USE_CXX11 */
 	}
 
-	const fim::string flist_t::pop(const fim::string& filename)
+	const fim::string flist_t::pop(const fim::string& filename, bool advance)
 	{
 		fim::string s;
 
@@ -2595,7 +2597,7 @@ ret:
 			assert(cf_>=0);
 			s = (*this)[cf_];
 			this->erase( this->begin() + cf_ );
-			if(cf_)
+			if(cf_ && ! (advance && cf_ < size() ) )
 			       	cf_--;
 		}
 		return s;
