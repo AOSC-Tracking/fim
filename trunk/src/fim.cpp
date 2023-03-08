@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ struct fim_options_t fim_options[] = {
        	"Execute any command bound (via the " FIM_FLT_BIND " command) to a specified keysym at startup. A keysym can be prefixed by a repetition count number. You can specify the option multiple times to simulate multiple keystrokes. "
 	"See man " FIM_MAN_fR("fimrc") "(5) for a list of keysyms and the use of " FIM_FLT_BIND "."
     },
-    { "chars-press",   required_argument,       FIM_NULL, 'K',
+    { FIM_OSW_CHARS_PRESS,   required_argument,       FIM_NULL, 'K',
 	"input keyboard characters at startup","{chars}",
        	"Input one or more keyboard characters at program startup (simulate keyboard presses). "
 	"This option can be specified multiple times. "

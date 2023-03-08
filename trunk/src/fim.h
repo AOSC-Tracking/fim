@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -463,6 +463,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_OSW_READ_FROM_STDIN	"read-from-stdin"
 #define FIM_OSW_IMAGE_FROM_STDIN	"image-from-stdin"
 #define FIM_OSW_DUMP_SCRIPTOUT "write-scriptout"
+#define FIM_OSW_CHARS_PRESS "chars-press"
 #define FIM_OSW_LOAD_IMG_DSC_FILE	"load-image-descriptions-file"
 #define FIM_OSW_IMG_DSC_FILE_SEPC	"image-descriptions-file-separator"
 #define FIM_OSW_SORT_FSIZE		"sort-fsize"

@@ -22,6 +22,10 @@ fimrc - \fB fim \fP configuration file and language reference
 .fi
 .B fim --write-scriptout /dev/stdout [ {options} ]
 .fi
+.B fim --chars-press :{commands} [ {options} ]
+.fi
+.B fim --chars-press :{commands} --chars-press '' [ {options} ]
+.fi
 
 .SH DESCRIPTION
 This page explains the 
