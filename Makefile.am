@@ -317,6 +317,8 @@ endif
 endif
 if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '2,4 stdout  "{}";q' | wc -l` = 3
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '3;list "mark";6;list "mark";                   1,2 stdout "marked {}";q' | grep 'marked.*[01].pcx' | wc -l` = 2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '3;list "mark";6;list "mark"; toggleLimitMarked;1,2 stdout "marked {}";q' | grep 'marked.*[25].pcx' | wc -l` = 2
 	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb                            --read-from-file ../special/images.list   -c 'if(_filelistlen!=2)quit 255; quit'
 if WANT_READ_STDIN_IMAGE
 	cd $(top_srcdir)/media/numbers_pcx/; $(abs_builddir)/$(FIM_EXE) $(FIMNORCOPTS) -o dumb --read-from-stdin-elds '!' --read-from-file ../special/images.list   -c 'if(_filelistlen!=0)quit 255; quit'
