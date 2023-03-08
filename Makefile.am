@@ -91,7 +91,7 @@ signed-dist: dist
 CXX11TEST=test ` $(FIM_EXE) -V | grep standard | head -1  | tr -d -c '[:digit:]'` -gt 200301
 FIMNORCOPTS=-N --no-etc-rc-file --no-history
 FIMSCLTSTOPTS=-C '_downscale_huge_at_load=-1;_magnify_factor=2;_reduce_factor=2;' --no-auto-scale -o dumb -q 
-FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhlltW' -K ':quit' -K ''
+FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhlltW' -K ':quit' --chars-press '' # --chars-press -K
 NO_ASAN=ASAN_OPTIONS=detect_leaks=0
 
 if ENABLE_CACA

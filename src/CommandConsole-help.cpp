@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help member functions
 
- (c) 2011-2022 Michele Martone
+ (c) 2011-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -96,6 +96,8 @@ manmode:
 			".B fim --" FIM_OSW_FINAL_COMMANDS " {commands} [ {options} ]\n.fi\n"
 			".B fim --" FIM_OSW_DUMP_SCRIPTOUT " {scriptfile} [ {options} ]  \n.fi\n"
 			".B fim --" FIM_OSW_DUMP_SCRIPTOUT " " FIM_LINUX_STDOUT_FILE " [ {options} ]\n.fi\n"
+			".B fim --" FIM_OSW_CHARS_PRESS " " ":{commands} [ {options} ]\n.fi\n"
+			".B fim --" FIM_OSW_CHARS_PRESS " " ":{commands} --" FIM_OSW_CHARS_PRESS " '' [ {options} ]\n.fi\n"
 			"\n"
 		".SH DESCRIPTION\n"
 			"This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line {options}.\n"
