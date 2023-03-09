@@ -1444,6 +1444,7 @@ if test x$fim_cv_read_dirs == xyes; then
 	  AC_DEFINE([FIM_RECURSIVE_DIRS])
   fi
 fi
+AM_CONDITIONAL(WANT_RECURSIVE_DIRS, test x$fim_cv_recursive_dirs = xyes)
 
 dnl ==================
 
