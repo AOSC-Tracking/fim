@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff.
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1195,6 +1195,31 @@ fim::string fim_getcwd(void)
 #endif /* _BSD_SOURCE || _XOPEN_SOURCE >= 500 */
 #endif /* HAVE_GET_CURRENT_DIR_NAME */
 		return cwd;
+}
+
+static fim_int fim_util_atoi_kmX(const fim_char_t *nptr, int base)
+{
+	// from rsb__util_atoi_kmX
+	fim_int v = fim_atoi(nptr);
+
+	if(*nptr=='-')
+		++nptr;
+	while(isdigit(*nptr))
+		++nptr;
+	if(*nptr && tolower(*nptr)=='g')
+		v *= base * base * base;
+	if(*nptr && tolower(*nptr)=='m')
+		v *= base * base;
+	if(*nptr && tolower(*nptr)=='k')
+		v *= base;
+
+	return v;
+}
+
+fim_int fim_util_atoi_km2(const fim_char_t *nptr)
+{
+	// from rsb__util_atoi_km2
+	return fim_util_atoi_kmX(nptr, 1024);
 }
 
 fim_int fim_atoi(const char*s)

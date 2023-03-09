@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -109,6 +109,7 @@ int fim_snprintf_XB(char *str, size_t size, size_t q);
 fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_calloc = false);
 const fim_char_t * fim_basename_of(const fim_char_t * s);
 fim::string fim_getcwd(void);
+fim_int fim_util_atoi_km2(const fim_char_t *nptr);
 fim_int fim_atoi(const char*s);
 size_t fim_maxrss(void);
 fim_bool_t fim_is_id(const char*s);

@@ -291,7 +291,7 @@ struct fim_options_t fim_options[] = {
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
 	"open at specified byte offset",
 	"{bytes-offset[{:upper-offset}|{+offset-range}]}",
-"Use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP will be probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files."
+"Use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP will be probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
     },
     {"pread-cmd",      required_argument,       FIM_NULL,  0x70726561, //prea(d)
 	"read image file in stdin from pipeline",
@@ -1480,9 +1480,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 				std::ostringstream tmp;
 				fim_int read_offset_u=0;
 				if(strchr(optarg,':'))
-					read_offset_u=fim_atoi(strchr(optarg,':')+1)-read_offset_l;
+					read_offset_u=fim_util_atoi_km2(strchr(optarg,':')+1)-read_offset_l;
 				if(strchr(optarg,'+'))
-					read_offset_u=fim_atoi(strchr(optarg,'+')+1);
+					read_offset_u=fim_util_atoi_km2(strchr(optarg,'+')+1);
 
 				tmp << FIM_VID_OPEN_OFFSET_L << "=" << read_offset_l << ";";
 				tmp << FIM_VID_OPEN_OFFSET_U << "=" << read_offset_u << ";";
