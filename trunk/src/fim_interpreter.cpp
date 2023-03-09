@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -491,8 +491,10 @@ nodeType *vscon(fim_char_t*s,int typeHint)
 	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006f6d00    ) // .om.
 #endif /* SIZEOF_INT */
 #endif /* FIM_BIG_ENDIAN */
-
+	{
+		fim_free(s);
 		return con(fim_rand());
+	}
 #endif /* FIM_RANDOM */
 
 	nodeType *p=scon(s);
