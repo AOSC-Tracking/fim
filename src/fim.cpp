@@ -801,8 +801,9 @@ int fim_dump_man_page(void)
 #endif /* FIM_HAS_TIMEOUT */
 			"\n")+
 			string("\n""If " FIM_MAN_fB("{imagepath}") " is a file, its format is guessed not by its name but by its contents. "
-				"See the " FIM_MAN_fB(FIM_VID_FILE_LOADER) " variable to change this default.\n\n")+
+				"See the " FIM_MAN_fB(FIM_VID_FILE_LOADER) " variable to change this default.\n\n")
 #ifdef FIM_READ_DIRS
+			+
 			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise this will be checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")
 #endif /* FIM_READ_DIRS */
 			;
