@@ -208,7 +208,7 @@ The \fBdumb\fP test mode is not interactive.
 
 .TP
 \fB--offset {bytes-offset[{:upper-offset}|{+offset-range}]}\fP
-Use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper-offset\fP is specified, further bytes until \fBupper-offset\fP will be probed. If \fB+offset-range\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files.
+Use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper-offset\fP is specified, further bytes until \fBupper-offset\fP will be probed. If \fB+offset-range\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes.
 .TP
 \fB--pread-cmd {cmd-filter-pipeline}\fP
 Specify a shell command with \fB{cmd-filter-pipeline}\fP. If the current filename matches "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$", it will be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which will be read and displayed.
