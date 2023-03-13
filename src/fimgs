@@ -1,7 +1,7 @@
 #!/bin/bash
 # $Id$
 
-# (c) 2007-2022 Michele Martone
+# (c) 2007-2023 Michele Martone
 
 # This is a modified version of the original fbgs script by Gerd Hoffman.
 # Note: it probably won't work on bash version < 3.0.
@@ -240,7 +240,7 @@ while test x"$opt" = x"1"
 #while shift
 do
 	f="$1";
-	if test x"$f" == x"--" ; then shift; while test "$#" -gt "0" ; do f="$1"; fbiopts="$fbiopts $1" ; shift; done; f=/dev/null  ; fi 
+	if test x"$f" = x"--" ; then shift; while test "$#" -gt "0" ; do f="$1"; fbiopts="$fbiopts $1" ; shift; done; f=/dev/null  ; fi 
 	shift;
 	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
@@ -335,7 +335,7 @@ function add_fbi_read_opts() { fbiopts="$fbiopts $fbi_read_opts"; }
 # ... but this fimgs script is lazy and it gets satisfied with a bare decompress !
 
 # lone file handling..
-#[[ "$?" == 0 ]] || echo "this script is not suited for file $f" 
+#[[ "$?" = 0 ]] || echo "this script is not suited for file $f" 
 else
 	[[ -f "$DIR/`basename $f`" ]] || cp -- "$f" "$DIR" || die "problems copying $f to $DIR"
 fi
