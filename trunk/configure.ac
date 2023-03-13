@@ -403,7 +403,7 @@ dnl 		    (`int' or `void').])
 dnl ==================
 AH_TEMPLATE([FIM_WANT_STATIC_BINARY])
 AC_ARG_ENABLE(static, AS_HELP_STRING([--enable-static],[Want a static binary. (disabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_static=1 ; else fim_cv_want_static=0 ; fi ],[ fim_cv_want_static=0 ])
-if test x$fim_cv_want_static == x1 ; then 
+if test x$fim_cv_want_static = x1 ; then 
 	LIBS="$LIBS --static"
         LIBDJVU_STATIC_EXTRA="-lpthread"
 	# too many dependencies for the following!
@@ -489,7 +489,7 @@ if test x$fim_handle_gif != xno ; then
 
 #  if test x$with_libgif != xno ; then
 # the following needs thorough testing
-  if test x"$have_gif" == xyes ; then
+  if test x"$have_gif" = xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffGif.o"
   LIBS="$LIBS $LIBGIF"
   AC_DEFINE([FIM_HANDLE_GIF])
@@ -540,7 +540,7 @@ if test x$fim_handle_tiff != xno ; then
 
 #  if test x$with_libtiff != xno ; then
 # the following needs thorough testing
-  if test x"$have_tiff" == xyes ; then
+  if test x"$have_tiff" = xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffTiff.o"
   LIBS="$LIBS $LIBTIFF"
   AC_DEFINE([FIM_HANDLE_TIFF])
@@ -654,7 +654,7 @@ if test x$fim_handle_jpeg != xno ; then
 
 #  if test x$with_libjpeg != xno ; then
 # the following needs thorough testing
-  if test x"$have_jpeg" == xyes ; then
+  if test x"$have_jpeg" = xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffJpeg.o"
   LIBS="$LIBS $LIBJPEG"
   AC_DEFINE([HAVE_LIBJPEG],[1],[We have libjpeg])
@@ -705,7 +705,7 @@ dnl     fi
 dnl   fi
 dnl 
 dnl # the following needs thorough testing
-dnl   if test x"$have_dvi" == xyes ; then
+dnl   if test x"$have_dvi" = xyes ; then
 dnl   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffDvi.o"
 dnl   LIBS="$LIBS $LIBDVI"
 dnl   AC_DEFINE([HAVE_LIBSPECTRE],[1],[We have libdvilib2])
@@ -756,7 +756,7 @@ if test x$fim_handle_ps != xno ; then
   fi
 
 # the following needs thorough testing
-  if test x"$have_ps" == xyes ; then
+  if test x"$have_ps" = xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPs.o"
   LIBS="$LIBS $LIBPS"
   AC_DEFINE([HAVE_LIBSPECTRE],[1],[We have libspectre])
@@ -809,7 +809,7 @@ if test x$fim_handle_djvu != xno ; then
   fi
 
 # the following needs thorough testing
-  if test x"$have_djvu" == xyes ; then
+  if test x"$have_djvu" = xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffDjvu.o"
   LIBS="$LIBS $LIBDJVU"
   AC_DEFINE([HAVE_LIBDJVU],[1],[We have libdjvulibre])
@@ -883,7 +883,7 @@ dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
   fi
 
 # the following needs thorough testing
-  if test x"$have_poppler" == xyes ; then
+  if test x"$have_poppler" = xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPdf.o"
   LIBS="$LIBS $LIBPOPPLER"
   AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpoppler (Warning: the API could still break! (as of v.0.8.7--0.24.1))])
@@ -990,7 +990,7 @@ if test x$fim_handle_png = xyes; then
 		fim_handle_png=no
         else
                 CXXFLAGS="$CXXFLAGS `$LIBPNG_CONFIG --cflags`"
-		if test x$fim_cv_want_static == x1 ; then 
+		if test x$fim_cv_want_static = x1 ; then 
                 LIBS="$LIBS `$LIBPNG_CONFIG --static --libs`"
 		else
                 LIBS="$LIBS `$LIBPNG_CONFIG --libs`"
@@ -1438,9 +1438,9 @@ fi
 
 dnl ==================
 
-if test x$fim_cv_read_dirs == xyes; then
+if test x$fim_cv_read_dirs = xyes; then
   AC_DEFINE([FIM_READ_DIRS])
-  if test x$fim_cv_recursive_dirs == xyes; then
+  if test x$fim_cv_recursive_dirs = xyes; then
 	  AC_DEFINE([FIM_RECURSIVE_DIRS])
   fi
 fi
@@ -1668,7 +1668,7 @@ fim_cv_want_font_magnify_factor="$withval";
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
 dnl ==================
-AM_CONDITIONAL([HAVE_RUNNABLE_TESTS],[test x"$host_cpu" == x"$build_cpu" -a x"$host_os" == x"$build_os" ])
+AM_CONDITIONAL([HAVE_RUNNABLE_TESTS],[test x"$host_cpu" = x"$build_cpu" -a x"$host_os" = x"$build_os" ])
 dnl ==================
 dnl # /tmp/__FIM_TEMPORARY_FILE
 AC_ARG_WITH(tmpfile, AS_HELP_STRING([--with-tmpfile=FILE],[Specify where to put temporary files created when interacting with external conversion programs.]),
@@ -1861,19 +1861,19 @@ AC_DEFINE_UNQUOTED([FIM_WANT_FILENAME_MARK_AND_DUMP], $fim_cv_want_mark_and_dump
 dnl ==================
 AH_TEMPLATE([FIM_WANT_NOSCRIPTING])
 AC_ARG_ENABLE(scripting, AS_HELP_STRING([--enable-scripting],[Scripting. (enabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_noscripting=0 ; else fim_cv_want_noscripting=1 ; fi ],[ fim_cv_want_noscripting=0 ])
-if test x$fim_cv_want_noscripting == x1 ; then 
+if test x$fim_cv_want_noscripting = x1 ; then 
 AC_DEFINE_UNQUOTED([FIM_WANT_NOSCRIPTING], $fim_cv_want_noscripting, [Scripting. (enabled by default)])
 fi
 dnl ==================
 AH_TEMPLATE([FIM_WANT_NO_OUTPUT_CONSOLE])
 AC_ARG_ENABLE(output-console, AS_HELP_STRING([--enable-output-console],[Output console. (enabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_no_output_console=0 ; else fim_cv_want_no_output_console=1 ; fi ],[ fim_cv_want_no_output_console=0 ])
-if test x$fim_cv_want_no_output_console == x1 ; then 
+if test x$fim_cv_want_no_output_console = x1 ; then 
 AC_DEFINE_UNQUOTED([FIM_WANT_NO_OUTPUT_CONSOLE], $fim_cv_want_no_output_console, [Output console. (enabled by default)])
 fi
 dnl ==================
 dnl AH_TEMPLATE([FIM_WANT_UNICODE])
 dnl AC_ARG_ENABLE(unicode, AS_HELP_STRING([--enable-unicode],[Unicode. (Unimplemented, disabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_unicode=1 ; else fim_cv_want_unicode=0 ; fi ],[ fim_cv_want_unicode=0 ])
-dnl if test x$fim_cv_want_unicode == x1 ; then 
+dnl if test x$fim_cv_want_unicode = x1 ; then 
 dnl 	# CXXFLAGS="$CXXFLAGS `freetype-config --cflags`"
 dnl 	# LIBS="$LIBS `freetype-config --libs`"
 dnl 	AC_DEFINE_UNQUOTED([FIM_WANT_UNICODE], $fim_cv_want_unicode, [Check for freetype library, with no feature behind: do not use this. (disabled by default)])
@@ -1900,7 +1900,7 @@ AC_ARG_ENABLE(raw-bits-rendering, AS_HELP_STRING([--disable-raw-bits-rendering],
 if test x$fim_want_rbr = xyes ; then
 	AC_DEFINE_UNQUOTED([FIM_WANT_RAW_BITS_RENDERING], 1, [Enables raw bits rendering])
 fi
-AM_CONDITIONAL(ENABLE_RAW_BITS_RENDERING, test x$fim_want_rbr == xyes)
+AM_CONDITIONAL(ENABLE_RAW_BITS_RENDERING, test x$fim_want_rbr = xyes)
 dnl ==================
 AH_TEMPLATE([FIM_ALLOW_LOADER_STRING_SPECIFICATION])
 fim_want_lss=yes
