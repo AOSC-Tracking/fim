@@ -701,8 +701,10 @@ If you want to be sure of the files authenticity, you should at least follow the
 <PRE CLASS="SHCMD">
 wget MIRROR/TGZ
 wget MIRROR/SIG
-gpg --search 'dezperado autistici org'
-# import the key from a trusted keyserver by following on screen instructions
+# Alternative A: import the key from a trusted keyserver by following on screen instructions:
+gpg --search 0xE0E669C8EF1258B8
+# Alternative B: import the key from FIM's website:
+wget -O- https://www.nongnu.org/fbi-improved/0xE0E669C8EF1258B8.asc | gpg --import -  
 gpg --verify SIG
 </PRE>
 

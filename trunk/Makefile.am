@@ -421,7 +421,7 @@ if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_interlaced.gif -c 'quit !(i:width!=0)' # interlaced gif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberatly wrong gif
 endif
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png` = 2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png` = 1
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/truncated_bad.png.bin -c 'quit'; test $$? = 134 # deliberatly wrong png: reminder that need start to use png_set_error_fn
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_gray.png -c 'quit'; # just coverage so far

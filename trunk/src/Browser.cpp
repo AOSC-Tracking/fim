@@ -705,12 +705,23 @@ nop:
 			goto ret; /* this prevents infinite recursion */
 		if( /*c_getImage() &&*/ viewport() && ! (viewport()->check_valid()) )
 		{
+    	    		if ( cc.getIntVariable(FIM_VID_VERBOSITY) )
+	    			std::cout << "loading " << c << " has failed" << "\n"; 
 			free_current_image(false);
 			++ lehsof;
 #ifdef FIM_REMOVE_FAILED
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
 #if FIM_USE_CXX11
 				do_filter({c});
+#if FIM_WANT_GOTOLAST
+				/* on failed load, try jumping to last meaningful file */
+				{
+					const fim_int fi = getGlobalIntVariable(FIM_VID_FILEINDEX), li = getGlobalIntVariable(FIM_VID_LASTFILEINDEX);
+					if ( fi > li && li > 0 )
+						setGlobalVariable(FIM_VID_FILEINDEX, li),
+						flist_.set_cf(li-1);
+				}
+#endif
 #else /* FIM_USE_CXX11 */
 				args_t args;
 				args.push_back(c.c_str());
@@ -2649,7 +2660,7 @@ void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
 		if(bs.at(pos) != negative)
 			this->erase(this->begin()+pos-ecount),ecount++;
 #endif /* FIM_USE_CXX11 */
-	adj_cf();
+	// TODO: updating cf_ here would make sense, but is redundant
 }
 	fim_bool_t flist_t::pop_current(void)
 	{

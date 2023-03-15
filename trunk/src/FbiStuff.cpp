@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -2108,7 +2108,7 @@ probe_loader:
 
     if( loader==FIM_NULL && (!can_pipe || read_offset_l > 0) )
     {
-    		if(vl>1)FIM_VERB_PRINTF("skipping external loading programs ..\n");
+    		if(vl)FIM_VERB_PRINTF("skipping external loading programs...\n");
 		goto head_not_found;
     }
 #ifdef FIM_WITH_LIBPNG 
