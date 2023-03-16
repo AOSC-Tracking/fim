@@ -139,7 +139,7 @@ fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer based on f
 .B fimgs [ {fimgs-options} ] file [-- [{fim-options}]]
 .SH DESCRIPTION
 .B fimgs  
-is a wrapper script which takes a PostScript or pdf or .cbr or .rar or .cbz or .zip or .dvi or any of the above prefixed with http:// or https:// or ssh:// as input, renders the pages using ghostscript into a temporary directory and finally calls \fB $FBI\fP to display them.
+is a wrapper script which takes a PostScript or pdf or .cbr or .rar or .cbz or .zip or .dvi or any of the above prefixed with http:// or https:// or ssh: as input, renders the pages using ghostscript into a temporary directory and finally calls \fB $FBI\fP to display them.
 
 In case of compressed archives (in ZIP or RAR formats), the images are decompressed into a directory and displayed using \fB fim\fP.
 In this case, only images contained in the archive will be displayed (no nested archives or pdf's or ps's or dvi's).
@@ -156,6 +156,8 @@ In order to uncompress ZIP archives, fimgs will use 'zip'.
 In order to uncompress TAR.GZ or TAR.BZ2 or TAR.XZ archives, fimgs will use 'tar'.
 
 In order to fetch http:// or https:// prefixed URLS, 'wget' will be used.
+
+In order to fetch ssh: prefixed host:path locations, 'scp' will be used.
 
 In case of a CBZ, CBR, PDF, PS, or DVI file, will invoke \fB fim\fP with '$fbi_read_opts'.
 
@@ -246,16 +248,16 @@ do
 	f="$1";
 	if test x"$f" = x"--" ; then shift; while test "$#" -gt "0" ; do f="$1"; fbiopts="$fbiopts $1" ; shift; done; f=/dev/null  ; fi 
 	shift;
-	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap 'rm $fn' EXIT ; f="$fn"; }
-	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap 'rm $fn' EXIT ; f="$fn"; }
-	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/ssh:/}" "$fn" && trap 'rm $fn' EXIT ; f="$fn"; }
+	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn"; f="$fn"; }
+	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn"; f="$fn"; }
+	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/#ssh:/}" "$fn" ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
 	if ! [[ -e "$f" ]] ; then exit 255; fi
 	#while [[ ! -f "$f" ]] ; do shift ; [[ "$#" -lt 0 ]] && break 2 ; done
 ###############################################################################
 ##		HANDLING OF DVI,PS AND PDF FILES
 ###############################################################################
-#[[ "$f" =~ .dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fR $DIR" EXIT
+#[[ "$f" =~ .dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" ; rm -fR $DIR" EXIT
 #[[ -f "$f" ]] || { echo "an option!" ;  fbiopts="$fbiopts $f" ; break ; } # not a file, but an option
 
 

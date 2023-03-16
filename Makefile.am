@@ -189,15 +189,23 @@ sanity-check:	all
 .PHONY: check
 check:	tests
 
-# this is the official way of testing fim
-.PHONY: tests
-tests:	all
+.PHONY: devtests
+devtests:	all
 if WITH_SHELLCHECK
 	$(SHELLCHECK) -e SC2235,SC1117,SC2230,SC2086,SC2006,SC2001 $(top_srcdir)/src/fimgs
 endif
 	test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
 	test `grep '[^=]==[^=]' $(top_srcdir)/src/fimgs | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only
+if ENABLE_GIF
+	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q
+	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/u.gif -- $(FIMNORCOPTS) -o dumb -K q; test $$? = 255
+	export TMPDIR=`pwd`/tmpdir && $(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q && test "`ls $$TMPDIR`" = ""
+endif
+
+# this is the official way of testing fim
+.PHONY: tests
+tests:	all
 	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb --sanity-check
 	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout random ; quit 0;' # make sure no leak from 'random'
 	ulimit -c unlimited || true
