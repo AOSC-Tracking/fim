@@ -192,6 +192,9 @@ check:	tests
 # this is the official way of testing fim
 .PHONY: tests
 tests:	all
+if WITH_SHELLCHECK
+	$(SHELLCHECK) -e SC2235,SC1117,SC2230,SC2086,SC2006,SC2001 $(top_srcdir)/src/fimgs
+endif
 	test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
 	test `grep '[^=]==[^=]' $(top_srcdir)/src/fimgs | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only

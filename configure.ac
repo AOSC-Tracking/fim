@@ -191,6 +191,8 @@ AC_PATH_PROG([CPP],[cpp],[no])
 AC_PATH_PROG([AWK],[awk],[no])
 AC_PATH_PROG([CAT],[cat],[no])
 AC_PATH_PROG([MAN],[man],[no])
+AC_PATH_PROG([SHELLCHECK],[shellcheck],[no])
+AM_CONDITIONAL(WITH_SHELLCHECK, test x$ac_cv_path_SHELLCHECK != xno)
 #AC_PATH_PROG([CC],[cc],[no])
 #AC_PATH_PROG([WHICH],[which],[no])
 #AC_PATH_PROG([GPG],[gpg],[no])
@@ -1578,7 +1580,7 @@ AC_ARG_WITH(exec-shell, AS_HELP_STRING([--with-exec-shell=SHELL],[Specify altern
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
 dnl ==================
-AC_ARG_ENABLE(convert, AS_HELP_STRING([--disable-smartautocompletion],[Fim will treat as a proper, unescaped string, nonquoted and nonevaluated strings which happen to match an existing filename.]),
+AC_ARG_ENABLE(smartautocompletion, AS_HELP_STRING([--disable-smartautocompletion],[Fim will treat as a proper, unescaped string, nonquoted and nonevaluated strings which happen to match an existing filename.]),
 [       if test x$enableval = xno; then
 		fim_cv_smartautcompletion=no
 	else

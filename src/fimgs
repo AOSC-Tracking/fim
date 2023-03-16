@@ -31,10 +31,10 @@ shopt  -s nocasematch
 
 
 # we must have write permissions in that directory
-mkdir -p $DIR	|| exit 1
+mkdir -p "$DIR"	|| exit 1
 
 # we want that directory clean after this script execution, no matter what happens
-trap "rm -rf $DIR" EXIT
+trap 'rm -rf $DIR' EXIT
 
 # useless for now :)
 # declare -f 
@@ -63,7 +63,7 @@ function check_in_path()
 # output functions
 function info()  { echo '  [+]' "$@" 1>&2 ;  }
 function einfo() { echo '  [-]' "$@" 1>&2 ;  }
-function die() { einfo "ERROR : "$@ 1>&2 ; exit ${FIMERRCV}; }
+function die() { einfo "ERROR : $*" 1>&2 ; exit ${FIMERRCV}; }
 
 # our favourite framebuffer viewing program :)
 FBI=fim
@@ -88,7 +88,7 @@ fbi_read_opts="--autotop --autowidth"
 fbi_default_opts="--autozoom"
 fbiopts="$fbi_default_opts"
 gsopts="-q"
-passwd=""
+#passwd=""
 opt=1
 
 # in this way odd filenames are kept intact, be WARNED
@@ -132,7 +132,7 @@ do
 			;;
 		-m)	shift
 cat << EOF
-.TH fimgs 1 "(c) 2007-2022 Michele Martone"
+.TH fimgs 1 "(c) 2007-2023 Michele Martone"
 .SH NAME
 fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer based on fim
 .SH SYNOPSIS
@@ -206,8 +206,10 @@ EOF
 			echo -e "\n \`man fimgs\`   will give you more info."
 			exit 1
 			;;
+	        --)	
+			break;; # -- is *not* to be passed to fim
 	        *)	
-			[[ "$1" =~ '^-.*' ]] && fbiopts="$fbiopts $1";
+			[[ "$1" =~ ^-.* ]] && fbiopts="$fbiopts $1";
 			break;;
 #		-*)	echo "unknown option: $1"
 #			exit 1
@@ -222,7 +224,9 @@ check_in_path $FBI  || die "no fim in \$PATH"
 ###############################################################################
 ##		HANDLING OF CBR AND CBZ ARCHIVES
 ###############################################################################
-UNCBZ="unzip" ; ZOPT="-x '*/*'" # suits for Info-ZIP implementation
+UNCBZ="unzip" ;
+# shellcheck disable=SC2089
+ZOPT="-x '*/*'" # suits for Info-ZIP implementation
 #UNRAR="unrar-free"
 #UNRAR="rar"
 UNRAR="unrar-nonfree"
@@ -242,9 +246,9 @@ do
 	f="$1";
 	if test x"$f" = x"--" ; then shift; while test "$#" -gt "0" ; do f="$1"; fbiopts="$fbiopts $1" ; shift; done; f=/dev/null  ; fi 
 	shift;
-	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
-	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
-	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/ssh:/}" "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
+	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap 'rm $fn' EXIT ; f="$fn"; }
+	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap 'rm $fn' EXIT ; f="$fn"; }
+	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/ssh:/}" "$fn" && trap 'rm $fn' EXIT ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
 	if ! [[ -e "$f" ]] ; then exit 255; fi
 	#while [[ ! -f "$f" ]] ; do shift ; [[ "$#" -lt 0 ]] && break 2 ; done
@@ -279,7 +283,7 @@ info "rendering $f to $BDIR.."
 
 #this is a workaround for gs's .. bug ..
 
-[[ "$f" =~ "^\.\."  ]] && f="$PWD/$f"
+[[ "$f" =~ ^\.\.  ]] && f="$PWD/$f"
 
 # note : we cannot render gs renderable documents with more than 1000 pages...
 gs	-dSAFER -dNOPAUSE -dBATCH			\
@@ -316,7 +320,9 @@ then
 [[ "$f" =~ .cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 #[[ "$f" =~ .CBR$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ .rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+# shellcheck disable=SC2086,SC2090
 [[ "$f" =~ .cbz$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+# shellcheck disable=SC2086,SC2090
 #[[ "$f" =~ .CBZ$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 [[ "$f" =~ .zip$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 [[ "$f" =~ .tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
@@ -347,7 +353,8 @@ done
 #echo "options are $fbiopts"
 
 # there should be some filter to avoid feed garbage to fim ... 
-find $DIR/ -type f -iname '*.bmp' -or -iname '*.gif' -or -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.pcx' -or -iname '*.pbm' -or -iname '*.pgm' -or -iname '*.ppm' -or -iname '*.png' -or -iname '*.tif' -or -iname '*.tiff' -or -iname '*.webp' | sort -n | $FBI $fbiopts  -- -
+# shellcheck disable=SC2086
+find "$DIR/" -type f -iname '*.bmp' -or -iname '*.gif' -or -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.pcx' -or -iname '*.pbm' -or -iname '*.pgm' -or -iname '*.ppm' -or -iname '*.png' -or -iname '*.tif' -or -iname '*.tiff' -or -iname '*.webp' | sort -n | $FBI $fbiopts  -- -
 
 # when no framebuffer device is available, we could invoke another console viewer, couldn't we ?
 # cacaview $DIR/*
