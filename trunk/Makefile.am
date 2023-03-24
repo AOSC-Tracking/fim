@@ -313,13 +313,13 @@ endif
 	if which convert; then \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 8  $(top_srcdir)/media/icon_smile.ppm && \
 		sed -i 's/P6$$/P6\n# comment/g'                      $(top_srcdir)/media/icon_smile.ppm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit'` = ppm && rm -f $(top_srcdir)/icon_smile.ppm && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit'` = ppm && rm -f $(top_srcdir)/media/icon_smile.ppm && \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 16 $(top_srcdir)/media/icon_smile.ppm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit'` = ppm && rm -f $(top_srcdir)/icon_smile.ppm && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit'` = ppm && rm -f $(top_srcdir)/media/icon_smile.ppm && \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 8  $(top_srcdir)/media/icon_smile.pgm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/icon_smile.pgm; \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 16 $(top_srcdir)/media/icon_smile.pgm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/icon_smile.pgm; \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
 	fi # cover-test FbiStuffPpm.cpp
 if WITH_LIBGRAPHICSMAGICK
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = libGraphicsMagick
@@ -405,7 +405,7 @@ if ENABLE_CACA
 	@make cacatests
 endif
 if ENABLE_FRAMEBUFFER
-	@if test -z "$(DISPLAY)$(SSH_TTY)"; then make fbtests; fi
+	@if test -z "$(DISPLAY)$(SSH_TTY)" -a -w "/dev/fb0"; then make fbtests; fi
 endif
 if ENABLE_SDL
 	@if test -n "$(DISPLAY)"; then make sdltests; fi
@@ -574,8 +574,13 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=1;" -k 10F1 -k q | tr -d '\n'` = 1 # test binding repeat and F1 binding
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=0;" -k 10F1 -k q | tr -d '\n'` = 1111111111 # test binding repeat and F1 binding
 if WANT_READLINE
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smile.ppm -K '' -K q -F "quit !(_fileindex==2);" # test slash search
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F "quit !(_fileindex==0);" # test slash search
+if ENABLE_GIF
+	cp -p $(top_srcdir)/media/icon_smile.gif $(top_srcdir)/media/icon_smile.pgm
+	cp -p $(top_srcdir)/media/icon_smile.gif $(top_srcdir)/media/icon_smile.ppm
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smile.ppm -K '' -K q -F 'quit !(_fileindex==2);' # test slash search
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F 'quit !(_fileindex==0);' # test slash search
+	rm $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm
+endif
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -gt 70
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;                        "; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -lt 70
