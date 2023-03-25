@@ -44,7 +44,7 @@ class Var FIM_FINAL
 		fim_float_t f;
 		fim_int i;
 	};
-	fim::string s;
+	fim::string s_;
 	public:
 	Var(const Var& v):
 		type(FimTypeDefault),i(0)
@@ -61,7 +61,7 @@ class Var FIM_FINAL
 		if(type==FimTypeFloat)
 			this->f=v.f;
 		if(type==FimTypeString)
-			this->s=v.s;
+			this->s_=v.s_;
 		return getInt();
 	}
 
@@ -100,7 +100,7 @@ class Var FIM_FINAL
 				f=fim_atof(s);
 		else
 		       	if(type==FimTypeString)
-				this->s=s;
+				this->s_=s;
 		else
 		       	i=0;
 	}
@@ -109,14 +109,14 @@ class Var FIM_FINAL
 		type(FimTypeDefault),i(0)
 	{
 		type=FimTypeString;
-		this->s=s.c_str();
+		this->s_=s.c_str();
 	}
 
 	Var(const fim_char_t*s):
 		type(FimTypeDefault),i(0)
 	{
 		type=FimTypeString;
-		this->s=s;
+		this->s_=s;
 	}
 	const Var& operator= (int   i){DBG("2i:"<<i<<"\n";type=FimTypeInt);this->i=i;return *this;}
 	const Var& operator= (fim_float_t f){setFloat(f);return *this;}
@@ -126,11 +126,11 @@ class Var FIM_FINAL
 
 	fim_float_t setFloat(fim_float_t f){type=FimTypeFloat;return this->f=f;}
 	fim_int   setInt(fim_int i){type=FimTypeInt;return this->i=i;}
-	fim::string setString(const fim::string& s){type=FimTypeString;this->s=s;return this->s;}
+	fim::string setString(const fim::string& s){type=FimTypeString;this->s_=s;return this->s_;}
 	int getType(void)const{return type;}
 	fim_int getInt(void)const{return(type==FimTypeInt)?i:
 		(type==FimTypeFloat?(static_cast<fim_int>(f)):
-		 (type==FimTypeString?(fim_atoi(s.c_str())):0)
+		 (type==FimTypeString?(fim_atoi(s_.c_str())):0)
 		 );
 		}
 
@@ -139,7 +139,7 @@ class Var FIM_FINAL
 	return(type==FimTypeFloat)?f:
 		(type==FimTypeInt?
 		 	((fim_float_t)i):
-			((type==FimTypeString)?fim_atof(s.c_str()):0.0f)
+			((type==FimTypeString)?fim_atof(s_.c_str()):0.0f)
 			);
 			}
 
@@ -147,7 +147,7 @@ class Var FIM_FINAL
 	{
 		DBG("t:"<<(char)type <<"\n");
 		if(type==FimTypeString)
-			return this->s;
+			return this->s_;
 		else
 		{
 			fim_char_t buf[FIM_CHARS_FOR_INT];
@@ -256,13 +256,13 @@ class Var FIM_FINAL
 	Var re_match(const Var& v)const { return getString().re_match(v.getString().c_str()); }
 	//#undef _types
 	std::ostream& print(std::ostream& os)const;
-	size_t size(void) const { return sizeof(Var) + s.capacity(); }
+	size_t size(void) const { return sizeof(Var) + this->s_.capacity(); }
 	void shrink_to_fit(void) {
 #if FIM_USE_CXX11
-	       	s.shrink_to_fit();
+	       	this->s_.shrink_to_fit();
 #endif /* FIM_USE_CXX11 */
        	}
-	int find(const fim_char_t c)const{const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s.c_str()) && (r=strchr(s.c_str(),c)))return r-p; return -1; }
+	int find(const fim_char_t c)const{const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s_.c_str()) && (r=strchr(s_.c_str(),c)))return r-p; return -1; }
 };
 	fim::string fim_var_help_db_query(const fim::string& id);
 	void fim_var_help_db_init(void);

@@ -760,7 +760,7 @@ int lines_count(const fim_char_t*s, int cols)
 		n+=s>b?(s-1-b)/cols:0;	/* extra lines due to the excessive line width (if s==b we can't expect any wrapping, of course )	*/
 		++n;	// the \n is counted as a new line
 		b=++s;	// if now *s==NUL, strchr simply will fail
-	};
+	}
 	//printf("n:%d\n",n);
 	s=b;//*b==NUL or *b points to the last substring non newline terminated
 	n+=(strlen(s))/cols;	// we count the last substring chars (with no wrapping exceptions)

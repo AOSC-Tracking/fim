@@ -2,7 +2,7 @@
 /*
  readline.cpp : Code dealing with the GNU readline library.
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -52,9 +52,9 @@ fim_char_t * fim_readline(const fim_char_t *prompt)
 {
 	fim_char_t * rc=FIM_NULL;
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
-	FIM_PR(" prompt: " << prompt << "\n");
+	FIM_PR(" prompt: " << prompt << "\n")
 	rc=readline(prompt);
-	FIM_PR(" rc: " << (rc==FIM_NULL?"(NULL)":(*rc?rc:"(NUL)")) << "\n");
+	FIM_PR(" rc: " << (rc==FIM_NULL?"(NULL)":(*rc?rc:"(NUL)")) << "\n")
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
 	return rc;
 }
@@ -227,17 +227,17 @@ static int redisplay_hook_no_fb(void)
 
 static int fim_post_rl_getc(int c)
 {
-	FIM_PR(FIM_RL_KEY_DBG(c));
+	FIM_PR(FIM_RL_KEY_DBG(c))
 	FIM_DR(c);
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	if(c==FIM_SYM_ESC && fim_want_rl_cl_with_esc)
 	{
-		FIM_PR("esc -> enter\n");
+		FIM_PR("esc -> enter\n")
 		if(rl_line_buffer)
 		{
 			rl_point=0,
 			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
-			FIM_PR("left readline mode\n");
+			FIM_PR("left readline mode\n")
 		}
 
 		c=FIM_SYM_ENTER;
@@ -247,7 +247,7 @@ static int fim_post_rl_getc(int c)
 #endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 	}
 #endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
-	FIM_PR(FIM_RL_KEY_DBG(c));
+	FIM_PR(FIM_RL_KEY_DBG(c))
 	return c;
 }
 
@@ -257,14 +257,14 @@ static int fim_rl_sdl_aa_getc_hook(void)
 	//unsigned int c;
 	fim_key_t c;
 	c=0;
-	FIM_PR("  fim_rl_pc=" << fim_rl_pc);
+	FIM_PR("  fim_rl_pc=" << fim_rl_pc)
 	
 	if(cc.get_displaydevice_input(&c,true)==1)
 	{
 		c=fim_post_rl_getc(c);
 		if(c&(1<<31))
 		{
-			FIM_PR(FIM_RL_KEY_DBG(c));
+			FIM_PR(FIM_RL_KEY_DBG(c))
 			rl_set_keymap(rl_get_keymap_by_name("emacs-meta"));	/* FIXME : this is a dirty trick : */
 			//c&=!(1<<31);		/* FIXME : a dirty trick */
 			c&=0xFFFFFF^(1<<31);	/* FIXME : a dirty trick */
@@ -274,7 +274,7 @@ static int fim_rl_sdl_aa_getc_hook(void)
 		}
 		else
 		{
-			FIM_PR(FIM_RL_KEY_DBG(c));
+			FIM_PR(FIM_RL_KEY_DBG(c))
 			rl_set_keymap(rl_get_keymap_by_name("emacs"));		/* FIXME : this is a dirty trick : */
 			//std::cout << "char in : "<< (fim_byte_t)c <<" !\n";
 			rl_stuff_char(c);	/* warning : this may fail */
@@ -289,7 +289,7 @@ static int fim_rl_sdl_aa_getc_hook(void)
 
 int fim_rl_sdl_aa_getc(FILE * fd)
 {
-	FIM_PR("");
+	FIM_PR("")
 	return 0;/* yes, a dummy function instead of getc() */
 }
 #endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2) */
@@ -299,7 +299,7 @@ int fim_rl_getc(FILE * fd)
 	int c=FIM_SYM_CHAR_NUL;
 #if 1
 	c=rl_getc(fd);
-	FIM_PR(FIM_RL_KEY_DBG(c));
+	FIM_PR(FIM_RL_KEY_DBG(c))
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
 	if(c==FIM_SYM_ESC)
 	{
@@ -360,7 +360,7 @@ int fim_search_rl_startup_hook(void)
 	const fim_char_t * hs=cc.browser_.last_regexp_.c_str();
 	if(hs)
 	{
-		FIM_PR(hs);
+		FIM_PR(hs)
 		rl_replace_line(hs,0);
 		rl_point=strlen(hs);
 	}

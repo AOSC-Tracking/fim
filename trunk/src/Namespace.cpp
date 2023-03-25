@@ -2,7 +2,7 @@
 /*
  Namespace.cpp : a class for local variables storage
 
- (c) 2007-2020 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -135,13 +135,13 @@ namespace fim
 
 	        fim_float_t Namespace::setGlobalVariable(const fim_var_id& varname,fim_float_t value)
 		{
-			FIM_NS_SV(varname,value);
+			FIM_NS_SV(varname,value)
 			return value;
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,fim_int value)
 		{
-			FIM_NS_SV(varname,value);
+			FIM_NS_SV(varname,value)
 			return value;
 		}
 
@@ -159,13 +159,13 @@ namespace fim
 
 		const fim_char_t* Namespace::setGlobalVariable(const fim_var_id& varname,const fim_char_t*value)
 		{
-			FIM_NS_SV(varname,value);
+			FIM_NS_SV(varname,value)
 			return value;
 		}
 
 		const fim::string& Namespace::setGlobalVariable(const fim_var_id& varname, const fim::string& value)
 		{
-			FIM_NS_SV(varname,value);
+			FIM_NS_SV(varname,value)
 			return value;
 		}
 

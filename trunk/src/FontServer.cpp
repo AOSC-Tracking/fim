@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -302,7 +302,7 @@ scanlistforafontfile:
 openhardcodedfont:
     if (FIM_NULL == fontfilename)
     {
-	FIM_SAVE_CONSOLEFONTNAME(FIM_DEFAULT_HARDCODEDFONT_STRING);
+	FIM_SAVE_CONSOLEFONTNAME(FIM_DEFAULT_HARDCODEDFONT_STRING)
     	fp=fmemopen(dfontdata,sizeof(dfontdata),"r");
 	if(fp)
 		goto gotafp;
@@ -333,7 +333,7 @@ openhardcodedfont:
 	FIM_FPRINTF(ff_stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
 	goto oops;
     }
-    FIM_SAVE_CONSOLEFONTNAME(fontfilename);
+    FIM_SAVE_CONSOLEFONTNAME(fontfilename)
 #if FIM_WANT_HARDCODED_FONT
 gotafp:
 #endif /* FIM_WANT_HARDCODED_FONT */

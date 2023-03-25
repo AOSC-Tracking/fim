@@ -105,7 +105,7 @@ static Var cvar(NodeType p, const bool dv, const int sd)
 
 	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)==FIM_SYM_STRING_CONCAT)
 	{
-		DBG("Concat (.)"<<FIM_SYM_ENDL);
+		DBG("Concat (.)"<<FIM_SYM_ENDL)
 		for(int i=0;i<FIM_NOPS(p);++i)
 		{
 			np=(FIM_OPRND(p,i));
@@ -116,29 +116,29 @@ static Var cvar(NodeType p, const bool dv, const int sd)
 	else
 	if(FIM_OPRNDT(p) == stringCon )
 	{
-		DBG("stringCon"<<FIM_SYM_ENDL);
+		DBG("stringCon"<<FIM_SYM_ENDL)
 		arg=(FIM_SACC(p));
 		return arg;
 	}
 	else
 	if(FIM_OPRNDT(p) == vId )
 	{	
-		DBG("cvId"<<FIM_SYM_ENDL);
+		DBG("cvId"<<FIM_SYM_ENDL)
 		return FIM_GV(FIM_SACC(p));
 	}
 	else if(FIM_OPRNDT(p) == intCon )
 	{
-		DBG("cvar:intCon: "<<FIM_IACC(p)<<FIM_SYM_ENDL);
+		DBG("cvar:intCon: "<<FIM_IACC(p)<<FIM_SYM_ENDL)
 		return Var(FIM_IACC(p));
 	}
 	else if(FIM_OPRNDT(p) == floatCon)
 	{
-		DBG("cvar:floatCon: "<<FIM_FACC(p)<<FIM_SYM_ENDL);
+		DBG("cvar:floatCon: "<<FIM_FACC(p)<<FIM_SYM_ENDL)
 		return FIM_FACC(p);
 	}
 	else
 	{
-		//DBG("nest:"<<FIM_OPRNDT(p)<<"\n");
+		//DBG("nest:"<<FIM_OPRNDT(p)<<"\n")
 		return ex(p);
 	}
 ret:
@@ -157,7 +157,7 @@ static args_t var(NodeType p, const bool dv, const int sd)
 		np=(FIM_OPRND(p,i));
 		if( FIM_OPRNDT(np) == stringCon )
 		{
-			DBG("stringConstant: "<<fim_shell_arg_escape(FIM_SACC(np))<<"\n");
+			DBG("stringConstant: "<<fim_shell_arg_escape(FIM_SACC(np))<<"\n")
 			args.push_back(FIM_SACC(np));
 		}
 		else
@@ -172,7 +172,7 @@ static args_t var(NodeType p, const bool dv, const int sd)
 			args.push_back(cvar(np,dv,sd).getString());
 		}
 	}
-	//DBG("?:\n");
+	//DBG("?:\n")
 	return args;
 }
 
@@ -191,10 +191,10 @@ Var ex(NodeType p)
 	switch(FIM_OPRNDT(p))
 	{
 		case intCon:
-			DBG("intConstant\n");
+			DBG("intConstant\n")
 			return FIM_IACC(p);
 	        case floatCon:
-			DBG("floatConstant"<<FIM_FACC(p)<<FIM_SYM_ENDL);
+			DBG("floatConstant"<<FIM_FACC(p)<<FIM_SYM_ENDL)
 			return FIM_FACC(p);
 		case vId:
 		{
@@ -202,49 +202,49 @@ Var ex(NodeType p)
 			// may handle here special value "random" ...
 			if(FIM_GVT(varId)==FIM_SYM_TYPE_INT)
 			{
-				DBG("getVar (int): "<<varId<<" = "<<fim::cc.getIntVariable(varId)<<FIM_SYM_ENDL);
+				DBG("getVar (int): "<<varId<<" = "<<fim::cc.getIntVariable(varId)<<FIM_SYM_ENDL)
 				return FIM_GV(varId);
 			}
 			if(FIM_GVT(varId)==FIM_SYM_TYPE_FLOAT)
 			{
-				DBG("getVar (float): "<<varId<<" = "<<fim::cc.getFloatVariable(varId)<<FIM_SYM_ENDL);
+				DBG("getVar (float): "<<varId<<" = "<<fim::cc.getFloatVariable(varId)<<FIM_SYM_ENDL)
 				return FIM_GV(varId);
 			}
 			else
 			{
-				DBG("getVar (string): "<<varId<<" = "<<fim_shell_arg_escape(fim::cc.getStringVariable(varId))<<FIM_SYM_ENDL);
+				DBG("getVar (string): "<<varId<<" = "<<fim_shell_arg_escape(fim::cc.getStringVariable(varId))<<FIM_SYM_ENDL)
 				return FIM_GV(varId);
 			}
 		}
 		case stringCon:
-			DBG("stringCon\n");
+			DBG("stringCon\n")
 			// a single string token was encountered
 			return Var(FIM_SACC(p));
 		case typeOpr:	/*	some operator	*/
-			//DBG("typeOpr\n");
+			//DBG("typeOpr\n")
 		switch(FIM_OPRNDO(p))
 		{
 			case WHILE:
-				DBG("Begin While\n");
+				DBG("Begin While\n")
 				++sd;
 				fim::cc.catchLoopBreakingCommand(0);
 				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
 					ex(FIM_OPRND(p,1));
 				--sd;
-				DBG("End While\n");
+				DBG("End While\n")
 				goto ret;
 			case IF:
-				DBG("Begin If:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL);
+				DBG("Begin If:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL)
 				++sd;
 				if (ex(FIM_OPRND(p,0)).getInt())
 					ex(FIM_OPRND(p,1));
 				else if (FIM_NOPS(p) > 2)
 					ex(FIM_OPRND(p,2));
 				--sd;
-				DBG("End If\n");
+				DBG("End If\n")
 				goto ret;
 			case FIM_SYM_SEMICOLON:
-				DBG("Semicolon (;)\n"); // cmd;cmd
+				DBG("Semicolon (;)\n") // cmd;cmd
 				ex(FIM_OPRND(p,0));
 				if (abs(fim::cc.show_must_go_on()) == 2)
 				{
@@ -275,9 +275,9 @@ Var ex(NodeType p)
 						while( np &&    FIM_NOPS(np) >=1 )
 						if( FIM_OPRNDO(np)=='a' )
 						{
-							DBG("Args...\n");
+							DBG("Args...\n")
 					  		args_t na=var(np,dv,sd);
-							DBG("Args: "<<na.size()<<FIM_SYM_ENDL);
+							DBG("Args: "<<na.size()<<FIM_SYM_ENDL)
 				          		for(fim_size_t i=0;i<na.size();++i)
 							{
 								fim::string ss = na[i].c_str();
@@ -294,7 +294,7 @@ Var ex(NodeType p)
 #if FIM_INTERPRETER_PARANOIA
 						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
 						{
-							DBG(FIM_INTERPRETER_ERROR);
+							DBG(FIM_INTERPRETER_ERROR)
 						}
 #endif
 					}
@@ -305,12 +305,12 @@ Var ex(NodeType p)
 
 						if(cmd)
 						{
-							DBG("Begin Exec: " << cmd << " " << fargs << "\n");
+							DBG("Begin Exec: " << cmd << " " << fargs << "\n")
 							++sd;
 							result = FIM_EC(cmd,fargs);
 							// NOTE: would make sense to interrupt loop after first failing command
 							--sd;
-							DBG("End Exec: " << cmd << " " << fargs << "\n");
+							DBG("End Exec: " << cmd << " " << fargs << "\n")
 						}
 					}
 		}
@@ -322,7 +322,7 @@ Var ex(NodeType p)
 			if( FIM_NOPS(p) == 2 )
 			{
 				fim_int times=ex(FIM_OPRND(p,1)).getInt();
-				DBG("Begin Repeat " << times << "x\n");
+				DBG("Begin Repeat " << times << "x\n")
 				++sd;
 				if(times<0)
 					goto err;
@@ -330,13 +330,13 @@ Var ex(NodeType p)
 				for (fim_int i=0;i<times && FIM_NO_BREAK ;++i)
 					ex(FIM_OPRND(p,0));
 				--sd;
-				DBG("End Repeat " << times << "x\n");
+				DBG("End Repeat " << times << "x\n")
 				goto ret;
 			}
 			else
 				goto err;
 			case 'x': 
-				//DBG("X\n");
+				//DBG("X\n")
 			  	/*
 			     * when encountering an 'x' node, the first (left) subtree should 
 			     * contain the string with the identifier of the command to 
@@ -346,7 +346,7 @@ Var ex(NodeType p)
 #if FIM_INTERPRETER_PARANOIA
 			  		if( FIM_NOPS(p) < 1 )
 			  		{
-						DBG(FIM_INTERPRETER_ERROR);
+						DBG(FIM_INTERPRETER_ERROR)
 						goto err;
 					}
 #endif
@@ -354,13 +354,13 @@ Var ex(NodeType p)
 		          		{
 						NodeType np=p;	
 						np=(FIM_OPRND(np,1)); //the right subtree first node
-						// DBG("ARGS:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
+						// DBG("ARGS:"<<FIM_NOPS(np)<<FIM_SYM_ENDL)
 						while( np &&    FIM_NOPS(np) >=1 )
 						if( FIM_OPRNDO(np)=='a' )
 						{
-							DBG("Args...\n");
+							DBG("Args...\n")
 					  		args_t na=var(np,dv,sd);
-							DBG("Args: "<<na.size()<<FIM_SYM_ENDL);
+							DBG("Args: "<<na.size()<<FIM_SYM_ENDL)
 				          		for(fim_size_t i=0;i<na.size();++i)
 							{
 #if FIM_USE_CXX11
@@ -375,7 +375,7 @@ Var ex(NodeType p)
 #if FIM_INTERPRETER_PARANOIA
 						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
 						{
-							DBG(FIM_INTERPRETER_ERROR);
+							DBG(FIM_INTERPRETER_ERROR)
 						}
 #endif
 					}
@@ -386,11 +386,11 @@ Var ex(NodeType p)
 							const fim_char_t * cmd = FIM_SACC(FIM_OPRND(p,0));
 							if(cmd)
 							{
-								DBG("Begin Exec: " << cmd << " " << args << "\n");
+								DBG("Begin Exec: " << cmd << " " << args << "\n")
 								++sd;
 								result = FIM_EC(cmd,args);
 								--sd;
-								DBG("End Exec: " << cmd << " " << args << "\n");
+								DBG("End Exec: " << cmd << " " << args << "\n")
 							}
 						}
 						return fim_atoi(result.c_str());
@@ -408,11 +408,11 @@ Var ex(NodeType p)
 			typeHint=FIM_OPRNDH(FIM_OPRND(p,0));
 			if(typeHint=='a')
 			{
-				DBG("Assign (=)\n");
+				DBG("Assign (=)\n")
 				Var v=cvar(FIM_OPRND(p,1),dv,sd);
 				FIM_SV(s,v);
-			        DBG("Set:"<<s<<"="<<        v.getString()<<" ("<<(fim_char_t)v.getType()<<")\n");
-			        DBG("Get:"<<s<<"="<<FIM_GV(s).getString()<<" ("<<(fim_char_t)FIM_GV(s).getType()<<")\n");
+			        DBG("Set:"<<s<<"="<<        v.getString()<<" ("<<(fim_char_t)v.getType()<<")\n")
+			        DBG("Get:"<<s<<"="<<FIM_GV(s).getString()<<" ("<<(fim_char_t)FIM_GV(s).getType()<<")\n")
 			       	return v;
 			}
 			else
@@ -420,8 +420,8 @@ Var ex(NodeType p)
 			}
 		}
 #if FIM_WANT_AVOID_FP_EXCEPTIONS
-			case '%': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1%v2; else return v2;};
-			case '/': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1/v2; else return v2;};
+			case '%': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1%v2; else return v2;}
+			case '/': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1/v2; else return v2;}
 #else /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '%': return ex(FIM_OPRND(p,0)) % ex(FIM_OPRND(p,1));
 			case '/': return ex(FIM_OPRND(p,0)) / ex(FIM_OPRND(p,1));

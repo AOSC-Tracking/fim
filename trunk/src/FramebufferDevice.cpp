@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -539,7 +539,7 @@ void FramebufferDevice::svga_display_image_new(
     }
 }
 
-int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int vt_, int try_boz_patch)
+int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int vt, int try_boz_patch)
 {
     /*
      * This member function will probe for a valid framebuffer device.
@@ -548,13 +548,13 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
      * Like the ones when running fim under screen.
      * Like the ones when running fim under X.
      * */
-    fim_char_t fbdev_[FIM_FBDEV_FILE_MAX_CHARS];
+    fim_char_t fbdev[FIM_FBDEV_FILE_MAX_CHARS];
     struct vt_stat vts;
 
     dev_init();
     tty_ = 0;
-    if (vt_ != 0)
-	fb_setvt(vt_);
+    if (vt != 0)
+	fb_setvt(vt);
 
 #ifdef FIM_BOZ_PATCH
     if(!try_boz_patch)
@@ -587,8 +587,8 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
 	    close(fb_);
 /*	    FIM_FPRINTF(stderr, "map: vt%02d => fb%d\n",
 		    c2m.console,c2m.framebuffer);*/
-	    sprintf(fbdev_,devices_->fbnr,c2m.framebuffer);
-	    device = fbdev_;
+	    sprintf(fbdev,devices_->fbnr,c2m.framebuffer);
+	    device = fbdev;
 #ifdef FIM_BOZ_PATCH
     	    }
     else
@@ -924,7 +924,7 @@ ret:
     return 0;
 }
 
-int FramebufferDevice::fb_activate_current(int tty_)
+int FramebufferDevice::fb_activate_current(int tty)
 {
 /* Hmm. radeonfb needs this. matroxfb doesn't. (<- fbi comment) */
     struct vt_stat vts;
@@ -932,21 +932,21 @@ int FramebufferDevice::fb_activate_current(int tty_)
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif /* FIM_BOZ_PATCH */
-    if (-1 == ioctl(tty_,VT_GETSTATE, &vts)) {
+    if (-1 == ioctl(tty,VT_GETSTATE, &vts)) {
 	fim_perror("ioctl VT_GETSTATE");
 	goto err;
     }
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif /* FIM_BOZ_PATCH */
-    if (-1 == ioctl(tty_,VT_ACTIVATE, vts.v_active)) {
+    if (-1 == ioctl(tty,VT_ACTIVATE, vts.v_active)) {
 	fim_perror("ioctl VT_ACTIVATE");
 	goto err;
     }
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif /* FIM_BOZ_PATCH */
-    if (-1 == ioctl(tty_,VT_WAITACTIVE, vts.v_active)) {
+    if (-1 == ioctl(tty,VT_WAITACTIVE, vts.v_active)) {
 	fim_perror("ioctl VT_WAITACTIVE");
 	goto err;
     }
