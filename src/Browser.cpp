@@ -451,7 +451,7 @@ nop:
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_EXPERIMENTAL_SHADOW_DIRS == 2
 				namespace fs = std::filesystem;
-				for ( const auto shadow_dir: shadow_dirs_ )
+				for ( const auto & shadow_dir: shadow_dirs_ )
 				if ( fs::is_directory(shadow_dir) )
 				for( const auto & p: fs::recursive_directory_iterator(shadow_dir) )
 				{

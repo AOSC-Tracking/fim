@@ -1206,7 +1206,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char sac, fim_flags_t p
 				if(*sa=='\n')
 					chomp(lineptr); // BAD
 
-				if(sa && *sa && lineptr && strstr(lineptr,sa))
+				if(*sa && lineptr && strstr(lineptr,sa))
 					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
 				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
