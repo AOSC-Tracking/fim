@@ -325,9 +325,9 @@ ret:
 	}
 #endif /* FIM_READ_STDIN_IMAGE */
 
-	Browser::Browser(CommandConsole& cc):
+	Browser::Browser(CommandConsole& cc_):
 #ifdef FIM_NAMESPACES
-		Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR),
+		Namespace(&cc_,FIM_SYM_NAMESPACE_BROWSER_CHAR),
 #endif /* FIM_NAMESPACES */
 #if FIM_WANT_PIC_LBFL
 		flist_(),
@@ -335,7 +335,7 @@ ret:
 #if FIM_WANT_PIC_LBFL
 		tlist_(),
 #endif /* FIM_WANT_PIC_LBFL */
-		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
+		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc_)
 #if FIM_WANT_BACKGROUND_LOAD
 		,pcache_(cache_)
 #endif /* FIM_WANT_BACKGROUND_LOAD */
@@ -376,7 +376,7 @@ ret:
 			fim_char_t f = tolower(*args[0].c_str());
 			if( f )
 			{
-				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
+				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current())
 				if( c_getImage() && viewport() )
 				{
 					const bool pr = viewport()->do_pan(args);
@@ -406,7 +406,7 @@ ret:
 					}
 #endif /* FIM_PAN_GOES_NEXT */
 				}
-				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
+				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN)
 			}
 		}
 		else
@@ -805,7 +805,7 @@ ret:
 		fim_int wp=1;
 		FIM_PR('*');
 
-		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPREFETCH,current());
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPREFETCH,current())
 		if( args.size() > 0 )
 			goto ret;
 
@@ -834,7 +834,7 @@ ret:
 #if FIM_WANT_BACKGROUND_LOAD
 apf:		/* after prefetch */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPREFETCH);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPREFETCH)
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,wp);
 		if(wp != 2)
 			display_status("");
@@ -854,7 +854,7 @@ ret:
 		       	result = "sorry, no image to reload\n"; 
 			goto ret;
 	       	}
-		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRERELOAD,current());
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRERELOAD,current())
 		if( args.size() > 0 )
 			free_current_image(true);
 		else
@@ -863,7 +863,7 @@ ret:
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(_c);
-		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTRELOAD);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTRELOAD)
 		result = FIM_CNS_EMPTY_RESULT;
 ret:
 		FIM_PR('.');
@@ -889,13 +889,13 @@ ret:
 			result = "sorry, no image to load\n";//warning
 			goto ret;
 		}
-		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRELOAD,current());
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRELOAD,current())
 		commandConsole_.set_status_bar("please wait while loading...", "*");
 
 		loadCurrentImage();
 
 		load_error_handle(_c);
-		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTLOAD);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTLOAD)
 ret:
 		FIM_PR('.');
 		return result;
@@ -1294,9 +1294,9 @@ ret:
 
 			if(hm)
 			{	
-				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREGOTO,current());
+				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREGOTO,current())
 				goto_image(i);
-				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTGOTO);
+				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTGOTO)
 #ifdef FIM_AUTOCMDS
 				if(!commandConsole_.inConsole())
 					commandConsole_.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),FIM_NULL);
@@ -1584,7 +1584,7 @@ ret:
 			}
 			else
 				if( isre )
-					{;}
+					{ }
 			else
 			{
 				cout << " please specify a number or ^ or $\n";
@@ -1698,9 +1698,9 @@ ret:
 go_jump:
 			if( ( nf != cf ) || ( np != cp ) )
 			{	
-				const fim::string c = current();
+				const fim::string ncf = current();
 				if(!(xflags&FIM_X_NOAUTOCMD))
-				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c); }
+				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,ncf); }
 				if( ispg )
 				{
 					if(viewport())
@@ -1710,7 +1710,7 @@ go_jump:
 					goto_image(nf,isfg?true:false);
 
 				if(!(xflags&FIM_X_NOAUTOCMD))
-				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,c); }
+				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,ncf); }
 			}
 		}
 ret:
@@ -2135,7 +2135,7 @@ rfrsh:
 		// dt = - getmilliseconds();
 		if (lbs.any())
 		{
-			const size_t tsize = lbs.size();;
+			const size_t tsize = lbs.size();
 			const size_t cnt = (faction == Delete) ? tsize - lbs.count() : lbs.count();
 
 
@@ -2213,12 +2213,12 @@ nop:
 	fim_cxr Browser::fcmd_scroll(const args_t& args)
 	{
 		FIM_PR('*');
-		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current())
 		if(args.size()>0 && args[0]=="forward")
 			scrollforward(args);
 		else
 			scrolldown(args);
-		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN)
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -2261,12 +2261,12 @@ nop:
 		if(c_getImage())
 		{
 			//angle = getGlobalFloatVariable(FIM_VID_ANGLE);
-//			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREROTATE,current());
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
+//			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREROTATE,current())
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current())
 			if(viewport())
 				viewport()->img_rotate(angle);
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
-//			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTROTATE);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE)
+//			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTROTATE)
 		}
 ret:
 		FIM_PR('.');
@@ -2298,7 +2298,7 @@ ret:
 		else
 		if( c_getImage() )
 		{
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current())
 			if(c_getImage() && viewport())
 			{
 				if(args[0].re_match("top"))
@@ -2312,7 +2312,7 @@ ret:
 				if(args[0].re_match("center"))
 					viewport()->align('c');
 			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN)
 			result = FIM_CNS_EMPTY_RESULT;
 		}
 err:
@@ -2384,7 +2384,7 @@ err:
 	{
 		size_t bs = 0;
 
-		bs += cache_.byte_size();;
+		bs += cache_.byte_size();
 		bs += sizeof(*this);
 #if FIM_EXPERIMENTAL_SHADOW_DIRS == 1
 		for (const auto & e : hlist_)

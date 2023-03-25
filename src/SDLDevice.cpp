@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -577,7 +577,7 @@ err:
 		return current_h_;
 	}
 
-	inline void SDLDevice::setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT
+	inline void SDLDevice::setpixel(SDL_Surface *screen, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT
 	{
 		/*
 		 * this function is taken straight from the sdl documentation: there are smarter ways to do this.
@@ -589,8 +589,8 @@ err:
 		{
 			Uint8 *pixmem8;
 			Uint8 colour;
-			colour = SDL_MapRGB( screen_->format, b, g, r );
-			pixmem8 = (Uint8*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
+			colour = SDL_MapRGB( screen->format, b, g, r );
+			pixmem8 = (Uint8*)((fim_byte_t*)( screen->pixels)  + (y + x)*Bpp_);
 			*pixmem8 = colour;
 		}
 		break;
@@ -599,8 +599,8 @@ err:
 		{
 			Uint16 *pixmem16;
 			Uint16 colour;
-			colour = SDL_MapRGB( screen_->format, b, g, r );
-			pixmem16 = (Uint16*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
+			colour = SDL_MapRGB( screen->format, b, g, r );
+			pixmem16 = (Uint16*)((fim_byte_t*)( screen->pixels)  + (y + x)*Bpp_);
 			*pixmem16 = colour;
 		}
 		break;
@@ -608,8 +608,8 @@ err:
 		{
 			Uint32 *pixmem32;
 			Uint32 colour;
-			colour = SDL_MapRGB( screen_->format, b, g, r );
-			pixmem32 = (Uint32*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
+			colour = SDL_MapRGB( screen->format, b, g, r );
+			pixmem32 = (Uint32*)((fim_byte_t*)( screen->pixels)  + (y + x)*Bpp_);
 			*pixmem32 = colour;
 		}
 		break;
@@ -617,8 +617,8 @@ err:
 		{
 			Uint32 *pixmem32;
 			Uint32 colour;
-			colour = SDL_MapRGBA( screen_->format, b, g, r, 255 );
-			pixmem32 = (Uint32*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
+			colour = SDL_MapRGBA( screen->format, b, g, r, 255 );
+			pixmem32 = (Uint32*)((fim_byte_t*)( screen->pixels)  + (y + x)*Bpp_);
 			*pixmem32 = colour;
 		}
 		break;

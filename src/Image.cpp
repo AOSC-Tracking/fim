@@ -1019,9 +1019,9 @@ labeldone:
 		) ,4));
 	}
 
-	fim_err_t Image::rotate( fim_angle_t angle_ )
+	fim_err_t Image::rotate( fim_angle_t angle )
 	{
-		fim_angle_t newangle=this->angle_+angle_;
+		fim_angle_t newangle=this->angle_+angle;
 		if( !check_valid() )
 		       	return FIM_ERR_GENERIC;
 		setVariable(FIM_VID_ANGLE,newangle);

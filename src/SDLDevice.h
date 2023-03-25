@@ -2,7 +2,7 @@
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ public:
 	void flush(void)FIM_OVERRIDE;
 	void lock(void) FIM_OVERRIDE ;
 	void unlock(void) FIM_OVERRIDE ;
-	fim_bpp_t get_bpp(void)const FIM_OVERRIDE { return bpp_; };
+	fim_bpp_t get_bpp(void)const FIM_OVERRIDE { return bpp_; }
 	bool sdl_window_update(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 private:

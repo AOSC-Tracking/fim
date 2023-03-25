@@ -2,7 +2,7 @@
 /*
  FbiStuffPcx.cpp : Code for reading PCX files.
 
- (c) 2014-2022 Michele Martone
+ (c) 2014-2023 Michele Martone
  The functions pcx_load_image_fp and pcx_load_image_info_fp are (c) 2014-2014 Mohammed Isam.
  Originally based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
@@ -104,20 +104,20 @@ bool COLORMAP_DEFINED;
 static pcx_err_t pcx_load_image_info_fp(FILE *fp, int * numpagesp, unsigned int *wp, unsigned int *hp)
 {
 	if(fseek(fp,0,SEEK_SET) != 0)
-	  PCX_RETURN_ERROR("Error setting file pointer\n");
+	  PCX_RETURN_ERROR("Error setting file pointer\n")
 	if(fread(&PCX_HEADER, 128, 1, fp) != 1)
-	  PCX_RETURN_ERROR("Error reading first 128 bytes of PCX file\n");
+	  PCX_RETURN_ERROR("Error reading first 128 bytes of PCX file\n")
 	if(fseek(fp,0,SEEK_SET) != 0)
-	  PCX_RETURN_ERROR("Error setting file pointer\n");
+	  PCX_RETURN_ERROR("Error setting file pointer\n")
 		
 	if(fread(&PCX_HEADER, 128, 1, fp) != 1)
-	  PCX_RETURN_ERROR("Error reading file header\n");
+	  PCX_RETURN_ERROR("Error reading file header\n")
 		
 	if(PCX_HEADER.manufacturer != 10)
-	  PCX_RETURN_ERROR("Not a PCX image\n");
+	  PCX_RETURN_ERROR("Not a PCX image\n")
 	
 	if(PCX_HEADER.encoding != 1)
-	  PCX_RETURN_ERROR("Invalid encoding\n");
+	  PCX_RETURN_ERROR("Invalid encoding\n")
 	 
 /* PCX is little-endian. If machine is big-endian, swap bytes.. */
 #if BYTE_ORDER == BIG_ENDIAN
@@ -157,14 +157,14 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 	int plane, i;
 	
 	if(fseek(fp,0,SEEK_SET) != 0)
-	  PCX_RETURN_ERROR("Error setting file pointer\n");
+	  PCX_RETURN_ERROR("Error setting file pointer\n")
 	if(fread(&PCX_HEADER, 128, 1, fp) != 1)
-	  PCX_RETURN_ERROR("Error reading file header\n");
+	  PCX_RETURN_ERROR("Error reading file header\n")
 	
 	if(PCX_HEADER.manufacturer != 10)
-	  PCX_RETURN_ERROR("Not a PCX image\n");
+	  PCX_RETURN_ERROR("Not a PCX image\n")
 	if(PCX_HEADER.encoding != 1)
-	  PCX_RETURN_ERROR("Invalid encoding\n");
+	  PCX_RETURN_ERROR("Invalid encoding\n")
 	
 /* PCX is little-endian. If machine is big-endian, swap bytes.. */
 #if BYTE_ORDER == BIG_ENDIAN
@@ -182,38 +182,38 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 	COLORMAP_DEFINED = 0;
 	pos2 = ftell(fp);
 	if(fseek(fp, -769, SEEK_END) != 0)
-	  PCX_RETURN_ERROR("Error setting file pointer\n");
+	  PCX_RETURN_ERROR("Error setting file pointer\n")
 	
 	h = fread(&tmp, 1, 1, fp);
-	if(h != 1) PCX_RETURN_ERROR("Error reading from file\n");
+	if(h != 1) PCX_RETURN_ERROR("Error reading from file\n")
 	
 	if(tmp == 12)
 	{
 	    //fprintf(stderr, "Reading palette\n");
 	    //check the first color is black
 	    h = fread(&palette[0].red,   1, 1, fp);
-	    if(h != 1) PCX_RETURN_ERROR("Error reading palette information\n");
+	    if(h != 1) PCX_RETURN_ERROR("Error reading palette information\n")
 	    h = fread(&palette[0].green, 1, 1, fp);
-	    if(h != 1) PCX_RETURN_ERROR("Error reading palette information\n");
+	    if(h != 1) PCX_RETURN_ERROR("Error reading palette information\n")
 	    h = fread(&palette[0].blue,  1, 1, fp);
-	    if(h != 1) PCX_RETURN_ERROR("Error reading palette information\n");
+	    if(h != 1) PCX_RETURN_ERROR("Error reading palette information\n")
 	    if(palette[0].red == 0 && palette[0].blue == 0 && palette[0].green == 0)
 	    {
 	      for(h = 1; h < 256; h++)
 	      {
 		if(fread(&palette[h].red,   1, 1, fp) != 1)
-		  PCX_RETURN_ERROR("Error reading palette information\n");
+		  PCX_RETURN_ERROR("Error reading palette information\n")
 		if(fread(&palette[h].green, 1, 1, fp) != 1)
-		  PCX_RETURN_ERROR("Error reading palette information\n");
+		  PCX_RETURN_ERROR("Error reading palette information\n")
 		if(fread(&palette[h].blue,  1, 1, fp) != 1)
-		  PCX_RETURN_ERROR("Error reading palette information\n");
+		  PCX_RETURN_ERROR("Error reading palette information\n")
 	      }
 	      PALETTE_DEFINED = 1;
 	      //file_size -= 769; //exclude palette data from image data
 	    }
 	}
 	if(fseek(fp, pos2, SEEK_SET) != 0)
-	  PCX_RETURN_ERROR("Error setting file pointer\n");
+	  PCX_RETURN_ERROR("Error setting file pointer\n")
 	
 	line_bytes = PCX_HEADER.bpl*PCX_HEADER.planes;
 	image_w = (PCX_HEADER.xend-PCX_HEADER.xstart)+1;
@@ -231,12 +231,12 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 	  h = fread(&value, 1, 1, fp);
 	  //fprintf(stderr, "size=%d, pos=%d\n", bitmap_size, pos);
 	  if(h != 1) value = 0;
-	    //PCX_RETURN_ERROR("Error reading pixel value from file\n");
+	    //PCX_RETURN_ERROR("Error reading pixel value from file\n")
 	  if((value & FLAG_MASK) == FLAG_MASK)	//RLE code
 	  {
 	    repeat = (value & REVERSE_MASK);
 	    h = fread(&value, 1, 1, fp);
-	    if(h != 1) PCX_RETURN_ERROR("Error reading pixel value from file\n");
+	    if(h != 1) PCX_RETURN_ERROR("Error reading pixel value from file\n")
 	    for(h = 0; h < repeat; h++)
 	    {
 	     switch(PCX_HEADER.bpp)
@@ -455,7 +455,7 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 		    for(i = 0; i < padding; i++)
 		    {
 		      if(fread(&value, 1, 1, fp) != 1)
-			PCX_RETURN_ERROR("Error reading from file\n");
+			PCX_RETURN_ERROR("Error reading from file\n")
 		    }
 		  plane = 0;
 		}
@@ -467,7 +467,7 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 		    for(i = 0; i < padding; i++)
 		    {
 		      if(fread(&value, 1, 1, fp) != 1)
-			PCX_RETURN_ERROR("Error reading from file\n");
+			PCX_RETURN_ERROR("Error reading from file\n")
 		    }*/
 		}
 		count = 0;
@@ -503,7 +503,7 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 		    for(i = 0; i < padding; i++)
 		    {
 		      if(fread(&value, 1, 1, fp) != 1)
-			PCX_RETURN_ERROR("Error reading from file\n");
+			PCX_RETURN_ERROR("Error reading from file\n")
 		    }*/
 		  count = 0;
 		}
@@ -550,7 +550,7 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 		    for(i = 0; i < padding; i++)
 		    {
 		      if(fread(&value, 1, 1, fp) != 1)
-			PCX_RETURN_ERROR("Error reading from file\n");
+			PCX_RETURN_ERROR("Error reading from file\n")
 		    }*/
 		  count = 0;
 		}
@@ -591,7 +591,7 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 		    for(i = 0; i < padding; i++)
 		    {
 		      if(fread(&value, 1, 1, fp) != 1)
-			PCX_RETURN_ERROR("Error reading from file\n");
+			PCX_RETURN_ERROR("Error reading from file\n")
 		    }*/
 		  count = 0;
 		}

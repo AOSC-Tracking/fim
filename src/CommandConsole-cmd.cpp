@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2022 Michele Martone
+ (c) 2009-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -545,17 +545,17 @@ err:
 #endif /* FIM_WANT_SYSTEM_CALL_DEBUG */
 #if FIM_WANT_SINGLE_SYSTEM_INVOCATION
 		/* 20110302 FIXME: inefficient */
-		fim::string cc=FIM_CNS_EMPTY_STRING;
+		fim::string scs=FIM_CNS_EMPTY_STRING;
 		for(size_t i=0;i<args.size();++i)
 		{
 			// FIXME: escaping the command (first argument) actually requires more than this
 #define FIM_WANT_SIMPLE_SHELL_ESCAPING 1
 #if FIM_WANT_SIMPLE_SHELL_ESCAPING
-			cc+=fim_shell_arg_escape(args[i]);
+			scs+=fim_shell_arg_escape(args[i]);
 #else /* FIM_WANT_SIMPLE_SHELL_ESCAPING */
-			cc+=args[i];
+			scs+=args[i];
 #endif /* FIM_WANT_SIMPLE_SHELL_ESCAPING */
-			cc+=" ";
+			scs+=" ";
 #if FIM_WANT_SYSTEM_CALL_DEBUG
 			is+=args[i];
 			is+=" ";
@@ -563,11 +563,11 @@ err:
 		}
 #if FIM_WANT_SYSTEM_CALL_DEBUG
 		std::cerr << "received string: " << is << FIM_SYM_ENDL;	
-		std::cerr << "about to call popen on string: " << cc << FIM_SYM_ENDL;	
+		std::cerr << "about to call popen on string: " << scs << FIM_SYM_ENDL;	
 #endif /* FIM_WANT_SYSTEM_CALL_DEBUG */
 		if(args.size())
 		{
-			FILE* fd=popen(cc.c_str(),"r");
+			FILE* fd=popen(scs.c_str(),"r");
 		//	cout << readStdFileDescriptor(fd);
 			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd));
 			cout << getStringVariable(FIM_VID_LAST_SYSTEM_OUTPUT);

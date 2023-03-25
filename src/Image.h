@@ -145,9 +145,9 @@ class Image FIM_FINAL
 	fim_pgor_t getOrientation(void)const;
 
 	fim_err_t set_scale(fim_scale_t ns);
-	fim_scale_t get_scale(void)const{return scale_;};
-	int get_page(void)const{return page_+1;};
-	size_t get_file_size(void)const{return fs_;/* need a Browser::file_info_cache */};
+	fim_scale_t get_scale(void)const{return scale_;}
+	int get_page(void)const{return page_+1;}
+	size_t get_file_size(void)const{return fs_;/* need a Browser::file_info_cache */}
 	size_t get_pixelmap_byte_size(void)const;
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale(void)const{ return (ascale_>0.0?ascale_:1.0); }
@@ -210,7 +210,7 @@ class Image FIM_FINAL
 				bs += it->first.size() + sizeof(it->first),
 				bs += it->second.size() + sizeof(it->second);
 			return bs;
-	       	};
+	       	}
        	};
 #endif /* FIM_WANT_PIC_LVDN */
 
@@ -363,11 +363,11 @@ public:
 
 						if( es != std::string::npos )
 						{
-							const std::string varname = fn.substr(vn,es-vn);
+							const std::string pvarname = fn.substr(vn,es-vn); // prefixed variable name
 							++es;
 #if FIM_WANT_PIC_CCMT
 							/* FIXME: rationalize this code */
-							if( varname == "^" )
+							if( pvarname == "^" )
 							{
 								const std::string varval = fn.substr(es);
 								if( fn[es] )
@@ -376,7 +376,7 @@ public:
 									cps = "";
 							}
 							else
-							if( varname == "+" )
+							if( pvarname == "+" )
 							{
 								const std::string varval = fn.substr(es);
 								if( fn[es] )
@@ -385,12 +385,12 @@ public:
 									cas = "";
 							}
 							else
-							if( varname == "!" )
+							if( pvarname == "!" )
 							{
 								ns = VNamespace();//reset
 							}
 							else
-							if( varname == "/" )
+							if( pvarname == "/" )
 							{
 								const std::string varval = fn.substr(es);
 								if( fn[es] )
@@ -400,7 +400,7 @@ public:
 								imgdscs_want_basename = true;
 							}
 							else
-							if( varname == "\\" )
+							if( pvarname == "\\" )
 							{
 								const std::string varval = fn.substr(es);
 								if( fn[es] )
@@ -413,10 +413,10 @@ public:
 #endif /* FIM_WANT_PIC_CCMT */
 							if( fn[es] )
 							{
-								if ( fim_is_id(varname.c_str()) )
+								if ( fim_is_id(pvarname.c_str()) )
 								{
 									const std::string varval = fn.substr(es);
-									ns.setVariable(varname,Var(varval));
+									ns.setVariable(pvarname,Var(varval));
 								}
 								else
 									; // not an id; TODO: may warn the user
@@ -448,9 +448,9 @@ public:
 						else
 						{
 							// use last (cached) description
-							const char sc = ds[csil];
+							const char oc = ds[csil];
 
-							switch(sc)
+							switch(oc)
 							{
 								case('='): // #!fim:=
 									ds = ld;
@@ -508,9 +508,8 @@ public:
 					{
 						// TODO: FIXME: this branch waits to be activated.
 						// ... remove pic
-						const bool imgdscs_want_basename = true;
 						ds = expand(ns,ds);
-						if(! imgdscs_want_basename )
+						if(! (imgdscs_want_basename || true) )
 						{
 							(*this)[din+fn]=ds;
 #if FIM_WANT_PIC_LVDN

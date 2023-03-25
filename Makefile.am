@@ -420,19 +420,19 @@ endif
 if HAVE_RUNNABLE_TESTS
 if ENABLE_GIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:1K $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:1K $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+4 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+5 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 0 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+5 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 0 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6:1000 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' | grep -v Reading` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="gif"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' | tr -d '\n' | tr ' ' _ ` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 8 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11"libungif"
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_interlaced.gif -c 'quit !(i:width!=0)' # interlaced gif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberatly wrong gif
 endif

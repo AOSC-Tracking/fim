@@ -2,7 +2,7 @@
 /*
  CommandConsole-var.h : CommandConsole variables store
 
- (c) 2013-2022 Michele Martone
+ (c) 2013-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ namespace fim
 				goto err;
 			}
 			}
-			catch(FimException e){}
+			catch(FimException){}
 		}
 #endif /* FIM_NAMESPACES */
 		nsp = this;

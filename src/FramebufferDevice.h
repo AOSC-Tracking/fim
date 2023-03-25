@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -146,23 +146,23 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	fim_char_t                       *fbmode_;
 
 	public:
-	fim_err_t set_fbdev(fim_char_t *fbdev_)
+	fim_err_t set_fbdev(fim_char_t *fbdev)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
 			return FIM_ERR_GENERIC;
-		if(fbdev_)
-			this->fbdev_=fbdev_;
+		if(fbdev)
+			this->fbdev_=fbdev;
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t set_fbmode(fim_char_t *fbmode_)
+	fim_err_t set_fbmode(fim_char_t *fbmode)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
 			return FIM_ERR_GENERIC;
-		if(fbmode_)
-			this->fbmode_=fbmode_;
+		if(fbmode)
+			this->fbmode_=fbmode;
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -176,13 +176,13 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 		return FIM_ERR_NO_ERROR;
 	}
 
-	int set_default_fbgamma(float fbgamma_)
+	int set_default_fbgamma(float fbgamma)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
 			return FIM_ERR_GENERIC;
-		if(fbgamma_)
-			this->fbgamma_=fbgamma_;
+		if(fbgamma)
+			this->fbgamma_=fbgamma;
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -282,7 +282,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	void clear_screen(void);
 	void cleanup(void) FIM_OVERRIDE;
 
-	fim_err_t initialize (sym_keys_t &sym_keys)FIM_OVERRIDE {/*still unused : FIXME */ ;return FIM_ERR_NO_ERROR;}
+	fim_err_t initialize (sym_keys_t &sym_keys)FIM_OVERRIDE {/*still unused : FIXME */ return FIM_ERR_NO_ERROR;}
 	void finalize (void)FIM_OVERRIDE ;
 	private:
 	struct fs_font * fb_font_get_current_font(void)
@@ -467,7 +467,7 @@ void init_one(int32_t *lut, int bits, int shift)
 	private:
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
 	public:
-	fim_bpp_t get_bpp(void)const FIM_OVERRIDE{return fb_var_.bits_per_pixel; };
+	fim_bpp_t get_bpp(void)const FIM_OVERRIDE{return fb_var_.bits_per_pixel; }
 	virtual ~FramebufferDevice(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 };

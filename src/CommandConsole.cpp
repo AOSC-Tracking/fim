@@ -1449,33 +1449,33 @@ ret:
 		else
 		if(pattern==FIM_CNS_EMPTY_STRING)
 		{
-			const autocmds_t::const_iterator ai=autocmds_.find(event);
+			const autocmds_t::const_iterator ci=autocmds_.find(event);
 			//for each autocommand event registered
 			//for each file pattern registered, display the list..
-			if(ai!=autocmds_.end())
-			for(	autocmds_p_t::const_iterator api=(*ai).second.begin();
-					api!=(*ai).second.end();++api )
+			if(ci!=autocmds_.end())
+			for(	autocmds_p_t::const_iterator api=(*ci).second.begin();
+					api!=(*ci).second.end();++api )
 			//.. display the list of autocommands...
 			for(	args_t::const_iterator aui=((*api)).second.begin();
 					aui!=((*api)).second.end();++aui )
-				acl << FIM_FLT_AUTOCMD" \"" << (*ai).first << "\" \"" << (*api).first << "\" \"" << (*aui) << "\"\n";
+				acl << FIM_FLT_AUTOCMD" \"" << (*ci).first << "\" \"" << (*api).first << "\" \"" << (*aui) << "\"\n";
 		}
 		else
 		{
-			const autocmds_t::const_iterator ai=autocmds_.find(event);
+			const autocmds_t::const_iterator ci=autocmds_.find(event);
 
 			//for each autocommand event registered
 			//for each file pattern registered, display the list..
-			if(ai!=autocmds_.end())
+			if(ci!=autocmds_.end())
 			{
-				autocmds_p_t::const_iterator api=(*ai).second.find(pattern);
+				autocmds_p_t::const_iterator api=(*ci).second.find(pattern);
 
 				//.. display the list of autocommands...
-				if(api!=(*ai).second.end())
+				if(api!=(*ci).second.end())
 				{
 					for(	args_t::const_iterator aui=((*api)).second.begin();
 					aui!=((*api)).second.end();++aui )
-						acl << FIM_FLT_AUTOCMD" \"" << (*ai).first << "\" \"" << (*api).first << "\" \"" << (*aui) << "\"\n"; 
+						acl << FIM_FLT_AUTOCMD" \"" << (*ci).first << "\" \"" << (*api).first << "\" \"" << (*aui) << "\"\n"; 
 				}
 			}
 		}

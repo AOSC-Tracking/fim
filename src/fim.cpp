@@ -731,7 +731,7 @@ FIM_MAN_fB("-")", \n"
 			break;
 			default:
 			;
-		};
+		}
 		oss << slwe;
 		oss << slom;
 		if(helparg&&*helparg=='d')
@@ -846,30 +846,30 @@ int fim_dump_man_page(void)
 
 #define FIM_SROC(VAR,VAL) { if( VAR != VAL && VAR != Nothing ) std::cerr<<FIM_EMSG_DSMO; VAR = VAL; }
 #define FIM_ADD_DOCLINE_FOR_CMD(REP,CMD) if(!cc.find_key_for_bound_cmd(CMD).empty()){if(REP!=1)mp+=FIM_XSTRINGIFY(REP);else mp+=" ";mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";if(REP!=1)mp+=FIM_XSTRINGIFY(REP);mp+=CMD;mp+="\n";}
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_FILE);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_FILE);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_PAGE);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_PAGE);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_FILE)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_FILE)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_PAGE)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_PAGE)
 			/* TODO: may use a search-based method for locating keys to other commands... */
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_MAGNIFY);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_REDUCE);
-			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_MIRROR);
-			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_FLIP);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PAN_LEFT);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PAN_RIGHT);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_SCROLL_UP);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_SCROLL_DOWN);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_MAGNIFY)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_REDUCE)
+			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_MIRROR)
+			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_FLIP)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PAN_LEFT)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PAN_RIGHT)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_SCROLL_UP)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_SCROLL_DOWN)
 			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PAN_UP);
 			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PAN_DOWN);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_ROTATE);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_LIST);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_SCROLL);
-			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_QUIT);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_ROTATE)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_LIST)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_SCROLL)
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLT_QUIT)
 			mp+="You can type a number before a command binding to iterate the assigned command:\n";
 			//FIM_ADD_DOCLINE_FOR_CMD(3,FIM_FLC_PAN_UP);
-			FIM_ADD_DOCLINE_FOR_CMD(3,FIM_FLC_SCROLL_UP);
+			FIM_ADD_DOCLINE_FOR_CMD(3,FIM_FLC_SCROLL_UP)
 //			mp+=string(
 //"d,x,D,X		diagonal scroll\n"
 //"C-w			scale to the screen width\n"
@@ -1162,7 +1162,7 @@ FIM_NORETURN fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=F
 		break;
 		default:
 		;
-		};
+		}
 		if(helparg&&*helparg=='d')
 			std::cout << "\t\t " << fim_options[i].desc;
 		if(helparg&&*helparg=='l')
@@ -1607,7 +1607,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'i':
 		    //fim's
 #ifdef FIM_READ_STDIN_IMAGE
-		    FIM_SROC(read_stdin_choice,ImageFile);
+		    FIM_SROC(read_stdin_choice,ImageFile)
 #else /* FIM_READ_STDIN_IMAGE */
 		    FIM_FPRINTF(stderr, FIM_EMSG_NO_READ_STDIN_IMAGE);
 #endif /* FIM_READ_STDIN_IMAGE */
@@ -1681,7 +1681,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'p':
 		    //fim's (differing semantics from fbi's)
 	#ifndef FIM_WANT_NOSCRIPTING
-		    FIM_SROC(read_stdin_choice,Script);
+		    FIM_SROC(read_stdin_choice,Script)
         #else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
         #endif /* FIM_WANT_NOSCRIPTING */
@@ -1781,7 +1781,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_READ_STDIN
 		case '-':
 		    //fim's
-		    FIM_SROC(read_stdin_choice,FilesList);
+		    FIM_SROC(read_stdin_choice,FilesList)
 		    break;
 	#endif /* FIM_READ_STDIN */
 		case 0x72667373:
@@ -1790,7 +1790,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_READ_STDIN
 		case 0:
 		    //fim's
-		    FIM_SROC(read_stdin_choice,FilesList);
+		    FIM_SROC(read_stdin_choice,FilesList)
 		    break;
 	#endif /* FIM_READ_STDIN */
 		case 'L':

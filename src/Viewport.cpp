@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1053,9 +1053,9 @@ nop:
 
 		if ( image_ )
 		{
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current)
 			image_->do_crop(prect);
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE)
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -1216,7 +1216,7 @@ comeon:
 #endif	/* FIM_WANT_BDI */
 		{
 			fim_err_t errval = FIM_ERR_NO_ERROR;
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current)
 			this->update_meta(false);
 			if( c_getImage() )
 			switch( fc )
@@ -1271,7 +1271,7 @@ comeon:
 				else
 					errval = getImage()->set_scale(newscale);
 			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE)
 			if( errval != FIM_ERR_NO_ERROR )
 			{
 				// Here might handle reporting of an error..

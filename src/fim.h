@@ -37,7 +37,7 @@
 #define FIM_USE_CXX14 ( __cplusplus> 201402L ) /* */
 #define FIM_USE_CXX17 ( __cplusplus> 201707L ) /* */
 
-#if FIM_WITH_DEBUG 
+#ifdef FIM_WITH_DEBUG 
 #else
 #define NDEBUG 1	/* turns off assert() functionality */
 #endif
