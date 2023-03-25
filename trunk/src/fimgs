@@ -71,10 +71,10 @@ FBI=fim
 check_in_path sort  || die "no sort in \$PATH"
 check_in_path echo  || die "no echo in \$PATH"
 check_in_path find  || die "no find in \$PATH"
-check_in_path wget  || die "no wget in \$PATH"
+#check_in_path wget  || die "no wget in \$PATH"
 check_in_path gs    || die "no gs (ghostscript) in \$PATH"
-check_in_path xz    || die "no xz               in \$PATH"
-check_in_path bunzip2 || die "no bunzip2 in \$PATH"
+#check_in_path xz    || die "no xz               in \$PATH"
+#check_in_path bunzip2 || die "no bunzip2 in \$PATH"
 check_in_path tar   || die "no tar in \$PATH"
 check_in_path basename   || die "no basename in \$PATH"
 check_in_path md5sum   || die "no md5sum in \$PATH"
@@ -153,9 +153,11 @@ In order to uncompress RAR archives, fimgs will use 'unrar-nonfree' or 'rar' or 
 
 In order to uncompress ZIP archives, fimgs will use 'zip'.
 
+In order to uncompress BZ2 files, 'bunzip2' will be used, if present.
+
 In order to uncompress TAR.GZ or TAR.BZ2 or TAR.XZ archives, fimgs will use 'tar'.
 
-In order to fetch http:// or https:// prefixed URLS, 'wget' will be used.
+In order to fetch http:// or https:// prefixed URLS, 'wget' will be used, if present.
 
 In order to fetch ssh: prefixed host:path locations, 'scp' will be used.
 
@@ -248,8 +250,8 @@ do
 	f="$1";
 	if test x"$f" = x"--" ; then shift; while test "$#" -gt "0" ; do f="$1"; fbiopts="$fbiopts $1" ; shift; done; f=/dev/null  ; fi 
 	shift;
-	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn"; f="$fn"; }
-	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn"; f="$fn"; }
+	[[ "$f" =~ 'https://' ]] && check_in_path wget && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn"; f="$fn"; }
+	[[ "$f" =~ 'http://' ]] && check_in_path wget && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn"; f="$fn"; }
 	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/#ssh:/}" "$fn" ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
 	if ! [[ -e "$f" ]] ; then exit 255; fi
@@ -330,8 +332,8 @@ then
 [[ "$f" =~ .tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
-[[ "$f" =~ .tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
-[[ "$f" =~ .tar.xz$ ]] && ( $UNXZ "$f" -C "$DIR" ) 
+check_in_path bunzip2 && [[ "$f" =~ .tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
+check_in_path xz && [[ "$f" =~ .tar.xz$ ]] && ( $UNXZ "$f" -C "$DIR" ) 
 
 function add_fbi_read_opts() { fbiopts="$fbiopts $fbi_read_opts"; }
 [[ "$f" =~ .cbr$    ]] && add_fbi_read_opts;
