@@ -1754,6 +1754,7 @@ dnl      		AC_MSG_WARN([Fim will try to invoke 'xfig' to handle FIG format files
 	else
 		fim_cv_xfig=no
 	fi
+AM_CONDITIONAL(WITH_XFIG, test x$have_xfig = xyes -a x$fim_cv_xfig = xyes)
 
 AC_CHECK_PROG(have_dia,dia,yes,no)
         if test x$have_dia = xyes -a x$fim_cv_dia = xyes ; then
@@ -1793,7 +1794,7 @@ dnl ==================
 		AC_DEFINE([FIM_TRY_INKSCAPE])
 	fi
 
-        if test x$have_xfig = xyes ; then
+	if test x$have_xfig = xyes -a x$fim_cv_xfig = xyes; then
 		AC_DEFINE([FIM_TRY_XFIG])
 	fi
 

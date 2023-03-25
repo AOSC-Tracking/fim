@@ -58,6 +58,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/numbers_pcx.tar.bz2 \
 	$(top_srcdir)/media/special/numbers_pcx.tar.gz \
 	$(top_srcdir)/media/special/numbers_pcx.tar.xz \
+	$(top_srcdir)/media/special/ciao.fig \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim$(EXEEXT)
@@ -326,6 +327,11 @@ endif
 		convert $(top_srcdir)/media/icon_smile.gif -depth 16 $(top_srcdir)/media/icon_smile.pgm && \
 		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
 	fi # cover-test FbiStuffPpm.cpp
+if WITH_XFIG
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit'` = ppm # 
+else
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit'` = 0 # 
+endif
 if WITH_LIBGRAPHICSMAGICK
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = libGraphicsMagick
 else
