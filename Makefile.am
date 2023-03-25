@@ -488,6 +488,9 @@ if WANT_READLINE
 endif
 if ENABLE_HISTORY
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-history --no-history-load --no-history-save -kq # FIXME: bogus test
+	rm -f .fim_history && HOME=`pwd` $(FIM_EXE) -N --no-etc-rc-file $(top_srcdir)/media/ -o dumb -C 'next;' -c quit && test `cat .fim_history` = 'next;' && rm .fim_history
+else
+	rm -f .fim_history && HOME=`pwd` $(FIM_EXE) -N --no-etc-rc-file $(top_srcdir)/media/ -o dumb -C 'next;' -c quit && test -n .fim_history
 endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
