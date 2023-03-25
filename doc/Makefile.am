@@ -1,6 +1,10 @@
 # $LastChangedDate$
-
+#
+if WITH_MAN2HTML
 HTMLDOCS=FIM.html fim.man.html  fimgs.man.html fimrc.man.html
+else
+HTMLDOCS=
+endif
 
 CLEANFILES= doctags$(EXEEXT) *.o  tags $(HTMLDOCS)
 
