@@ -331,9 +331,9 @@ endif
 endif
 if WITH_CONVERT
 if ENABLE_JPEG
-	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd="convert {} -background black -flop -fill white -pointsize 20 label:'mirrored {}' -gravity Center -append ppm:-" -c 'quit !(i:width==320)' ; fi
-	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd="convert {} -rotate 90 -append ppm:-" -c 'quit !(i:width==240)' ; fi
-	if which convert && convert identify -list format | grep -i ppm; then cp $(top_srcdir)/media/image.jpg -- -image.jpg && $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' --pread-cmd="convert {} -rotate 90 -append ppm:-" -c 'quit !(i:width==320)' -- -image.jpg && rm -- -image.jpg ; fi
+	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd='convert {} -background black -flop -fill white -pointsize 20 label:"mirrored {}" -gravity Center -append ppm:-' -c 'quit !(i:width==320)' ; fi
+	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd='convert {} -rotate 90 -append ppm:-' -c 'quit !(i:width==240)' ; fi
+	if which convert && convert identify -list format | grep -i ppm; then cp $(top_srcdir)/media/image.jpg -- -image.jpg && $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' --pread-cmd='convert {} -rotate 90 -append ppm:-' -c 'quit !(i:width==320)' -- -image.jpg && rm -- -image.jpg ; fi
 endif
 endif
 if ENABLE_PCX
