@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -227,6 +227,8 @@ class ImgDscs FIM_FINAL: public std::map<fim_fn_t,fim_ds_t>
 #endif /* FIM_USE_CXX11 */
 	vd_t vd_;
 #endif /* FIM_WANT_PIC_LVDN */
+#if FIM_USE_CXX11
+#else /* FIM_USE_CXX11 */
 	template<class T> struct ImgDscsCmp:public std::binary_function<typename T::value_type, typename T::mapped_type, bool>
 	{
 		public:
@@ -235,15 +237,20 @@ class ImgDscs FIM_FINAL: public std::map<fim_fn_t,fim_ds_t>
 			return vo.second == mo;
 		}
 	};
+#endif /* FIM_USE_CXX11 */
 	ImgDscs::iterator li_;
 	ImgDscs::iterator fo(const key_type& sk, const ImgDscs::iterator & li)
 	{
+#if FIM_USE_CXX11
+		return std::find_if(li,end(),[&](ImgDscs::value_type v){return v.second == sk;});
+#else /* FIM_USE_CXX11 */
 		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#endif /* FIM_USE_CXX11 */
 	}
 	ImgDscs::const_iterator fo(const key_type& sk, const ImgDscs::const_iterator & li)const
 	{
 #if FIM_USE_CXX11
-		return std::find_if(li,cend(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+		return std::find_if(li,cend(),[&](ImgDscs::value_type v){return v.second == sk;});
 #else /* FIM_USE_CXX11 */
 		return std::find_if(li,end() ,std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 #endif /* FIM_USE_CXX11 */
@@ -252,7 +259,7 @@ public:
 	ImgDscs::const_iterator fo(const key_type& sk)const
 	{
 #if FIM_USE_CXX11
-		return std::find_if(cbegin(),cend(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+		return std::find_if(cbegin(),cend(),[&](ImgDscs::value_type v){return v.second == sk;});
 #else /* FIM_USE_CXX11 */
 		return std::find_if( begin(), end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 #endif /* FIM_USE_CXX11 */
