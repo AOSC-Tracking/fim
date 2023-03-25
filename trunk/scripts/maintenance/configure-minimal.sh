@@ -8,4 +8,3 @@ set -x
        --disable-raw-bits-rendering "$@"
 make
 make tests
-scripts/maintenance/live-test.sh

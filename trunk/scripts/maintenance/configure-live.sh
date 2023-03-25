@@ -3,4 +3,3 @@
 ./configure --disable-fimrc --disable-history $@   || exit
 make || exit
 make tests || exit
-scripts/maintenance/live-test.sh

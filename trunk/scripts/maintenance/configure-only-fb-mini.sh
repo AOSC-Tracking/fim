@@ -3,4 +3,3 @@
 ./configure --disable-sdl $@   || exit
 make || exit
 make tests || exit
-#scripts/maintenance/live-test.sh
