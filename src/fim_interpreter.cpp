@@ -473,22 +473,23 @@ nodeType *scon(fim_char_t*s)
 nodeType *vscon(fim_char_t*s,int typeHint)
 {
 #ifdef FIM_RANDOM
-	if( strlen(s) > 3 ) // make sure s points to 3+ bytes
+	if( strlen(s) > 5 ) // make sure s points to 6+ bytes
 #ifndef FIM_BIG_ENDIAN
 #if ((SIZEOF_INT)>=8)
-	if( *reinterpret_cast<int*>(s+0) == 0x006d6f646e6172 ) // ..modnar
+	if( *reinterpret_cast<int*>(s+0) == 0x00006d6f646e6172 ) // ..modnar // note: wrong (can't assume two zeros, and eight byte illegal)
 #else /* SIZEOF_INT */
 	/* this is LSB order, so it is not portable code.  */
 	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // dnar
-	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006d6f00    ) // .mo.
+	&& (*reinterpret_cast<int*>(s+3))== 0x006d6f64    ) // .mod // access legal bytes
+	//&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006d6f00    ) // .mo. eight byte illegal
 #endif /* SIZEOF_INT */
 #else /* FIM_BIG_ENDIAN */
-
 #if ((SIZEOF_INT)>=8)
-	if( *reinterpret_cast<int*>(s+0) == 0x72616e646f6d00 ) // random..
+	if( *reinterpret_cast<int*>(s+0) == 0x72616e646f6d0000 ) // random.. // note: wrong (can't assume two zeros, and eight byte illegal)
 #else /* SIZEOF_INT */
-	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // rand
-	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006f6d00    ) // .om.
+	if( *reinterpret_cast<int*>(s+0) == 0x72616e64 // rand
+	&& (*reinterpret_cast<int*>(s+3))== 0x646f6d00    ) // dom. // access legal bytes
+	//&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006f6d00    ) // .om. // eight byte illegal
 #endif /* SIZEOF_INT */
 #endif /* FIM_BIG_ENDIAN */
 	{
