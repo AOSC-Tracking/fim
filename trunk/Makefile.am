@@ -90,7 +90,7 @@ signed-dist: dist
 
 
 CXX11TEST=test ` $(FIM_EXE) -V | grep standard | head -1  | tr -d -c '[:digit:]'` -gt 200301
-FIMNORCOPTS=-N --no-etc-rc-file --no-history
+FIMNORCOPTS= --no-rc-file --no-etc-rc-file --no-history
 FIMSCLTSTOPTS=-C '_downscale_huge_at_load=-1;_magnify_factor=2;_reduce_factor=2;' --no-auto-scale -o dumb -q 
 FIMVIDEOTESTOPTS=-K ']]].[[fmfmwsk--++hhlltW' -K ':quit' --chars-press '' # --chars-press -K
 NO_ASAN=ASAN_OPTIONS=detect_leaks=0
@@ -491,6 +491,8 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X --execute-script $(top_srcdir)/scripts/example/oneline.fim -c quit 
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X -E          $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/quit_23.fim -kq; # no quit at init
+	test `$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = '0'    # note: --no-rc-file and --etc-fimrc are incompatible
+	test `$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = value # note: --no-rc-file and --etc-fimrc are incompatible
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --no-internal-config -c 'width;quit !(i:width == 0)'
 if WANT_READLINE
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-commandline -K ':quit 10' # quits at second char
