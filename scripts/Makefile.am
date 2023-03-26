@@ -12,6 +12,7 @@ EXTRA_DIST= \
 	$(srcdir)/tests/spawn_and_quit.exp \
 	$(srcdir)/example/oneline.fim		\
 	$(srcdir)/example/quit_23.fim		\
+	$(srcdir)/example/set_var.fim		\
 	$(srcdir)/rc/fimrc.eog		\
 	$(srcdir)/rc/fimrc.gqview		\
 	$(srcdir)/rc/fimrc.kuickshow	\

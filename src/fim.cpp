@@ -137,7 +137,8 @@ struct fim_options_t fim_options[] = {
     },
     {"etc-fimrc",       required_argument, FIM_NULL, 'f',
 	"specify custom initialization file", "{fimrc}",
-	"Specify an alternative system wide initialization file (default: " FIM_CNS_SYS_RC_FILEPATH "), to be read prior to any other configuration file.\n"
+	"Specify an alternative system-wide initialization file (default: " FIM_CNS_SYS_RC_FILEPATH "), to be read prior to any other configuration file. "
+	"See also " FIM_MAN_fB("--no-etc-rc-file") ". \n"
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       FIM_NULL, 'F',
 	"execute {commands} just before exit", "{commands}",
@@ -228,8 +229,9 @@ struct fim_options_t fim_options[] = {
 	"No personal initialization file will be read (default is " FIM_CNS_USR_RC_COMPLETE_FILEPATH ") at startup."
     },
     {"no-etc-rc-file",      no_argument,       FIM_NULL, 0x4E4E,
-	"do not read the system wide initialization file at startup", FIM_NULL,
-	"No system wide initialization file will be read (default is " FIM_CNS_SYS_RC_FILEPATH ") at startup."
+	"do not read the system-wide initialization file at startup", FIM_NULL,
+	"No system-wide initialization file will be read (default is " FIM_CNS_SYS_RC_FILEPATH ") at startup. "
+	"See also " FIM_MAN_fB("--etc-fimrc") ". \n"
     },
     {"no-internal-config",      no_argument,       FIM_NULL, 0x4E4E4E,
 	"do not read the internal default configuration at startup"
@@ -1071,7 +1073,7 @@ FIM_MAN_fB("fim")
 " documentation files.\n"
 ".TP 15\n"
 ".B " FIM_CNS_SYS_RC_FILEPATH "\n"
-"The system wide "
+"The system-wide "
 FIM_MAN_fB("fim")
 " initialization file (executed at startup, after executing the hardcoded configuration).\n"
 
@@ -1079,7 +1081,7 @@ FIM_MAN_fB("fim")
 ".B " FIM_CNS_USR_RC_COMPLETE_FILEPATH "\n"
 "The personal "
 FIM_MAN_fB("fim")
-" initialization file (executed at startup, after the system wide initialization file).\n"
+" initialization file (executed at startup, after the system-wide initialization file).\n"
 
 ".TP 15\n"
 ".B " FIM_CNS_HIST_COMPLETE_FILENAME "\n"
