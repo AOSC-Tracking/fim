@@ -490,9 +490,13 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X --execute-script $(top_srcdir)/scripts/example/oneline.fim -c quit 
 	$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --execute-script $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23; # quit in script possible
+if WANT_DEFAULT_FIMRC
 	$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc      $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23; # quit at init possible
-	test `$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = '0'    # note: --no-rc-file and --etc-fimrc are incompatible
 	test `$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = value # note: --no-rc-file and --etc-fimrc are incompatible
+else
+	$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc      $(top_srcdir)/scripts/example/quit_23.fim -kq; # etc-fimrc quietly ignored
+endif
+	test `$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = '0'    # note: --no-rc-file and --etc-fimrc are incompatible
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --no-internal-config -c 'width;quit !(i:width == 0)'
 if WANT_READLINE
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-commandline -K ':quit 10' # quits at second char
@@ -586,9 +590,7 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help     | wc -c` -gt 30000
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help     | wc -c` -lt 60000
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man | wc -c` -gt 60000
-if WANT_DEFAULT_FIMRC
 	test `$(FIM_EXE) $(FIMNORCOPTS) --dump-default-fimrc      | wc -c` -gt 15000
-endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'exec "src/fimrc"; echo; stdout; pwd; status "status" unalias' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd; autocmd "PostDisplay";autocmd "PostDisplay" "pattern";autocmd "1" "2" "toomuch"' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3";autocmd_del "1" "2" "3" "4"' -c quit #; cover test misc corner cases (note: no functionality check here)
