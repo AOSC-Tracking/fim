@@ -1302,7 +1302,7 @@ fi
 dnl ==================
 fim_cv_fimrc=yes
 
-AC_ARG_ENABLE(fimrc, AS_HELP_STRING([--disable-fimrc],[Fim will by default load the ~/.fimrc file.]),
+AC_ARG_ENABLE(fimrc, AS_HELP_STRING([--disable-fimrc],[By default, load the personal ~/.fimrc file and a system configuration file.]),
 [if test x$enableval = xno; then
         fim_cv_fimrc=no
 fi])
