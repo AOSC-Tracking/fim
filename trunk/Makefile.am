@@ -14,6 +14,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/image.jpg \
 	$(top_srcdir)/media/image.png \
 	$(top_srcdir)/media/fim.png \
+	$(top_srcdir)/media/icon_smile.gif \
 	$(top_srcdir)/media/numbers/0.gif \
 	$(top_srcdir)/media/numbers/1.gif \
 	$(top_srcdir)/media/numbers/2.gif \
@@ -535,7 +536,7 @@ if WANT_READLINE
 endif
 if ENABLE_HISTORY
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-history --no-history-load --no-history-save -kq # FIXME: bogus test
-	rm -f .fim_history && HOME=`pwd` $(FIM_EXE) -N --no-etc-fimrc-file $(top_srcdir)/media/ -o dumb -C 'next;' -c quit && test `cat .fim_history` = 'next;' && rm .fim_history
+	rm -f .fim_history && HOME=`pwd` $(FIM_EXE) -N --no-etc-fimrc-file $(top_srcdir)/media/ -o dumb -C 'next;next' -c quit && grep -q '^next;next' .fim_history && rm .fim_history # note: history file may contain spaces newlines etc
 else
 	rm -f .fim_history && HOME=`pwd` $(FIM_EXE) -N --no-etc-fimrc-file $(top_srcdir)/media/ -o dumb -C 'next;' -c quit && test -n .fim_history
 endif
@@ -554,13 +555,12 @@ if ENABLE_TIFF
 	if which convert ; then \
 		convert $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/image.tiff && \
 		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/image.tiff -c 'quit !(i:pages == 10)'; fi # multipage code in Image and load
-	rm $(top_srcdir)/image.tiff
+	rm -f $(top_srcdir)/image.tiff
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_gray.tiff                      -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -grayscale average media/special/0_gray.tiff
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_rgba.tiff                      -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -alpha transparent -depth 4 media/special/0_rgba.tiff
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_monochrome_white_polarity.tiff -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -monochrome -define quantum:polarity=min-is-white -depth 1 media/special/0_monochrome_white_polarity.tiff
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_16bps_msb.tiff -c 'i:width;quit !(i:width!=0)' # convert media/numbers/0.gif -depth 16 -colorspace srgb -define tiff:endian=msb media/special/0_16bps_msb.tiff
 endif
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'info;stdout _last_cmd_output;quit' | grep 'media.*KB' # cover info
 if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
 	if which wrjpgcom; then wrjpgcom -replace -comment 'add JPEG comment' $(top_srcdir)/media/image.jpg > image_commented.jpg && $(FIM_EXE) $(FIMNORCOPTS) -o dumb -X image_commented.jpg -c quit && rm -f image_commented.jpg; fi # leak fixed
@@ -583,6 +583,7 @@ if ENABLE_PS
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -C '_downscale_huge_at_load=-1;_preferred_rendering_dpi=100' $(top_srcdir)/media/special/postscript.eps -c 'stdout i:width;quit'` -lt `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -C '_downscale_huge_at_load=-1;_preferred_rendering_dpi=200' $(top_srcdir)/media/special/postscript.eps -c 'stdout i:width;quit'`
 endif
 if ENABLE_PNG
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'info;stdout _last_cmd_output;quit' | grep 'media.*KB' # cover info
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
 endif
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'identifier /*path...' -k q # parser leak fixed with destructor lines in yacc.ypp
@@ -614,7 +615,7 @@ if WANT_READ_STDIN_IMAGE
 endif
 #	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kK -kq -F 'if(_filelistlen==1)quit 255'; fi # -kK triggers a yield (often, not always)
 #	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen!=1)quit 255'; fi # no -kK -> no background images in batch mode (often, not always)
-	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen< 1)quit 255'; fi # difficult to write a reliable test for -B
+	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kn -kq -F 'if(_filelistlen< 1)quit 255'; fi # difficult to write a reliable test for -B, but -kn can help a bit with timing
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help /a /q | wc -c` -gt 900
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help help magnify _TERM jfngjfngjfn | wc -c` -gt 500
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'dump_key_codes; stdout _last_cmd_output; quit' | wc -c` -gt 1000

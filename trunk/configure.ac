@@ -1322,16 +1322,17 @@ dnl ==================
 AH_TEMPLATE([FIM_NOHISTORY])
 fim_cv_history=yes
 
-AC_ARG_ENABLE(history, AS_HELP_STRING([--disable-history],[Fim will by default load/save a ~/.fim_history file.]),
-[if test x$enableval = xno; then
+AC_ARG_ENABLE(history, AS_HELP_STRING([--disable-history],[Fim will by default load/save a ~/.fim_history file (note: depends on readline).]),
+[if test x$enableval = xno ; then
         fim_cv_history=no
 fi])
+if test x$fim_want_readline = xno; then
+        fim_cv_history=no;
+fi
 AM_CONDITIONAL(ENABLE_HISTORY, test x$fim_cv_history != xno)
 
 AH_TEMPLATE([FIM_NOHISTORY])
-if test x$fim_cv_history = xyes; then
-	have_history=yes
-else
+if test x$fim_cv_history != xyes; then
 	AC_DEFINE([FIM_NOHISTORY])
 fi
 
@@ -2063,7 +2064,7 @@ dnl     compile time warnings               : ${fim_cv_warnings:-no} (additional
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc startup file support       : ${have_fimrc:-no}
-	~/.fim_history load/save support    : ${have_history:-no}
+	~/.fim_history load/save support    : ${fim_cv_history:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded PSF font (FBFONT=fim://)  : ${have_hardcoded_font:-no}
