@@ -531,6 +531,11 @@ if ENABLE_JPEG
 	fi # only cover test exif
 	cp $(top_srcdir)/media/image.jpg $(abs_srcdir)/media/upc_abs.JPG && $(FIM_EXE) $(FIMNORCOPTS) -o dumb --no-stat-push $(abs_srcdir)/media/upc_abs.JPG -c 'quit !(i:width>0 && i:height>0)' && rm -f $(abs_srcdir)/media/upc_abs.JPG # not really jpg-specific, exploits regexps & co
 endif
+if ENABLE_POPPLER
+	if which epstopdf && which epstopdf; then \
+		epstopdf $(top_srcdir)/media/special/postscript.eps && \
+		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/postscript.pdf -c 'quit !(i:width>0 && i:height>0)' ; fi # libpoppler
+endif
 if ENABLE_PS
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/postscript.eps -c 'quit !(i:width>0 && i:height>0)'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -C '_downscale_huge_at_load=-1;_preferred_rendering_dpi=100' $(top_srcdir)/media/special/postscript.eps -c 'quit !(i:width>0 && i:height>0)'
