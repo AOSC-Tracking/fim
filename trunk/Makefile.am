@@ -333,7 +333,7 @@ else
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit'` = 0 # 
 endif
 if WITH_LIBGRAPHICSMAGICK
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = libGraphicsMagick
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = libGraphicsMagick
 else
 if WITH_CONVERT
 	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = 0 # assuming no other decoders exists, -X stops external converters
