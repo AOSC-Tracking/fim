@@ -2077,40 +2077,12 @@ probe_loader:
 		goto found_a_loader;
     }
 
-#if !FIM_HAVE_FULL_PROBING_LOADER
-#ifdef HAVE_LIBGRAPHICSMAGICK
-    /* FIXME: with this scheme, this is the only 0-mlen loader allowed */
-    if (FIM_NULL == loader
-		    && read_offset_l == 0
-#if 1
-		    && filename && is_file_nonempty(filename) /* FIXME: need an appropriate error/warning printout in this case */
-#endif /* */
-		    )
-	loader = &magick_loader;
-    else
-	;
-#endif /* HAVE_LIBGRAPHICSMAGICK */
-#else /* FIM_HAVE_FULL_PROBING_LOADER */
-    /* Incomplete: the problem is related to the descriptor: after the first probe, 
-     * the file descriptor may not be available anymore, in case of standard input,
-     * unless some more advanced solution is found.
-     * */
-    if(FIM_NULL==loader)
-    if(rozlsl)
-    list_for_each(item,&loaders)
-    {
-        loader = list_entry(item, struct ida_loader, list);
-    	if(loader->mlen > 0)
-	    continue;
-	loader = FIM_NULL;
-    }
-#endif /* FIM_HAVE_FULL_PROBING_LOADER */
-
     if( loader==FIM_NULL && (!can_pipe || read_offset_l > 0) )
     {
     		if(vl)FIM_VERB_PRINTF("skipping external loading programs...\n");
-		goto head_not_found;
+		goto after_external_converters;
     }
+
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
     if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_DIA " ..\n");
@@ -2254,6 +2226,38 @@ probe_loader:
     }
 #endif
 #endif /* FIM_TRY_CONVERT */
+
+after_external_converters:	/* external loaders failed */
+
+#if !FIM_HAVE_FULL_PROBING_LOADER
+#ifdef HAVE_LIBGRAPHICSMAGICK
+    /* FIXME: with this scheme, this is the only 0-mlen loader allowed */
+    if (FIM_NULL == loader
+		    && read_offset_l == 0
+#if 1
+		    && filename && is_file_nonempty(filename) /* FIXME: need an appropriate error/warning printout in this case */
+#endif /* */
+		    )
+	loader = &magick_loader;
+    else
+	;
+#endif /* HAVE_LIBGRAPHICSMAGICK */
+#else /* FIM_HAVE_FULL_PROBING_LOADER */
+    /* Incomplete: the problem is related to the descriptor: after the first probe, 
+     * the file descriptor may not be available anymore, in case of standard input,
+     * unless some more advanced solution is found.
+     * */
+    if(FIM_NULL==loader)
+    if(rozlsl)
+    list_for_each(item,&loaders)
+    {
+        loader = list_entry(item, struct ida_loader, list);
+    	if(loader->mlen > 0)
+	    continue;
+	loader = FIM_NULL;
+    }
+#endif /* FIM_HAVE_FULL_PROBING_LOADER */
+
     if (FIM_NULL == loader)
 	    goto head_not_found;
 
