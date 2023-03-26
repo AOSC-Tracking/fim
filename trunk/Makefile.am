@@ -110,7 +110,17 @@ if WITH_EXPECT
 		$(EXPECT) $(top_srcdir)/scripts/tests/spawn_and_quit.exp $(FIM_EXE) $(FIMNORCOPTS) -o fb $(top_srcdir)/media/
 endif
 	$(TIMEOUT_SMALL) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) 
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS)
+	FRAMEBUFFER="/dev/non-existing-framebuffer-device" \
+		$(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS); test $$? = 1 # invalid FRAMEBUFFER device is detected as error
+	FRAMEBUFFER="/dev/non-existing-framebuffer-device" \
+		$(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) |& grep open.*No.such # invalid FRAMEBUFFER is verbose
+	$(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) --device "/dev/non-existing-framebuffer-device" |& grep -v Inappropriate # --device seemingly broken (FIXME)
+	$(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) |& grep -v Inappropriate # good device works fine
 	if test "$(TERM)" != screen.linux && which screen; then \
 		test `screen -q $(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS) -c 'stdout "fail"' | wc -l` = 0; \
 	fi # screen does not propagate commands's return code, therefore the stdout-based trick
@@ -462,11 +472,11 @@ if ENABLE_GIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 8 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_interlaced.gif -c 'quit !(i:width!=0)' # interlaced gif
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberatly wrong gif
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberately invalid gif
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png` = 1
 if ENABLE_PNG
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/truncated_bad.png.bin -c 'quit'; test $$? = 134 # deliberatly wrong png: reminder that need start to use png_set_error_fn
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/truncated_bad.png.bin -c 'quit'; test $$? = 134 # deliberately invalid png: reminder that need start to use png_set_error_fn
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_gray.png -c 'quit'; # just coverage so far
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' --slideshow 0 -1 # if this does not hang is good
