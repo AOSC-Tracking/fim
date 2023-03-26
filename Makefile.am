@@ -238,13 +238,14 @@ if WITH_MAN2HTML
 	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
 endif
 endif
-	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb --sanity-check
-	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout random ; quit 0;' # make sure no leak from 'random'
-	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit !(randomm == 0 && ( random != 0 || random != 0 || random != 0));' # hope to get three non-zeros
+	@ ! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
+if HAVE_RUNNABLE_TESTS
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
-	@ ! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
+	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb --sanity-check
+	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout random ; quit 0;' # make sure no leak from 'random'
+	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit !(randomm == 0 && ( random != 0 || random != 0 || random != 0));' # hope to get three non-zeros
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c '_display_status_fmt="fim:%M%n%R%m%C%v"' --verbose-interpreter --verbose-interpreter -kn -kq # cover modifiers and interpreter
 #
 if ENABLE_PCX
@@ -459,7 +460,6 @@ endif
 if ENABLE_AA
 	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
 endif
-if HAVE_RUNNABLE_TESTS
 if ENABLE_GIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
@@ -713,6 +713,9 @@ if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-10%";          w2=i:swidth;   quit !(w1 > w2)'
 endif
 	if $(FIM_EXE) --help crop | grep -q is.a.command; then make croptests; fi
+if HAVE_FIMGS
+	make fimgstests
+endif
 	make ltests
 if HAVE_VALGRIND
 	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
@@ -721,9 +724,6 @@ if HAVE_VALGRIND
 			make ltests; \
 	fi
 endif
-endif
-if HAVE_FIMGS
-	make fimgstests
 endif
 
 .PHONY: croptests
