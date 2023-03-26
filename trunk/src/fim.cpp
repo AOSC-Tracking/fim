@@ -153,9 +153,10 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_WANT_HELP_ARGS */
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
-    { "keysym-press",   required_argument,       FIM_NULL, 'k',
+    { FIM_OSW_KEYSYM_PRESS,   required_argument,       FIM_NULL, 'k',
 	"execute any command bound to keysym at startup","{keysym}",
        	"Execute any command bound (via the " FIM_FLT_BIND " command) to a specified keysym at startup. A keysym can be prefixed by a repetition count number. You can specify the option multiple times to simulate multiple keystrokes. "
+	"Presses entered via " FIM_MAN_fB("--" FIM_OSW_KEYSYM_PRESS) " are processed before presses entered via " FIM_MAN_fB("--" FIM_OSW_CHARS_PRESS) ". "
 	"See man " FIM_MAN_fR("fimrc") "(5) for a list of keysyms and the use of " FIM_FLT_BIND "."
     },
     { FIM_OSW_CHARS_PRESS,   required_argument,       FIM_NULL, 'K',
@@ -167,6 +168,7 @@ struct fim_options_t fim_options[] = {
 	" -K ':next;' activates the command line and enter \"next;\" without executing it; "
 	" -K \":next;\" -K \"next\" executes \"next\", stays in the command line and enter keys \"next\"; "
 	" -K \":next;\" -K \"\" -K \"next\" executes \"next\", leaves the command line, and executes in sequence any command bound to keys 'n', 'e', 'x', 't'. "
+	"Presses entered via " FIM_MAN_fB("--" FIM_OSW_CHARS_PRESS) " are processed after presses entered via " FIM_MAN_fB("--" FIM_OSW_KEYSYM_PRESS) ". "
     },
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
