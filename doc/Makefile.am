@@ -5,8 +5,6 @@ if WITH_PERL
 HTMLDOCS+=FIM.html
 endif
 if WITH_MAN2HTML
-HTMLDOCS+=fim.man.html fimgs.man.html fimrc.man.html
-else
 if WITH_PERL
 HTMLDOCS+=fim.man.html fimgs.man.html fimrc.man.html
 endif
