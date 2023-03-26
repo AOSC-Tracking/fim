@@ -62,7 +62,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim$(EXEEXT)
-FIMGS_EXE=PATH=$(PATH):./src/ ./src/fimgs
+FIMGS_EXE=PATH=./src/:$(PATH) ./src/fimgs
 
 
 # mhmhmhm 
