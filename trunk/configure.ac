@@ -847,11 +847,20 @@ if test x$fim_handle_pdf != xno ; then
   fim_handle_pdf=yes
   have_poppler=yes
         if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
+    	# dear fim hackers, you should install pkg-config to get this macro expanded
+    	POPPLER_REQUIRED=0.8.7
+    	PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no) dnl sets POPPLER_LIBS POPPLER_CXXFLAGS
+    	PKG_CHECK_MODULES(GLIB, glib-2.0) dnl sets GLIB_CFLAGS GLIB_LIBS
 dnl FIXME : the following is a dirty hack
-          AC_CHECK_LIB(poppler, gfree,
-            have_poppler=yes,
+
+dnl	  LIBS="$LIBS $GLIB_LIBS $POPPLER_LIBS"
+          AC_CHECK_LIB(poppler, g_free,
+            have_poppler=yes
+            LIBS+=" $GLIB_LIBS $POPPLER_LIBS";
+            CXXFLAGS+=" $GLIB_CFLAGS $POPPLER_CXXFLAGS";
+	    ,
             have_poppler=no
-      AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]) )
+      AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]), [$GLIB_LIBS $POPPLER_LIBS])
     if test x"$have_poppler" = xyes; then
       AC_MSG_CHECKING([for poppler/poppler-config.h])
        AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <stdio.h>
@@ -911,19 +920,14 @@ AC_ARG_ENABLE(pdf,
               [AS_HELP_STRING([--enable-pdf],[Compile with pdf support])],enable_pdf="$enableval",enable_pdf=yes)
 
 if test "x$enable_pdf" = "xyes"; then
-    POPPLER_REQUIRED=0.8.7
-    # dear fim hackers, you should install pkg-config to get this macro expanded
-    PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no)
-
     if test "x$enable_pdf" = "xyes"; then
             AC_DEFINE([ENABLE_PDF], [1], [Enable pdf support.])
             SHELL_LIBS="$SHELL_LIBS $POPPLER_LIBS"
-            SHELL_CXXFLAGS="$SHELL_CXXFLAGS $POPPLER_CXXFLAGS"
+            SHELL_CXXFLAGS="$SHELL_CXXFLAGS $GLIB_CFLAGS $POPPLER_CXXFLAGS"
 
             fim_save_LIBS=$LIBS
-            LIBS="$LIBS $POPPLER_LIBS"
+            LIBS="$LIBS $GLIB_LIBS $POPPLER_LIBS"
             LIBS=$fim_save_LIBS
-
     else
             AC_MSG_WARN(["PDF support is disabled since poppler library version $POPPLER_REQUIRED or newer not found"])
     fi

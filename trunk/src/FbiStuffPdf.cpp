@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -55,6 +55,7 @@
 #include <poppler/SplashOutputDev.h>
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
+#include <glib.h>
 #endif /* (POPPLER_VERSION_MINOR>=21) */
 
 #if HAVE_FILENO
@@ -64,6 +65,9 @@
 #endif /* HAVE_FILENO */
 
 /*								*/
+#define GBool gboolean
+#define gTrue 1
+#define gFalse 0
 
 namespace fim
 {
@@ -131,8 +135,6 @@ static void*
 pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	fim_char_t _[1];
-	_[0]='\0';
 	struct pdf_state_t * ds=FIM_NULL;
 	int rotation=0,pageNo=page+1;
 	const double zoomReal=100.0;
@@ -186,6 +188,8 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	globalParams->setErrQuiet(gFalse);
 
 #if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
+	fim_char_t _[1];
+	_[0]='\0';
 	globalParams->setBaseDir(_);
 #endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
 
@@ -199,7 +203,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	if (!ds->od)
 	{
         	GBool bitmapTopDown = gTrue;
-        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
+        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown, splashThinLineDefault/*antialias*/);
 	        if (ds->od)
 #ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
 			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
