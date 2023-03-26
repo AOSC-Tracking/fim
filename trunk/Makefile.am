@@ -118,7 +118,9 @@ endif
 		$(TIMEOUT_SMALL) \
 			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) |& grep open.*No.such # invalid FRAMEBUFFER is verbose
 	$(TIMEOUT_SMALL) \
-			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) --device "/dev/non-existing-framebuffer-device" |& grep -v Inappropriate # --device seemingly broken (FIXME)
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) --device "/dev/non-existing-framebuffer-device"; test $$? = 1 # invalid --device option detected as error
+	$(TIMEOUT_SMALL) \
+			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) --device "/dev/non-existing-framebuffer-device" |& grep open.*No.such # invalid FRAMEBUFFER is verbose
 	$(TIMEOUT_SMALL) \
 			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb $(FIMVIDEOTESTOPTS) |& grep -v Inappropriate # good device works fine
 	if test "$(TERM)" != screen.linux && which screen; then \

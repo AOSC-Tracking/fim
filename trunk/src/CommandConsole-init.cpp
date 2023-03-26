@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2022 Michele Martone
+ (c) 2010-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,11 +106,19 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					);
 			const bool do_boz_patch = (dopts.size() && dopts[0]=='S')?0:(0xbabebabe==0xbabebabe);
+			if( displaydevice_)
+			{
+				ffdp=((FramebufferDevice*)displaydevice_);
+				if(default_fbdev)ffdp->set_fbdev(default_fbdev);
+				if(default_fbmode)ffdp->set_fbmode(default_fbmode);
+				if(default_vt!=-1)ffdp->set_default_vt(default_vt);
+				if(default_fbgamma!=-1.0)ffdp->set_default_fbgamma(default_fbgamma);
+				ffdp=NULL;
+			}
 			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init(do_boz_patch))
 			{
 				if(do_boz_patch) // if not, allow for reinit
 					cleanup();
-				ffdp=((FramebufferDevice*)displaydevice_);
 				displaydevice_=NULL;
 				if(ffdp)
 					delete ffdp;
@@ -118,10 +126,6 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			}
 			ffdp=((FramebufferDevice*)displaydevice_);
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_FB);
-			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
-			if(default_fbmode)ffdp->set_fbmode(default_fbmode);
-			if(default_vt!=-1)ffdp->set_default_vt(default_vt);
-			if(default_fbgamma!=-1.0)ffdp->set_default_fbgamma(default_fbgamma);
 			mangle_tcattr_=true;
 		}
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
