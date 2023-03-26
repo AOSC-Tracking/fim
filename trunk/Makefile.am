@@ -234,11 +234,7 @@ endif
 tests:	all
 if WITH_PERL
 	test -s doc/FIM.html
-endif
 if WITH_MAN2HTML
-	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
-else
-if WITH_PERL
 	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
 endif
 endif
