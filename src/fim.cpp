@@ -135,10 +135,10 @@ struct fim_options_t fim_options[] = {
 	"execute {scriptfile} after initialization", "{scriptfile}",
 	"Execute " FIM_MAN_fB("scriptfile") " after the default initialization file is read, and before executing " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " commands."
     },
-    {"etc-fimrc",       required_argument, FIM_NULL, 'f',
+    {FIM_OSW_ETC_FIMRC,       required_argument, FIM_NULL, 'f',
 	"specify custom initialization file", "{fimrc}",
 	"Specify an alternative system-wide initialization file (default: " FIM_CNS_SYS_RC_FILEPATH "), to be read prior to any other configuration file. "
-	"See also " FIM_MAN_fB("--no-etc-rc-file") ". \n"
+	"See also " FIM_MAN_fB("--" FIM_OSW_NO_ETC_FIMRC) ". \n"
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       FIM_NULL, 'F',
 	"execute {commands} just before exit", "{commands}",
@@ -228,7 +228,7 @@ struct fim_options_t fim_options[] = {
 	"do not read the personal initialization file at startup", FIM_NULL,
 	"No personal initialization file will be read (default is " FIM_CNS_USR_RC_COMPLETE_FILEPATH ") at startup."
     },
-    {"no-etc-rc-file",      no_argument,       FIM_NULL, 0x4E4E,
+    {FIM_OSW_NO_ETC_FIMRC,      no_argument,       FIM_NULL, 0x4E4E,
 	"do not read the system-wide initialization file at startup", FIM_NULL,
 	"No system-wide initialization file will be read (default is " FIM_CNS_SYS_RC_FILEPATH ") at startup. "
 	"See also " FIM_MAN_fB("--etc-fimrc") ". \n"
