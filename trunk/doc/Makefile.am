@@ -30,9 +30,7 @@ dist_doc_DATA = FIM.TXT
 all:	$(HTMLDOCS) $(EXTRA_DIST)
 
 FIM.html fim-stylesheet.css: doctags$(EXEEXT) FIM.TXT
-if HAVE_RUNNABLE_TESTS
 	./doctags$(EXEEXT) $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
-endif
 
 fim.man:
 	make doc/fim.man -C $(top_srcdir)/

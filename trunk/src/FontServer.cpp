@@ -277,7 +277,9 @@ scanlistforafontfile:
 		goto oops;
 
 	while( ( de = readdir(dir) ) != FIM_NULL )
-	if( de->d_type == DT_REG )
+#ifndef __MINGW32__
+	if( de->d_type == DT_REG ) // not in mingw
+#endif
 	if( regexp_match(de->d_name,"8x.*\\.psf") )
 	{
 		nf = FIM_LINUX_CONSOLEFONTS_DIR;
