@@ -489,8 +489,8 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X --execute-script $(top_srcdir)/scripts/example/oneline.fim -c quit 
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X -E          $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/quit_23.fim -kq; # no quit at init
+	$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --execute-script $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23; # quit in script possible
+	$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc      $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23; # quit at init possible
 	test `$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = '0'    # note: --no-rc-file and --etc-fimrc are incompatible
 	test `$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = value # note: --no-rc-file and --etc-fimrc are incompatible
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --no-internal-config -c 'width;quit !(i:width == 0)'
