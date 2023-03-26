@@ -137,7 +137,7 @@ Dump default configuration (the one hardcoded in the fim executable) to standard
 Execute \fBscriptfile\fP after the default initialization file is read, and before executing \fB--execute-commands\fP commands.
 .TP
 \fB-f {fimrc}\fP, \fB--etc-fimrc {fimrc}\fP
-Specify an alternative system-wide initialization file (default: @sysconfdir@/fimrc), to be read prior to any other configuration file. See also \fB--no-etc-rc-file\fP. 
+Specify an alternative system-wide initialization file (default: @sysconfdir@/fimrc), to be read prior to any other configuration file. See also \fB--no-etc-fimrc-file\fP. 
 
 .TP
 \fB-F {commands}\fP, \fB--final-commands {commands}\fP
@@ -173,7 +173,7 @@ Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Def
 \fB-N\fP, \fB--no-rc-file\fP
 No personal initialization file will be read (default is ~/.fimrc) at startup.
 .TP
-\fB--no-etc-rc-file\fP
+\fB--no-etc-fimrc-file\fP
 No system-wide initialization file will be read (default is @sysconfdir@/fimrc) at startup. See also \fB--etc-fimrc\fP. 
 
 .TP

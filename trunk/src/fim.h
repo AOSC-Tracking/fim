@@ -473,6 +473,8 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_OSW_RECURSIVE		"recursive"
 #define FIM_OSW_NOEXTPIPLOA		"no-pipe-load"
 #define FIM_OSW_NO_STAT_PUSH		"no-stat-push"
+#define FIM_OSW_NO_ETC_FIMRC		"no-etc-fimrc-file"
+#define FIM_OSW_ETC_FIMRC		"etc-fimrc"
 
 /*
  * Fim Constants
