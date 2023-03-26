@@ -182,6 +182,19 @@ if FIM_WANT_HARDCODED_CONSOLEFONT
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
 endif
 
+.PHONY: imlib2tests
+imlib2tests: all
+	$(NO_ASAN) $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2  $(FIMVIDEOTESTOPTS);
+	$(NO_ASAN) $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
+#	$(NO_ASAN) $(TIMEOUT_LARGE) \
+#		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=0:-1 ; test $$? = 252
+	$(NO_ASAN) FBFONT=       \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2 -c quit # TODO: this is only a coverage test
+	$(NO_ASAN) FBFONT=fim:// \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2 -c quit # TODO: this is only a coverage test
+
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
 sanity-check:	all
@@ -413,6 +426,7 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -= -c 'pan "0%" "100%"' -cq # pan_to; TODO: test properly
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -K++++ -c 'flip;mirror;pan_left;pan_right;pan_up;pan_down;pan_ne;pan_sw;pan_se;pan_nw "100%"' -c 'popen "echo quit"' # mostly coverage
 endif
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o non-existing-reverting-to-dumb-without-error -Kq
 if ENABLE_AA
 	@make aatests
 endif
@@ -421,6 +435,9 @@ if ENABLE_CACA
 endif
 if ENABLE_FRAMEBUFFER
 	@if test -z "$(DISPLAY)$(SSH_TTY)" -a -w "/dev/fb0"; then make fbtests; fi
+endif
+if ENABLE_IMLIB2
+	@make imlib2tests
 endif
 if ENABLE_SDL
 	@if test -n "$(DISPLAY)"; then make sdltests; fi

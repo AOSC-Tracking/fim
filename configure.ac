@@ -149,7 +149,8 @@ if test x"$fim_handle_imlib2" = x"yes" ; then
   CXXFLAGS="$CXXFLAGS `imlib2-config --cflags |tr '\n' ' '` ";
   AC_DEFINE([FIM_WITH_LIBIMLIB2],[1],[We have libImlib])
 fi
-  ], [])
+  ], [fim_handle_imlib2=no;])
+AM_CONDITIONAL(ENABLE_IMLIB2, test x"$fim_handle_imlib2" = x"yes")
 
 AC_CHECK_PROG([HAVE_FLEX],[flex],[yes],[no])
 AC_CHECK_PROG([HAVE_BISON],[bison],[yes],[no])

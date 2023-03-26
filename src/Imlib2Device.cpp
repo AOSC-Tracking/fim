@@ -2,7 +2,7 @@
 /*
  Imlib2.cpp : Imlib2 device Fim driver file
 
- (c) 2011-2022 Michele Martone
+ (c) 2011-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
  * Flip/mirror display is missing.
  * Fullscreen display is missing.
  * Mouse handling is missing.
- * TODO: we use so little of imlib2 here that it would be better to use X only, here.
+ * We use so little of imlib2 here that it would be better to use X only.
  */
 #include "fim.h"
 
