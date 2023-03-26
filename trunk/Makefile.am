@@ -232,9 +232,15 @@ endif
 # this is the official way of testing fim
 .PHONY: tests
 tests:	all
+if WITH_PERL
 	test -s doc/FIM.html
+endif
 if WITH_MAN2HTML
 	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
+else
+if WITH_PERL
+	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
+endif
 endif
 	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb --sanity-check
 	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout random ; quit 0;' # make sure no leak from 'random'
