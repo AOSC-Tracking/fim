@@ -96,7 +96,7 @@ Implemented features:
  - standard input script file read
  - support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  - support for AAlib (Ascii Art rendering) (-o aa)
- - support for libcaca (Colour Ascii Art rendering) (-o caca 
+ - support for libcaca (Colour Ascii Art rendering) (-o ca)
  - experimental (incomplete) support for Imlib2 (-o imlib2) (X!)
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
@@ -199,7 +199,7 @@ You find all of these on any decent Linux distribution.
  # run only -o aa tests (if disabled, fail)
  make aatests
 
- # run only -o caca tests (if disabled, fail)
+ # run only -o ca tests (if disabled, fail)
  make cacatests
 
 --------------------------------------------------------------------------------
@@ -401,7 +401,7 @@ Dimitar Toshkov Zhekov.
 	10		Contacts, URLs
 ================================================================================
 
-FIM is (C) 2007-2022 Michele Martone.
+FIM is (C) 2007-2023 Michele Martone.
 
  Email: "dezperado_FOobAr_autistici_Baz_org", just care replacing
          _FOobAr_ with a '@' and _Baz_ with a '.'.

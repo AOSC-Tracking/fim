@@ -2026,6 +2026,37 @@ AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
         fi
 ])
 dnl ###############################################################################
+AC_CACHE_CHECK([if you have c++11 ...], [have_cv_cxx11], AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+#if __cplusplus<201103L
+#error using pre-c++11
+#endif
+int main() { }
+]])],[fim_cxx_standard=new],[fim_cxx_standard=old],[]))
+
+if test x"$fim_cxx_standard" = x"new"; then
+AC_LINK_IFELSE([AC_LANG_PROGRAM([
+ #include <thread>
+void thread_function() { }
+],[
+    std::thread t(&thread_function);
+    t.join();
+])],[have_cv_thread_libs=yes],[have_cv_thread_libs=no],[have_cv_thread_libs=no;])
+
+if test x$have_cv_thread_libs != xyes; then
+	AC_MSG_NOTICE([Seemingly C++ threads need an extra library. Checking if -pthread solves this.])
+	AC_CHECK_LIB(pthread, pthread_create, 
+	LIBS="$LIBS -lpthread"; 
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([
+ #include <thread>
+void thread_function() { }
+],[
+    std::thread t(&thread_function);
+    t.join();
+])],[AC_MSG_NOTICE([Yes, adding -lpthread allows using C++ threads.])],[],[;])
+fim_cv_have_pthread_added=yes;], fim_cv_have_pthread_added=no)
+fi
+fi
+dnl ###############################################################################
 
 
 dnl ==================
