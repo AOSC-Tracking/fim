@@ -149,9 +149,9 @@ endif
 if WANT_READLINE
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o aa=w -C '_debug_commands="k"' -K:quit -K '' | grep pressed.key; fi # readline mode key verbosity
 endif
-	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` = $(FIM_USE_ASCII_ART_DEFAULT) #
-	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` = $(FIM_USE_ASCII_ART_DEFAULT) #
-	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` = $(FIM_USE_ASCII_ART_DEFAULT) #
+	test "`SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
+	test "`(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
+	test "`(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
 # extras for readline and caption related:
 if WANT_READLINE
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'ne$$'\t'$$'\t' -K '' -Kq # completion_display_matches_hook
@@ -175,9 +175,9 @@ endif
 if WANT_READLINE
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o ca=w -C '_debug_commands="k"' -K:quit -K '' | grep pressed.key; fi # readline mode key verbosity
 endif
-	test `SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null` = $(FIM_USE_ASCII_ART_DEFAULT) #
-	test `(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` = $(FIM_USE_ASCII_ART_DEFAULT) #
-	test `(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null` = $(FIM_USE_ASCII_ART_DEFAULT) #
+	test "`SSH_TTY=1       $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/                     -c 'stderr _device_string' -kq   2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
+	test "`(unset SSH_TTY; $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
+	test "`(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
 
 
 .PHONY: sdltests
@@ -216,6 +216,7 @@ sanity-check:	all
 .PHONY: check
 check:	tests
 
+SNTZ = |tr -d -c '0-9A-Za-z_./:'
 .PHONY: devtests
 devtests:	all
 if WITH_SHELLCHECK
@@ -224,6 +225,7 @@ endif
 	test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
 	test `grep '[^=]==[^=]' $(top_srcdir)/src/fimgs | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only
+	test `grep 'SNTZ.*wc' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate SNTZ.*wc on this line only
 	! grep -n '^[^ ].\{83,\}' README
 if ENABLE_GIF
 	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q
@@ -251,19 +253,19 @@ if HAVE_RUNNABLE_TESTS
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c '_display_status_fmt="fim:%M%n%R%m%C%v"' --verbose-interpreter --verbose-interpreter -kn -kq # cover modifiers and interpreter
 #
 if ENABLE_PCX
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit'` = 2.1
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit'` = 2.2
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~^"; list;b=_filelistlen; stdout a.".".b;quit'` = 2.1
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~^"; list;b=_filelistlen; stdout a.".".b;quit'` = 2.1
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~$$"; list;b=_filelistlen; stdout a.".".b;quit'` = 2.1
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~!"; list;b=_filelistlen; stdout a.".".b;quit'` = 2.0
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/2.pcx -c 'a=_filelistlen;limit "~!"; list;b=_filelistlen; stdout a.".".b;quit'` = 2.2
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~i" "4"; b=_filelistlen; limit "~i" "4-4"; c=_filelistlen; limit "~i" "4-5"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit'` = 10.1.1.2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.1
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~^"; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.1
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~^"; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.1
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~$$"; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.1
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~!"; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.0
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/../media/numbers_pcx/2.pcx -c 'a=_filelistlen;limit "~!"; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~i" "4"; b=_filelistlen; limit "~i" "4-4"; c=_filelistlen; limit "~i" "4-5"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' $(SNTZ)` = 10.1.1.2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~z" "0-900"; b=_filelistlen; limit "~z" "0-909"; c=_filelistlen; stdout a.".".b.".".c;quit'` = 10.0.7 # needs stat
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "!"; b=_filelistlen; stdout a.".".b;quit'` = 10.0 # needs stat
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~d" "01/01/1970-01/01/2007"; b=_filelistlen; limit "~d" "01/01/2007-19/01/2038"; c=_filelistlen; stdout a.".".b.".".c;quit'` = 10.0.10
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "prime" "yes"; b=_filelistlen; limit "prime" "no" ; c=_filelistlen; limit "prime" "zzz" ; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` = 10.3.2.0
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "uno"; b=_filelistlen;limit "due"; c=_filelistlen; limit "boh"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc` = 10.1.1.0
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "!"; b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 10.0 # needs stat
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "~d" "01/01/1970-01/01/2007"; b=_filelistlen; limit "~d" "01/01/2007-19/01/2038"; c=_filelistlen; stdout a.".".b.".".c;quit' $(SNTZ)` = 10.0.10
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "prime" "yes"; b=_filelistlen; limit "prime" "no" ; c=_filelistlen; limit "prime" "zzz" ; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc $(SNTZ)` = 10.3.2.0
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_filelistlen;limit "uno"; b=_filelistlen;limit "due"; c=_filelistlen; limit "boh"; d=_filelistlen; stdout a.".".b.".".c.".".d;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc $(SNTZ)` = 10.1.1.0
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'limit "-list";stdout _last_cmd_output;limit "-listall";stdout _last_cmd_output; quit;' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep there.are.*variable > /dev/null # TODO: need better test here
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'limit "-list" "prime";stdout _last_cmd_output;limit "-listall" "prime";stdout _last_cmd_output; quit;' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep there.are.*value > /dev/null # TODO: need better test here
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_8bit.pcx.bin -C 'stdout "Unsupported PCX file test.."' -c 'quit !(i:width==0)' # named so to not break dir-loading tests
@@ -305,7 +307,7 @@ if ENABLE_PCX
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx                                              -c 'list "remove"; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'next;list "pop";reload;quit    !(i:_filename == "$(top_srcdir)/media/numbers_pcx/0.pcx")'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'next;list "remove";reload;quit !(i:_filename == "$(top_srcdir)/media/numbers_pcx/2.pcx")'
-	test `$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -k n -k Del -k q -F 'stdout i:_filename'` = "$(top_srcdir)/media/numbers_pcx/2.pcx"
+	test `$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -k n -k Del -k q -F 'stdout i:_filename' $(SNTZ)` = "$(top_srcdir)/media/numbers_pcx/2.pcx"
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'a=1' -c 'a=a+1;' -c 'quit (1-(a==2))'
 endif
 if WANT_RECURSIVE_DIRS
@@ -316,58 +318,58 @@ if WANT_RECURSIVE_DIRS
 endif
 if ENABLE_RAW_BITS_RENDERING
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text   -c 'stdout _last_file_loader;quit'` = Text  # mostly coverage
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=1  -c 'stdout _last_file_loader;quit'` = Bit1  # mostly coverage
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=24 -c 'stdout _last_file_loader;quit'` = Bit24 # mostly coverage
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text   -c 'stdout _last_file_loader;quit' $(SNTZ)` = Text  # mostly coverage
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=1  -c 'stdout _last_file_loader;quit' $(SNTZ)` = Bit1  # mostly coverage
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=24 -c 'stdout _last_file_loader;quit' $(SNTZ)` = Bit24 # mostly coverage
 if WANT_READ_STDIN_IMAGE
-	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=1  -c 'magnify;stdout i:height."."._last_file_loader;quit'` = 1.Bit1  # coverage of tiny case; TODO: remove necessity of magnify
-	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=24 -c 'magnify;stdout i:height."."._last_file_loader;quit'` = 1.Bit24 # coverage of tiny case; TODO: remove necessity of magnify
-	test `echo media | $(FIM_EXE) $(FIMNORCOPTS) -o dumb - --binary=23 -c 'magnify;stdout _last_file_loader;quit'` = Bit24 # coverage of - and fallback to 24
+	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=1  -c 'magnify;stdout i:height."."._last_file_loader;quit' $(SNTZ)` = 1.Bit1  # coverage of tiny case; TODO: remove necessity of magnify
+	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=24 -c 'magnify;stdout i:height."."._last_file_loader;quit' $(SNTZ)` = 1.Bit24 # coverage of tiny case; TODO: remove necessity of magnify
+	test `echo media | $(FIM_EXE) $(FIMNORCOPTS) -o dumb - --binary=23 -c 'magnify;stdout _last_file_loader;quit' $(SNTZ)` = Bit24 # coverage of - and fallback to 24
 endif
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c 'window;stdout _last_cmd_output;quit;' grep disabled > /dev/null
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --dump-reference-help | wc -l` -gt 100
-	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c` -gt 28000 # man dump
-	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | grep fB | wc -l` -gt 40 # lots of troff
-	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | grep fB | wc -l` -eq 0  # no troff left (hopefully)
-	test `$(FIM_EXE) $(FIMNORCOPTS) --NON-existent-OPTIONNN | wc -l` -gt 70 # help function
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --dump-reference-help | wc -l $(SNTZ)` -gt 100
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c $(SNTZ)` -gt 28000 # man dump
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help=m | grep fB | wc -l $(SNTZ)` -gt 40 # lots of troff
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | grep fB | wc -l $(SNTZ)` -eq 0  # no troff left (hopefully)
+	test `$(FIM_EXE) $(FIMNORCOPTS) --NON-existent-OPTIONNN | wc -l $(SNTZ)` -gt 70 # help function
 	$(FIM_EXE) $(FIMNORCOPTS)       --NON-existent-OPTIONNN; test $$? = 240 # help function failing
 if ENABLE_BMP
 	if which convert; then \
 		convert $(top_srcdir)/media/icon_smile.gif -monochrome $(top_srcdir)/media/icon_smile.bmp && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` = bmp && rm -f $(top_srcdir)/icon_smile.bmp && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit' $(SNTZ)` = bmp && rm -f $(top_srcdir)/icon_smile.bmp && \
 		if which ppmtobmp ; then \
 		convert $(top_srcdir)/media/icon_smile.gif ppm:- | ppmtobmp -bpp 8 > $(top_srcdir)/media/icon_smile.bmp && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` = bmp && rm -f $(top_srcdir)/icon_smile.bmp && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit' $(SNTZ)` = bmp && rm -f $(top_srcdir)/icon_smile.bmp && \
 		convert $(top_srcdir)/media/icon_smile.gif ppm:- | ppmtobmp -bpp 4 > $(top_srcdir)/media/icon_smile.bmp && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` = bmp && rm -f $(top_srcdir)/icon_smile.bmp ; \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit' $(SNTZ)` = bmp && rm -f $(top_srcdir)/icon_smile.bmp ; \
 		fi && \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 8 -alpha Disassociate $(top_srcdir)/media/icon_smile.bmp && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit'` = bmp && rm -f $(top_srcdir)/icon_smile.bmp; \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.bmp -c 'stdout _last_file_loader;quit' $(SNTZ)` = bmp && rm -f $(top_srcdir)/icon_smile.bmp; \
 	fi
 endif
 	if which convert; then \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 8  $(top_srcdir)/media/icon_smile.ppm && \
 		sed -i 's/P6$$/P6\n# comment/g'                      $(top_srcdir)/media/icon_smile.ppm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit'` = ppm && rm -f $(top_srcdir)/media/icon_smile.ppm && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm && rm -f $(top_srcdir)/media/icon_smile.ppm && \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 16 $(top_srcdir)/media/icon_smile.ppm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit'` = ppm && rm -f $(top_srcdir)/media/icon_smile.ppm && \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.ppm -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm && rm -f $(top_srcdir)/media/icon_smile.ppm && \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 8  $(top_srcdir)/media/icon_smile.pgm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit' $(SNTZ)` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
 		convert $(top_srcdir)/media/icon_smile.gif -depth 16 $(top_srcdir)/media/icon_smile.pgm && \
-		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit'` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
+		test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm -c 'stdout _last_file_loader;quit' $(SNTZ)` = pgm && rm -f $(top_srcdir)/media/icon_smile.pgm; \
 	fi # cover-test FbiStuffPpm.cpp
 if WITH_XFIG
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit'` = ppm # 
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm # 
 else
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit'` = 0 # 
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # 
 endif
 if WITH_LIBGRAPHICSMAGICK
-	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = libGraphicsMagick
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = libGraphicsMagick
 else
 if WITH_CONVERT
-	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = 0 # assuming no other decoders exists, -X stops external converters
-	if which convert && convert identify -list format | grep -i webp; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit'` = ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # assuming no other decoders exists, -X stops external converters
+	if which convert && convert identify -list format | grep -i webp; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
 endif
 endif
 if WITH_CONVERT
@@ -404,7 +406,7 @@ endif
 if WANT_READ_STDIN_IMAGE
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'pread "cat $(top_srcdir)/media/numbers_pcx/1.pcx"; reload' -c 'quit !(i:width>0 && i:height>0)'
 endif
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(abs_srcdir)/media/numbers_pcx/1.pcx"; pwd;stdout _last_cmd_output;  cd "-"; pwd;stdout _last_cmd_output;  cd "$(abs_srcdir)/media/numbers_pcx/";pwd;stdout _last_cmd_output; quit' | tr -d '\n'` = "$(abs_srcdir)/media/numbers_pcx""$(abs_srcdir)""$(abs_srcdir)/media/numbers_pcx"
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(abs_srcdir)/media/numbers_pcx/1.pcx"; pwd;stdout _last_cmd_output;  cd "-"; pwd;stdout _last_cmd_output;  cd "$(abs_srcdir)/media/numbers_pcx/";pwd;stdout _last_cmd_output; quit' $(SNTZ) | tr -d '\n'` = "$(abs_srcdir)/media/numbers_pcx""$(abs_srcdir)""$(abs_srcdir)/media/numbers_pcx"
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --mark-from-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'l=_filelistlen;toggleLimitMarked;if(_filelistlen!=l/2)quit 255; quit'
@@ -438,7 +440,7 @@ endif
 endif
 if ENABLE_JPEG
 if WANT_READ_STDIN_IMAGE
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; eval "quit"' -i < $(top_srcdir)/media/image.jpg | tail -1` != "00" # mostly coverage
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; eval "quit"' -i < $(top_srcdir)/media/image.jpg $(SNTZ) | tail -1` != "00" # mostly coverage
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -= -c 'pan "0%" "100%"' -cq # pan_to; TODO: test properly
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -K++++ -c 'flip;mirror;pan_left;pan_right;pan_up;pan_down;pan_ne;pan_sw;pan_se;pan_nw "100%"' -c 'popen "echo quit"' # mostly coverage
@@ -463,24 +465,24 @@ if ENABLE_AA
 	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
 endif
 if ENABLE_GIF
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:1K $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+4 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+5 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 0 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6:1000 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' | grep -v Reading` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="gif"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' | tr -d '\n' | tr ' ' _ ` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 8 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 000
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit'` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:1K $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+4 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2+5 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 0 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6:1000 $(top_srcdir)/media/icon_smile.gif -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' | grep -v Reading $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="gif"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' | tr -d '\n' | tr ' ' _  $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 8 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 000
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_interlaced.gif -c 'quit !(i:width!=0)' # interlaced gif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberately invalid gif
 endif
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png` = 1
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png $(SNTZ)` = 1
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/truncated_bad.png.bin -c 'quit'; test $$? = 134 # deliberately invalid png: reminder that need start to use png_set_error_fn
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_gray.png -c 'quit'; # just coverage so far
@@ -514,7 +516,7 @@ endif
 if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/icon_smile.gif -c 'rotate 10' -c quit
-	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/numbers/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex'`" = 3 # 3 and not 11 # note: need only supported files along the path to pass
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/numbers/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex' $(SNTZ)`" = 3 # 3 and not 11 # note: need only supported files along the path to pass
 endif
 	top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/font.sh
@@ -525,11 +527,11 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --execute-script $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23; # quit in script possible
 if WANT_DEFAULT_FIMRC
 	$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc      $(top_srcdir)/scripts/example/quit_23.fim -kq; test $$? = 23; # quit at init possible
-	test `$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = value # note: --no-rc-file and --etc-fimrc are incompatible
+	test `$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit' $(SNTZ)` = value # note: --no-rc-file and --etc-fimrc are incompatible
 else
 	$(FIM_EXE) --no-history --no-rc-file $(top_srcdir)/media/ -o dumb -X --etc-fimrc      $(top_srcdir)/scripts/example/quit_23.fim -kq; # etc-fimrc quietly ignored
 endif
-	test `$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit'` = '0'    # note: --no-rc-file and --etc-fimrc are incompatible
+	test `$(FIM_EXE) $(FIMNORCOPTS)            $(top_srcdir)/media/ -o dumb -X --etc-fimrc $(top_srcdir)/scripts/example/set_var.fim -c 'stdout variable;quit' $(SNTZ)` = '0'    # note: --no-rc-file and --etc-fimrc are incompatible
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -X --no-internal-config -c 'width;quit !(i:width == 0)'
 if WANT_READLINE
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb --no-commandline -K ':quit 10' # quits at second char
@@ -629,10 +631,10 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'autocmd_del; autocmd_del "PostDisplay";autocmd_del "PostDisplay" "pattern";autocmd_del "1" "2" "3";autocmd_del "1" "2" "3" "4"' -c quit #; cover test misc corner cases (note: no functionality check here)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'alias "a" "quit 11"; unalias "a"; alias "a" "quit 23"; a; quit 13' -c quit ; test $$? = 23
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'alias "a" "quit 23"; unalias "-a"; a; quit 13' -c quit ; test $$? = 13
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unalias; stdout _last_cmd_output; unalias "NotExistent"; stdout _last_cmd_output;quit' | sed 's/unalias.*$$/Un/g' | tr -d '\n'` = UnUn
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=2;" -k 10F1 -k q | tr -d '\n'` = 11 # test binding repeat and F1 binding
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=1;" -k 10F1 -k q | tr -d '\n'` = 1 # test binding repeat and F1 binding
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=0;" -k 10F1 -k q | tr -d '\n'` = 1111111111 # test binding repeat and F1 binding
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unalias; stdout _last_cmd_output; unalias "NotExistent"; stdout _last_cmd_output;quit' | sed 's/unalias.*$$/Un/g' | tr -d '\n' $(SNTZ)` = UnUn
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=2;" -k 10F1 -k q | tr -d '\n' $(SNTZ)` = 11 # test binding repeat and F1 binding
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=1;" -k 10F1 -k q | tr -d '\n' $(SNTZ)` = 1 # test binding repeat and F1 binding
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c "bind 'F1' 'stdout 1';_max_iterated_commands=0;" -k 10F1 -k q | tr -d '\n' $(SNTZ)` = 1111111111 # test binding repeat and F1 binding
 if WANT_READLINE
 if ENABLE_GIF
 	cp -p $(top_srcdir)/media/icon_smile.gif $(top_srcdir)/media/icon_smile.pgm
@@ -644,19 +646,19 @@ endif
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -gt 70
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;                        "; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | wc -w ` -lt 70
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` = 2
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n'` = 1
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n' $(SNTZ)` = 2
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C 'v=1; bind "_" "recording;stdout _last_cmd_output;"; bind "S" "recording \"start\""' -K _S_rQ_E_q -F 'stdout i:_orientation' | grep ^.$$ | tr -d '\n' $(SNTZ)` = 1
 if ENABLE_GIF
-	test "`$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers/* -K 2n.q -F 'stdout i:_filename;'`" = $(top_srcdir)/media/numbers/3.gif
+	test "`$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers/* -K 2n.q -F 'stdout i:_filename;' $(SNTZ)`" = $(top_srcdir)/media/numbers/3.gif
 endif
 	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr; stdout; quit' 2>&1 > /dev/null | grep echo`" = "echo command" # stdout vs stderr
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr "out:due";stdout "out:uno";quit' 2>&1 > /dev/null | grep out` = "out:due" # stdout vs stderr
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c 'stderr "out:due";stdout "out:uno";quit' 2>&1 > /dev/null | grep out $(SNTZ)` = "out:due" # stdout vs stderr
 if WANT_READLINE
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C set_commandline_mode -K 'stdout "cli"; quit;' -K ''` = cli
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -C set_commandline_mode -K 'stdout "cli"; quit;' -K '' $(SNTZ)` = cli
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set; stdout _last_cmd_output; quit' | wc -w` -ge 50 # test set
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM"; stdout _last_cmd_output; quit' | wc -w` -eq 1 # test set
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n'` = WhatWhatSetSetSet
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n' $(SNTZ)` = WhatWhatSetSetSet
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unbind; unbind "?"; bind "~"; bind "n"; bind "n" ""' -c quit
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'color "desaturate";color "negate";color "identity";color "colorblind" "daltonize";color "deuteranopia" "daltonize";color "protanopia" "daltonize";color "tritanopia" "daltonize";color "colorblind"' -c quit # only cover test
 	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi
@@ -672,7 +674,7 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c '-1;stdout _fileindex;quit!(_fileindex==10);' # FIXME
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c '-3;stdout _fileindex;quit!(_fileindex==8);'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c ' 0;stdout _fileindex;quit!(_fileindex==0);'
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/-.pcx -c '3 stdout "y"; quit ((2+2)%(1+1))' | tr -d '\n'` = yyy # stress yacc.ypp
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/-.pcx -c '3 stdout "y"; quit ((2+2)%(1+1))' | tr -d '\n' $(SNTZ)` = yyy # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '+"30.0"%;quit' # FIXME: add actual test # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '+ 30.0% ;quit' # FIXME: add actual test # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '*"30.0" ;quit' # FIXME: add actual test # stress yacc.ypp
