@@ -297,6 +297,8 @@ if ENABLE_PNG
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+50%";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "sort"; a=_fileindex; goto "+prime"; b=_fileindex;goto "+prime"; c=_fileindex; goto "+prime"; d=_fileindex; goto "+prime"; e=_fileindex; stdout a.".".b.".".c.".".d.".".e; quit' | grep 0.2.5.6.1
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -C 'bind "n" "goto \"+1f\"";' -Knnnq -F 'quit !(_fileindex==4);'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -C 'bind "n" "goto \"+1F\"";' -Knnnq -F 'quit !(_fileindex==8);'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "sort_fsize"; goto 0; reload; stdout i:_filename; quit' | grep 1.pcx
 endif
 if ENABLE_PCX

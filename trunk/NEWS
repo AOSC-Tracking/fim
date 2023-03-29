@@ -40,7 +40,7 @@
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
  * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839-r1944)
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839-r1945)
  * internal: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
@@ -104,8 +104,8 @@
  * added " INTEGER , INTEGER IDENTIFIER arguments" syntax to repeat a command 
    on each file in the interval and substitute its name to '{}' in the arguments
    to an iterated command IDENTIFIER.
-# (r1599--r1602)
- * keeping a key pressed accelerate goto (experimental).
+# (r1599--r1602,r1945)
+ * If key bound to e.g. 'goto "+1F"', keep pressing to accelerate (not if e.g. "+1f").
 # (r1594)
  * internal: fix: piping from external commands was using 0 instead of 'WNOHANG', leading to hanging.
 # (r1585)
