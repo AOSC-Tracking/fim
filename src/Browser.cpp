@@ -1456,7 +1456,7 @@ ret:
 			isrj = (c=='+' || c=='-');
 			isdj = isrj && s[1] == '/' && ( sl == 2 || ( sl == 3 && strchr("udsbUDSB",s[2])) );
 #if FIM_WANT_NEXT_ACCEL
-			isac = !isre && isrj && same_keypress_repeats>0;
+			isac = !isre && isrj && isupper(s[sl-1]) && same_keypress_repeats>0;
 			isbl = isac;
 #endif /* FIM_WANT_NEXT_ACCEL */
 
