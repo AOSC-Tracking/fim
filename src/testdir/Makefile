@@ -16,7 +16,7 @@ SCRIPTS = test1.out test2.out test3.out test4.out test5.out test6.out test7.out 
 nongui: nolog $(SCRIPTS)
 	@echo
 	@cat test.log
-	@!grep FAILED test.log
+	@! grep FAILED test.log
 	@echo "[*] ALL DONE"
 
 
