@@ -516,7 +516,7 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png $(SNTZ)` = 1
 if ENABLE_JPEG
 if ENABLE_PCX
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/[0-4].pcx $(top_srcdir)/media/special/truncated_bad.jpg.bin  $(top_srcdir)/media/numbers_pcx/[5-9].pcx  -Knnnnnq  -F 'if(_fileindex!=6)quit 6;quit'; test $$? = 6 # fim should handle broken jpeg files graciously (FIXME)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/[0-4].pcx $(top_srcdir)/media/special/truncated_bad.jpg.bin  $(top_srcdir)/media/numbers_pcx/[5-9].pcx  -Knnnnnq  -F 'if(_fileindex!=6)quit 6;quit' # fim handles broken jpeg files graciously
 endif
 endif
 if ENABLE_PNG
