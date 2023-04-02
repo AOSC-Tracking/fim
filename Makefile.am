@@ -322,7 +322,14 @@ if ENABLE_PCX
 if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir "$(top_srcdir)/media/image.jpg" -c 'quit 2' -kq; test $$? = 2 # --cd-and-readdir respects scripting
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ' quit 2' -kq; test $$? = 2 # no heading semicolons: good
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ';quit 2' -kq; test $$? = 0 #    heading semicolons: bad (FIXME)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ';quit 2' -kq; test $$? = 0 #    heading semicolons: bad (FIXME in the long run)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir "$(top_srcdir)/media/image.jpg" -c 'quit 2' -kq; test $$? = 2 # --cd-and-readdir respects scripting
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if(_pwd!="$(abs_top_srcdir)/media")quit 1; quit' # check that cd is effective
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'stdout _pwd;quit'`" = $(abs_top_srcdir)/media # check that cd is effective, again (yes, redundant)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if (_filelistlen<=1)quit 1;quit' # check that dir files are pushed
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if (_filelistlen>20)quit 1;quit'; test $$? == 1 # too many files means recursive push (FIXME)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'l0=_filelistlen; list "pushdir"  "."; l1=_filelistlen; if(l0!=l1)quit 1; quit' # pushdir must be idempotent
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'l0=_filelistlen; list "pushdirr" "."; l1=_filelistlen; if(l0==l1)quit 1; quit'; test $$? == 1 # pushdir and pushdirr must differ (FIXME)
 endif
 endif
 endif
