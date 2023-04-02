@@ -239,6 +239,13 @@ if WITH_MAN2HTML
 	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
 endif
 endif
+if HAVE_VALGRIND
+	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
+		make clean -C src/testdir ; \
+		VALGRIND='valgrind --tool=memcheck --leak-check=yes --num-callers=15 --exit-on-first-error=yes --error-exitcode=255' \
+			make ltests; \
+	fi
+endif
 
 # this is the official way of testing fim
 .PHONY: tests
@@ -742,13 +749,6 @@ if HAVE_FIMGS
 	make fimgstests
 endif
 	make ltests
-if HAVE_VALGRIND
-	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
-		make clean -C src/testdir ; \
-		VALGRIND='valgrind --tool=memcheck --leak-check=yes --num-callers=15 --exit-on-first-error=yes --error-exitcode=255' \
-			make ltests; \
-	fi
-endif
 endif
 	@echo "[*] TESTS: SUCCESS"
 
