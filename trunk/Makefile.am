@@ -319,8 +319,8 @@ if WANT_RECURSIVE_DIRS
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdirr"     ;stdout l;if(l==_filelistlen)quit 255; quit'
 if ENABLE_PNG
 if ENABLE_PCX
-if ENABLE_JPG
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir "$(top_srcdir)/media/image.jpg" -c 'quit 2' -kq # exit code 2 ignored: FIXME
+if ENABLE_JPEG
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir "$(top_srcdir)/media/image.jpg" -c 'quit 2' -kq; test $$? = 2 # --cd-and-readdir respects scripting
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ' quit 2' -kq; test $$? = 2 # no heading semicolons: good
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ';quit 2' -kq; test $$? = 0 #    heading semicolons: bad (FIXME)
 endif

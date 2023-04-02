@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1782,10 +1782,13 @@ ok:
 	{
 		/*
 		 * make cmd dumpable
+		 * an improved version would step back to first non-whitespace character
 		 */
-		if(cmd.c_str()[strlen(cmd.c_str())-1]!=FIM_SYM_SEMICOLON)
-			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING FIM_CNS_NEWLINE);	
-		return cmd+fim::string(FIM_CNS_NEWLINE);	
+		const char lc = cmd.c_str()[strlen(cmd.c_str())-1];
+		if(lc!='}')
+			if(lc!=FIM_SYM_SEMICOLON)
+				return cmd+fim::string(FIM_SYM_SEMICOLON_STRING FIM_CNS_NEWLINE);	
+		return cmd+fim::string(FIM_CNS_NEWLINE);
 	}
 #endif /* FIM_RECORDING */
 	void CommandConsole::appendPostInitCommand(const fim::string& cmd)
