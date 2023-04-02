@@ -95,8 +95,8 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
     },
     {"cd-and-readdir", no_argument,       FIM_NULL, 0x4352,
-	    "step in first loaded directory and push other files", FIM_NULL,
-	    "Step into the first loaded directory, and then push other files."
+	    "step in the directory of first file and push other files in that directory", FIM_NULL,
+	    "Step in the directory of the first file to be loaded, push other files from that directory, and jump back to the first file."
     },
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       FIM_NULL, 'c',
 	"execute {commands} after initialization", "{commands}",
@@ -1649,7 +1649,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 0x4352:
 		    //fim's
-		    cc.appendPostInitCommand( "if(" FIM_VID_FILELISTLEN "==1){_ffn=i:" FIM_VID_FILENAME ";" FIM_FLT_CD " i:" FIM_VID_FILENAME ";" FIM_FLT_LIST " 'remove' i:" FIM_VID_FILENAME ";" FIM_FLT_BASENAME " _ffn;_bfn='./'." FIM_VID_LAST_SYSTEM_OUTPUT ";" FIM_FLT_LIST " 'pushdir' '.';" FIM_FLT_LIST " 'sort';" FIM_FLT_GOTO " '?'._bfn;" FIM_FLT_RELOAD ";" FIM_FLT_REDISPLAY ";}if(" FIM_VID_FILELISTLEN "==0){" FIM_FLT_STDOUT " 'No files loaded: exiting.';" FIM_FLT_QUIT " 0;}");
+		    cc.appendPostInitCommand( "if(" FIM_VID_FILELISTLEN "==1){_ffn=i:" FIM_VID_FILENAME ";" FIM_FLT_CD " i:" FIM_VID_FILENAME ";" FIM_FLT_LIST " 'remove' i:" FIM_VID_FILENAME ";" FIM_FLT_BASENAME " _ffn; _bfn='./'." FIM_VID_LAST_CMD_OUTPUT ";" FIM_FLT_LIST " 'pushdir' '.';" FIM_FLT_LIST " 'sort';" FIM_FLT_GOTO " '?'._bfn;" FIM_FLT_RELOAD ";" FIM_FLT_REDISPLAY ";}if(" FIM_VID_FILELISTLEN "==0){" FIM_FLT_STDOUT " 'No files loaded: exiting.';" FIM_FLT_QUIT " 0;}");
 		    appendedPostInitCommand=true;
 		    break;
 		case 'c':
