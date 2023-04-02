@@ -246,6 +246,8 @@ cd
 .fi
 cd {path}: change the current directory to {path}.
 .fi
+If {path} is a file, use its base directory name.
+.fi
 cd '-' will change to the previous current directory (before the last ':cd {path}' command).
 .fi
 
@@ -388,7 +390,7 @@ getenv {identifier}: create a variable with the same value as the '{identifier}'
 .B
 goto
 .fi
-goto {['+'|'-']{number}['%']['f'|'p'|'F'|'P']} | {/{regexp}/} | {'+//'} | {'+/'|'-/'}[C] | {{'+'|'-'}{identifier}['+']}: jump to an image.
+goto {['+'|'-']{number}['%']['f'|'p'|'F'|'P']} | {/{regexp}/} | {?{filename}} | {'+//'} | {'+/'|'-/'}[C] | {{'+'|'-'}{identifier}['+']}: jump to an image.
 .fi
 If {number} is given, and not surrounded by any specifier, will go to image at index {number}.
 .fi
@@ -401,6 +403,8 @@ The 'f' specifier asks for the jump to occur within the files (same for 'F', but
 The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing).
 .fi
 If /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern.
+.fi
+If the argument starts with ?, jump to the filename following ?.
 .fi
 If given '+//', will jump to the first different image matching the last given regular expression pattern.
 .fi
