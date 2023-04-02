@@ -102,7 +102,7 @@ Regard this as another easter bunny option.
 
 .TP
 \fB--cd-and-readdir\fP
-Step into the first loaded directory, and then push other files.
+Step in the directory of the first file to be loaded, push other files from that directory, and jump back to the first file.
 .TP
 \fB-c {commands}\fP, \fB--execute-commands {commands}\fP
 Execute \fBcommands\fP after reading the initialization file, just before entering the interactive mode.
