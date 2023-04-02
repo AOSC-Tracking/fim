@@ -1,4 +1,4 @@
-# A test for the help system.
+# A test for the help system (will fail if using pre-C++11).
 # Its results need update on each help system update.
 alias 'dump' "stdout _last_cmd_output; stdout '*';";
 echo "A test for the help system";

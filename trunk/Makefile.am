@@ -216,7 +216,7 @@ sanity-check:	all
 .PHONY: check
 check:	tests
 
-SNTZ = |tr -d -c '0-9A-Za-z_./:'
+SNTZ = |tr -d -c '0-9A-Za-z_./:-'
 .PHONY: devtests
 devtests:	all
 if WITH_SHELLCHECK
@@ -227,22 +227,23 @@ endif
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only
 	test `grep 'SNTZ.*wc' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate SNTZ.*wc on this line only
 	! grep -n '^[^ ].\{83,\}' README
+	! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
 if ENABLE_GIF
 	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q
 	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/u.gif -- $(FIMNORCOPTS) -o dumb -K q; test $$? = 255
 	export TMPDIR=`pwd`/tmpdir && $(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q && test "`ls $$TMPDIR`" = ""
 endif
-
-# this is the official way of testing fim
-.PHONY: tests
-tests:	all
 if WITH_PERL
 	test -s doc/FIM.html
 if WITH_MAN2HTML
 	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
 endif
 endif
-	@ ! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
+
+# this is the official way of testing fim
+.PHONY: tests
+tests:	all
+	! ( echo $(abs_top_srcdir) | grep '[\\ :"'"'"']' ) # reject unreasonable base directory names
 if HAVE_RUNNABLE_TESTS
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
@@ -749,6 +750,7 @@ if HAVE_VALGRIND
 	fi
 endif
 endif
+	@echo "[*] TESTS: SUCCESS"
 
 .PHONY: croptests
 croptests:

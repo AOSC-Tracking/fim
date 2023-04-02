@@ -97,6 +97,7 @@ struct fim_options_t fim_options[] = {
     {"cd-and-readdir", no_argument,       FIM_NULL, 0x4352,
 	    "step in the directory of first file and push other files in that directory", FIM_NULL,
 	    "Step in the directory of the first file to be loaded, push other files from that directory, and jump back to the first file."
+	    FIM_CNS_CMDSEP "Useful when invoking from a desktop environment."
     },
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       FIM_NULL, 'c',
 	"execute {commands} after initialization", "{commands}",
