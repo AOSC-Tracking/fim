@@ -330,6 +330,7 @@ if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if (_filelistlen>20)quit 1;quit' # too many files means recursive push
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'l0=_filelistlen; list "pushdir"  "."; l1=_filelistlen; if(l0!=l1)quit 1; quit' # pushdir must be idempotent
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'l0=_filelistlen; list "pushdirr" "."; l1=_filelistlen; if(l0==l1)quit 1; quit' # pushdir and pushdirr must differ
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if(i:_filename=~"image.jpg")quit 1; quit 0' # --cd-and-readdir does not jump to loaded file (FIXME: confusing)
 endif
 endif
 endif
