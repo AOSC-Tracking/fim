@@ -115,9 +115,12 @@ struct fim_options_t fim_options[] = {
 	"execute {commands} just after initialization", "{commands}",
 	"Similar to the " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " option, but "
 	"execute " FIM_MAN_fB("commands") " earlier, just before reading the initialization file.\n"
+	"The special 'early' form " FIM_MAN_fB("=var=val") " will assign " FIM_MAN_fB("var") " to " FIM_MAN_fB("val") " immediately, before the interpreter is started.\n"
 	"\n"
 	"For example,\n"
-	"-C '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"' starts fim no auto-scaling.\n"
+	"-C '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"' starts fim no auto-scaling;\n"
+	"the equivalent early form is:\n"
+	"-C '=" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "= '.\n"
 	"\n"
     },
     {"device",     required_argument, FIM_NULL, 'd',
@@ -1660,8 +1663,19 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 'C':
 		    //fim's
-		    cc.appendPreConfigCommand(optarg);
-		    appendedPreConfigCommand=true;
+		    if (cc.regexp_match(optarg,"^=[_0-9A-Za-z]+=.+",true))
+		    {
+			const fim::string oa(optarg+1);
+			const int ei = oa.find('=');
+			const fim::string vi(oa.substr(0,ei));
+			const fim::string vv(oa.substr(ei+1));
+		    	cc.setVariable(vi,vv);
+		    }
+		    else
+		    {
+		    	cc.appendPreConfigCommand(optarg);
+		    	appendedPreConfigCommand=true;
+		    }
 		    break;
 		case 'W':
 		    //fim's

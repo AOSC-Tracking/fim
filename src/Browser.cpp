@@ -993,7 +993,6 @@ nostat:
 			{
 				if( pn.re_match(re.c_str()) )
 					retval |= push_path( pn, pf | FIM_FLAG_PUSH_FILE_NO_CHECK );
-				//std::cout << re << " " << pn << "!\n";
 			}
 		}
 #if FIM_WANT_BACKGROUND_LOAD
