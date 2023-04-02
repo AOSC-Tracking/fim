@@ -407,6 +407,9 @@ if ENABLE_JPEG
 endif
 endif
 if ENABLE_PCX
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '=_pushdir_re=.(PNG)'  $(top_srcdir)/media/numbers_pcx/ -kq; test $$? = 248 # _pushdir_re assignment is effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '=_pushdir_re=.(PCX)'  $(top_srcdir)/media/numbers_pcx/ -kq # _pushdir_re assignment is effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_pushdir_re=".(PNG)"' $(top_srcdir)/media/numbers_pcx/ -kq # _pushdir_re assignment comes late and is not effective
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '2,4 stdout  "{}";q' | wc -l` = 3
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '3;list "mark";6;list "mark";                   1,2 stdout "marked {}";q' | grep 'marked.*[01].pcx' | wc -l` = 2
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c '3;list "mark";6;list "mark"; toggleLimitMarked;1,2 stdout "marked {}";q' | grep 'marked.*[25].pcx' | wc -l` = 2

@@ -119,9 +119,12 @@ do an endless loop consisting of bottom and top aligning, alternated.
 .TP
 \fB-C {commands}\fP, \fB--execute-commands-early {commands}\fP
 Similar to the \fB--execute-commands\fP option, but execute \fBcommands\fP earlier, just before reading the initialization file.
+The special 'early' form \fB=var=val\fP will assign \fBvar\fP to \fBval\fP immediately, before the interpreter is started.
 
 For example,
--C '\fB_scale_style\fP=" "' starts fim no auto-scaling.
+-C '\fB_scale_style\fP=" "' starts fim no auto-scaling;
+the equivalent early form is:
+-C '=\fB_scale_style\fP= '.
 
 
 .TP
