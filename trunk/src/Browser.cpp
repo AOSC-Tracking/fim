@@ -226,18 +226,18 @@ namespace fim
 			else if(args[0]=="pushdir")
 			{
 				if(args.size()>=2)
-					push_dir(args[1]);
+					push_dir(args[1],FIM_FLAG_NONREC);
 				else
-					push_dir(".");
+					push_dir(".",FIM_FLAG_NONREC);
 				result = FIM_CNS_EMPTY_RESULT;
 			}
 			else if(args[0]=="pushdirr")
 			{
 #ifdef FIM_RECURSIVE_DIRS
 				if(args.size()>=2)
-					push_dir(args[1],true);
+					push_dir(args[1],FIM_FLAG_PUSH_REC);
 				else
-					push_dir(".",true);
+					push_dir(".",FIM_FLAG_PUSH_REC);
 				result = FIM_CNS_EMPTY_RESULT;
 #else /* FIM_RECURSIVE_DIRS */
 				result = "Please recompile with +FIM_RECURSIVE_DIRS to activate pushdirr.";
