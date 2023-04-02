@@ -54,6 +54,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/0_truncated_bad.gif.bin \
 	$(top_srcdir)/media/special/0.webp \
 	$(top_srcdir)/media/special/truncated_bad.png.bin \
+	$(top_srcdir)/media/special/truncated_bad.jpg.bin \
 	$(top_srcdir)/media/special/0_gray.png \
 	$(top_srcdir)/media/special/numbers_pcx.tar \
 	$(top_srcdir)/media/special/numbers_pcx.tar.bz2 \
@@ -513,6 +514,11 @@ if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberately invalid gif
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png $(SNTZ)` = 1
+if ENABLE_JPEG
+if ENABLE_PCX
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/[0-4].pcx $(top_srcdir)/media/special/truncated_bad.jpg.bin  $(top_srcdir)/media/numbers_pcx/[5-9].pcx  -Knnnnnq  -F 'if(_fileindex!=6)quit 6;quit'; test $$? = 6 # fim should handle broken jpeg files graciously (FIXME)
+endif
+endif
 if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/truncated_bad.png.bin -c 'quit'; test $$? = 134 # deliberately invalid png: reminder that need start to use png_set_error_fn
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_gray.png -c 'quit'; # just coverage so far
