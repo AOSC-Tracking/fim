@@ -317,6 +317,15 @@ if WANT_RECURSIVE_DIRS
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdirr" _pwd;stdout l;if(l==_filelistlen)quit 255; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdir"      ;stdout l;if(l==_filelistlen)quit 255; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(top_srcdir)/media/"' -c 'stdout _pwd;l=_filelistlen;list "pushdirr"     ;stdout l;if(l==_filelistlen)quit 255; quit'
+if ENABLE_PNG
+if ENABLE_PCX
+if ENABLE_JPG
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir "$(top_srcdir)/media/image.jpg" -c 'quit 2' -kq # exit code 2 ignored: FIXME
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ' quit 2' -kq; test $$? = 2 # no heading semicolons: good
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ';quit 2' -kq; test $$? = 0 #    heading semicolons: bad (FIXME)
+endif
+endif
+endif
 endif
 if ENABLE_RAW_BITS_RENDERING
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
