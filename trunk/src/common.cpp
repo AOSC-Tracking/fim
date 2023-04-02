@@ -64,6 +64,20 @@ void fim_touppers(fim_char_t *s)
 }
 */
 
+static fim::string fim_my_dirname(const fim::string& arg)
+{
+	size_t lds = arg.rfind(FIM_CNS_DIRSEP_CHAR);
+	if (lds != std::string::npos)
+	{
+		while (lds > 0 && arg[lds-1] == FIM_CNS_DIRSEP_CHAR)
+			--lds;
+		fim::string dir(arg);
+		dir.erase(lds);
+		return dir;
+	}
+	return arg;
+}
+
 fim::string fim_dirname(const fim::string& arg)
 {
 #ifdef HAVE_LIBGEN_H
@@ -72,7 +86,7 @@ fim::string fim_dirname(const fim::string& arg)
 	buf[FIM_PATH_MAX-1]='\0';
 	return dirname(buf);
 #else /* HAVE_LIBGEN_H */
-	return "";//FIXME
+	return fim_my_dirname(arg);
 #endif /* HAVE_LIBGEN_H */
 }
 
@@ -798,8 +812,12 @@ int fim_common_test(void)
 	score += ( *next_row("123\n4",3)=='4');
 	score += ( *next_row("12",3)=='\0');
 	score += ( *next_row("1234",3)=='4');
+	score += ( fim_my_dirname("media/file")  == "media" );
+	score += ( fim_my_dirname("media//file") == "media" );
+	score += ( fim_dirname("media/file")  == "media" );
+	score += ( fim_dirname("media//file") == "media" );
 	score += ( swap_bytes_in_int(0x01020304) == 0x04030201 );
-	return score - 10;
+	return score - 14;
 }
 
 #if FIM_WANT_OBSOLETE
