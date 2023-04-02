@@ -2582,6 +2582,7 @@ ret:
 
 		if( filename != FIM_CNS_EMPTY_STRING )
 		{
+			const size_t idx = std::find(this->begin(),this->end(),filename) - this->begin();
 #if FIM_USE_CXX11
 			this->erase(std::remove_if(this->begin(),this->end(),[&](const fim::fle_t&fl)->bool{return fim::string(fl)==filename;}),this->end());
 #else
@@ -2599,7 +2600,8 @@ ret:
 					this->erase(this->begin()+i);
 #endif
 #endif
-                        adj_cf();
+			if (idx < cf_)
+				cf_--;
 		}
 		else
 		if( size() )
