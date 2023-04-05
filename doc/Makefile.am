@@ -33,21 +33,21 @@ FIM.html fim-stylesheet.css: doctags$(EXEEXT) FIM.TXT
 	./doctags$(EXEEXT) $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
 
 fim.man:
-	make doc/fim.man -C $(top_srcdir)/
-	
+	make doc/fim.man -C $(abs_top_builddir)/
+
 fim.man.html: fim.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) > $@
 	if test ! -s $@ ; then $(MAN2TXT) ./$< > $<.txt && $(srcdir)/vim2html.pl tags $<.txt && mv $<.txt.html $@ ; fi
 
 fimrc.man:
-	make doc/fimrc.man -C $(top_srcdir)/
+	make doc/fimrc.man -C $(abs_top_builddir)/
 
 fimrc.man.html: fimrc.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) > $@
 	if test ! -s $@ ; then $(MAN2TXT) ./$< > $<.txt && $(srcdir)/vim2html.pl tags $<.txt && mv $<.txt.html $@ ; fi
 
 fimgs.man:
-	make doc/fimgs.man -C $(top_srcdir)/
+	make doc/fimgs.man -C $(abs_top_builddir)/
 
 fimgs.man.html: fimgs.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) > $@
