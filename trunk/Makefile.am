@@ -64,7 +64,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim$(EXEEXT)
-FIMGS_EXE=PATH=./src/:$(PATH) ./src/fimgs
+FIMGS_EXE=PATH=./src/:$(PATH) $(abs_srcdir)/src/fimgs
 
 
 # mhmhmhm 
@@ -333,8 +333,8 @@ if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ' quit 2' -kq; test $$? = 2 # no heading semicolons: good
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb "$(top_srcdir)/media/" -c ';quit 2' -kq; test $$? = 0 #    heading semicolons: bad (FIXME in the long run)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir "$(top_srcdir)/media/image.jpg" -c 'quit 2' -kq; test $$? = 2 # --cd-and-readdir respects scripting
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if(_pwd!="$(abs_top_srcdir)/media")quit 1; quit' # check that cd is effective
-	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'stdout _pwd;quit'`" = $(abs_top_srcdir)/media # check that cd is effective, again (yes, redundant)
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if(_pwd=="$(abs_builddir)")quit 1; quit' # check that cd is effective
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'stdout _pwd;quit'`" = `cd $(abs_top_srcdir)/media; pwd;` # check that cd is effective, again (yes, redundant)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if (_filelistlen<=1)quit 1;quit' # check that dir files are pushed
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'if (_filelistlen>20)quit 1;quit' # too many files means recursive push
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --cd-and-readdir $(abs_top_srcdir)/media/image.jpg -c 'l0=_filelistlen; list "pushdir"  "."; l1=_filelistlen; if(l0!=l1)quit 1; quit' # pushdir must be idempotent
@@ -352,7 +352,7 @@ if ENABLE_RAW_BITS_RENDERING
 if WANT_READ_STDIN_IMAGE
 	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=1  -c 'magnify;stdout i:height."."._last_file_loader;quit' $(SNTZ)` = 1.Bit1  # coverage of tiny case; TODO: remove necessity of magnify
 	test `echo -n U | $(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-from-stdin --binary=24 -c 'magnify;stdout i:height."."._last_file_loader;quit' $(SNTZ)` = 1.Bit24 # coverage of tiny case; TODO: remove necessity of magnify
-	test `echo media | $(FIM_EXE) $(FIMNORCOPTS) -o dumb - --binary=23 -c 'magnify;stdout _last_file_loader;quit' $(SNTZ)` = Bit24 # coverage of - and fallback to 24
+	test `echo $(abs_srcdir)/media | $(FIM_EXE) $(FIMNORCOPTS) -o dumb - --binary=23 -c 'magnify;stdout _last_file_loader;quit' $(SNTZ)` = Bit24 # coverage of - and fallback to 24
 endif
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c 'window;stdout _last_cmd_output;quit;' grep disabled > /dev/null
@@ -402,7 +402,7 @@ endif
 endif
 if WITH_CONVERT
 if ENABLE_JPEG
-	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd='convert {} -background black -flop -fill white -pointsize 20 label:"mirrored {}" -gravity Center -append ppm:-' -c 'quit !(i:width==320)' ; fi
+	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd='convert {} -background black -flop -fill white -pointsize 3 label:"mirrored {}" -gravity Center -append ppm:-' -c 'quit !(i:width==320)' ; fi # pointsize need to be small or text will exceed 320 pixels
 	if which convert && convert identify -list format | grep -i ppm; then $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' $(top_srcdir)/media/image.jpg --pread-cmd='convert {} -rotate 90 -append ppm:-' -c 'quit !(i:width==240)' ; fi
 	if which convert && convert identify -list format | grep -i ppm; then cp $(top_srcdir)/media/image.jpg -- -image.jpg && $(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_downscale_huge_at_load=-1' --pread-cmd='convert {} -rotate 90 -append ppm:-' -c 'quit !(i:width==320)' -- -image.jpg && rm -- -image.jpg ; fi
 endif
@@ -437,13 +437,13 @@ endif
 if WANT_READ_STDIN_IMAGE
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'pread "cat $(top_srcdir)/media/numbers_pcx/1.pcx"; reload' -c 'quit !(i:width>0 && i:height>0)'
 endif
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(abs_srcdir)/media/numbers_pcx/1.pcx"; pwd;stdout _last_cmd_output;  cd "-"; pwd;stdout _last_cmd_output;  cd "$(abs_srcdir)/media/numbers_pcx/";pwd;stdout _last_cmd_output; quit' $(SNTZ) | tr -d '\n'` = "$(abs_srcdir)/media/numbers_pcx""$(abs_srcdir)""$(abs_srcdir)/media/numbers_pcx"
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'cd "$(abs_srcdir)/media/numbers_pcx/1.pcx"; pwd;d1=_last_cmd_output;  cd "-"; pwd;d2=_last_cmd_output;  cd "$(abs_srcdir)/media/numbers_pcx/";pwd;d3=_last_cmd_output; if(d1!=d3||d1==d2)quit 1;quit' $(SNTZ) # check that "cd file" works
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --mark-from-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'l=_filelistlen;toggleLimitMarked;if(_filelistlen!=l/2)quit 255; quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator $$'\t' $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator '?'    $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit 255;quit'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/dir.desc -c 'quit !(_filelistlen==2)'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C 'cd "$(top_srcdir)"' $(top_srcdir)/media/special/dir.desc -c 'quit !(_filelistlen==2)'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator $$'\t' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator '?'    --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit 255;quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/1.pcx;if(i:prime=="no")quit 255;quit;'
@@ -552,7 +552,7 @@ endif
 if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/icon_smile.gif -c 'rotate 10' -c quit
-	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/numbers/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex' $(SNTZ)`" = 3 # 3 and not 11 # note: need only supported files along the path to pass
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R $(top_srcdir)/media/numbers/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex' $(SNTZ)`" = 3 # 3 and not 11 # note: need only supported files along the path to pass
 endif
 	top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	top_srcdir=$(top_srcdir) FIMNORCOPTS="$(FIMNORCOPTS)" $(SHELL) $(top_srcdir)/scripts/tests/font.sh
@@ -654,7 +654,7 @@ if WANT_READ_STDIN_IMAGE
 endif
 #	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kK -kq -F 'if(_filelistlen==1)quit 255'; fi # -kK triggers a yield (often, not always)
 #	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B .     -kq -F 'if(_filelistlen!=1)quit 255'; fi # no -kK -> no background images in batch mode (often, not always)
-	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kn -kq -F 'if(_filelistlen< 1)quit 255'; fi # difficult to write a reliable test for -B, but -kn can help a bit with timing
+	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B $(top_srcdir)/ -kn -kq -F 'if(_filelistlen< 1)quit 255'; fi # difficult to write a reliable test for -B, but -kn can help a bit with timing
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help /a /q | wc -c` -gt 900
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help help magnify _TERM jfngjfngjfn | wc -c` -gt 500
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'dump_key_codes; stdout _last_cmd_output; quit' | wc -c` -gt 1000
@@ -776,7 +776,7 @@ endif
 ltests:
 if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
-	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
+	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; else echo "out-of-dir? skipping ltests..." ; fi
 endif
 
 .PHONY: fimgstests
