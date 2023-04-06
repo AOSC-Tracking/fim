@@ -82,7 +82,6 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES], ['$(top_srcdir)/VERSION'])
 
 
 AC_SUBST(FIM_LIBS)
-AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(VERSION)
 dnl AC_SUBST(HTMLDOCS)
 #AC_LANG_POP([C++])
@@ -368,7 +367,7 @@ if test x$ac_cv_header_sys_wait_h = xyes; then
 	AH_TEMPLATE([HAVE_SYS_WAIT_H])
 	AC_DEFINE([HAVE_SYS_WAIT_H],[1],[We have sys/wait.h])
 fi
-AC_CHECK_HEADERS([FlexLexer.h])
+AC_CHECK_HEADERS([FlexLexer.h], [break], AC_MSG_ERROR([[Cannot find FlexLexer.  Fim requires it!]]))
 if test x$ac_cv_func_pipe = xyes; then
 	AH_TEMPLATE([HAVE_PIPE])
 	AC_DEFINE([HAVE_PIPE],[1],[We have pipe()])

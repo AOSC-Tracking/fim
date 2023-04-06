@@ -22,7 +22,7 @@ yacc.tab.hpp: yacc.tab.cpp
 yacc.tab.cpp: yacc.ypp lex.lex
 	LC_ALL=C $(YACC) $(YFLAGS) $< -o $@
 
-FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
+# FIM_LIB_OBJECTS = yacc.tab.$(OBJEXT) lex.yy.$(OBJEXT)
 
 conf.h:       fimrc
 	$(ECHO) 'const fim_char_t * const FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
@@ -41,11 +41,11 @@ examples.h: ../scripts/example/oneline.fim
 	$(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< >> $@
 	$(ECHO) '"";' >> $@
 
-CommandConsole-help.o: CommandConsole-help.cpp help-acm.cpp help.cpp examples.h grammar.h
+CommandConsole-help.$(OBJEXT): CommandConsole-help.cpp help-acm.cpp help.cpp examples.h grammar.h
 if FIM_WANT_HARDCODED_CONSOLEFONT
-FontServer.o: default_font_byte_array.h
+FontServer.$(OBJECT): default_font_byte_array.h
 endif
-SDLDevice.o: default_icon_byte_array.h
+SDLDevice.$(OBJECT): default_icon_byte_array.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -201,19 +201,19 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/fim_interpreter.cpp \
 	$(srcdir)/fim_string.cpp
 
-Command.o: Command.h
-Viewport.o: Viewport.h
-Browser.o: Browser.h
-Image.o: Image.h
-CommandConsole.o: defaultConfiguration.o fim.h
-CommandConsole-cmd.o: fim.h
-CommandConsole-help.o: conf.h defaultConfiguration.o
-CommandConsole-init.o: conf.h defaultConfiguration.o
-help.o: conf.h defaultConfiguration.o
-fim.o: version.h help.cpp grammar.h examples.h
-Var.o: help.cpp
+Command.$(OBJECT): Command.h
+Viewport.$(OBJECT): Viewport.h
+Browser.$(OBJECT): Browser.h
+Image.$(OBJECT): Image.h
+CommandConsole.$(OBJECT): defaultConfiguration.$(OBJECT) fim.h
+CommandConsole-cmd.$(OBJECT): fim.h
+CommandConsole-help.$(OBJECT): conf.h defaultConfiguration.$(OBJECT)
+CommandConsole-init.$(OBJECT): conf.h defaultConfiguration.$(OBJECT)
+help.$(OBJECT): conf.h defaultConfiguration.$(OBJECT)
+fim.$(OBJECT): version.h help.cpp grammar.h examples.h
+Var.$(OBJECT): help.cpp
 fim.cpp: version.h help.cpp grammar.h examples.h
-lex.yy.o: lex.yy.cc
+lex.yy.$(OBJECT): lex.yy.cc
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
