@@ -43,9 +43,9 @@ examples.h: ../scripts/example/oneline.fim
 
 CommandConsole-help.$(OBJEXT): CommandConsole-help.cpp help-acm.cpp help.cpp examples.h grammar.h
 if FIM_WANT_HARDCODED_CONSOLEFONT
-FontServer.$(OBJECT): default_font_byte_array.h
+FontServer.$(OBJEXT): default_font_byte_array.h
 endif
-SDLDevice.$(OBJECT): default_icon_byte_array.h
+SDLDevice.$(OBJEXT): default_icon_byte_array.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -201,19 +201,19 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/fim_interpreter.cpp \
 	$(srcdir)/fim_string.cpp
 
-Command.$(OBJECT): Command.h
-Viewport.$(OBJECT): Viewport.h
-Browser.$(OBJECT): Browser.h
-Image.$(OBJECT): Image.h
-CommandConsole.$(OBJECT): defaultConfiguration.$(OBJECT) fim.h
-CommandConsole-cmd.$(OBJECT): fim.h
-CommandConsole-help.$(OBJECT): conf.h defaultConfiguration.$(OBJECT)
-CommandConsole-init.$(OBJECT): conf.h defaultConfiguration.$(OBJECT)
-help.$(OBJECT): conf.h defaultConfiguration.$(OBJECT)
-fim.$(OBJECT): version.h help.cpp grammar.h examples.h
-Var.$(OBJECT): help.cpp
+Command.$(OBJEXT): Command.h
+Viewport.$(OBJEXT): Viewport.h
+Browser.$(OBJEXT): Browser.h
+Image.$(OBJEXT): Image.h
+CommandConsole.$(OBJEXT): defaultConfiguration.$(OBJEXT) fim.h
+CommandConsole-cmd.$(OBJEXT): fim.h
+CommandConsole-help.$(OBJEXT): conf.h defaultConfiguration.$(OBJEXT)
+CommandConsole-init.$(OBJEXT): conf.h defaultConfiguration.$(OBJEXT)
+help.$(OBJEXT): conf.h defaultConfiguration.$(OBJEXT)
+fim.$(OBJEXT): version.h help.cpp grammar.h examples.h
+Var.$(OBJEXT): help.cpp
 fim.cpp: version.h help.cpp grammar.h examples.h
-lex.yy.$(OBJECT): lex.yy.cc
+lex.yy.$(OBJEXT): lex.yy.cc
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
