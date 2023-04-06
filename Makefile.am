@@ -230,6 +230,7 @@ endif
 	! grep -n '^[^ ].\{83,\}' README
 	! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
 	! grep '\.o\>' $(top_srcdir)/src/Makefile.am 
+	! grep '\<OBJECT\>' $(top_srcdir)/src/Makefile.am 
 if ENABLE_GIF
 	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q
 	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/u.gif -- $(FIMNORCOPTS) -o dumb -K q; test $$? = 255
