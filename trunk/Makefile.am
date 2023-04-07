@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies # dejagnu
 SUBDIRS = src doc distros scripts
 
-dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS
+dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS $(top_srcdir)/README.md
 # no INSTALL INSTALL.TXT is necessary in rules
 EXTRA_DIST=  COPYING  \
 	Makefile.am configure.ac configure \
@@ -227,7 +227,8 @@ devtests:	all
 if WITH_SHELLCHECK
 	$(SHELLCHECK) -e SC2235,SC1117,SC2230,SC2086,SC2006,SC2001 $(top_srcdir)/src/fimgs
 endif
-	test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
+	! grep -n '^[^ ].\{83,\}'  README
+	! grep -n '^[^ ].\{175,\}' README.md test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
 	test `grep '[^=]==[^=]' $(top_srcdir)/src/fimgs | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only
 	test `grep 'SNTZ.*wc' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate SNTZ.*wc on this line only
@@ -1008,4 +1009,27 @@ commit: log
 # This awaits completion.
 #rpm: dist
 #        rpmbuild -ta @PACKAGE@-@VERSION@.tar.gz
+
+README.md: README
+	cp $< $@.tmp;
+	$(GREP) '^	[0-9][.]\?[0-9]\?		' README | while read; do \
+		ID=$${REPLY/ - /}; \
+		ID=$${ID//, /-}; \
+		ID=$${ID// /-}; \
+		ID=$${ID//,/}; \
+		ID=$${ID,,}; \
+		ID=$${ID// /}; \
+		ID=$${ID//	/}; \
+		ID=$${ID//(/}; \
+		ID=$${ID//)/}; \
+		ID=$${ID//:/}; \
+		ID=$${ID//./}; \
+		ID=$${ID//\//}; \
+		$(GREP) "^$${REPLY/ - /}" README -C0 | $(SED) "s/\(^$${REPLY/ - /}.*\)/## <a id=\"$${ID}\"><\/a>\1 ##/g;s/$${REPLY}/[$${REPLY/ - /}]\(#$${ID}\)/g;" -i $@.tmp; done;
+	$(SED) -i "s|doc.fim.man.html|$(WWW)/\#man_fim|g" $@.tmp;
+	$(SED) -i "s|doc.fimrc.man.html|$(WWW)/\#man_fimrc|g" $@.tmp;
+	$(SED) -i "s|^-===\+-$$||g" $@.tmp;
+	$(SED) -i "s|^		FIM|FIM|g" $@.tmp;
+	$(SED) -i "s|^================================================================================|--------------------------------------------------------------------------------|g" $@.tmp;
+	mv $@.tmp $@;
 
