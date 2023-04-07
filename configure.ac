@@ -1678,7 +1678,7 @@ fim_cv_want_font_magnify_factor="$withval";
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
 dnl ==================
-AM_CONDITIONAL([HAVE_RUNNABLE_TESTS],[! test x"$host_cpu" = x"$build_cpu" -a x"$host_os" = x"$build_os" ])
+AM_CONDITIONAL([HAVE_RUNNABLE_TESTS],[test x"$host_cpu" = x"$build_cpu" -a x"$host_os" = x"$build_os" ])
 dnl ==================
 dnl # /tmp/__FIM_TEMPORARY_FILE
 AC_ARG_WITH(tmpfile, AS_HELP_STRING([--with-tmpfile=FILE],[Specify where to put temporary files created when interacting with external conversion programs.]),

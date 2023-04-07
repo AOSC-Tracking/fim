@@ -223,7 +223,7 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
 	testsuite/*/* \
 	regex.c b2ba.c
 
-RUNTESTDEFAULTFLAGS = --tool ./fim FIM=$$srcdir/./fim  --srcdir $$srcdir/testsuite
-#RUNTESTDEFAULTFLAGS = --all --tool ./fim FIM=$$srcdir/./fim --tool_opts=$$srcdir/../media/fim.png --srcdir $$srcdir/testsuite
+RUNTESTDEFAULTFLAGS = --tool ./fim$(EXEEXT) FIM=$$srcdir/./fim$(EXEEXT)  --srcdir $$srcdir/testsuite
+#RUNTESTDEFAULTFLAGS = --all --tool ./fim$(EXEEXT) FIM=$$srcdir/./fim$(EXEEXT) --tool_opts=$$srcdir/../media/fim.png --srcdir $$srcdir/testsuite
 
 
