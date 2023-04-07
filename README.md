@@ -1,22 +1,22 @@
--==============================================================================-
-		FIM - Fbi IMproved    README document.
-================================================================================
- - 	1		Overview
- - 	2		Description
- - 	3		Features, comparison to other image viewers
- - 	4		Compiling
- - 	4.5		Testing
- - 	5		Run Time Requirements
- - 	5.5		Hacking, maintenance guidelines
- - 	6		Original Idea
- - 	7		Technical overview, important for patch writers
- - 	8		Availability in Linux distributions
- - 	8.1		Debian, Ubuntu
- - 	9		License
- - 	10		Contacts, mailing lists, URLs
--==============================================================================-
-	1		Overview
-================================================================================
+
+FIM - Fbi IMproved    README document.
+--------------------------------------------------------------------------------
+ - [	1		Overview](#1overview)
+ - [	2		Description](#2description)
+ - [	3		Features, comparison to other image viewers](#3features-comparison-to-other-image-viewers)
+ - [	4		Compiling](#4compiling)
+ - [	4.5		Testing](#45testing)
+ - [	5		Run Time Requirements](#5run-time-requirements)
+ - [	5.5		Hacking, maintenance guidelines](#55hacking-maintenance-guidelines)
+ - [	6		Original Idea](#6original-idea)
+ - [	7		Technical overview, important for patch writers](#7technical-overview-important-for-patch-writers)
+ - [	8		Availability in Linux distributions](#8availability-in-linux-distributions)
+ - [	8.1		Debian, Ubuntu](#81debian-ubuntu)
+ - [	9		License](#9license)
+ - [	10		Contacts, mailing lists, URLs](#10contacts-mailing-lists-urls)
+
+## <a id="1overview"></a>[	1		Overview](#1overview) ##
+--------------------------------------------------------------------------------
 
 FIM (Fbi IMproved) is a highly customizable and scriptable image viewer targeted
 at the users who are comfortable with software like the Vim text editor or the
@@ -30,13 +30,13 @@ framebuffer console, too.
 
 FIM is free software, distributed under the terms of the GPL software license.
 
--==============================================================================-
-	2		Description
-================================================================================
 
-FIM invocation is documented in `man fim` (doc/fim.man.html).
+## <a id="2description"></a>[	2		Description](#2description) ##
+--------------------------------------------------------------------------------
+
+FIM invocation is documented in `man fim` (/#man_fim).
 The FIM language (syntax, commands, variables, key bindings) is documented in
- `man fimrc` (doc/fimrc.man.html).
+ `man fimrc` (/#man_fimrc).
 
 FIM offers many ways for scaling, orienting, listing or rearranging the
 ordering of images.
@@ -49,9 +49,9 @@ completely customizable key bindings, internal/external scriptability
  and an initialization file), internal filename-based image search, and more.
 Each documentation item is accessible via the internal `help` command.
 
--==============================================================================-
-	3		Features, comparison to other image viewers
-================================================================================
+
+## <a id="3features-comparison-to-other-image-viewers"></a>[	3		Features, comparison to other image viewers](#3features-comparison-to-other-image-viewers) ##
+--------------------------------------------------------------------------------
 
 Features:
 
@@ -152,9 +152,9 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  ______________________________________________________________________________
  
 
--==============================================================================-
-	4		Compiling
-================================================================================
+
+## <a id="4compiling"></a>[	4		Compiling](#4compiling) ##
+--------------------------------------------------------------------------------
 
  * the GNU readline library ( https://www.gnu.org/software/readline/ )
  * GNU flex  (NOT any lex ) ( https://www.gnu.org/software/flex/  )
@@ -177,7 +177,7 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  	libFS, libCURL, libLIRC
 
 --------------------------------------------------------------------------------
-	4.5		Testing
+## <a id="45testing"></a>[	4.5		Testing](#45testing) ##
 
  Just after the  `./configure`  and `make` steps, you should:
  
@@ -203,7 +203,7 @@ You can also run separately parts of `make tests`:
 	make cacatests
 
 --------------------------------------------------------------------------------
-	4.6		Example compiling FIM from repository on Debian
+## <a id="46example-compiling-fim-from-repository-on-debian"></a>[	4.6		Example compiling FIM from repository on Debian](#46example-compiling-fim-from-repository-on-debian) ##
 
 	sudo apt-get install subversion
 	sudo apt-get install flex libfl-dev bison
@@ -221,9 +221,9 @@ You can also run separately parts of `make tests`:
 	./configure --enable-aa --enable-caca --enable-sdl
 	make
  
--==============================================================================-
-	5		Run Time Requirements
-================================================================================
+
+## <a id="5run-time-requirements"></a>[	5		Run Time Requirements](#5run-time-requirements) ##
+--------------------------------------------------------------------------------
 
  * Linux (not sure if it is necessary for it to be an x86; i think not)
  * The framebuffer device ( e.g.: `/dev/fb0` or `/dev/fb/0` ) enabled in the kernel
@@ -234,9 +234,9 @@ You can also run separately parts of `make tests`:
  * shared library files for e.g.: libpng, libjpeg, libgif, libtiff, libreadline,
    libexif, ...
 
--==============================================================================-
-	5.5		Hacking, maintenance guidelines
-================================================================================
+
+## <a id="55hacking-maintenance-guidelines"></a>[	5.5		Hacking, maintenance guidelines](#55hacking-maintenance-guidelines) ##
+--------------------------------------------------------------------------------
 
 If you hack FIM in an interesting way, consider submitting your changes as a
 patch.
@@ -247,9 +247,9 @@ patch.
  * FIM should continue passing the tests after your patch, and your patch should
    be robust, too. Consider writing a new test case.
 
--==============================================================================-
-	6		Original Idea
-================================================================================
+
+## <a id="6original-idea"></a>[	6		Original Idea](#6original-idea) ##
+--------------------------------------------------------------------------------
 
 FIM derives from the wonderful fbi-1.31, written by Gerd Hoffmann/Knorr:
  ( Fbi can be obtained at https://www.kraxel.org/blog/linux/fbida/ ).
@@ -260,9 +260,9 @@ features to enrich Fbi with a command line and more customizations.
 FIM is a significant reorganization and expansion of the Fbi code, and aims at
 obtaining the most scriptable and configurable image viewer ever.
 
--==============================================================================-
-	7		Technical overview, important for patch writers
-================================================================================
+
+## <a id="7technical-overview-important-for-patch-writers"></a>[	7		Technical overview, important for patch writers](#7technical-overview-important-for-patch-writers) ##
+--------------------------------------------------------------------------------
 
 To run, FIM requires a Linux box with X, or the framebuffer device enabled in
 the kernel, and some popular image file decoding libraries.
@@ -340,12 +340,12 @@ Platforms tested in the past versions (fim-0.3...):
  all of the documentation and _write me an email first_ (i will give you some
  advice).
 
--==============================================================================-
-	8		Availability in Linux distributions
-================================================================================
+
+## <a id="8availability-in-linux-distributions"></a>[	8		Availability in Linux distributions](#8availability-in-linux-distributions) ##
+--------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
-	8.1		Debian, Ubuntu
+## <a id="81debian-ubuntu"></a>[	8.1		Debian, Ubuntu](#81debian-ubuntu) ##
  
  You should find fim in Debian and Ubuntu,  and install it with:
 
@@ -366,9 +366,9 @@ Platforms tested in the past versions (fim-0.3...):
  The above list was valid on a Debian Jessie installation; it's possible that
  these packages names change with time.
  
--==============================================================================-
-	9		License
-================================================================================
+
+## <a id="9license"></a>[	9		License](#9license) ##
+--------------------------------------------------------------------------------
 
  FIM is free software, and is licensed under the GPLv2 or later.
  FIM has been written by Michele Martone.
@@ -384,9 +384,9 @@ which is licensed compatibly with the GPL.
 from the GPL licensed Terminus Font package, version 4.30 authored by
 Dimitar Toshkov Zhekov.
 
--==============================================================================-
-	10		Contacts, mailing lists, URLs
-================================================================================
+
+## <a id="10contacts-mailing-lists-urls"></a>[	10		Contacts, mailing lists, URLs](#10contacts-mailing-lists-urls) ##
+--------------------------------------------------------------------------------
 
 FIM is (C) 2007-2023 Michele Martone.
 
@@ -418,5 +418,5 @@ ChangeLog    : http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ChangeLog
 
 Bugs (official) : http://savannah.nongnu.org/bugs/?group=fbi-improved
 
- $Id$
+ $Id: README 1800 2022-11-02 13:42:59Z dezperado $
  vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=markdown:norl:
