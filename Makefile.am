@@ -212,7 +212,11 @@ imlib2tests: all
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
 sanity-check:	all
+if HAVE_RUNNABLE_TESTS
 	@$(FIM_EXE) $(FIMNORCOPTS) -E $(top_srcdir)/scripts/tests/sanity.fim -t
+else
+	@echo "you are cross-compiling, so can't run tests..."
+endif
 
 .PHONY: check
 check:	tests
@@ -231,16 +235,17 @@ endif
 	! grep '\<'$(USER)'\>' doc/*man* # against namespace leaks
 	! grep '\.o\>' $(top_srcdir)/src/Makefile.am 
 	! grep '\<OBJECT\>' $(top_srcdir)/src/Makefile.am 
-if ENABLE_GIF
-	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q
-	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/u.gif -- $(FIMNORCOPTS) -o dumb -K q; test $$? = 255
-	export TMPDIR=`pwd`/tmpdir && $(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q && test "`ls $$TMPDIR`" = ""
-endif
 if WITH_PERL
 	test -s doc/FIM.html
 if WITH_MAN2HTML
 	test -s doc/fimgs.man.html -a -s doc/fim.man.html -a -s doc/fimrc.man.html
 endif
+endif
+if HAVE_RUNNABLE_TESTS
+if ENABLE_GIF
+	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q
+	$(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/u.gif -- $(FIMNORCOPTS) -o dumb -K q; test $$? = 255
+	export TMPDIR=`pwd`/tmpdir && $(FIMGS_EXE) ssh:$$(hostname):$(abs_top_srcdir)/media/numbers/0.gif -- $(FIMNORCOPTS) -o dumb -K q && test "`ls $$TMPDIR`" = ""
 endif
 if HAVE_VALGRIND
 	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
@@ -248,6 +253,7 @@ if HAVE_VALGRIND
 		VALGRIND='valgrind --tool=memcheck --leak-check=yes --num-callers=15 --exit-on-first-error=yes --error-exitcode=255' \
 			make ltests; \
 	fi
+endif
 endif
 
 # this is the official way of testing fim
@@ -760,8 +766,10 @@ if HAVE_FIMGS
 	make fimgstests
 endif
 	make ltests
-endif
 	@echo "[*] TESTS: SUCCESS"
+else
+	@echo "[!] TESTS: Skipped (you are cross-compiling, aren't you?)"
+endif
 
 .PHONY: croptests
 croptests:
@@ -900,8 +908,10 @@ if HAVE_RUNNABLE_TESTS
 endif
 
 doc/fimgs.man.in: $(FIM_EXE)
+if HAVE_RUNNABLE_TESTS
 if HAVE_GS
 	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                     > doc/fimgs.man.in
+endif
 endif
 
 doc/fim.man doc/fimrc.man doc/fimgs.man: doc/fim.man.in doc/fimrc.man.in doc/fimgs.man.in

@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,12 @@ extern "C"
 // we require C linkage for these symbols
 #include <jpeglib.h>
 }
-#define FIM_JPEGLIB_TRUE 1 /* jpeglib 8.0 uses 'boolean' */
+#ifndef HAVE_BOOLEAN
+#ifndef TRUE
+#define TRUE 1
+#endif
+#endif /* HAVE_BOOLEAN */
+#define FIM_JPEGLIB_TRUE TRUE /* jpeglib 8.0 uses 'boolean' */
 
 
 /*
