@@ -72,12 +72,14 @@ help-acm.cpp: fim.h
 b2ba$(EXEEXT): b2ba.c
 	$(CC) -o $@ $<
 
+if HAVE_RUNNABLE_TESTS
 if FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT
 default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba$(EXEEXT)
 	./b2ba$(EXEEXT) < $< > $@
 else
 default_font_byte_array.h:   ../var/fonts/Lat15-Terminus16.psf b2ba$(EXEEXT)
 	./b2ba$(EXEEXT) < $< > $@
+endif
 endif
 
 # the following sources are built at make time
