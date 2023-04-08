@@ -839,7 +839,7 @@ dnl
 dnl By default, we disable poppler : its API is still immature.
 dnl
 fim_handle_pdf=no
-AC_ARG_ENABLE(poppler, AS_HELP_STRING([--enable-poppler],[Enable poppler (PDF rendering) support. This will add LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/" to the compilation flags. You can override this by passing configure a suitable LIBPOPPLER_CXXFLAGS variable.]),
+AC_ARG_ENABLE(poppler, AS_HELP_STRING([--enable-poppler],[Enable poppler (PDF rendering) support. This will try to detect extra compilation flags. You can override this by passing configure with POPPLER_CFLAGS=... .]),
 [       if test x$enableval = xyes ; then
 		fim_handle_pdf=yes
         fi
@@ -849,17 +849,19 @@ if test x$fim_handle_pdf != xno ; then
   fim_handle_pdf=yes
   have_poppler=yes
         if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
-    	# dear fim hackers, you should install pkg-config to get this macro expanded
+    	# dear fim hackers, you should install pkg-config to get this macro expanded (p)
+dnl	# pkg-config --cflags poppler
+dnl	# pkg-config --cflags poppler-cpp
+dnl	# ...
     	POPPLER_REQUIRED=0.8.7
-    	PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no) dnl sets POPPLER_LIBS POPPLER_CXXFLAGS
+    	PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no) dnl sets POPPLER_LIBS and POPPLER_CFLAGS
     	PKG_CHECK_MODULES(GLIB, glib-2.0) dnl sets GLIB_CFLAGS GLIB_LIBS
-dnl FIXME : the following is a dirty hack
+dnl keep next line empty or it may break configure.
 
-dnl	  LIBS="$LIBS $GLIB_LIBS $POPPLER_LIBS"
           AC_CHECK_LIB(poppler, g_free,
             have_poppler=yes
             LIBS+=" $GLIB_LIBS $POPPLER_LIBS";
-            CXXFLAGS+=" $GLIB_CFLAGS $POPPLER_CXXFLAGS";
+            CXXFLAGS+=" $GLIB_CFLAGS $POPPLER_CFLAGS";
 	    ,
             have_poppler=no
       AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]), [$GLIB_LIBS $POPPLER_LIBS])
@@ -882,14 +884,7 @@ dnl	  LIBS="$LIBS $GLIB_LIBS $POPPLER_LIBS"
       have_poppler=yes
       AC_MSG_RESULT($have_poppler)
       if test x"$have_poppler" = xyes; then
-        LIBPOPPLER="-lpoppler $LIBPOPPLER_STATIC_EXTRA"
-	# FIXME: the following is a dirty hack!
-	if test x"$LIBPOPPLER_CXXFLAGS" = x ; then
-        	LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
-	fi
-        CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS -DFIM_LIBPOPPLER_VERSION_MAYBE=$have_poppler_maybe_version"
-dnl	are we sure poppler does not have something like the following ?
-dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
+        CXXFLAGS="$CXXFLAGS -DFIM_LIBPOPPLER_VERSION_MAYBE=$have_poppler_maybe_version"
       else
           AC_MSG_WARN([*** POPPLER/PDF loader will not be built (POPPLER header file not found) ***])
       fi
@@ -913,7 +908,6 @@ dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
 else
   fim_handle_pdf=no
 fi
-AC_SUBST(LIBPOPPLER)
 AM_CONDITIONAL(ENABLE_POPPLER, test x$have_poppler = xyes)
 
 dnl FIXME : we have two libpoppler checks ... :
@@ -925,7 +919,7 @@ if test "x$enable_pdf" = "xyes"; then
     if test "x$enable_pdf" = "xyes"; then
             AC_DEFINE([ENABLE_PDF], [1], [Enable pdf support.])
             SHELL_LIBS="$SHELL_LIBS $POPPLER_LIBS"
-            SHELL_CXXFLAGS="$SHELL_CXXFLAGS $GLIB_CFLAGS $POPPLER_CXXFLAGS"
+            SHELL_CXXFLAGS="$SHELL_CXXFLAGS $GLIB_CFLAGS $POPPLER_CFLAGS"
 
             fim_save_LIBS=$LIBS
             LIBS="$LIBS $GLIB_LIBS $POPPLER_LIBS"

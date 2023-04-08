@@ -229,6 +229,7 @@ if WITH_SHELLCHECK
 endif
 	! grep -n '^[^ ].\{83,\}'  README
 	! grep -n '^[^ ].\{175,\}' README.md test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
+	if grep -q PKG_CHECK_MODULES configure.ac; then ! grep -q PKG_CHECK_MODULES configure; fi
 	test `grep '[^=]==[^=]' $(top_srcdir)/src/fimgs | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only
 	test `grep 'SNTZ.*wc' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate SNTZ.*wc on this line only
