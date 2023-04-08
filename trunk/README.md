@@ -418,5 +418,3 @@ ChangeLog    : http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ChangeLog
 
 Bugs (official) : http://savannah.nongnu.org/bugs/?group=fbi-improved
 
- $Id: README 1800 2022-11-02 13:42:59Z dezperado $
- vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=markdown:norl:

@@ -325,6 +325,8 @@ if ENABLE_PCX
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort"; next;f=i:_filename;list "swap";     reload;if(f==i:_filename)quit 255; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/media/numbers_pcx/*.pcx --sort -c 'list "pop"; if(_filelistlen!= 9) quit 255;quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx $(top_srcdir)/media/numbers_pcx/*.pcx        -c 'list "pop"; if(_filelistlen!=19) quit 255;quit'
+	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/2.pcx --reverse -c 'quit!(i:_filename=~"2.pcx")'
+	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/2.pcx           -c 'quit (i:_filename=~"2.pcx")'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx                                              -c 'list "remove"; quit'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'next;list "pop";reload;quit    !(i:_filename == "$(top_srcdir)/media/numbers_pcx/0.pcx")'
 	$(TIMEOUT_SMALL) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'next;list "remove";reload;quit !(i:_filename == "$(top_srcdir)/media/numbers_pcx/2.pcx")'
@@ -550,7 +552,7 @@ endif
 if ENABLE_SDL
 if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \
-		$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl -r w $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
+		$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl --resolution w $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'; # pcx needs no library\
 	fi
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17 -A $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit !(_autotop==1)'; fi # --autotop
 	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o sdl=17x17 -P $(top_srcdir)/media/numbers_pcx/1.pcx  -q -c 'quit (_autotop!=1) || (i:swidth!=_screen_width)'; fi # --text-reading
@@ -1032,5 +1034,5 @@ README.md: README
 	$(SED) -i "s|^-===\+-$$||g" $@.tmp;
 	$(SED) -i "s|^		FIM|FIM|g" $@.tmp;
 	$(SED) -i "s|^================================================================================|--------------------------------------------------------------------------------|g" $@.tmp;
-	mv $@.tmp $@;
+	$(GREP) -v '^\(.vim:\|..Id\)' $@.tmp > $@;
 

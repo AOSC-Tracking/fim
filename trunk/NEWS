@@ -10,13 +10,13 @@
 # (r1937)
  * Fix: --device option not ignored anymore.
 # (r1932)
- * Renamed --no-etc-rc-file switch to --no-etc-fimrc-file
+ * Rename --no-etc-rc-file switch to --no-etc-fimrc-file .
 # (r1921)
  * fimgs: bunzip2, wget, and xz are now optional.
 # (r1918)
  * Bugfix: fimgs to properly remove temporary directory after loading downloaded files.
 # (r1903)
- * Misc small improvements in text output and reporting (no cursor in post-search output line; misc messages).
+ * Misc small improvements in documentation text output and reporting (no cursor in post-search output line; misc messages).
  * Key 'Z' now assigned to 'sleep 1'.
 # (r1910)
  * Key 'Del' now assigned to 'list "remove"'.
@@ -27,9 +27,9 @@
 # (r1890)
  * Add command "pan 'vsteps%' 'hsteps%'" and "'pan 'vsteps' 'hsteps'".
 # (r1880)
- * Keys F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12 are now usable with 'bind' in with modes -o aa, -o ca, -o dumb.
+ * Keys F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12 are now usable with 'bind' with modes -o aa, -o ca, -o dumb.
 # (r1878)
- * Fix for -o sdl: when flipped or mirrored was drawing a smaller box by mistake.
+ * Fix for -o sdl: when flipped or mirrored, it used to draw a smaller box by mistake.
 # (r1876)
  * Only filenames matching "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$" can occur in a conversion command involving an external program.
 # (r1875)
@@ -37,15 +37,15 @@
 # (r1834)
  * -o fb=S will not tolerate running under screen.
 # (r1832)
- * Bugfix in --script-from-stdin preventing possible crashes.
+ * Bugfix in --script-from-stdin now prevents possible crashes.
 # (r1816)
  * Removed configure options --enable-c++11 -- use CXXFLAGS instead.
 # (r1784,r1801)
  * Bugfix: 'autocmd_del' with no arguments would crash.
 # (r1781)
- * Bugfix: Autocommand "PostHardcodedConfigLoading" will now trigger even execute even if --disable-fimrc .
-# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839-r1965)
- * internal: considerably expanded 'make tests'.
+ * Bugfix: autocommand "PostHardcodedConfigLoading" now triggers even if --disable-fimrc .
+# (r1771-r1773,r1776-r1777,r1781,r1783-r1785,r1789,r1792-r1796,r1803-r1806,r1808-r1809,r1813-r1815,r1818,r1822-r1823,r1827,r1831-r1836,r1839-r1966)
+ * Internals: considerably expanded 'make tests'.
 # (r1770,r1772)
  * Add command 'stderr', similar to 'stdout'.
 # (r1739,TODO)
@@ -59,11 +59,11 @@
 # (r1727)
  * man fimrc: added a section with default aliases,
 # (r1724,r1738)
- * If possible, use 'timeout' in 'make tests'.
+ * Where appropriate, 'make tests' uses 'timeout' to prevent possible hangs.
 # (r1718-r1720,r1726,r1777-r1780,r1903)
- * Switch -K aka --chars-press <chars> simulates input of characters at startup.
+ * Switch  -K <chars>  aka  --chars-press <chars> simulates input of characters at startup.
 # (r1709,r1710)
- * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
+ * Fix: slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
 # (r1707,r1711)
  * Fix: after 'quit' no command shall execute anymore (unless in -F).
 # (r1705,r1759-r1760)
@@ -71,11 +71,11 @@
 # (r1700)
  * With SDL (-o sdl), center window by default.
 # (r1693)
- * fix: pressing keys "1n1n" will not execute 'n' 11 times but twice.
+ * Fix: now pressing keys "1n1n" will not execute 'n' 11 times, but twice.
 # (r1689)
- * configure --enable-debug is developer option now.
+ * configure --enable-debug is a developer option now.
 # (r1679-r1688,r1721-r1722,r1753-r1758,r1760,r1772,r1788,1797-1799,r1802,r1836)
- * libcaca (-o ca) mode is now working and is the default ASCII Art mode.
+ * libcaca (-o ca) mode is now complete and is the default ASCII Art mode.
 # (r1677,r1678,r1725)
  * Slideshow function (e.g `fim --slideshow=5 *.jpg`) now more responsive.
 # (r1662)
@@ -83,7 +83,7 @@
 # (r1649)
  * Bugfix with aalib (-o aa): don't truncate long lines.
 # (r1641,r1911)
- * Avoid leak in language parser.
+ * Avoid memory leak in language parser.
 # (r1644-r1646)
  * Avoid console buffer memory corruption.
 # (r1626)
@@ -91,185 +91,185 @@
 # (r1625,r1637,r1657,r1658,r1661,r1665,r1666)
  * Eliminate memory leaks in PNG, JPG, TIFF, EXIF, and font decoding code.
 # (r1624,r1650)
- * fix possibly broken `make -j` in rebuilding fimgs.man and fimrc.man.
+ * Fix possibly broken `make -j` in rebuilding fimgs.man and fimrc.man.
 # (r1623)
- * correct configure script check for regcomp() -- could lead to false negatives.
+ * Correct configure script check for regcomp() -- could lead to false negatives.
 # (r1621)
  * Don't break build on missing 'gs'.
 # (r1616,r1659,r1660,r1667,r1762,r1839)
- * Using --load-shadow-directory <dir> adds a shadow directory (experimental).
-   Then 'scale "shadow"' (bound to key '"') will substitute the current displayed image with that 
-   of the first same-named file located under a shadow directory.
+ * Experimental: use --load-shadow-directory <dir> to add a "shadow directory".
+   Then 'scale "shadow"' (bound to key '"') will substitute the current displayed image
+   with that of the first same-named file located under a shadow directory.
 # (r1615)
- * Default "_pushdir_re" variable matches now .webp filename extension when loading a directory.
+ * When loading a directory, regular expression from default "_pushdir_re" variable now matches filenames with .webp extension.
 # (r1613)
- * fix: fim -c '/<pattern>' was broken.
+ * Fix: `fim -c '/<pattern>'` was broken.
 # (r1605,r1803)
- * added " INTEGER , INTEGER IDENTIFIER arguments" syntax to repeat a command 
+ * Add " INTEGER , INTEGER IDENTIFIER arguments" syntax to repeat a command 
    on each file in the interval and substitute its name to '{}' in the arguments
    to an iterated command IDENTIFIER.
 # (r1599--r1602,r1945)
- * If key bound to e.g. 'goto "+1F"', keep pressing to accelerate (not if e.g. "+1f").
+ * If a key is bound to e.g. 'goto "+1F"', keep pressing it to accelerate (not if e.g. "+1f").
 # (r1594)
- * internal: fix: piping from external commands was using 0 instead of 'WNOHANG', leading to hanging.
+ * Internal fix: piping from external commands was using 0 instead of 'WNOHANG', leading to hanging.
 # (r1585)
- * internal: fix: error handling was missing.
+ * Internal fix: error handling was missing.
 # (r1584)
- * fimgs: handling tar.xz archives.
-# (r1583)
- * Reload automatically on file change.
+ * fimgs now to handle tar.xz archives.
+# (r1583,r1966)
+ * Reload automatically image on file change.
 # (r1571)
  * Command 'list' 'sort_var' 'var' to sort file list according to values of 'i:var'.
 # (r1570)
  * Command 'list' 'sort_comment' to sort file list according to 'i:_comment' value.
 # (r1564)
- * Added an --verbose-font-load switch to set _fbfont_verbosity=1.
+ * Add a --verbose-font-load switch to set '_fbfont_verbosity=1'.
 # (r1563)
  * Variable '_fbfont_verbosity' sets verbose font loading.
 # (r1561)
- * fix: short options -b, -h, -R were not getting optional argument (e.g. -b1).
+ * Fix: short options -b, -h, -R were not getting optional argument (e.g. -b1).
 # (r1559)
- * key combination C-r now assigned to "reload ''".
+ * Key combination C-r now assigned to "reload ''".
 # (r1555)
- * fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
+ * Fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
 # (r1544)
- * key combination C-w assigned to setting auto-scaling to width.
+ * Key combination C-w assigned to setting auto-scaling to width.
 # (r1543)
- * smoother scroll of large images.
+ * Smoother scroll of large images.
 # (r1540,r1541,r1741)
- * if SSH_TTY set and no output device specified, give precedence to aalib, then libcaca.
+ * If SSH_TTY set and no output device specified, give precedence to aalib, then libcaca.
 # (r1539)
- * bugfix: in --as-text will avoid repeated reload of file.
+ * Bugfix: in --as-text will avoid repeated reload of file.
 # (r1526)
  * Hardcoded font (if configured in) will serve as fallback font.
 # (r1523)
- * Added an --no-pipe-load / -X switch to _no_external_loader_programs=1;
+ * Add a --no-pipe-load / -X switch to _no_external_loader_programs=1;
 # (r1503)
- * description variables beginning with '_' will not go into i: .
+ * Description variables beginning with '_' will not go into i: .
 # (r1502,r1504,r1580)
- * list 'vars|variables': list variables in all i:* read from description file.
+ * List variables in all i:* read from description file with "list 'vars|variables'".
 # (r1499,r1506,r1567,r1568)
- * expansion of @variables and @# comments in read descriptions.
+ * Expansion of @variables and @# comments from description files.
 # (r1501)
- * The 'menu key' in SDL mode will show a temporary mouse click actions menu.
+ * The menu key in SDL mode shows a temporary mouse click actions menu.
 # (r1490,r1491)
- * bugfix: description file reading could crash due to wrong check.
+ * Bugfix: description file reading was crashing due to wrong check.
 # (r1485)
- * Caption of _caption_over_image will take at most half of the screen.
+ * Caption text of "_caption_over_image" takes at most half of the screen.
 # (r1484)
- * If _caption_over_image=3, image will be possibly drawn below the caption.
+ * If _caption_over_image=3, image is possibly drawn below the caption.
 # (r1480)
- * The 'v' and 'S' keys will redraw as well.
+ * The 'v' and 'S' keys now cause a redraw.
 # (r1477,r1478)
- * Description line can be of any length (EXPERIMENTAL).
+ * The description line can be of any length.
 # (r1474)
- * New configure option, defaulting to: --enable-paths-in-man: Generate man pages with configure specified paths (e.g. sysconfdir, docdir).
+ * New configure option, defaulting to: --enable-paths-in-man; it generates man pages with configure specified paths (e.g. sysconfdir, docdir).
 # (r1468)
- * fix: -s switch was broken.
+ * Fix: -s switch was broken.
 # (r1447)
- * If no semicolon (;) terminating -C argument, one will be appended.
+ * Add a semicolon (;) to -C arguments if not present already.
 # (r1417)
- * framebuffer console switch off while loading: configure with the 
+ * Framebuffer console switch off while loading: configure with the 
    --enable-framebuffer-switch-while-loading switch to have it back.
 # (r1413)
- * fix: configure would fail on --disable-aa and absent aalib.
+ * Fix: configure would fail on --disable-aa and absent aalib.
 # (r1403)
- * Configure has --enable-seek-magic by default. And is more verbose.
+ * Now configure has --enable-seek-magic by default. And is more verbose.
 # (r1395,r1396)
- * Command 'help' will also consider key bindings, and give multiple answers if matching.
+ * Command 'help' also shows key bindings, and give multiple answers if matching.
 # (r1389,r1818,r1823,r1846)
- * If further arguments follow switch --help, individual help messages will be shown.
+ * For each word following switch --help, an individual help message is shown.
 # (r1382)
- * Command 'goto' accepts multiple arguments; those after the first triggering a jump will be ignored.
+ * Command 'goto' accepts multiple arguments; evaluating them until the first one triggering a jump.
 # (r1379,r1380)
- * Command goto {'-/'|'+/'}[C] will jump to a file based on C (default 'S').
+ * Command goto {'-/'|'+/'}[C] jumps to a file based on character C (default 'S').
    If C is 's', to prev/next file with same directory name.
    If C is 'd', to prev/next file with directory name down the same hierarchy.
    If C is 'u', to prev/next file with directory name up the same hierarchy.
    If C is 'b', to prev/next file with same basename.
-   If C is uppercase, to the prev/next file not matching the criteria.
+   If C is as above but uppercase, to the prev/next file not matching the criteria.
 # (r1381)
  * Accordingly, aliases 'next_file_dir_same', 'next_file_dir_other', 'next_file_dir_up',
    'next_file_dir_down', 'next_file_same_basename', 'prev_file_dir_same',
    'prev_file_dir_other', 'prev_file_dir_up' 'prev_file_dir_down' 'prev_file_same_basename'.
 # (r1366)
- * fix: 'recording' command non functioning properly.
+ * Fix: 'recording' command was not functioning properly.
 # (r1365)
- * fix: will not pop back last if calling recording 'stop' outside of recording mode.
- * fix: won't clear recorded list if calling recording 'start' multiple times.
+ * Fix: don't pop back last command if "recording 'stop'" executed outside of recording mode.
+ * Fix: won't clear recorded list if calling recording 'start' multiple times.
 # (r1359)
- * Specifying more than once any of -p -i - will issue a warning.
+ * Specifying more than once any of -p -i - causes a warning.
 # (r1334,r1335,r1346)
  * New switch --verbose-interpreter to execute interpreter verbosely by setting adequately _debug_commands='ackC'.
 # (r1331,r1333)
- * Strings specified within single quotes will have single quotes escaped, just as double quotes.
+ * Strings specified within single quotes have single quotes escaped, just as double quotes.
    So that e.g.: '\'hello\'' equals "'hello'" and "\"hello\"" equals '"hello"'.
 # (r1330,r1351,r1363)
  * Variable '_debug_commands' is now a string with several verbosity options.
 # (r1323,r1325,r1801)
- * fix: misc for --offset, e.g. avoiding probing for external loader programs.
-# (r1319)
- * --verbose-load option for verbose file loading.
+ * Fix: misc fixes for --offset, e.g. avoiding probing for external loader programs.
+# (r1319,r1966)
+ * Add --verbose-load option for verbose file loading.
 # (r1317,r1321)
- * -C '_seek_magic=..' will now probe whole range of specified signature.
+ * -C '_seek_magic=..' probes whole range of specified signature when loading a file.
 # (r1316)
- * fix in _seek_magic documentation.
+ * Fix in _seek_magic documentation.
 # (r1913)
- * option --offset accepts numbers suffixed by one of K, M, and G for respectively kibi-, mebi-, and gibi- (2^10, 2^20 and 2^30) units.
+ * Option --offset accepts numbers suffixed by one of K, M, and G for respectively kibi-, mebi-, and gibi- (2^10, 2^20 and 2^30) units.
 # (r1314)
- * bugfix: --offset option was ignoring lower bytes-offset.
+ * Bugfix: --offset option was ignoring lower bytes-offset.
 # (r1312)
- * fix: a check was missing in the PS decoder when reading from stdin.
+ * Fix: a check was missing in the PS decoder when reading from stdin.
 # (r1253)
  * Command 'pan' accepts '-' and '+' to jump to prev/next file if border is reached.
 # (r1210-r1213,r1847,r1854)
  * Command 'font' controls displayed font and scans font directories.
- * Keys '{' and '}' will cycle through scanned consolefonts.
+ * Keys '{' and '}' cycle through available consolefonts.
 # (r1187)
- * Variable _fbfont_magnify_factor will scale text font at runtime.
+ * Variable _fbfont_magnify_factor scales text font at runtime.
 # (r1198)
- * Variable _fbfont_as_screen_fraction; if >0, font will be scaled to exceed 1/_fbfont_as_screen_fraction of both width and height.  If _fbfont_as_screen_fraction<0, font scaling will be fixed.
+ * Variable _fbfont_as_screen_fraction; if >0, font is scaled to exceed 1/_fbfont_as_screen_fraction of both width and height.  If _fbfont_as_screen_fraction<0, font scaling is fixed.
 # (r1199)
- * Keys '[' ']' bound to new aliases "font_reduce" and "font_magnify".
+ * Keys '[' and ']' bound to new aliases "font_reduce" and "font_magnify".
  * Key '|' bound to new alias "toggle_font_auto_scale".
 # (r1217)
- * Switch -r {width:height} / --resolution {width:height} will behave as expected in SDL mode.
+ * Switch -r {width:height} / --resolution {width:height} behaves as expected in SDL mode.
 # (r1184,r1215)
- * Variable _downscale_huge_at_load, if 1 (default), will downscale automatically huge images at load time. To avoid loading images exceeding too much screen size.
+ * Variable _downscale_huge_at_load, if 1 (default), downscale automatically huge images at load time. To avoid loading images exceeding too much screen size.
 # (r1202,r1205)
  * Variable i:_buffered_in_tmpfile stores temporary decoding image filename, if any.
 # (r1200)
- * Internally load SVG by invoking inkscape <file.svg> --without-gui --export-png <temp.png>. A file beginning with "<svg" will be considered an SVG (Scalable Vector Graphics).
+ * Internally load SVG files by invoking inkscape <file.svg> --without-gui --export-png <temp.png>. A file beginning with "<svg" is be considered an SVG (Scalable Vector Graphics).
 # (r1197,r1223)
- * Command 'scrollforward' will skip a border if this is less than a fraction of the screen; this smoothes up documents reading. The fraction is one over '_scroll_skip_page_fraction', if >1; 1/16 if 1, no tolerance if <1.
+ * Command 'scrollforward' skips a border if this is less than a fraction of the screen; this smoothes up documents reading. The fraction is one over '_scroll_skip_page_fraction', if >1; 1/16 if 1, no tolerance if <1.
 # (r1233,r1236,r1238,r1240,r1241,r1242,r1246,r1247)
- * Variable "_want_wm_mouse_ctrl" will control mouse click/movement behaviour in SDL mode.
+ * Variable "_want_wm_mouse_ctrl" controls mouse click/movement behaviour in SDL mode.
 # (r1231)
  * Variable "_min_cached_images" is the minimum number of images to keep from eviction.
 # (r1156)
- * Commands  scale '<'  /  scale '>' will shrink/magnify the image using cached mipmaps.
+ * Commands  scale '<'  /  scale '>' shrinks/magnifies the image using cached mipmaps.
 # (r1248)
- * Will show mouse cursor in full screen (SDL mode).
+ * By default, show mouse cursor in full screen SDL mode.
 # (r1226)
  * Autocommand "PostInteractiveCommand" does not trigger anymore after 'quit' command.
 # (r1196)
- * In case of CBZ,CBR,PDF,PS,DVI file, fimgs script will use '--autotop --autowidth'.
+ * In case of a CBZ,CBR,PDF,PS,DVI file, the fimgs script now uses '--autotop --autowidth'.
 # (r1153,1154,1195)
- * fimgs script will now probe for unrar-nonfree/rar/unrar-free (in this order).
+ * The fimgs script now probes for unrar-nonfree/rar/unrar-free (in this order).
 # (r1149)
- * Variable '_caption_over_image_fmt' will now customize overlay string contents.
+ * Customize overlay text via variable '_caption_over_image_fmt'.
 # (r1147,r1148)
  * Command syntax 'goto {+|-}identifier[+]' (new) jumps to next file having a different value of i:identifier, also empty if without trailing `+'.
 # (r1136)
- * Command limit '-set_union' will merge current limited list with the new one.
+ * Command "limit '-set_union'" merges current limited list with the new one.
 # (r1135)
- * Command limit '-merge' will merge current limited list with the new one.
+ * Command "limit '-merge'" merges current limited list with the new one.
 # (r1133,r1134)
- * Command desc 'reload' loads once again description files specified at the command line with --load-image-descriptions-file.
+ * Command "desc 'reload'" loads once again description files specified at the command line with --load-image-descriptions-file.
 # (r1130,r1131)
- * FIM won't check for duplicates on command line specified files unless sorting is requested.
+ * FIM only checks for filename duplicates if a sorting option is specified.
 # (r1126)
-# * Makefile: added a stand-alone `make ltests' goal to test fim' language only.
+# * Makefile: add a stand-alone 'make ltests' goal to test fim's language only.
 # (r1113)
  * Switch -P/--text-reading fixed. Seems to be broken in version 0.5.
 # (r1108)
@@ -280,54 +280,54 @@
 # (r1112)
  * Command "color 'identity'": populate the image with 'RGB identity' pixels.
 # (r1104)
-# * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
+# * Language standard level (and a few features) enabled and set from the value of the predefined __cplusplus C++ macro.
 # (r1079,r1809)
- * Introduced a "#!fim:/=dir" special description line to specify directory prepended to basename.
- * Introduced a "#!fim:\=dir" special description line to specify directory prepended to filepath.
+ * Introduce a "#!fim:/=dir" special description line to specify directory prepended to basename.
+ * Introduce a "#!fim:\=dir" special description line to specify directory prepended to filepath.
 # (r1072)
 # * Documented the %k expando for _info_fmt_str.
 # (r1127,r1128)
-# * Optimized further the `limit' command.
+# * Optimized further the 'limit' command.
 # (r1078)
- * Command limit '-list'      will list existing variables identifiers as set via 'desc'
- * Command limit '-list' 'id' will list existing values for instances of variable 'id' as set via 'desc'
+ * Command limit '-list'      lists existing variables identifiers as set via 'desc'
+ * Command limit '-list' 'id' lists existing values for instances of variable 'id' as set via 'desc'
 # (r1068)
- * Command "limit '~i' MINIDX[-MAXIDX]", with MINIDX and MAXIDX numbers (eventually with K as x 1000 multiplier) will restrict to filenames in positions between those.
+ * Command "limit '~i' MINIDX[-MAXIDX]", with MINIDX and MAXIDX numbers (possibly with K as x 1000 multiplier) restricts filenames list to the specified interval.
 # (r1070)
- * Command "limit '~d'", will limit to files having exact current file's modify date +- one day.
+ * Command "limit '~d'", limits to files having exact current file's modify date +- one day.
 # (r1067)
- * Command "limit '~z'", with, will limit to files having same file size as the current.
- * Command "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K (x 1024) or M (x 1024 1024) multipliers, will limit according to file size.
- * Command "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will limit according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
+ * Command "limit '~z'" limits to files having same file size as the current.
+ * Command "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with possibly K (x 1024) or M (x 1024 1024) multipliers, limits according to file size.
+ * Command "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, limits files list according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
 # (r1069)
  * Command "limit '~d' MINDATE[-MINDATE]", with MINDATE and MAXDATE dates as in DD/MM/YYYY, and after 1900.
 # (r1065)
- * Command "limit '-further' ..." will make 'limit' act on the current list, rather than on the full anew. 
+ * Command "limit '-further' ..." makes 'limit' act on the current list, rather than on the full anew. 
 # (r1056,r1062)
  * Command "limit" uses new criteria:
-   If invoked with '~!' will restrict to files with unique basename.
+   If invoked with '~!' it restricts to files with unique basename.
    If with '~=', to files with duplicate basename;
    if with '~^', to the first of the files with duplicate basename;
    if with '~$', to the last of the files with duplicate basename. 
 # (r1220)
- * Alias "unlimit" will reset the limited list.
+ * Alias "unlimit" resets the limited list.
 # (r1053)
- * Variable '_all_file_loaders' introduced: space-separated list of hardcoded file loaders usable with '_file_loader'.
+ * Add variable '_all_file_loaders': a space-separated list of hardcoded file loaders usable with '_file_loader'.
 # (r1051,r1052)
  * Switch -R/--recursive[=arg] has now an optional argument; overwrites (if set) or appends to (if beginning with + or |) the "_pushdir_re" variable (recursed filename extensions).
 # (r1046)
- * Introduced a "#!fim:+=" special description line to append to cached description.
- * Introduced a "#!fim:^=" special description line to prepend to cached description.
+ * Introduce a "#!fim:+=" special description line to append to cached description.
+ * Introduce a "#!fim:^=" special description line to prepend to cached description.
 # (r1045)
- * Introduced a "#!fim:!=" special description line to reset all variables of the cached namespace.
+ * Introduce a "#!fim:!=" special description line to reset all variables of the cached namespace.
 # (r1043)
  * Command 'desc        "save"' functionality to save descriptions file data from the currently browsable images list.
 # (r1048)
- * Command 'desc "-append" "save"' will work in append mode.
+ * Command 'desc "-append" "save"' works in append mode.
 # (r1044,r1047)
- * Command 'desc "-all" "save"' will save also all descriptions file variables.
+ * Command 'desc "-all" "save"' saves also all descriptions file variables.
 # (r1048)
- * Command 'desc "-nooverw" "-append" "save"' will either force overwrite; saving and appending possible, if user request.
+ * Command 'desc "-nooverw" "save"' does not force overwrite.
 # (r1039, also in branches/0.5)
  * To ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
 # (r1035,r1762)
@@ -342,80 +342,79 @@
 # TODO: not yet active
 #  * Support for glob fnmatch wordexp...
 # (r1021,r1228)
- * Switch -k --keysym-press <keysym> to execute simulated press of keysym at startup.
+ * Switch -k --keysym-press <keysym> to simulate press of keysym at startup.
    Keysym can be prefixed by a repetition count number.
 # (r1018,r1761,r1785)
- * New switch  -/  <pattern> as short for -c /<pattern>.
- * New switch --// <pattern> as short for -c /<pattern> with _re_search_opts='f'.
+ * New switch  -/  <pattern> as short form of of -c /<pattern>.
+ * New switch --// <pattern> as short form of of -c /<pattern> with _re_search_opts='f'.
 # (r1015)
 # * Will emit a status message when limiting long lists.
 # (r1014)
- * Key space (' ') now assigned to 'scrollforward' (earlier was 's').
+ * Tehe space key (' ') is now assigned to 'scrollforward' (earlier was 's').
 # (r1013)
  * Introduced context prepend/append shebang syntax "#!fim:^=" and "#!fim:+=" in description files.
 # (r1008,r1795-1796)
  * Switch --read-from-stdin-elds supports now the ASCII NUL terminator (via '').
 # (r1007)
-# * Switch -V (--version) will print out libspectre version info.
+# * Switch -V (--version) prints out libspectre version info.
 # (r1006)
- * Switch -V (--version) will print to stdout (not anymore to stderr).
+ * Switch -V (--version) prints to stdout (not anymore to stderr).
 # (r1003)
- * The -B switch is now short for --background-recursive.
+ * The -B switch is now shorthand for --background-recursive.
 # (r1097)
- * If compiled in pre-C++11 flags, -B / --background-recursive will behave as -R.
+ * If compiled in pre-C++11 flags, -B / --background-recursive behaves as -R.
 # (r1002)
- * Switch -S is now short for --image-descriptions-file-separator (not anymore for --sanity-check).
+ * Switch -S is now short form of --image-descriptions-file-separator (not anymore for --sanity-check).
 # (r1001)
- * Switch -D is now short for --load-image-descriptions-file (not anymore for --dump-default-fimrc).
+ * Switch -D is now short form of --load-image-descriptions-file (not anymore for --dump-default-fimrc).
 # (r999,r1000)
  * Switch -L/--read-from-file: read an image list from file (similarly to the - switch).
 # (r971)
-# * New variable _cache_control to control the cache mechanism.
- * Now caching of mipmaps on by default; can be turned off with new variable '_cache_control'.
+# * New variable "_cache_control" to control the cache mechanism.
+ * Now caching of mipmaps is on by default; can be turned off with new variable '_cache_control'.
 # (r965)
- * Variable '_push_pushes_dirs'; if it is 2, will also push hidden files and directories; that is, ones whose names begin with a dot (.).
+ * Variable "_push_pushes_dirs"; if it is 2, also push hidden files and directories; that is, ones whose names begin with a dot (.).
 # (r942)
- * configure --with-font-magnifying-factor=FACTOR controls text magnification.
-   If FACTOR is positive this value will be hardcoded and fixed. 
+ * configure --with-font-magnifying-factor=FACTOR controls text magnification by an integer factor.
+   If FACTOR is positive, this value is hardcoded and cannot be changed at runtime.
 # (r945)
-   If FACTOR is negative, -FACTOR is default but still runtime modifiable.
-   If FACTOR is 0 (default) a default of 1 will apply.
-   Option meant to be used on configurations with high resolutions and small consolefonts.
+   If FACTOR is negative, -FACTOR is default, but can be changed at runtime.
+   If FACTOR is 0 (default) a default of 1 applies, and can be changed at runtime.
+   This option is meant to be used on configurations with high resolutions and small consolefonts.
 # (r1206,r1207)
- * configure --with-tmpfile will specify a new temporary directory. 
+ * configure --with-tmpfile specifies a new temporary directory. 
 # (r1145)
- * configure will try to detect curses/ncurses.
+ * configure tries to detect curses/ncurses.
 # (r1235)
- * fix: mouse movement under SDL used to trigger unnecessary screen redraws.
+ * Fix: mouse movement under SDL used to trigger unnecessary screen redraws.
 # (r1230)
- * fix: lastly used image will be erased at last, after eventually prefetched images.
+ * Fix: the last used image is to be evicted from the cache as last, after possibly prefetched images.
 # (r1124)
- * fix: in configure script, the regex_t check was unnecessarily broken.
+ * Fix: in configure script, the regex_t check was unnecessarily broken.
 # (r1037, also in branches/0.5)
- * fix: ./configure --disable-pcx was not properly disabling PCX format support
+ * Fix: ./configure --disable-pcx was not properly disabling PCX format support
 # (r963)
  * With C++11 flags, --background-recursive loads images in the background recursively (experimental, unfinished).
 #  (TODO: not completely finished)
 # (r948)
 # * configure --enable-c++11 enables background image loading.
-#  (TODO: need better handling of failed loads)
 # (r961)
-# * configure switch --enable-cxx11 : renamed to --enable-c++11
+# * Rename configure switch --enable-cxx11 to --enable-c++11 .
 # (r955)
- * Variable i:_file_load_time will store the time taken to load the file and decode the image.
+ * Use variable "i:_file_load_time" to store the time taken to load the file and decode the image.
 # (r952)
- * Variable _use_mipmaps=2 will compute the mipmaps faster, using every fourth source pixel.  This can be a good solution for speeding up large photographs scaling.
+ * Use variable "_use_mipmaps=2" to compute the mipmaps faster, using every fourth source pixel.  This can be a good solution for speeding up large photographs scaling.
 # (r947)
 # * Mipmap computing (controlled by _use_mipmaps) is now faster.
 # (r941,1804)
- * description files beginning with "#!fim:desc" (whatever extension) can now be detected and loaded as they were normal image files.
+ * Description files beginning with "#!fim:desc" (of whatever extension) can now be loaded as they were normal image files.
 # (r936)
- * New switch --reverse to reverse the file list.
+ * Add switch --reverse to reverse the file list.
 # (r933)
- * New switch --sort-mtime to sort file list according to modification time.
- * New switch --sort-fsize to sort file list according to file size.
- * Command 'list' 'sort_mtime' to sort file list according to modification time.
- * Command 'list' 'sort_fsize' to sort file list according to file size.
+ * Add switch --sort-mtime to sort file list according to modification time.
+ * Add switch --sort-fsize to sort file list according to file size.
+ * Command "list 'sort_mtime'" to sort file list according to modification time.
+ * Command "list 'sort_fsize'" to sort file list according to file size.
 # (r1063)
  * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
 # (r1535)
@@ -426,42 +425,42 @@
  * Command 'list "swap"' introduced.
 # (r931)
  * New '_lastgotodirection' variable, with the last file goto direction.
- * Key 'Enter' will now 'mark' and then go forward or back according to variable '_lastgotodirection'.
+ * Key 'Enter' now marks and goes forward or back according to variable '_lastgotodirection'.
 # (r1076)
 # * Misc fixes of minor things causing compile warnings.
 # (r1155)
- * fix: the largest mipmap was not always being used.
+ * Fix: the largest mipmap was not always being used.
 # (r1144)
- * fix: -lfl linkage is not really necessary: removed it.
+ * Fix: -lfl linkage is not really necessary: removed it.
 # (r1143)
- * fix: support for PPM files with 2 bytes per sample.
+ * Fix: support for PPM files with 2 bytes per sample.
 # (r1074)
- * fix: a few more checks when reading PCX files.
+ * Fix: a few more checks when reading PCX files.
 # (r1059)
- * fix: documented that switch --sanity-check terminates the program, rather than continuing.
+ * Fix: documented that switch --sanity-check terminates the program, rather than continuing.
 # (r1038, also in branches/0.5)
- * fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
+ * Fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
 # (r1036, also in branches/0.5)
- * fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
+ * Fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
 # (r1025,r1028)
- * fix: cleaned up the internal keysyms initialization code.
+ * Fix: cleaned up the internal keysyms initialization code.
 # (r1011)
- * fix: removed obsolete documentation for the "window" command, now disabled.
+ * Fix: removed obsolete documentation for the "window" command, now disabled.
 # (r1181,r1865)
- * bugfix: improve GIF error handling.
+ * Bugfix: improve GIF error handling.
 # (r1075)
-# * bugfix: was likely using uninitialized data in Image().
+# * Bugfix: was likely using uninitialized data in Image().
 # (r1208)
- * bugfix: on certain framebuffer configurations part of the screen was not being redrawn.
+ * Bugfix: on certain framebuffer configurations part of the screen was not being redrawn.
 # (r1204)
- * bugfix: conversion from external program was vulnerable to failure due to a missing check.
+ * Bugfix: conversion from external program was vulnerable to failure due to a missing check.
 # (r1073)
-#  * bugfix: a function in AADevice (fim_aa_get_input) was missing return value.
+#  * Bugfix: a function in AADevice (fim_aa_get_input) was missing return value.
 # (r1071)
- * bugfix: avoiding data corruption when handling %k expando.
+ * Bugfix: avoiding data corruption when handling %k expando.
 # (r1009)
- * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
- * fix: configure will use `sdl-config --static-lib`'.
+ * Bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
+ * Fix: configure uses `sdl-config --static-lib`.
 
                 Version 0.5
 
@@ -535,7 +534,7 @@
  * introduced variable _re_search_opts affecting regexp-based search
  * default key 'r' is bound to 'rotate90', key 'R' to 'rotate270'
  * can be invoked without stdin; e.g. from an X menu
- * added "display 'resize'" to resize the SDL window, eventually to image size
+ * added "display 'resize'" to resize the SDL window, optionally to the image size
 # (r698) (not mentioned in the docs)
  * default SDL mode is windowed now
 # (r698)
@@ -634,7 +633,7 @@
  * important fbdev bug fixes 
  * autocompletion of variable identifiers
 
-        	Version 0.3
+                Version 0.3
 
  * minor strchr compilation problem on some systems
  * better consolefonts support  
@@ -654,7 +653,7 @@
  * pushing files from a directory
  * several minor and major bugfixes
 
-        	Version 0.3-beta
+                Version 0.3-beta
 
  * full         support for AAlib (Ascii Art rendering) (-o aa)
  * experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
@@ -666,7 +665,7 @@
  * framebuffer driver now can be disabled at compile time
  * colors inversion: saves a significant fraction of power when viewing documents 
 
-        	Version 0.3-alpha
+                Version 0.3-alpha
 
  * experimental support for AAlib (Ascii Art rendering) (-t)
  * reading image files (-i) and scripts (-p) from stdin
@@ -680,7 +679,7 @@
  * new default key bindings for split windows control
  * could be compiled with no readline library (--disable-readline)
 
-        	Version 0.2
+                Version 0.2
  
  * internal windowing (with splitting, resizing, swapping) support
  * .xcf, .fig, .dia, .svg files now viewable via wrapper calls
@@ -692,13 +691,13 @@
  * eradicated some bugs
  * introduced new variables, commands
 
-        	Version 0.2-alpha
+                Version 0.2-alpha
  
  * first windowing functionalities
  * bugs and subtle flaws handling
  * introduced new variables, commands
 
-            	Version 0.1
+                Version 0.1
 
  * regular expressions for filtering the viewed image list
  * vim-like autocommands
