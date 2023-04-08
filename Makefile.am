@@ -160,6 +160,7 @@ if WANT_READLINE
 	echo q | $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K : # cover fim_rl_getc
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -C '_caption_over_image=3;_caption_over_image_fmt="fim:%M";_display_status=1;display' -kn -kq # cover Viewport::extra_top_height 
 endif
+	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
 
 .PHONY: cacatests
 cacatests: all
@@ -489,24 +490,6 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.jpg -C '_downscale_huge_at_load=-1' -K++++ -c 'flip;mirror;pan_left;pan_right;pan_up;pan_down;pan_ne;pan_sw;pan_se;pan_nw "100%"' -c 'popen "echo quit"' # mostly coverage
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o non-existing-reverting-to-dumb-without-error -Kq
-if ENABLE_AA
-	@make aatests
-endif
-if ENABLE_CACA
-	@make cacatests
-endif
-if ENABLE_FRAMEBUFFER
-	@if test -z "$(DISPLAY)$(SSH_TTY)" -a -w "/dev/fb0"; then make fbtests; fi
-endif
-if ENABLE_IMLIB2
-	@make imlib2tests
-endif
-if ENABLE_SDL
-	@if test -n "$(DISPLAY)"; then make sdltests; fi
-endif
-if ENABLE_AA
-	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
-endif
 if ENABLE_GIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:6 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 000
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 2:7 $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
@@ -766,6 +749,21 @@ if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png $(FIMSCLTSTOPTS) -c 'w1=i:swidth;scale "-10%";          w2=i:swidth;   quit !(w1 > w2)'
 endif
 	if $(FIM_EXE) --help crop | grep -q is.a.command; then make croptests; fi
+if ENABLE_AA
+	@make aatests
+endif
+if ENABLE_CACA
+	@make cacatests
+endif
+if ENABLE_FRAMEBUFFER
+	@if test -z "$(DISPLAY)$(SSH_TTY)" -a -w "/dev/fb0"; then make fbtests; fi
+endif
+if ENABLE_IMLIB2
+	@make imlib2tests
+endif
+if ENABLE_SDL
+	@if test -n "$(DISPLAY)"; then make sdltests; fi
+endif
 if HAVE_FIMGS
 	make fimgstests
 endif
