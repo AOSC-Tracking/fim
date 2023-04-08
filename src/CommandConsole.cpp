@@ -1083,6 +1083,8 @@ skip_ac:
 				{
 					args_t args;
 					args.push_back("''");
+    	    				if ( cc.getIntVariable(FIM_VID_VERBOSITY) )
+	    					std::cout << "current file has changed -- reloading\n"; 
 					execute(FIM_FLT_RELOAD,args);
 				}
 #endif /* FIM_WANT_RELOAD_ON_FILE_CHANGE */
