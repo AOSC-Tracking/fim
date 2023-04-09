@@ -1,8 +1,8 @@
-/* $LastChangedDate$ */
+/* $LastChangedDate: 2018-01-09 22:49:26 +0100 (Tue, 09 Jan 2018) $ */
 /*
  FbiStuffMatrixMarket.cpp : fim functions for decoding Matrix Market files
 
- (c) 2009-2022 Michele Martone
+ (c) 2009-2023 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -53,6 +53,7 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	rsb_coo_idx_t rows,cols;
+	rsb_nnz_idx_t nnz;
 	struct mm_state_t *h;
 	h = (struct mm_state_t *)fim_calloc(1,sizeof(*h));
 	const int rows_max=FIM_RENDERING_MAX_ROWS,cols_max=FIM_RENDERING_MAX_COLS;
@@ -67,13 +68,26 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	if(rsb_lib_init(RSB_NULL_INIT_OPTIONS))
 		goto err;
 
-	if(rsb_file_mtx_get_dimensions(filename, &cols, &rows, FIM_NULL, FIM_NULL))
+#if RSB_LIBRSB_VER < 10300
+	if(rsb_file_mtx_get_dimensions(filename, &cols, &rows, &nnz, FIM_NULL))
 		goto err;
+#else /* RSB_LIBRSB_VER */
+	if(rsb_file_mtx_get_dims(filename, &cols, &rows, &nnz, FIM_NULL))
+		goto err;
+#endif /* RSB_LIBRSB_VER */
 
 #if 1
 	if(cols<1 || rows<1)
 		goto err;
 
+#if FIM_EXPERIMENTAL_IMG_NMSPC
+	if(i->nsp)
+	{
+		i->nsp->setVariable(string("columns"),cols);
+		i->nsp->setVariable(string("rows"),rows);
+		i->nsp->setVariable(string("nnz"),nnz);
+	}
+#endif /* FIM_EXPERIMENTAL_IMG_NMSPC */
 	if(cols>cols_max)
 		cols=cols_max;
 	if(rows>rows_max)
