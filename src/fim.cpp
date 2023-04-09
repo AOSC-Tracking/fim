@@ -283,9 +283,9 @@ struct fim_options_t fim_options[] = {
 "The \\fBsdl\\fP option (graphical windowed mode) may be specified as  \\fBsdl" FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
 " where " FIM_MAN_fB("width") " and " FIM_MAN_fB("height") " are integer numbers specifying the desired resolution "
 " (if " FIM_MAN_fB("height") " not specified, it takes the value of " FIM_MAN_fB("width") ");"
-" the " FIM_MAN_fB("'w'") " character requests windowed mode;"
+" the " FIM_MAN_fB("'w'") " character requests windowed mode (instead of " FIM_MAN_fB("'W'") " for fullscreen);"
 " the " FIM_MAN_fB("'m'") " character requests mouse pointer display;"
-" the " FIM_MAN_fB("'h'") " character requests help grid map draw (option can be repeated);"
+" the " FIM_MAN_fB("'h'") " character requests help grid map draw (can be repeated for variants);"
 " the " FIM_MAN_fB("'r'") " character requests support for window resize;"
 " the " FIM_MAN_fB("'%'") " character requests to treat " FIM_MAN_fB("width") " and " FIM_MAN_fB("height")
 " as percentage of possible window resolution."

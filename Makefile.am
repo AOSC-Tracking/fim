@@ -132,6 +132,11 @@ endif
 		$(TIMEOUT_SMALL) \
 			$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o fb=S $(FIMVIDEOTESTOPTS); test $$? = 255; \
 	fi
+if FIM_WANT_HARDCODED_CONSOLEFONT
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o fb $(top_srcdir)/media/ --verbose-font-load -c 'font "info"; quit' | wc -l` -ge 4 # font verbosity minimum
+else
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o fb $(top_srcdir)/media/ --verbose-font-load -c 'font "info"; quit' | wc -l` -ge 3 # font verbosity minimum
+endif
 
 .PHONY: aatests
 aatests: all
@@ -271,6 +276,10 @@ if HAVE_RUNNABLE_TESTS
 	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout random ; quit 0;' # make sure no leak from 'random'
 	$(TIMEOUT_LARGE) $(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit !(randomm == 0 && ( random != 0 || random != 0 || random != 0));' # hope to get three non-zeros
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c '_display_status_fmt="fim:%M%n%R%m%C%v"' --verbose-interpreter --verbose-interpreter -kn -kq # cover modifiers and interpreter
+	wc0=`        $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -kq                              |wc -l`; \
+		wc1=`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -kq                --verbose-load|wc -l`; \
+		wc2=`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -kq --verbose-load --verbose-load|wc -l`; \
+		test $$wc0 -lt $$wc1 -a $$wc1 -lt $$wc2 # ensure at least two levels of load verbosity
 #
 if ENABLE_PCX
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/1.pcx $(top_srcdir)/media/numbers_pcx/1.pcx -c 'a=_filelistlen;limit "~="; list;b=_filelistlen; stdout a.".".b;quit' $(SNTZ)` = 2.1
