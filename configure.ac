@@ -2004,6 +2004,7 @@ AC_DEFINE([FBI_AUTHOR],["Gerd Hoffmann <kraxel _CUT_ bytesex.org>"])
 dnl ###############################################################################
 dnl this is experimental stuff
 dnl ###############################################################################
+want_matrices_rendering=no;
 AC_ARG_ENABLE(matrices-rendering, AS_HELP_STRING([--enable-matrices-rendering],[Uses librsb for rendering of Matrix Market files (must have librsb-config in the PATH).]),
 [       if test x$enableval = xyes; then
         	if test x$ac_cv_func_rsb_lib_init = xyes; then
@@ -2011,6 +2012,7 @@ AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
 AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
 #CXXFLAGS="$CXXFLAGS `librsb-config  --cflags`"
 #LIBS="$LIBS `librsb-config --static --ldflags | sed s/-static//g`"
+			want_matrices_rendering=yes;
 		else
 			AC_MSG_ERROR([Cannot detect librsb! Either disable matrix rendering or supply the right LIBS and CXXFLAGS!])
         	fi
@@ -2018,6 +2020,7 @@ AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
 		true;
         fi
 ])
+AM_CONDITIONAL(ENABLE_MATRIX_MARKET_DECODER, test x$ac_cv_func_rsb_lib_init = xyes -a x$want_matrices_rendering = xyes)
 dnl ###############################################################################
 AC_CACHE_CHECK([if you have c++11 ...], [have_cv_cxx11], AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #if __cplusplus<201103L

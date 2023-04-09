@@ -61,6 +61,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/numbers_pcx.tar.gz \
 	$(top_srcdir)/media/special/numbers_pcx.tar.xz \
 	$(top_srcdir)/media/special/ciao.fig \
+	$(top_srcdir)/media/special/matrix.mtx \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim$(EXEEXT)
@@ -518,6 +519,9 @@ if ENABLE_GIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb --offset 6 -C '_seek_magic="GIF"' $(top_srcdir)/media/special/icon_smile_gif_at_7.bin -c 'stdout (i:width!=0).(i:height!=0)._last_file_loader;quit' $(SNTZ)` = 11'libungif'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_interlaced.gif -c 'quit !(i:width!=0)' # interlaced gif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0_truncated_bad.gif.bin -c 'quit !(i:width==0)' # deliberately invalid gif
+endif
+if ENABLE_MATRIX_MARKET_DECODER
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/matrix.mtx -c 'stdout i:rows.i:columns.i:nnz._last_file_loader;quit' $(SNTZ)` = 222MatrixMarket;
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c '_max_cached_images=1;stdout _fileindex;quit;' --no-stat-push a/b.png c/d.png e/f.png $(SNTZ)` = 1
 if ENABLE_JPEG
