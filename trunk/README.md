@@ -4,14 +4,11 @@ FIM - Fbi IMproved    README document.
  - [	1		Overview](#1overview)
  - [	2		Description](#2description)
  - [	3		Features, comparison to other image viewers](#3features-comparison-to-other-image-viewers)
- - [	4		Compiling](#4compiling)
- - [	4.5		Testing](#45testing)
- - [	5		Run Time Requirements](#5run-time-requirements)
- - [	5.5		Hacking, maintenance guidelines](#55hacking-maintenance-guidelines)
+ - [	4		Build, test, example](#4build-test-example)
+ - [	5		Run time requirements](#5run-time-requirements)
  - [	6		Original Idea](#6original-idea)
- - [	7		Technical overview, important for patch writers](#7technical-overview-important-for-patch-writers)
+ - [	7		Notes for patch writers](#7notes-for-patch-writers)
  - [	8		Availability in Linux distributions](#8availability-in-linux-distributions)
- - [	8.1		Debian, Ubuntu](#81debian-ubuntu)
  - [	9		License](#9license)
  - [	10		Contacts, mailing lists, URLs](#10contacts-mailing-lists-urls)
 
@@ -112,8 +109,8 @@ Features:
  * dump list of selected images to `stdout`
  * jump between last two images repeatedly with one key
 
- The next is a comparison (very outdated...) of popular image viewers available
- on Linux, focusing on FIM-like free software ones.
+ The next table is a comparison (very outdated...) of popular image viewers 
+ available on Linux, focusing on FIM-like free software ones.
 
 |  Program:                  |kuickshow|eog|xz|gv|fbi|FIM|GQview|dfbsee|pv|qiv|
 |--------------------------------|-----|---|--|--|---|---|------|------|--|---|
@@ -153,8 +150,11 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  
 
 
-## <a id="4compiling"></a>[	4		Compiling](#4compiling) ##
+## <a id="4build-test-example"></a>[	4		Build, test, example](#4build-test-example) ##
 --------------------------------------------------------------------------------
+
+
+Requirements are:
 
  * the GNU readline library ( https://www.gnu.org/software/readline/ )
  * GNU flex  (NOT any lex ) ( https://www.gnu.org/software/flex/  )
@@ -162,11 +162,11 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  * GNU bison (NOT any yacc) ( https://www.gnu.org/software/bison/)
  * the GCC ( GNU Compiler Collection ) ( http://gcc.gnu.org/ )
    or clang ( https://clang.llvm.org/ )
- * optionally:
-	* libsdl		  ( http://libsdl.org/ )
+ * and optionally:
+	* libsdl-1.2		  ( http://libsdl.org/ )
 	* libexif		  ( https://libexif.github.io/ )
 	* libjpeg		  ( http://www.ijg.org/ )
-	* libpng		  ( http://directory.fsf.org/libpng.html )
+	* libpng		  ( http://www.libpng.org/ )
 	* giflib		  ( http://sourceforge.net/projects/giflib/ )
 	* libtiff		  ( http://www.libtiff.org/ )
 	* libdjvulibre	  ( https://djvu.sourceforge.net/ )
@@ -176,10 +176,21 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  Libraries originally required by Fbi-1.31 but not by FIM:
  	libFS, libCURL, libLIRC
 
---------------------------------------------------------------------------------
-## <a id="45testing"></a>[	4.5		Testing](#45testing) ##
 
- Just after the  `./configure`  and `make` steps, you should:
+Usually, building and installing FIM proceeds like:
+
+	./configure --help # get options you may pass to configure
+	./configure
+	make
+	make test
+	sudo make install
+
+If you wish to run `./configure` again with different options, it is
+recommended to `make clean` before that.
+
+--------------------------------------------------------------------------------
+## <a id="41test"></a>[	4.1		Test](#41test) ##
+
  
 	# run fim in interactive mode (press q to quit)
 	make test
@@ -203,7 +214,7 @@ You can also run separately parts of `make tests`:
 	make cacatests
 
 --------------------------------------------------------------------------------
-## <a id="46example-compiling-fim-from-repository-on-debian"></a>[	4.6		Example compiling FIM from repository on Debian](#46example-compiling-fim-from-repository-on-debian) ##
+## <a id="42example-on-debian"></a>[	4.2		Example on Debian](#42example-on-debian) ##
 
 	sudo apt-get install subversion
 	sudo apt-get install flex libfl-dev bison
@@ -216,36 +227,24 @@ You can also run separately parts of `make tests`:
 	sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
 	sudo apt-get install libarchive-dev
 	svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
-	sh autogen.sh
 	cd fim
+	autoreconf -i
 	./configure --enable-aa --enable-caca --enable-sdl
 	make
+	sudo make install
  
 
-## <a id="5run-time-requirements"></a>[	5		Run Time Requirements](#5run-time-requirements) ##
+## <a id="5run-time-requirements"></a>[	5		Run time requirements](#5run-time-requirements) ##
 --------------------------------------------------------------------------------
 
  * Linux (not sure if it is necessary for it to be an x86; i think not)
  * The framebuffer device ( e.g.: `/dev/fb0` or `/dev/fb/0` ) enabled in the kernel
    ( and usually found in `"/usr/src/linux/Documentation/fb"` in the kernel source
     code tree ).
- * unless disabledFIM will create a history (`~/.fim_history`) file in the
-    `${HOME}` directory on leaving
+ * unless disabled, FIM will create a history (`~/.fim_history`) file in the
+    `${HOME}` directory when leaving (so it assumes ${HOME} to exist)
  * shared library files for e.g.: libpng, libjpeg, libgif, libtiff, libreadline,
    libexif, ...
-
-
-## <a id="55hacking-maintenance-guidelines"></a>[	5.5		Hacking, maintenance guidelines](#55hacking-maintenance-guidelines) ##
---------------------------------------------------------------------------------
-
-If you hack FIM in an interesting way, consider submitting your changes as a
-patch.
-
- * If you introduce support for a new file format: `fim -V` should list the
-   your new format, too (so you should update it).
- * Same for a new output device.
- * FIM should continue passing the tests after your patch, and your patch should
-   be robust, too. Consider writing a new test case.
 
 
 ## <a id="6original-idea"></a>[	6		Original Idea](#6original-idea) ##
@@ -261,7 +260,7 @@ FIM is a significant reorganization and expansion of the Fbi code, and aims at
 obtaining the most scriptable and configurable image viewer ever.
 
 
-## <a id="7technical-overview-important-for-patch-writers"></a>[	7		Technical overview, important for patch writers](#7technical-overview-important-for-patch-writers) ##
+## <a id="7notes-for-patch-writers"></a>[	7		Notes for patch writers](#7notes-for-patch-writers) ##
 --------------------------------------------------------------------------------
 
 To run, FIM requires a Linux box with X, or the framebuffer device enabled in
@@ -272,14 +271,7 @@ Information about the framebuffer can be found under the directory
  inside the kernel tree 
  (usually "/usr/src/linux/Documentation/fb" ).
 
-The libraries can be found on their sites (as of 20230407):
-
- * libpng   : http://www.libpng.org/
- * libjpeg  : http://www.ijg.org/
- * giflib   : http://sourceforge.net/projects/giflib/
- * libtiff  : http://www.libtiff.org/
- * libdjvulibre : https://djvu.sourceforge.net/
-
+The file decoding libraries are listed in an earlier section.
 Tested and working with library SDL-1.2.12 through SDL-1.2.15.
 
 From the original Fbi README, it reads that Gerd himself built FBI hacking
@@ -337,8 +329,21 @@ Platforms tested in the past versions (fim-0.3...):
 
 
  If you intend to write patches or contribute to the code, be sure of reading 
- all of the documentation and _write me an email first_ (i will give you some
+ all of the documentation and _write me an email first_ (I will give you some
  advice).
+
+
+--------------------------------------------------------------------------------
+## <a id="71hacking-maintenance-guidelines"></a>[	7.1		Hacking, maintenance guidelines](#71hacking-maintenance-guidelines) ##
+
+If you hack FIM in an interesting way, consider submitting your changes as a
+patch.
+
+ * If you introduce support for a new file format: `fim -V` should list the
+   your new format, too (so you should update it).
+ * Same for a new output device.
+ * FIM should continue passing the tests after your patch, and your patch should
+   be robust, too. Consider writing a new test case.
 
 
 ## <a id="8availability-in-linux-distributions"></a>[	8		Availability in Linux distributions](#8availability-in-linux-distributions) ##
@@ -347,7 +352,7 @@ Platforms tested in the past versions (fim-0.3...):
 --------------------------------------------------------------------------------
 ## <a id="81debian-ubuntu"></a>[	8.1		Debian, Ubuntu](#81debian-ubuntu) ##
  
- You should find fim in Debian and Ubuntu,  and install it with:
+ You should find fim in Debian and Ubuntu, and install it with:
 
 	sudo apt-get install fim
 
@@ -396,7 +401,8 @@ FIM is (C) 2007-2023 Michele Martone.
 
 If it is for a bug report or installation help, be sure of reading the
 documentation and the BUGS file first.
-FIM is not perfect: a number of weaknesses are summarized in TODO and BUGS.
+FIM is not perfect: a number of weaknesses are summarized in the man pages,
+the TODO file, and the BUGS file.
 
 
 Homepage     : https://www.nongnu.org/fbi-improved/
