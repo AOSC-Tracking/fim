@@ -527,6 +527,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     return h;
 oops:
 std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
+    if( h ) jpeg_destroy_decompress (&h->cinfo);
     if( h && h->thumbnail) fim_free(h->thumbnail);
     if( h ) fim_free(h);
     fim_jerr=0;/* ready for the next */
