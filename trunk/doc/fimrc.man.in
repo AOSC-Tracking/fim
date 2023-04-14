@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011-2022 Michele Martone"
+.TH fimrc 5 "(c) 2011-2023 Michele Martone"
 .SH NAME
 fimrc - \fB fim \fP configuration file and language reference
 

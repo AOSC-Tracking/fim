@@ -138,6 +138,8 @@ if FIM_WANT_HARDCODED_CONSOLEFONT
 else
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o fb $(top_srcdir)/media/ --verbose-font-load -c 'font "info"; quit' | wc -l` -ge 3 # font verbosity minimum
 endif
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit !(_fbfont_as_screen_fraction=~"[0-9]")' # must be a number (0 if off); more tests needed
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit !(_fbfont_magnify_factor=~"[0-9]")' # must be a number (0 if off); more tests needed
 
 .PHONY: aatests
 aatests: all
@@ -368,6 +370,7 @@ endif
 endif
 endif
 if ENABLE_RAW_BITS_RENDERING
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit !(_all_file_loaders=~"Text")' # shall reflect supported file formats
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text -c quit
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --as-text   -c 'stdout _last_file_loader;quit' $(SNTZ)` = Text  # mostly coverage
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ --binary=1  -c 'stdout _last_file_loader;quit' $(SNTZ)` = Bit1  # mostly coverage
