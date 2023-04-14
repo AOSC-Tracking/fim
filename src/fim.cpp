@@ -454,7 +454,8 @@ struct fim_options_t fim_options[] = {
 #if FIM_WANT_R_SWITCH
     {"resolution", required_argument, FIM_NULL, 'r',
 	"set SDL resolution", "{width:height}",
-	"Set resolution specification in pixels. Supported by SDL only (will be appended to --" FIM_OSW_OUTPUT_DEVICE " argument)."
+	"Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --" FIM_OSW_OUTPUT_DEVICE ". "
+	"Shorthand value 'fullscreen' will be translated into 'W'. "
     },
 #else /* FIM_WANT_R_SWITCH */
     {"resolution", required_argument, FIM_NULL, 'r', "Set resolution (UNFINISHED).", "{width:height}",
@@ -2035,7 +2036,10 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		{
 			if(g_fim_output_device.find('=')==std::string::npos)
 				g_fim_output_device+="=";
-			g_fim_output_device+=rs;
+			if(fim::string("fullscreen")==rs)
+				g_fim_output_device+='W'; // fullscreen
+			else
+				g_fim_output_device+=rs;
 		}
 #endif /* FIM_WANT_R_SWITCH */
 
