@@ -58,7 +58,7 @@ dnl
 </head>
 <body bgcolor="#ffeedd" link="#AA6600" vlink="#884400">
 <table align="center" cellspacing="15pt" border="0" width="100%" >
-SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer program homepage,top)
+SECTION(FIM_ABBR (Fbi IMproved) image viewer program homepage,top)
 <tr>
 <td align="center">
 <A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="30%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
@@ -82,7 +82,7 @@ It has been developed with Linux in mind, but can be built to run on several Uni
 
 <br> &nbsp;<br>
 
-It is lightweight: it depends on a relatively few libraries, it can display in full screen and you control it using the keyboard.
+It is lightweight: it depends on a few libraries (and most optional), it can display in full screen and you control it using the keyboard.
 
 <BR>
 It is universal: it can open many file formats and it can display pictures in the following video modes:
@@ -136,7 +136,8 @@ If you like FIM_ABBR, consider:
 <a href="#fim.man.html_AUTHOR">its author</a>;
  supporting the <a href="http://savannah.nongnu.org/">Savannah project</a>, whom network kindly hosts FIM_ABBR repositories;
  donating to the <a href="http://www.fsfe.org/">Free Software Foundation Europe</a>;
- donating to the <a href="http://www.fsf.org/">Free Software Foundation</a>.
+ donating to the <a href="http://www.fsf.org/">Free Software Foundation</a>;
+ donating to <a href="https://www.autistici.org/">Autistici/Inventati</a>.
 
 <br> &nbsp;<br>
 
