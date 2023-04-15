@@ -3,6 +3,33 @@
 
                 Version 0.6-trunk
 
+A summary of major improvements:
+
+ * Colour ASCII-Art output via libcaca, selected with -o ca
+ * better mechanism to determine best output device
+ * font magnification by integer factors, good for higher resolutions
+ * runtime font selection
+ * new options to commands "scale", "goto", "limit", "list", ...
+ * 'limit' view to relevant image files based on properties (like in 'mutt')
+ * pass key presses to be automated at startup with -k and -K options
+ * pretty free from memory leaks
+ * -X switch inhibits custom external converters
+ * new powerful subcommand "list 'mark'"
+ * new command-line switches (--sort..) to sort the initial files list
+ * use mipmaps for faster scaling
+ * open files from a files list with -L
+ * load image description files with -D 
+ * background recursive scan and load of files with -B
+ * search files at startup based on description with -/ and --//
+ * new verbosity and debug options
+ * better error handling when encountering corrupt files
+ * fast in-place switch to high-res file via --load-shadow-directory 
+ * improvements in -o aa (Ascii Art output device with aalib)
+ * more options for window size selection in -o sdl
+ * Keys F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12 now usable with 'bind'
+
+In detail, in no particular order:
+
  * Switch --resolution 'fullscreen' appends 'W' if in SDL mode.
  * If a "matrix market" file is loaded, its rows, columns and nnz are image variables, too.
  * Introduce special 'early' form  -C =var=val  where variable var is assigned to unquoted and non-interpreted value val immediately.

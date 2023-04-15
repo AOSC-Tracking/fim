@@ -237,6 +237,7 @@ if WITH_SHELLCHECK
 	$(SHELLCHECK) -e SC2235,SC1117,SC2230,SC2086,SC2006,SC2001 $(top_srcdir)/src/fimgs
 endif
 	! grep '^#' NEWS
+	! grep -n '^[^ ].\{107,\}' doc/FIM.TXT
 	! grep -n '^[^ ].\{83,\}'  README
 	! grep -n '^[^ ].\{175,\}' README.md test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
 	if grep -q PKG_CHECK_MODULES configure.ac; then ! grep -q PKG_CHECK_MODULES configure; fi
