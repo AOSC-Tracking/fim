@@ -1,0 +1,16 @@
+Source: fim
+Section: graphics
+Build-Depends: debhelper (>=4), libjpeg-dev, libtiff-dev, libpng3-dev | libpng-dev, libungif4-dev, libreadline4-dev, zlib1g-dev
+Priority: optional
+Maintainer: 
+Standards-Version: 0.0.1
+
+Package: fim
+Architecture: any
+Depends: ${shlibs:Depends}
+Suggests: imagemagick
+Description: FBI Improved : Linux Framebuffer Image viewer (Improved)
+ This is an image viewer for Linux framebuffer devices.  
+ It is based on original FBI, by Gerd Hoffmann. Supports the majority of the features 
+ present in FBI plus built-in scriptability and a readline-based console.
+ 

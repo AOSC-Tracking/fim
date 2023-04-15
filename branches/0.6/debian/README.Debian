@@ -1,0 +1,11 @@
+fim for Debian
+--------------
+
+
+There are lots of ./configure options and customizations missing in
+this  binary build (e.g.: SDL (X) support).
+
+If you are interested in them, please read fim's documentation and 
+build it from sources.
+
+ -- Michele Martone <michele.martone@uniroma2.it>  Wed, 25 Feb 2009 01:06:16 +0100
