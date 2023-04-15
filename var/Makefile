@@ -155,6 +155,9 @@ up_old:
 
 FIMCVSDIR=~/src/fim_cvs_www/fbi-improved/
 
+ci:
+	cd $(FIMCVSDIR) && cvs diff && read && cvs ci .
+
 up:
 	cd $(SITEDIR) && cp -v * $(FIMCVSDIR)
 	ls -l $(FIMCVSDIR)

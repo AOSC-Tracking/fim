@@ -910,7 +910,7 @@ help:
 
 .PHONY: ai
 ai: $(distdir).tar.gz.sig  $(distdir).tar.gz $(distdir).tar.bz2.sig $(distdir).tar.bz2
-	make site up -C var/
+	make up -C var/
 
 .PHONY: up
 up: upload news
@@ -955,7 +955,13 @@ changelog:
 	svn2cl -i ..
 
 .PHONY: release
-release: upload freshmeat
+release:
+	make signed-dist
+	make uptrunk
+	make -C var all
+	make -C var ci
+
+#release: upload freshmeat
 
 .PHONY: upload
 upload: savannah 
