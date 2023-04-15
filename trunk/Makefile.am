@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies # dejagnu
 SUBDIRS = src doc distros scripts
 
-dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS $(top_srcdir)/README.md
+dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS.in $(top_srcdir)/NEWS $(top_srcdir)/README.md
 # no INSTALL INSTALL.TXT is necessary in rules
 EXTRA_DIST=  COPYING  \
 	Makefile.am configure.ac configure \
@@ -236,6 +236,7 @@ devtests:	all
 if WITH_SHELLCHECK
 	$(SHELLCHECK) -e SC2235,SC1117,SC2230,SC2086,SC2006,SC2001 $(top_srcdir)/src/fimgs
 endif
+	! grep '^#' NEWS
 	! grep -n '^[^ ].\{83,\}'  README
 	! grep -n '^[^ ].\{175,\}' README.md test `grep '[^=]==[^=]' $(top_srcdir)/configure.ac | grep -v ^dnl | wc -l` = 0 # look out for bashisms
 	if grep -q PKG_CHECK_MODULES configure.ac; then ! grep -q PKG_CHECK_MODULES configure; fi
@@ -1029,6 +1030,9 @@ commit: log
 #rpm: dist
 #        rpmbuild -ta @PACKAGE@-@VERSION@.tar.gz
 
+NEWS: NEWS.in
+	grep -v '^#' < $< > $@
+
 README.md: README
 	cp $< $@.tmp;
 	$(GREP) '^	[0-9][.]\?[0-9]\?		' README | while read; do \
@@ -1051,4 +1055,5 @@ README.md: README
 	$(SED) -i "s|^		FIM|FIM|g" $@.tmp;
 	$(SED) -i "s|^================================================================================|--------------------------------------------------------------------------------|g" $@.tmp;
 	$(GREP) -v '^\(.vim:\|..Id\)' $@.tmp > $@;
+	rm $@.tmp
 
