@@ -30,7 +30,13 @@
 #ifdef FIM_WITH_LIBSDL
 
 #include "SDLDevice.h"
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 #define FIM_SDL_FLAGS /*SDL_FULLSCREEN|*/SDL_HWSURFACE
+#else /* FIM_WITH_LIBSDL_VERSION == 2  <- experimental */
+#define FIM_SDL_FLAGS 0
+#define SDL_FULLSCREEN SDL_WINDOW_FULLSCREEN_DESKTOP // :-)
+#define SDL_RESIZABLE SDL_WINDOW_RESIZABLE // :-)
+#endif /* FIM_WITH_LIBSDL_VERSION */
 
 #define FIM_WANT_HARDCODED_ICON 1
 #define FIM_SDL_ICONPATH ""
@@ -52,7 +58,7 @@ namespace fim
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 #define FIM_WANT_MOUSE_PAN 1
-#define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1 && FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+#define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 #define FIM_WANT_SDL_CLICK_MENU FIM_WANT_SDL_CLICK_MOUSE_SUPPORT && 1
 
 #if FIM_WANT_MOUSE_CROP
@@ -184,7 +190,13 @@ static int gx,gy;
 			):DisplayDevice(),
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	screen_(FIM_NULL),
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 	vi_(FIM_NULL),
+#else /* FIM_WITH_LIBSDL_VERSION */
+	texture_(FIM_NULL),
+	wi_(FIM_NULL),
+	re_(FIM_NULL),
+#endif /* FIM_WITH_LIBSDL_VERSION */
 	current_w_(0), current_h_(0),
 	Bpp_(FIM_CNS_BPP_INVALID),
 	bpp_(FIM_CNS_BPP_INVALID),
@@ -192,7 +204,11 @@ static int gx,gy;
 	want_windowed_(FIM_SDL_FLAGS & SDL_FULLSCREEN ? false : true),
 	want_mouse_display_(true),
 	want_resize_(true),
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 	modes_(FIM_NULL)
+#else /* FIM_WITH_LIBSDL_VERSION */
+	numDisplayModes_(0)
+#endif /* FIM_WITH_LIBSDL_VERSION */
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
@@ -201,7 +217,9 @@ static int gx,gy;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		parse_optstring(opts_.c_str());
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		fim_bzero(&bvi_,sizeof(bvi_));
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		//current_w_=current_h_=0;
 	}
 
@@ -438,15 +456,20 @@ static int gx,gy;
 		if(fim_draw_help_map_ || fim_draw_help_map_tmp_)
 			draw_help_map();
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
-		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
+		if(SDL_MUSTLOCK(screen_))
+			SDL_UnlockSurface(screen_);
 
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		SDL_Flip(screen_);
-
+#else /* FIM_WITH_LIBSDL_VERSION */
+		sdl2_redraw();
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		return FIM_ERR_NO_ERROR;
 	}
 
 	bool SDLDevice::sdl_window_update(void)
 	{
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		vi_ = SDL_GetVideoInfo();
 		if(!vi_)
 			return false;
@@ -455,6 +478,15 @@ static int gx,gy;
 		bpp_      =vi_->vfmt->BitsPerPixel;
 		Bpp_      =vi_->vfmt->BytesPerPixel;
 		// FIXME: shall update want_windowed_ with effective flags contents
+#else /* FIM_WITH_LIBSDL_VERSION */
+		if(!wi_)
+			return false;
+		SDL_GetWindowSize(wi_, &current_w_, &current_h_);
+		if(!screen_ || !screen_->format)
+			return false;
+		bpp_      =screen_->format->BitsPerPixel;
+		Bpp_      =screen_->format->BytesPerPixel;
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		return true;
 	}
 
@@ -470,13 +502,24 @@ static int gx,gy;
 			goto sdlerr;
 		}
 
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if( const SDL_VideoInfo * bvip = SDL_GetVideoInfo() )
 		{
 			bvi_=*bvip;
 			get_modes_list();
 		}
+#else /* FIM_WITH_LIBSDL_VERSION */
+		get_modes_list();
+		want_width = want_width ? want_width : FIM_DEFAULT_WINDOW_WIDTH;
+		want_height = want_height ? want_height : FIM_DEFAULT_WINDOW_HEIGHT;
+		wi_ = SDL_CreateWindow(FIM_CNS_FIM_APPTITLE, SDL_WINDOWPOS_CENTERED /*SDL_WINDOWPOS_UNDEFINED*/, SDL_WINDOWPOS_CENTERED, want_width, want_height, want_resize_?SDL_WINDOW_RESIZABLE:0);
+		re_ = SDL_CreateRenderer(wi_, -1, 0);
+		SDL_RenderClear(re_);
+		SDL_RenderPresent(re_);
+#endif /* FIM_WITH_LIBSDL_VERSIO  */
 		fim_perror(FIM_NULL);
 		
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if(FIM_SDL_WANT_KEYREPEAT)
 		{
 			fim_sdl_int delay = SDL_DEFAULT_REPEAT_DELAY, interval = SDL_DEFAULT_REPEAT_INTERVAL;
@@ -484,6 +527,7 @@ static int gx,gy;
 				SDL_GetKeyRepeat(&delay,&interval);
 			fim_perror(FIM_NULL);
 		}
+#endif /* FIM_WITH_LIBSDL_VERSION */
 
 		if ( want_windowed_ )
 		{
@@ -504,8 +548,10 @@ static int gx,gy;
 		}
 		fim_perror(FIM_NULL);
 
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		reset_wm_caption();
 		fim_perror(FIM_NULL);
 
@@ -553,7 +599,13 @@ err:
 	void SDLDevice::finalize(void)
 	{
 		if ( ! finalized_ )
+		{
+#if (FIM_WITH_LIBSDL_VERSION == 2)
+			SDL_FreeSurface(screen_);
+			SDL_DestroyTexture(texture_);
+#endif /* FIM_WITH_LIBSDL_VERSION */
 			SDL_Quit();
+		}
 		finalized_=true;
 	}
 
@@ -630,7 +682,310 @@ err:
 
 	}
 
-	static fim_sys_int get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll)
+#if FIM_WANT_MOUSE_PAN
+static void get_input_inner_mouse_move(fim_key_t * c, SDL_Event & event, fim_sys_int *keypressp, bool want_poll)
+{
+	FIM_SDL_INPUT_DEBUG(c,"SDL_MOUSEMOTION");
+	{
+		//std::cout << current_w_    << " " << event.motion.y    << "\n";
+		//std::cout << event.motion.x    << " " << event.motion.y    << "\n";
+		//std::cout << event.motion.xrel << " " << event.motion.yrel << "\n";
+		Viewport* cv = cc.current_viewport();
+		static bool discardedfirst = false;
+		if(cv)
+		if(discardedfirst)
+		if(const Image* ci = cv->c_getImage())
+		if(ci->check_valid())
+		if( event.motion.x > 0 && event.motion.y )
+		{
+			// 1/(2*bf) of each screen side will be insensitive to mouse movement.
+			fim_off_t bf = 5;
+			fim_off_t vx = cv->viewport_width();
+			fim_off_t vy = cv->viewport_height();
+			fim_off_t bx = vx / bf;
+			fim_off_t by = vy / bf;
+			fim_coo_t riw = ci->width();
+			fim_coo_t rih = ci->height();
+
+#if FIM_WANT_POSITION_DISPLAYED
+			gx = (riw<vx) ? -1 : event.motion.x;
+			gy = (rih<vy) ? -1 : event.motion.y;
+#endif /* FIM_WANT_POSITION_DISPLAYED */
+
+			if(FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL)
+			{
+				// variable resolution mouse scroll (maximal smoothess)
+				// max of xres/yres discrete scrolls.
+				fim_off_t xres = FIM_MIN(vx-bx,riw), yres = FIM_MIN(vy-by,rih);
+				double px = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.x-bx/2,vx-bx,xres),xres);
+				double py = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.y-by/2,vy-by,yres),yres);
+				px*=100.0/xres;
+				py*=100.0/yres;
+				cv->pan_to(FIM_DELIMIT_TO_100(px),FIM_DELIMIT_TO_100(py));
+			}
+			else
+			{
+				// percentage scroll.
+				// downside: if image very wide/tall/big, will
+				// steps might be very large.
+				fim_off_t px = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx));
+				fim_off_t py = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by));
+				//std::cout << "pct:"<< px << " " << py << "\n";
+				cv->pan_to(px,py);
+			}
+			cv->display(); // draw only if necessary
+			//cv->redisplay(); // draw always
+		}
+		discardedfirst=true;
+	}
+}
+#endif /* FIM_WANT_MOUSE_PAN */
+
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+static fim_sys_int get_input_inner_mouse_click(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll)
+{
+	//case SDL_MOUSEMOTION:
+	//case SDL_MOUSEBUTTONUP:
+	if(fim::string wmc = cc.getStringVariable(FIM_VID_WANT_MOUSE_CTRL))
+	if( wmc.size()>=9 && strncpy(key_char_grid,wmc.c_str(),9) )
+	{
+		fim_coo_t x,y;
+		const Uint8 ms = SDL_GetMouseState(&x,&y);
+#if FIM_WANT_MOUSE_CROP
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+		const SDLMod mod = SDL_GetModState();
+#else /* FIM_WITH_LIBSDL_VERSION */
+		const SDL_Keymod mod = SDL_GetModState();
+#endif /* FIM_WITH_LIBSDL_VERSION */
+		const bool shift_on = ( (mod & KMOD_LSHIFT) || (mod & KMOD_LSHIFT) );
+
+		if( cc.find_keycode_for_bound_cmd(FIM_FLT_CROP) )
+		if(shift_on)
+		{
+			if ( g_last_click_x >= 0 && g_last_click_y >= 0 )
+			{
+				x = x - lastdstrect.x + lastsrcrect.x;
+				y = y - lastdstrect.y + lastsrcrect.y;
+				const fim_coo_t x1 = FIM_MIN(x, g_last_click_x );
+				const fim_coo_t x2 = FIM_MAX(x, g_last_click_x );
+				const fim_coo_t y1 = FIM_MIN(y, g_last_click_y );
+				const fim_coo_t y2 = FIM_MAX(y, g_last_click_y );
+
+				if (x2>x1)
+				if (y2>y1)
+				{
+					std::ostringstream oss;
+					oss << x1 << " " << y1 << " " << x2 << " " << y2;
+					cc.setVariable(FIM_VID_CROP_ONCE, oss.str());
+					*c=1+('k'-'a');
+					g_last_click_x = g_last_click_y = -1;
+					return 1;
+				}
+				g_last_click_x = g_last_click_y = -1;
+			}
+			g_last_click_x = x - lastdstrect.x + lastsrcrect.x;
+			g_last_click_y = y - lastdstrect.y + lastsrcrect.y;
+		}
+#endif /* FIM_WANT_MOUSE_CROP */
+
+#if FIM_WANT_SDL_CLICK_MOUSE_SUPPORT
+		Viewport* cv = cc.current_viewport();
+		fim_coo_t xt = cv->viewport_width()/3;
+		fim_coo_t yt = cv->viewport_height()/3;
+
+		if(!cc.inConsole() && ms&SDL_BUTTON_LMASK)
+		{
+		if( x < xt )
+		{
+			if( y < yt )
+			{
+				*c=key_char_grid[0]; return 1;
+			}
+			else
+			if( y < 2*yt )
+			{
+				*c=key_char_grid[1]; return 1;
+			}
+			else
+			{
+				*c=key_char_grid[2]; return 1;
+			}
+		}
+		else
+		if( x < 2*xt )
+		{
+			if( y < yt )
+			{
+				*c=key_char_grid[3]; return 1;
+			}
+			else
+			if( y < 2*yt )
+			{
+				*c=key_char_grid[4]; return 1;
+			}
+			else
+			{
+				*c=key_char_grid[5]; return 1;
+			}
+		}
+		else
+		{
+			if( y < yt )
+			{
+				*c=key_char_grid[6]; return 1;
+			}
+			else
+			if( y < 2*yt )
+			{
+				*c=key_char_grid[7]; return 1;
+			}
+			else
+			{
+				*c=key_char_grid[8]; return 1;
+			}
+		}
+		}
+#endif /* FIM_WANT_SDL_CLICK_MOUSE_SUPPORT */
+		//cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>cv->viewport_width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
+#if 0
+		if(ms&SDL_BUTTON_RMASK) cout << "rmask\n";
+		if(ms&SDL_BUTTON_LMASK) cout << "lmask\n";
+		if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
+		if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
+		if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
+#endif /* 1 */
+		if(!cc.inConsole())
+		{
+			if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
+			if(ms&SDL_BUTTON_RMASK) { toggle_draw_help_map(); return 0; }
+			if(ms&SDL_BUTTON_MMASK) { toggle_draw_help_map(); return 0; }
+			//if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
+			//if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
+			if(ms&SDL_BUTTON_X1MASK	) { *c='+'; return 1; }
+			if(ms&SDL_BUTTON_X2MASK	) { *c='-'; return 1; }
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+			if(ms&SDL_BUTTON(SDL_BUTTON_WHEELUP)) { *c='+'; return 1; }
+			if(ms&SDL_BUTTON(SDL_BUTTON_WHEELDOWN)) { *c='-'; return 1; }
+#endif /* FIM_WITH_LIBSDL_VERSION */
+		}
+	}
+	return 0;
+}
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
+
+#if (FIM_WITH_LIBSDL_VERSION == 2)
+fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll) const
+{
+	fim_sys_int ret=0;
+	SDL_Event event=*eventp;
+
+	*c = FIM_SYM_NULL_KEY;
+
+	if(want_poll)
+		ret=SDL_PollEvent(&event);
+	else
+		ret=SDL_WaitEvent(&event);
+	if(ret)
+	{
+		if(event.type==SDL_KEYUP)
+			if(!SDL_PollEvent(&event))
+				goto done;
+
+		switch (event.type)
+		{
+#if FIM_SDL_WANT_RESIZE 
+			case SDL_WINDOWEVENT:
+			{
+				int nw, nh;
+				SDL_GetWindowSize(wi_, &nw, &nh);
+				if(nw!=current_w_)
+				if(nh!=current_h_)
+				cc.display_resize(nw,nh);
+			}
+			break;
+#endif /* FIM_SDL_WANT_RESIZE */
+			case SDL_QUIT:
+#if FIM_SDL_ALLOW_QUIT
+				*c=cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
+				return 1;
+#endif /* FIM_SDL_ALLOW_QUIT */
+				*keypressp = 1; // fixme
+			break;
+			case SDL_TEXTINPUT:
+			// printable chars of any case
+			if (event.text.text)
+			{
+				*c = event.text.text[0];
+				FIM_SDL_INPUT_DEBUG(c," SDL_TEXTINPUT: " << " text:" << event.text.text << " =c:" << *c);
+				return 1;
+			}
+			break;
+			case SDL_KEYDOWN:
+
+			if(event.key.keysym.mod  & KMOD_RCTRL || event.key.keysym.mod  & KMOD_LCTRL )
+			{
+				if (event.key.keysym.scancode>=4)
+				if (event.key.keysym.scancode<30)
+				if (isalnum(event.key.keysym.sym))
+				if (isprint(event.key.keysym.sym))
+				{
+					*c = event.key.keysym.scancode - 3;
+					FIM_SDL_INPUT_DEBUG(c," SDL_KEYDOWN: mod: " << event.key.keysym.mod << " sym:" << event.key.keysym.sym << " scancode-3=c:" << *c << " (+CTRL)");
+					return 1;
+				}
+				return 0;
+					
+			}
+			if (event.key.keysym.sym > 0x80 || !isprint(event.key.keysym.sym))
+			if ( ! (event.key.keysym.mod & KMOD_RSHIFT || event.key.keysym.mod & KMOD_LSHIFT ) ) // the release of shift emits stuff
+			{
+				// arrows and stuff
+				if (want_poll) // hack: only set if in readline mode
+					switch (event.key.keysym.sym)
+					{
+						//case(SDLK_UP): *c=FIM_KKE_UP; break;
+						case(SDLK_UP):   *c=0x111; break;
+						case(SDLK_DOWN): *c=0x112; break;
+						case(SDLK_RIGHT):*c=0x113; break;
+						case(SDLK_LEFT): *c=0x114; break;
+						default: *c = event.key.keysym.sym;
+					}
+				else
+					*c = event.key.keysym.sym;
+				
+				FIM_SDL_INPUT_DEBUG(c," SDL_KEYDOWN: mod: " << event.key.keysym.mod << " sym:" << event.key.keysym.sym << " =c:" << *c);
+				return 1;
+			}
+			if (event.key.keysym.sym > 0x80 ||  isprint(event.key.keysym.sym))
+			{
+				// FIM_SDL_INPUT_DEBUG(c," SDL_KEYDOWN: sym:" << event.key.keysym.sym << " (ignored)");
+				return 0;
+			}
+			*c = event.key.keysym.sym;
+			FIM_SDL_INPUT_DEBUG(c," SDL_KEYDOWN: sym:" << event.key.keysym.sym << " =c:" << *c);
+			return *c ? 1 : 0;
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+			case SDL_MOUSEBUTTONDOWN:
+				return get_input_inner_mouse_click(c, eventp, keypressp, want_poll);
+			break;
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
+#if FIM_WANT_MOUSE_PAN
+			case SDL_MOUSEMOTION:
+				get_input_inner_mouse_move(c, event, keypressp, want_poll);
+			break;
+#endif /* FIM_WANT_MOUSE_PAN */
+		}
+	}
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+	flip_draw_help_map_tmp(false);
+#endif
+done:
+	return 0;
+}
+#endif /* FIM_WITH_LIBSDL_VERSION */
+
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+	fim_sys_int get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll)
 	{
 		bool ctrl_on=0;
 		bool alt_on=0;
@@ -640,7 +995,6 @@ err:
 
 		*c = FIM_SYM_NULL_KEY;
 
-//		while(SDL_PollEvent(&event))
 		if(want_poll)
 			ret=SDL_PollEvent(&event);
 		else
@@ -655,7 +1009,7 @@ err:
 			{
 #if FIM_SDL_WANT_RESIZE 
 				case SDL_VIDEORESIZE:
-						cc.display_resize(event.resize.w,event.resize.h);
+					cc.display_resize(event.resize.w,event.resize.h);
 				break;
 #endif /* FIM_SDL_WANT_RESIZE */
 				case SDL_QUIT:
@@ -664,11 +1018,10 @@ err:
 				return 1;
 				//cc.quit();
 #endif /* FIM_SDL_ALLOW_QUIT */
-				*keypressp = 1;
+				*keypressp = 1; // fixme
 				
 				break;
 				case SDL_KEYDOWN:
-
 				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL )
 					ctrl_on=true;
 				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  ) 
@@ -676,75 +1029,7 @@ err:
 				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )
 					;//shift_on=true;
 
-			//	std::cout << "sym : " << event.key.keysym.sym << "\n" ;
-			//	std::cout << "uni : " << event.key.keysym.unicode<< "\n" ;
-			//	if(shift_on)std::cout << "shift_on\n";
-
 				if( event.key.keysym.unicode == 0x0 )
-				{
-					/* arrows and stuff */
-					FIM_SDL_INPUT_DEBUG(c,"no unicode");
-					if(event.key.keysym.sym<256)
-					{
-						FIM_SDL_INPUT_DEBUG(c,"uhm");
-						*c=event.key.keysym.sym;
-						return 1;
-					}
-					else
-					if(event.key.keysym.sym>=SDLK_F1 && event.key.keysym.sym<=SDLK_F12)
-					{
-						FIM_SDL_INPUT_DEBUG(c,"FXX?");
-						*c=event.key.keysym.sym;
-						return 1;
-					}
-					else
-					if(
-						event.key.keysym.sym!=SDLK_LSHIFT
-					&&	event.key.keysym.sym!=SDLK_RSHIFT
-					&&	event.key.keysym.sym!=SDLK_LALT
-					&&	event.key.keysym.sym!=SDLK_RALT
-					&&	event.key.keysym.sym!=SDLK_LCTRL
-					&&	event.key.keysym.sym!=SDLK_RCTRL
-					&&	event.key.keysym.sym!=SDLK_LSUPER
-					&&	event.key.keysym.sym!=SDLK_RSUPER
-					&&	event.key.keysym.sym!=SDLK_MENU	
-					)
-					{
-						/* arrows.. .. */
-						*c=event.key.keysym.sym;
-						FIM_SDL_INPUT_DEBUG(c,"arrow");
-						return 1;
-					}
-					else
-					{
-						if( event.key.keysym.sym==SDLK_LSHIFT )
-							FIM_SDL_INPUT_DEBUG(c,"left shift");
-						if( event.key.keysym.sym==SDLK_RSHIFT )
-							FIM_SDL_INPUT_DEBUG(c,"right shift");
-						if( event.key.keysym.sym==SDLK_MENU )
-						{
-#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
-							flip_draw_help_map_tmp(true);
-#endif
-							FIM_SDL_INPUT_DEBUG(c,"menu");
-						}
-						if( event.key.keysym.sym==SDLK_LSUPER )
-							FIM_SDL_INPUT_DEBUG(c,"left win");
-						if( event.key.keysym.sym==SDLK_RSUPER )
-							FIM_SDL_INPUT_DEBUG(c,"right win");
-						if( event.key.keysym.sym==SDLK_RALT )
-							FIM_SDL_INPUT_DEBUG(c,"right alt");
-						if( event.key.keysym.sym==SDLK_LALT )
-							FIM_SDL_INPUT_DEBUG(c,"left alt");
-						if( event.key.keysym.sym==SDLK_RCTRL )
-							FIM_SDL_INPUT_DEBUG(c,"right control");
-						if( event.key.keysym.sym==SDLK_LCTRL )
-							FIM_SDL_INPUT_DEBUG(c,"left control");
-						/* we ignore lone shift or alt .. */
-						return 0;
-					}
-				}
-
 				if(alt_on)
 				{
 					*c=(fim_byte_t)event.key.keysym.unicode;
@@ -804,130 +1089,10 @@ err:
 				}
 				FIM_SDL_INPUT_DEBUG(c,"unknown");
 				return 0;
-
 				break;
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
-				//case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
-				//case SDL_MOUSEBUTTONUP:
-				if(fim::string wmc = cc.getStringVariable(FIM_VID_WANT_MOUSE_CTRL))
-				if( wmc.size()>=9 && strncpy(key_char_grid,wmc.c_str(),9) )
-				{
-					fim_coo_t x,y;
-					const Uint8 ms = SDL_GetMouseState(&x,&y);
-#if FIM_WANT_MOUSE_CROP
-					const SDLMod mod = SDL_GetModState();
-					const bool shift_on = ( (mod & KMOD_LSHIFT) || (mod & KMOD_LSHIFT) );
-
-					if( cc.find_keycode_for_bound_cmd(FIM_FLT_CROP) )
-					if(shift_on)
-					{
-						if ( g_last_click_x >= 0 && g_last_click_y >= 0 )
-						{
-							x = x - lastdstrect.x + lastsrcrect.x;
-							y = y - lastdstrect.y + lastsrcrect.y;
-							const fim_coo_t x1 = FIM_MIN(x, g_last_click_x );
-							const fim_coo_t x2 = FIM_MAX(x, g_last_click_x );
-							const fim_coo_t y1 = FIM_MIN(y, g_last_click_y );
-							const fim_coo_t y2 = FIM_MAX(y, g_last_click_y );
-
-							if (x2>x1)
-							if (y2>y1)
-							{
-								std::ostringstream oss;
-								oss << x1 << " " << y1 << " " << x2 << " " << y2;
-								cc.setVariable(FIM_VID_CROP_ONCE, oss.str());
-								*c=1+('k'-'a');
-								g_last_click_x = g_last_click_y = -1;
-								return 1;
-							}
-							g_last_click_x = g_last_click_y = -1;
-						}
-						g_last_click_x = x - lastdstrect.x + lastsrcrect.x;
-						g_last_click_y = y - lastdstrect.y + lastsrcrect.y;
-						break;
-					}
-#endif /* FIM_WANT_MOUSE_CROP */
-
-#if FIM_WANT_SDL_CLICK_MOUSE_SUPPORT
-					Viewport* cv = cc.current_viewport();
-					fim_coo_t xt = cv->viewport_width()/3;
-					fim_coo_t yt = cv->viewport_height()/3;
-
-					if(!cc.inConsole() && ms&SDL_BUTTON_LMASK)
-					{
-					if( x < xt )
-					{
-						if( y < yt )
-						{
-							*c=key_char_grid[0]; return 1;
-						}
-						else
-						if( y < 2*yt )
-						{
-							*c=key_char_grid[1]; return 1;
-						}
-						else
-						{
-							*c=key_char_grid[2]; return 1;
-						}
-					}
-					else
-					if( x < 2*xt )
-					{
-						if( y < yt )
-						{
-							*c=key_char_grid[3]; return 1;
-						}
-						else
-						if( y < 2*yt )
-						{
-							*c=key_char_grid[4]; return 1;
-						}
-						else
-						{
-							*c=key_char_grid[5]; return 1;
-						}
-					}
-					else
-					{
-						if( y < yt )
-						{
-							*c=key_char_grid[6]; return 1;
-						}
-						else
-						if( y < 2*yt )
-						{
-							*c=key_char_grid[7]; return 1;
-						}
-						else
-						{
-							*c=key_char_grid[8]; return 1;
-						}
-					}
-					}
-#endif /* FIM_WANT_SDL_CLICK_MOUSE_SUPPORT */
-					//cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>cv->viewport_width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
-#if 0
-					if(ms&SDL_BUTTON_RMASK) cout << "rmask\n";
-					if(ms&SDL_BUTTON_LMASK) cout << "lmask\n";
-					if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
-					if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
-					if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
-#endif /* 1 */
-					if(!cc.inConsole())
-					{
-						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
-						if(ms&SDL_BUTTON_RMASK) { toggle_draw_help_map(); return 0; }
-						if(ms&SDL_BUTTON_MMASK) { toggle_draw_help_map(); return 0; }
-						//if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
-						//if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
-						if(ms&SDL_BUTTON_X1MASK	) { *c='+'; return 1; }
-						if(ms&SDL_BUTTON_X2MASK	) { *c='-'; return 1; }
-						if(ms&SDL_BUTTON(SDL_BUTTON_WHEELUP)) { *c='+'; return 1; }
-						if(ms&SDL_BUTTON(SDL_BUTTON_WHEELDOWN)) { *c='-'; return 1; }
-					}
-				}
+					return get_input_inner_mouse_click(c, eventp, keypressp, want_poll);
 				break;
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 				case SDL_KEYUP:
@@ -935,59 +1100,7 @@ err:
 				break;
 				case SDL_MOUSEMOTION:
 #if FIM_WANT_MOUSE_PAN
-				FIM_SDL_INPUT_DEBUG(c,"SDL_MOUSEMOTION");
-				{
-					//std::cout << current_w_    << " " << event.motion.y    << "\n";
-					//std::cout << event.motion.x    << " " << event.motion.y    << "\n";
-					//std::cout << event.motion.xrel << " " << event.motion.yrel << "\n";
-					Viewport* cv = cc.current_viewport();
-					static bool discardedfirst = false;
-					if(cv)
-					if(discardedfirst)
-					if(const Image* ci = cv->c_getImage())
-					if(ci->check_valid())
-					if( event.motion.x > 0 && event.motion.y )
-					{
-						// 1/(2*bf) of each screen side will be insensitive to mouse movement.
-						fim_off_t bf = 5;
-						fim_off_t vx = cv->viewport_width();
-						fim_off_t vy = cv->viewport_height();
-						fim_off_t bx = vx / bf;
-						fim_off_t by = vy / bf;
-						fim_coo_t riw = ci->width();
-						fim_coo_t rih = ci->height();
-
-#if FIM_WANT_POSITION_DISPLAYED
-						gx = (riw<vx) ? -1 : event.motion.x;
-						gy = (rih<vy) ? -1 : event.motion.y;
-#endif /* FIM_WANT_POSITION_DISPLAYED */
-
-						if(FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL)
-						{
-							// variable resolution mouse scroll (maximal smoothess)
-							// max of xres/yres discrete scrolls.
-							fim_off_t xres = FIM_MIN(vx-bx,riw), yres = FIM_MIN(vy-by,rih);
-							double px = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.x-bx/2,vx-bx,xres),xres);
-							double py = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.y-by/2,vy-by,yres),yres);
-							px*=100.0/xres;
-							py*=100.0/yres;
-							cv->pan_to(FIM_DELIMIT_TO_100(px),FIM_DELIMIT_TO_100(py));
-						}
-						else
-						{
-							// percentage scroll.
-							// downside: if image very wide/tall/big, will
-							// steps might be very large.
-							fim_off_t px = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx));
-							fim_off_t py = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by));
-							//std::cout << "pct:"<< px << " " << py << "\n";
-							cv->pan_to(px,py);
-						}
-						cv->display(); // draw only if necessary
-						//cv->redisplay(); // draw always
-					}
-					discardedfirst=true;
-				}
+					get_input_inner_mouse_move(c, event, keypressp, want_poll);
 #endif /* FIM_WANT_MOUSE_PAN */
 				break;
 				default:
@@ -1002,6 +1115,7 @@ done:
 #endif
 		return 0;
 	}
+#endif /* FIM_WITH_LIBSDL_VERSION */
 
 	fim_sys_int SDLDevice::get_input(fim_key_t * c, bool want_poll)
 	{
@@ -1178,11 +1292,25 @@ err:
 		fs_puts(f_, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y, FIM_CNS_WHITE);
 
-		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+		if(SDL_MUSTLOCK(screen_)) 
+			SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
+#else /* FIM_WITH_LIBSDL_VERSION */
+		sdl2_redraw();
+#endif /* FIM_WITH_LIBSDL_VERSION */
 done:
 		return errval;
 	}
+#if (FIM_WITH_LIBSDL_VERSION == 2)
+	void SDLDevice::sdl2_redraw(void)const
+	{
+		SDL_UpdateTexture(texture_, NULL, screen_->pixels, screen_->pitch);
+		SDL_RenderClear(re_);
+		SDL_RenderCopy(re_, texture_, NULL, NULL);
+		SDL_RenderPresent(re_);
+	}
+#endif /* FIM_WITH_LIBSDL_VERSION */
 
 	fim_key_t SDLDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	{
@@ -1226,24 +1354,36 @@ done:
 
 	void SDLDevice::lock(void)
 	{
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if(SDL_MUSTLOCK(screen_))
 		{
 			if(SDL_LockSurface(screen_) < 0) return;
 		}
+#else /* FIM_WITH_LIBSDL_VERSION */
+		// nothing
+#endif /* FIM_WITH_LIBSDL_VERSION */
 	}
 
 	void SDLDevice::unlock(void)
 	{
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
+#else /* FIM_WITH_LIBSDL_VERSION */
+		sdl2_redraw();
+#endif /* FIM_WITH_LIBSDL_VERSIO  */
 	}
 
 
 	void SDLDevice::get_modes_list(void)
 	{
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if (!modes_)
 			if ( bvi_.vfmt )
 				modes_ = SDL_ListModes(bvi_.vfmt, SDL_HWSURFACE|SDL_FULLSCREEN);
+#else /* FIM_WITH_LIBSDL_VERSION */
+		numDisplayModes_ = SDL_GetNumDisplayModes(0);
+#endif /* FIM_WITH_LIBSDL_VERSION */
 	}
 		
 	bool SDLDevice::allowed_resolution(fim_coo_t w, fim_coo_t h) const
@@ -1252,15 +1392,9 @@ done:
 			goto ok;
 		if(w<FIM_SDL_MINWIDTH || h<FIM_SDL_MINHEIGHT)
 			if ( ! want_windowed_ )
-			{
-				std::cerr << "requested window size ("<< w <<":"<< h <<") too small for fullscreen...\n";
 				return false;
-			}
 		if(w<f_->swidth() || h<f_->sheight())
-		{
-			std::cerr << "requested window size ("<< w <<":"<< h <<") smaller than font size...\n";
 			return false;
-		}
 ok:
 		return true;
 	}
@@ -1297,27 +1431,82 @@ ok:
 			if( want_flags & SDL_FULLSCREEN )
 				nr = 1, dr = 1;
 
-			w = FIM_FRAC(bvi_.current_w,nr,dr);
-		       	h = FIM_FRAC(bvi_.current_h,nr,dr);
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+			w = bvi_.current_w;
+		       	h = bvi_.current_h;
+#else /* FIM_WITH_LIBSDL_VERSION */
+			SDL_GetWindowSize(wi_, &w, &h);
+#endif /* FIM_WITH_LIBSDL_VERSION */
+			w = FIM_FRAC(w,nr,dr);
+		       	h = FIM_FRAC(h,nr,dr);
 		}
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		w = FIM_MIN(w,bvi_.current_w);
 		h = FIM_MIN(h,bvi_.current_h);
 		//std::cout << "using " << bvi_.current_w << " "<<  bvi_.current_h << " !\n";
+#else /* FIM_WITH_LIBSDL_VERSION */
+		{
+			SDL_DisplayMode displayMode;
+			SDL_GetDesktopDisplayMode(0,&displayMode);
+			const int w_=displayMode.w;
+			const int h_=displayMode.h;
+			w = FIM_MIN(w,w_);
+			h = FIM_MIN(h,h_);
+		}
+#endif /* FIM_WITH_LIBSDL_VERSION */
 
 #if FIM_WANT_HARDCODED_ICON
 		icon = SDL_LoadBMP_RW(SDL_RWFromMem(icondata, sizeof(icondata)), 1);
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		SDL_WM_SetIcon(icon, FIM_NULL);
+#else /* FIM_WITH_LIBSDL_VERSION */
+		SDL_SetWindowIcon(wi_, icon);
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		SDL_FreeSurface(icon);
 #endif /* FIM_WANT_HARDCODED_ICON */
 
 		//std::cout << "resizing to " << w << " "<< h << "\n";
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if (FIM_NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, want_flags)))
 		{
 			///std::cout << "resizing to " << w << " "<< h << " FAILED!\n";
 			return FIM_ERR_GENERIC;
 		}
-
+#else /* FIM_WITH_LIBSDL_VERSION */
+		if ( screen_)
+		{
+			SDL_FreeSurface(screen_);
+			SDL_DestroyTexture(texture_);
+			screen_=FIM_NULL;
+		}
+		if(wi_)
+		{
+//			if(!want_windowed_) w = h = 0;
+			SDL_SetWindowFullscreen(wi_,want_flags);
+			if((want_flags & SDL_FULLSCREEN) == SDL_FULLSCREEN)
+			{
+				sdl_window_update();
+				w=current_w_;
+				h=current_h_;
+			}
+			SDL_SetWindowSize(wi_,w,h);
+			sdl_window_update();
+		}
+		if (!screen_)
+		{
+			if (FIM_NULL==(nscreen_ = SDL_CreateRGBSurface(0, w/*?w:10*/, h/*?h:10*/, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000)))
+			{
+				return FIM_ERR_GENERIC;
+			}
+			else
+			{
+				current_w_ = w, current_h_ = h;
+				texture_ = SDL_CreateTexture(re_, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, w, h);
+			}
+		}
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		screen_=nscreen_;
+
 		if(want_flags&SDL_FULLSCREEN)
 			reset_wm_caption();
 		if(!sdl_window_update())
@@ -1352,7 +1541,11 @@ ok:
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 #if FIM_WANT_CAPTION_CONTROL
 		if( msg && want_windowed_ )
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 			SDL_WM_SetCaption(msg,FIM_SDL_ICONPATH);
+#else /* FIM_WITH_LIBSDL_VERSION */
+			SDL_SetWindowTitle(wi_,msg);
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		else
 		       	rc=FIM_ERR_UNSUPPORTED;
 #else
@@ -1363,7 +1556,11 @@ ok:
 	
 	fim_err_t SDLDevice::reset_wm_caption(void)const
 	{
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
+#else /* FIM_WITH_LIBSDL_VERSION */
+		SDL_SetWindowTitle(wi_,FIM_CNS_FIM_APPTITLE);
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -1387,13 +1584,13 @@ ok:
 
 	fim_err_t SDLDevice::get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h) const
 	{
+		int i;
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if ( !modes_ )
 			return FIM_ERR_GENERIC;
 
 		if( modes_ == (SDL_Rect **) -1 )
 			return FIM_ERR_GENERIC;
-
-		int i;
 		for(i=0;modes_[i];++i)
 #ifdef FIM_SDL_DEBUG
 			printf("  %d x %d\n", modes_[i]->w, modes_[i]->h);
@@ -1401,6 +1598,12 @@ ok:
 			;
 #endif
 		const int mc = i;
+#else /* FIM_WITH_LIBSDL_VERSION */
+		if( numDisplayModes_ < 1 )
+			return FIM_ERR_GENERIC;
+		const int mc = numDisplayModes_;
+		i = mc - 1;
+#endif /* FIM_WITH_LIBSDL_VERSION */
 
 		if (mc)
 		switch (spec)
@@ -1417,6 +1620,7 @@ ok:
 			case 'S':
 				i = mc - 1;
 			break;
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 			default:
 			case 'a':
 				i = -1;
@@ -1438,10 +1642,48 @@ ok:
 				h-= bvi_.current_h / 10;
 				i = -1;
 			break;
+#else /* FIM_WITH_LIBSDL_VERSION */
+			default:
+			case 'a':
+				i = -1;
+				w = current_w_;
+				h = current_h_;
+				h-= current_h_ / 3;
+				w-= current_w_ / 3;
+			break;
+#if FIM_SDL_WANT_PERCENTAGE
+			case '%':
+			{
+				SDL_DisplayMode displayMode;
+				SDL_GetDesktopDisplayMode(0,&displayMode);
+				h = (displayMode.h * h) / 100;
+				w = (displayMode.w * w) / 100;
+				i = -1;
+			}
+			break;
+#endif /* FIM_SDL_WANT_PERCENTAGE */
+			case 'A':
+				w = current_w_;
+				h = current_h_;
+				h-= current_h_ / 10;
+				i = -1;
+			break;
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		}
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 		if ( i >= 0 )
 			w = modes_[i]->w,
 			h = modes_[i]->h;
+#else /* FIM_WITH_LIBSDL_VERSION */
+		if ( i >= 0 )
+		{
+			SDL_DisplayMode displayMode;
+			const int displayIndex_=i;
+			SDL_GetDisplayMode(displayIndex_,numDisplayModes_,&displayMode);
+			w = displayMode.w;
+			h = displayMode.h;
+		}
+#endif /* FIM_WITH_LIBSDL_VERSION */
 		return FIM_ERR_NO_ERROR;
 	}
 #endif /* FIM_WITH_LIBSDL */

@@ -1161,26 +1161,42 @@ dnl 		fim_handle_sdl=no
 dnl         fi
 dnl ])
 
-AC_ARG_ENABLE(sdl, AS_HELP_STRING([--disable-sdl],[Disable libsdl support.]),
-[       if test x$enableval = xyes ; then fim_handle_sdl=yes ; fi ]
+sdl_version_preference=''
+AC_ARG_ENABLE(sdl, AS_HELP_STRING([--disable-sdl],[Disable libsdl support. Or --enable-sdl=1 --enable-sdl=2 to give preference to one those two versions (requires either sdl-config or sdl2-config).]),
+sdl_version_preference="$enableval";
+[       if test x$enableval != xno ; then fim_handle_sdl=yes ; fi ]
 [       if test x$enableval = xno  ; then fim_handle_sdl=no  ; fi ])
 
 # tested with sdl 1.2
 if test x$fim_handle_sdl != xno; then
 	# support for custom library configurator path
-        if test x$libsdl_config_prefix != x; then
-                LIBSDL_CONFIG="$libsdl_config_prefix/bin/sdl-config"
-        else
-                AC_PATH_PROG(LIBSDL_CONFIG, sdl-config, no)
-        fi
+	echo PORCO DIO $sdl_version_preference
+	if test x"${sdl_version_preference}" != x2; then
+        	if test x$libsdl_config_prefix != x; then
+        	        LIBSDL_CONFIG="$libsdl_config_prefix/bin/sdl-config"
+        	else
+        	        AC_PATH_PROG(LIBSDL_CONFIG, sdl-config, no)
+        	fi
+	fi
+	if test x"${sdl_version_preference}" != x1; then
+        	if test x$libsdl_config_prefix != x; then
+        	        LIBSDL2_CONFIG="$libsdl_config_prefix/bin/sdl2-config"
+        	else
+        	        AC_PATH_PROG(LIBSDL2_CONFIG, sdl2-config, no)
+        	fi
+		if test x$LIBSDL2_CONFIG != x -a x$LIBSDL2_CONFIG != x"no" ; then
+			LIBSDL_CONFIG="$LIBSDL2_CONFIG";
+		fi
+		unset LIBSDL2_CONFIG;
+	fi
         if test "x$LIBSDL_CONFIG" = "xno"; then
 		if test x$fim_handle_sdl = xyes; then
-                	AC_MSG_ERROR([LIBSDL not found (failed detecting the sdl-config program)])
+                	AC_MSG_ERROR([LIBSDL not found (failed detecting the sdl configuration (sdl-config/sdl2-config) program)])
 		else
 			fim_handle_sdl='no'
 		fi
         else
-		AC_MSG_NOTICE([Activating LIBSDL.])
+		AC_MSG_NOTICE([Activating LIBSDL (use $LIBSDL_CONFIG).])
 		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
@@ -1194,7 +1210,11 @@ if test x$fim_handle_sdl != xno; then
                 LIBS="$LIBS `$LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS`"
 		# finish this !
                 #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
-                AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined, if libsdl support is enabled])
+		if test x`$LIBSDL_CONFIG --version | head -c 1` == x2; then
+			AC_DEFINE(FIM_WITH_LIBSDL, 2, [Defined if libsdl support is enabled, and set to 1 or 2.])
+		else
+			AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined if libsdl support is enabled, and set to 1 or 2.])
+		fi
         fi
 fi
 AM_CONDITIONAL(ENABLE_SDL, test x$fim_handle_sdl = xyes)

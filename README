@@ -164,6 +164,7 @@ Requirements are:
    or clang ( https://clang.llvm.org/ )
  * and optionally:
 	* libsdl-1.2		  ( http://libsdl.org/ )
+	* libsdl-2.0		  ( http://libsdl.org/ )
 	* libexif		  ( https://libexif.github.io/ )
 	* libjpeg		  ( http://www.ijg.org/ )
 	* libpng		  ( http://www.libpng.org/ )
@@ -222,7 +223,7 @@ You can also run separately parts of `make tests`:
 	sudo apt-get install pkg-config                # to generate configure
 	sudo apt-get install libreadline-dev libexif-dev
 	sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
-	sudo apt-get install libsdl1.2-dev libaa1-dev libcaca-dev
+	sudo apt-get install libsdl2-dev libaa1-dev libcaca-dev
 	# experimental, not recommended:
 	sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
 	sudo apt-get install libarchive-dev
@@ -273,6 +274,7 @@ Information about the framebuffer can be found under the directory
 
 The file decoding libraries are listed in an earlier section.
 Tested and working with library SDL-1.2.12 through SDL-1.2.15.
+Introduced experimental support for SDL-2.0.
 
 From the original Fbi README, it reads that Gerd himself built FBI hacking
 "a svgalib PhotoCD viewer", so regard this software as a big, dirty code
@@ -365,7 +367,7 @@ patch.
  autoconf autoconf-archive autoheader automake autotools-dev bison ctags
  flex groff g++ libaa1-dev libcaca-dev libdjvulibre-dev libgif4 libgif-dev
  libjpeg-dev libncurses5-dev libpng-dev libpoppler-cpp-dev libpoppler-dev
- libreadline-dev libsdl-dev libspectre-dev libtiff-dev libtool m4 make svn
+ libreadline-dev libsdl2-dev libspectre-dev libtiff-dev libtool m4 make svn
  txt2html libexif-dev
 
  The above list was valid on a Debian Jessie installation; it's possible that
