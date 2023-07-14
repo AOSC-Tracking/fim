@@ -22,17 +22,31 @@
 #define FIM_SDLDEVICE_H
 #ifdef FIM_WITH_LIBSDL
 
+#define FIM_WITH_LIBSDL_VERSION FIM_WITH_LIBSDL
+
 #include "DisplayDevice.h"
 #include <SDL.h>
+#if (FIM_WITH_LIBSDL_VERSION == 2)
+#include <SDL_video.h>
+#endif
 
 class SDLDevice FIM_FINAL :public DisplayDevice 
 {
 private:
 
 	SDL_Surface *screen_;
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+#else
+	SDL_Texture *texture_;
+#endif
 	SDL_Event event_;
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 	const SDL_VideoInfo* vi_;
 	SDL_VideoInfo bvi_;
+#else
+	SDL_Window* wi_;
+	SDL_Renderer *re_;
+#endif
 
 	fim_coo_t current_w_;
 	fim_coo_t current_h_;
@@ -42,11 +56,18 @@ private:
 	bool want_windowed_;
 	bool want_mouse_display_;
 	bool want_resize_;
+#if (FIM_WITH_LIBSDL_VERSION == 1)
 	SDL_Rect ** modes_;
+#else
+	int numDisplayModes_;
+#endif
 
 	void get_modes_list(void);
 	fim_err_t get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h) const;
 public:
+#if (FIM_WITH_LIBSDL_VERSION == 2)
+	fim_sys_int get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll) const;
+#endif
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice(MiniConsole& mc_, fim::string opts);
@@ -101,6 +122,9 @@ private:
 	fim_err_t reset_wm_caption(void)const;
 	fim_err_t post_wmresize(void);
 	fim_err_t draw_help_map(void);
+#if (FIM_WITH_LIBSDL_VERSION == 2)
+	void sdl2_redraw(void)const;
+#endif
 };
 
 #endif /* FIM_WITH_LIBSDL */

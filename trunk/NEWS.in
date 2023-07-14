@@ -5,6 +5,10 @@
 
  * Nothing yet. Please use stable branch 0.6 for now.
 
+                Version 0.6-rc1
+
+ * Experimental support for SDL2.
+
                 Version 0.6-rc0
 
 A summary of major improvements:

@@ -1,6 +1,10 @@
 	
 	FIM NEWS -- history of main user-visible changes in FIM.
 
+                Version 0.6-rc1
+
+ * Experimental support for SDL2.
+
                 Version 0.6-rc0
 
 A summary of major improvements:
