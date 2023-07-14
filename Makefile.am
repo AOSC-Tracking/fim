@@ -193,6 +193,8 @@ endif
 .PHONY: sdltests
 sdltests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  --version | grep 'SDL[2]\?'
+	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS);
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=hhMR20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
