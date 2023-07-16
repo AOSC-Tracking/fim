@@ -394,6 +394,7 @@ class CommandConsole FIM_FINAL :
 	fim_cxr fcmd_display(const args_t& args);
 	fim_cxr fcmd_redisplay(const args_t& args);
 	fim_bool_t key_syms_update(void);
+	fim::string find_key_syms(fim_key_t key)const;
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;
 	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;

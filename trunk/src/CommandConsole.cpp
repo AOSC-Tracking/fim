@@ -2234,6 +2234,14 @@ err:
 		return true;
 	}
 
+	fim::string CommandConsole::find_key_syms(fim_key_t key)const
+	{
+		fim::string sym;
+		if ( key_syms_.find(key) != key_syms_.end() )
+			sym = key_syms_.find(key)->second;
+		return sym;
+	}
+
 	size_t CommandConsole::byte_size(void)const
 	{
 		size_t bs = 0;
