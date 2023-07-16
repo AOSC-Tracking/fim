@@ -917,6 +917,11 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 				alt_on = false;
 			}
 			break;
+			case SDL_DROPFILE:
+				cc.push(event.drop.file,FIM_FLAG_PUSH_REC/*|FIM_FLAG_PUSH_BACKGROUND|FIM_FLAG_PUSH_FILE_NO_CHECK*/); // TODO: perhaps add flag to jump there; and make FIM_FLAG_PUSH_REC effective from this context.
+				cc.browser_.fcmd_goto(args_t{"?"+std::string(event.drop.file)}); // mere $ could not cope with jump to existing
+				sdl2_redraw();
+			break;
 			case SDL_DISPLAYEVENT:
 			case SDL_SYSWMEVENT:
 			case SDL_WINDOWEVENT:
