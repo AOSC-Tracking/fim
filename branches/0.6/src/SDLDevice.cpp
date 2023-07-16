@@ -41,6 +41,7 @@
 #define FIM_WANT_HARDCODED_ICON 1
 #define FIM_SDL_ICONPATH ""
 #define FIM_FRAC(VAL,N,D) (((VAL)*(N))/(D))
+#define FIM_SDL_KEYSYM_TO_RL(X) ((X) | (1<<31)) // see readline.cpp
 
 namespace fim
 {
@@ -69,9 +70,10 @@ namespace fim
 #endif /* FIM_WANT_MOUSE_CROP */
 
 #ifdef FIM_SDL_DEBUG
+#define FIM_SDL_DBG_COUT std::cout << "SDL:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
 #define FIM_SDL_INPUT_DEBUG(C,MSG)  \
 /* i miss sooo much printf() :'( */ \
-std::cout << (size_t)getmilliseconds() << " : "<<MSG<<" : "; \
+FIM_SDL_DBG_COUT << (size_t)getmilliseconds() << " : "<<MSG<<" : "; \
 std::cout.setf ( std::ios::hex, std::ios::basefield ); \
 std::cout.setf ( std::ios::showbase ); \
 std::cout << *(fim_key_t*)(C) <<"\n"; \
@@ -878,6 +880,7 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 {
 	fim_sys_int ret=0;
 	SDL_Event event=*eventp;
+	static int alt_on=false;
 
 	*c = FIM_SYM_NULL_KEY;
 
@@ -888,11 +891,25 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 	if(ret)
 	{
 		if(event.type==SDL_KEYUP)
+		{
+			if ( ( event.key.keysym.sym == SDLK_LALT ) || ( event.key.keysym.sym == SDLK_RALT ))
+			{
+				FIM_SDL_INPUT_DEBUG(c," SDL_KEYUP: ALT");
+				alt_on = false;
+			}
 			if(!SDL_PollEvent(&event))
 				goto done;
+		}
 
 		switch (event.type)
 		{
+			case SDL_KEYUP:
+			if ( ( event.key.keysym.sym == SDLK_LALT ) || ( event.key.keysym.sym == SDLK_RALT ))
+			{
+				FIM_SDL_INPUT_DEBUG(c," SDL_KEYUP: ALT");
+				alt_on = false;
+			}
+			break;
 #if FIM_SDL_WANT_RESIZE 
 			case SDL_WINDOWEVENT:
 			{
@@ -912,7 +929,10 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 				*keypressp = 1; // fixme
 			break;
 			case SDL_TEXTINPUT:
+			if (alt_on)
+				break;
 			// printable chars of any case
+
 			if (event.text.text)
 			{
 				*c = event.text.text[0];
@@ -921,7 +941,12 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 			}
 			break;
 			case SDL_KEYDOWN:
-
+			if ( ( event.key.keysym.sym == SDLK_LALT ) || ( event.key.keysym.sym == SDLK_RALT ))
+			{
+				FIM_SDL_INPUT_DEBUG(c," SDL_KEYDOWN: ALT");
+				alt_on = true;
+				return 0;
+			}
 			if(event.key.keysym.mod  & KMOD_RCTRL || event.key.keysym.mod  & KMOD_LCTRL )
 			{
 				if (event.key.keysym.scancode>=4)
@@ -936,6 +961,15 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 				return 0;
 					
 			}
+
+			if (alt_on)
+			if (isalpha(event.key.keysym.sym))
+			{
+				*c = FIM_SDL_KEYSYM_TO_RL(event.key.keysym.sym);
+				FIM_SDL_INPUT_DEBUG(c," SDL_KEYDOWN: mod: " << event.key.keysym.mod << " sym:" << event.key.keysym.sym << " =c:" << *c << " (+CTRL)");
+				return 1;
+			}
+
 			if (event.key.keysym.sym > 0x80 || !isprint(event.key.keysym.sym))
 			if ( ! (event.key.keysym.mod & KMOD_RSHIFT || event.key.keysym.mod & KMOD_LSHIFT ) ) // the release of shift emits stuff
 			{
@@ -976,10 +1010,11 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 #endif /* FIM_WANT_MOUSE_PAN */
 		}
 	}
+done:
+	FIM_SDL_INPUT_DEBUG(c,"no key");
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 	flip_draw_help_map_tmp(false);
 #endif
-done:
 	return 0;
 }
 #endif /* FIM_WITH_LIBSDL_VERSION */
@@ -1322,6 +1357,7 @@ done:
 		SDL_Event levent;
 		fim_sys_int lkeypress=0;
 		fim_tms_t sms=10,ms=seconds*1000;// sms: sleep ms
+		FIM_SDL_INPUT_DEBUG(&c,"");
 #if 0
 		for(;seconds>0;--seconds)
 			sleep(1);

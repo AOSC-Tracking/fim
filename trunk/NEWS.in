@@ -38,6 +38,8 @@ A summary of major improvements:
 
 In detail, in no particular order:
 
+# (r1979-r1980)
+ * Experimental support for SDL2.
 # (r1971)
  * Switch --resolution 'fullscreen' appends 'W' if in SDL mode.
 # (r1970)
