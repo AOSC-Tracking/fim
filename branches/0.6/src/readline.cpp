@@ -418,6 +418,7 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
 	rl_erase_empty_line=1; // NEW: 20110630 in sdl mode with no echo disabling, prints newlines, if unset
+	rl_set_keyboard_input_timeout(1000); // rl_read_key will wait 1000us (1ms) before rl_event_hook
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	fim_want_rl_cl_with_esc=1;
 #endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */

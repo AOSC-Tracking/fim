@@ -39,6 +39,7 @@ A summary of major improvements:
 In detail, in no particular order:
 
  * Experimental support for SDL2.
+ * More responsive readline mode.
  * Switch --resolution 'fullscreen' appends 'W' if in SDL mode.
  * If a "matrix market" file is loaded, its rows, columns and nnz are image variables, too.
  * Introduce special 'early' form  -C =var=val  where variable var is assigned to unquoted and non-interpreted value val immediately.
