@@ -947,7 +947,7 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 			if (alt_on)
 				break;
 			// printable chars of any case and some symbols
-			if (event.text.text)
+			if (event.text.text[0])
 			{
 				*c = event.text.text[0];
 				FIM_SDL_INPUT_DEBUG(c," SDL_TEXTINPUT: " << " text:" << event.text.text << " =c:" << *c);
