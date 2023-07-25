@@ -1162,7 +1162,7 @@ dnl         fi
 dnl ])
 
 sdl_version_preference=''
-AC_ARG_ENABLE(sdl, AS_HELP_STRING([--disable-sdl],[Disable libsdl support. Or --enable-sdl=1 --enable-sdl=2 to give preference to one those two versions (requires either sdl-config or sdl2-config).]),
+AC_ARG_ENABLE(sdl, AS_HELP_STRING([--disable-sdl],[Disable libsdl support. Or --enable-sdl=1 --enable-sdl=2 to give preference to one those two versions. Requires either sdl-config or sdl2-config. Some configurations require prepending PKG_CONFIG=pkg-config before configure, for sdl2-config to work.]),
 sdl_version_preference="$enableval";
 [       if test x$enableval != xno ; then fim_handle_sdl=yes ; fi ]
 [       if test x$enableval = xno  ; then fim_handle_sdl=no  ; fi ])
@@ -1186,6 +1186,15 @@ if test x$fim_handle_sdl != xno; then
         	fi
 		if test x$LIBSDL2_CONFIG != x -a x$LIBSDL2_CONFIG != x"no" ; then
 			LIBSDL_CONFIG="$LIBSDL2_CONFIG";
+		fi
+		LIBS_BEFORE_CHECK="$LIBS"
+		export LIBS="$LIBS `$LIBSDL2_CONFIG --static-libs`"
+		AC_CACHE_CHECK([Whether sdl2-config gives linkable output with $LIBS], [have_cv_sdl2_config_ok], AC_LINK_IFELSE([AC_LANG_PROGRAM([/*headers*/], [/*main*/])],[have_cv_sdl2_config_ok=yes],[have_cv_sdl2_config_ok=no],[have_cv_sdl2_config_ok=no]))
+		LIBS="$LIBS_BEFORE_CHECK"
+		unset LIBS_BEFORE_CHECK
+		if test x"$have_cv_sdl2_config_ok" = xno && test x"$LIBSDL2_CONFIG" != x && pkg-config --version; then
+			AC_MSG_NOTICE([Setting PKG_CONFIG=pkg-config, perhaps it can help sdl-config.])
+			export PKG_CONFIG=pkg-config;
 		fi
 		unset LIBSDL2_CONFIG;
 	fi
