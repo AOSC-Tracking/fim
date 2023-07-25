@@ -274,7 +274,7 @@ Information about the framebuffer can be found under the directory
 
 The file decoding libraries are listed in an earlier section.
 Tested and working with library SDL-1.2.12 through SDL-1.2.15.
-Introduced experimental support for SDL-2.0.
+Experimental support for SDL-2.0.
 
 From the original Fbi README, it reads that Gerd himself built FBI hacking
 "a svgalib PhotoCD viewer", so regard this software as a big, dirty code
