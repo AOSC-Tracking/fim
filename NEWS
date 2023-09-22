@@ -5,6 +5,10 @@
 
  * Nothing yet. Please use stable branch 0.6 for now.
 
+                Version 0.6-rc2
+
+ * File dropping support in SDL2 mode and more responsive readline mode.
+
                 Version 0.6-rc1
 
  * Experimental support for SDL2.
