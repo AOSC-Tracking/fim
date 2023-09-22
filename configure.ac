@@ -1209,11 +1209,11 @@ if test x$fim_handle_sdl != xno; then
 		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
-		LIBSDL_CONFIG_FLAGS=--static-libs
+		LIBSDL_CONFIG_FLAGS=--libs
 		if $LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS ; then 
-			LIBSDL_CONFIG_FLAGS=--static-libs
-		else
 			LIBSDL_CONFIG_FLAGS=--libs
+		else
+			LIBSDL_CONFIG_FLAGS=--static-libs
 		fi
 		AC_MSG_NOTICE([Invoking $LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS.])
                 LIBS="$LIBS `$LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS`"
