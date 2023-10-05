@@ -550,7 +550,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EX_NUM_STRING	"{number}"
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
 #define FIM_CNS_SHELL	"/bin/sh"
-#define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM" 
+#define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, WEBP" 
 #define FIM_CNS_DSFF_SN	"BMP, PCX" 
 #if FIM_USE_CXX11
 /* this default FIM_CNS_PUSHDIR_RE might be built based on build options */

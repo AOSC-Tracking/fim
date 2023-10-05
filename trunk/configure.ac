@@ -180,7 +180,7 @@ AC_ARG_VAR([LIBGIF],[libgif library (contributes to LIBS)])
 AC_ARG_VAR([LIBJPEG],[libjpeg library (contributes to LIBS)])
 AC_ARG_VAR([LIBPS],[libspectre library (contributes to LIBS)])
 AC_ARG_VAR([LIBDJVU],[libdjvu libdjvulibre (contributes to LIBS)])
-AC_ARG_VAR([LIBPOPPLER],[poppler libdjvulibre (contributes to LIBS)])
+AC_ARG_VAR([LIBPOPPLER],[poppler library (contributes to LIBS)])
 dnl
 AC_PATH_PROG([RM],[rm],[no])
 AC_PATH_PROG([SED],[sed],[no])
@@ -964,6 +964,26 @@ else
 	AC_DEFINE(FIM_WITH_PCX, 0, [PCX file support.])
 fi
 AM_CONDITIONAL(ENABLE_PCX, test x$fim_handle_pcx = xyes)
+
+dnl ================================================================================
+## webp file handling
+AC_CHECK_HEADERS([webp/decode.h webp/demux.h], [fim_handle_webp=yes;], [fim_handle_webp=no;])
+AC_ARG_ENABLE(webp, AS_HELP_STRING([--disable-webp],[Disable WebP file support.]),
+[       if test x$enableval = xno ; then
+		fim_handle_webp =no
+        fi
+])
+if test x$fim_handle_webp = xyes; then
+	LIBS="$LIBS `pkg-config libwebpdemux --libs`";
+	CXXFLAGS="$CXXFLAGS `pkg-config libwebpdemux --cflags`";
+	AC_MSG_NOTICE([Enabling WebP file format support.])
+	AC_DEFINE(FIM_WITH_LIBWEBP, 1, [WebP file support.])
+	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffWebP.o"
+else
+	AC_MSG_NOTICE([Disabling PCX file format support.])
+	AC_DEFINE(FIM_WITH_LIBWEBP, 0, [WebP file support.])
+fi
+AM_CONDITIONAL(ENABLE_WEBP, test x$fim_handle_webp = xyes)
 
 dnl ================================================================================
 
@@ -2159,6 +2179,7 @@ dnl
 	PS       file support (libspectre)  :*${fim_handle_ps:-no}
 	NEF/RAW  file support (libufraw)    :*${fim_handle_ufraw:-no}
 	TAR/ZIP/.. file support (libarchive):*${fim_handle_archive:-no}
+	WEBP     file support (libwebp)     :*${fim_handle_webp:-no}
 	GraphicsMagick support (libGraphicsMagick):*${fim_handle_graphicsmagick:-no}
 
         YACC     : ${YACC}

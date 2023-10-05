@@ -112,6 +112,7 @@ EXTRA_fim_SOURCES += Imlib2Device.cpp
 EXTRA_fim_SOURCES += FbiStuffXyz.cpp
 EXTRA_fim_SOURCES += FbiStuffPcx.cpp
 EXTRA_fim_SOURCES += FbiStuffBmp.cpp
+EXTRA_fim_SOURCES += FbiStuffWebP.cpp
 
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba$(EXEEXT)
 

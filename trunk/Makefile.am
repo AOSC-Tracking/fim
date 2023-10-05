@@ -422,12 +422,16 @@ if WITH_XFIG
 else
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # 
 endif
+if ENABLE_WEBP
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = libwebp
+else
 if WITH_LIBGRAPHICSMAGICK
 	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = libGraphicsMagick
 else
 if WITH_CONVERT
 	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # assuming no other decoders exists, -X stops external converters
 	if which convert && convert identify -list format | grep -i webp; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
+endif
 endif
 endif
 if WITH_CONVERT

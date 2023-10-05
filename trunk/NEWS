@@ -4,6 +4,7 @@
                 Version 0.7-trunk
 
  * Still work-in-progress. Please use stable branch 0.6 for now.
+ * Experimental support for reading WebP images via libwebp.
  * FIM requires a compiler supporting at least C++11.
 
                 Version 0.6-rc2

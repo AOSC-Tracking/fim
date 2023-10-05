@@ -171,6 +171,7 @@ Requirements are:
 	* giflib		  ( http://sourceforge.net/projects/giflib/ )
 	* libtiff		  ( http://www.libtiff.org/ )
 	* libdjvulibre	  ( https://djvu.sourceforge.net/ )
+	* libwebp         (https://github.com/webmproject/libwebp/)
 	* ...
 
 
