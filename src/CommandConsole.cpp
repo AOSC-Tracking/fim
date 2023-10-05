@@ -235,8 +235,6 @@ ret:		return key;
 		{
 #if FIM_USE_CXX11
 			bindings_.erase(bi);
-#else /* FIM_USE_CXX11 */
-			bindings_.erase(c);
 #endif /* FIM_USE_CXX11 */
 			oss << c << ": successfully unbound.\n";
 			bindings_help_.erase(c); // if key c existent, erases associated help msg.
@@ -513,12 +511,6 @@ err:
 		 */
 #if FIM_USE_CXX11
 		return fcmd_alias({a,c,d});
-#else /* FIM_USE_CXX11 */
-		args_t args;
-		args.push_back(a);
-		args.push_back(c);
-		args.push_back(d);
-		return fcmd_alias(args);
 #endif /* FIM_USE_CXX11 */
 	}
 
@@ -1248,8 +1240,6 @@ rlnull:
 		marked_files_.erase(marked_files_.begin(),marked_files_.end());
 #if FIM_USE_CXX11
 		return {};
-#else /* FIM_USE_CXX11 */
-		return fim::string();
 #endif /* FIM_USE_CXX11 */
 	}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
@@ -2318,9 +2308,6 @@ err:
 #if FIM_USE_CXX11
 				for(auto & fs : fc)
 					fim_free_fs_font(fs.second), fs.second=FIM_NULL;
-#else /* FIM_USE_CXX11 */
-				for(	std::vector<fim_ffp_t>::iterator fi=fc.begin(); fi!=fc.end();++fi )
-					fim_free_fs_font(fi->second), fi->second=FIM_NULL;
 #endif /* FIM_USE_CXX11 */
 				fc.erase(fc.begin(),fc.end());
 				fc=lfc;

@@ -250,8 +250,6 @@ err:
 		else
 #if FIM_USE_CXX11
 			return {};
-#else /* FIM_USE_CXX11 */
-			return Var();
 #endif /* FIM_USE_CXX11 */
 	}
 } /* namespace fim */

@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,8 +25,6 @@
 #ifdef HAVE_SYS_TIME_H
 #if FIM_USE_CXX11
 #include <cstdint>
-#else /* FIM_USE_CXX11 */
-#include <stdint.h>
 #endif /* FIM_USE_CXX11 */
 #include <unistd.h>
 typedef uint64_t fim_time_t;
@@ -52,13 +50,6 @@ class Cache FIM_FINAL
 	using vcachels_t = std::map<cache_key_t,ViewportState >;	//key -> viewport state
 	//using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> >;	//key -> clones
 	//using cuc_t = std::map<fim::ImagePtr,int >;	//image -> clones usage counter
-#else /* FIM_USE_CXX11 */
-	typedef std::map<cache_key_t,fim::ImagePtr >  cachels_t;	//key -> image
-	typedef std::map<cache_key_t,fim_time_t > 	   lru_t;	//image -> time
-	typedef std::map<cache_key_t,int >        ccachels_t;	//key->counter
-	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//key -> viewport state
-	//typedef std::map<cache_key_t,std::vector<fim::ImagePtr> > cloned_cachels_t;	//key -> clones
-	//typedef std::map<fim::ImagePtr,int >  	   cuc_t;	//image -> clones usage counter
 #endif /* FIM_USE_CXX11 */
 
 #if FIM_IMG_NAKED_PTRS
@@ -96,10 +87,6 @@ class Cache FIM_FINAL
 	public:
 	/* a deleted member function (e.g. not even a be'friend'ed class can call it) */
 	Cache& operator= (const Cache&rhs) = delete;
-#else /* FIM_USE_CXX11 */
-	private:
-	/* a disabled member function (because of private: keyword) */
-	Cache& operator= (const Cache&rhs) { return *this; }
 #endif /* FIM_USE_CXX11 */
 	public:
 	bool freeCachedImage(ImagePtr image, const ViewportState *vsp, bool force);

@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,12 +32,6 @@ namespace fim
 	//using fim_var_id_list = std::vector<fim_var_id> ;
 	using fim_var_id_set = std::set<fim_var_id>;
 	using fim_var_val_set = std::set<Var>;
-#else /* FIM_USE_CXX11 */
-	typedef fim::string fim_var_id;	//id
-	typedef std::map<const fim_var_id,Var> variables_t;	//id->var
-	//typedef std::vector<fim_var_id> fim_var_id_list;
-	typedef std::set<fim_var_id> fim_var_id_set;
-	typedef std::set<Var> fim_var_val_set;
 #endif /* FIM_USE_CXX11 */
 
 	class Namespace

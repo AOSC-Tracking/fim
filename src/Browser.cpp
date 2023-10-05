@@ -41,8 +41,6 @@
 #include <utility>	/* std::swap */
 #include <random>	/* std::random_device */
 #include <algorithm>	/* std::shuffle */
-#else /* FIM_USE_CXX11 */
-#include <algorithm>	/* std::swap */
 #endif /* FIM_USE_CXX11 */
 
 #if FIM_WANT_FLIST_STAT 
@@ -295,9 +293,6 @@ ret:
 #if FIM_USE_CXX11
 		for(auto le : flist_)
 			os << le << FIM_CNS_NEWLINE;
-#else /* FIM_USE_CXX11 */
-		for(size_t i=0; i<flist_.size(); ++i)
-			os << flist_[i] << FIM_CNS_NEWLINE;
 #endif /* FIM_USE_CXX11 */
 		return os;
 	}
@@ -310,12 +305,6 @@ ret:
 		if( !stdin_image || !stdin_image->check_valid() )
 			goto ret;
 		default_image_ = std::move(stdin_image);
-#else /* FIM_USE_CXX11 */
-		if( !stdin_image || !stdin_image->check_valid() )
-			goto ret;
-		if( default_image_ )
-		       	delete default_image_;
-		default_image_ = stdin_image;
 #endif /* FIM_USE_CXX11 */
 		if(!cache_.setAndCacheStdinCachedImage(default_image_))
 			std::cerr << FIM_EMSG_CACHING_STDIN;
@@ -722,10 +711,6 @@ nop:
 						flist_.set_cf(li-1);
 				}
 #endif
-#else /* FIM_USE_CXX11 */
-				args_t args;
-				args.push_back(c.c_str());
-				do_filter(args);
 #endif /* FIM_USE_CXX11 */
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
@@ -748,8 +733,6 @@ ret:
 		if( n_files() )
 #if FIM_USE_CXX11
 			return fcmd_reload({});
-#else /* FIM_USE_CXX11 */
-			return fcmd_reload( args_t() );
 #endif /* FIM_USE_CXX11 */
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -1204,10 +1187,6 @@ ret:
 		else
 			g.seed(std::mt19937::default_seed);
 		std::shuffle(flist_.begin(),flist_.end(),g);
-#else /* FIM_USE_CXX11 */
-		if( dts )
-			std::srand(time(FIM_NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
-		std::random_shuffle(flist_.begin(),flist_.end());
 #endif /* FIM_USE_CXX11 */
 		return current();
 	}
@@ -1318,8 +1297,6 @@ nop:
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 #if FIM_USE_CXX11
 		const auto N = flist_.size();
-#else /* FIM_USE_CXX11 */
-		const fim_int N = flist_.size();
 #endif /* FIM_USE_CXX11 */
 		FIM_PR('*');
 
@@ -2571,8 +2548,6 @@ ret:
 		}
 #if FIM_USE_CXX11
 		this->shrink_to_fit();
-#else /* FIM_USE_CXX11 */
-		this->reserve(this->size());
 #endif /* FIM_USE_CXX11 */
 	}
 
@@ -2585,20 +2560,6 @@ ret:
 			const size_t idx = std::find(this->begin(),this->end(),filename) - this->begin();
 #if FIM_USE_CXX11
 			this->erase(std::remove_if(this->begin(),this->end(),[&](const fim::fle_t&fl)->bool{return fim::string(fl)==filename;}),this->end());
-#else
-#if 0
-			struct flecmp {
-				const fim::string&en;
-				flecmp(const fim::string &fn):en(fn){} 
-				bool operator()(const fim_fn_t&r)const{return fim::string(r) == en;} 
-			};
-			flecmp fci(filename);
-			this->erase(std::remove_if(this->begin(),this->end(),fci),this->end());
-#else
-			for( size_t i=0; i < this->size(); ++i )
-				if( fim::string((*this)[i]) == filename )
-					this->erase(this->begin()+i);
-#endif
 #endif
 			if (idx < cf_)
 				cf_--;
@@ -2655,11 +2616,6 @@ void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
 	for(auto fit=bit;fit!=eit;++fit)
 		if(bs.at(fit-bit) != negative)
 			this->erase(fit-ecount),ecount++;
-#else /* FIM_USE_CXX11 */
-	const size_t tsize = size();
-	for(size_t pos=0;pos<tsize;++pos)
-		if(bs.at(pos) != negative)
-			this->erase(this->begin()+pos-ecount),ecount++;
 #endif /* FIM_USE_CXX11 */
 	// TODO: updating cf_ here would make sense, but is redundant
 }
@@ -2681,11 +2637,6 @@ flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) c
 		if(bs.at(fit-bit) != positive )
 			nlist.emplace_back(*fit);// this might spare constructor
 			//nlist.push_back(*fit);
-#else /* FIM_USE_CXX11 */
-	const size_t tsize = size();
-	for(size_t pos=0;pos<tsize;++pos)
-		if(bs.at(pos) != positive )
-			nlist.push_back(*(this->begin()+pos));
 #endif /* FIM_USE_CXX11 */
 	return nlist;
 }

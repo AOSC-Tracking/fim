@@ -3,7 +3,8 @@
 
                 Version 0.7-trunk
 
- * Nothing yet. Please use stable branch 0.6 for now.
+ * Still work-in-progress. Please use stable branch 0.6 for now.
+ * FIM requires a compiler supporting at least C++11.
 
                 Version 0.6-rc2
 

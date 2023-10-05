@@ -52,8 +52,6 @@ enum fim_tii_t /* test image index  */ {
 /* pixel intensity float */
 #if FIM_USE_CXX11
 	using fim_pif_t = float;
-#else /* FIM_USE_CXX11 */
-typedef float fim_pif_t;
 #endif /* FIM_USE_CXX11 */
 
 class Image FIM_FINAL 
@@ -193,9 +191,6 @@ class Image FIM_FINAL
 	using ImagePtr = std::shared_ptr<Image>;
 	using ImageCPtr = std::shared_ptr<const Image>;
 #endif /* FIM_IMG_NAKED_PTRS */
-#else /* FIM_USE_CXX11 */
-	typedef Image* ImagePtr;
-	typedef const Image* ImageCPtr;
 #endif /* FIM_USE_CXX11 */
 } /* namespace fim */
 #if FIM_WANT_PIC_LVDN
@@ -222,37 +217,22 @@ class ImgDscs FIM_FINAL: public std::map<fim_fn_t,fim_ds_t>
 #if FIM_WANT_PIC_LVDN
 #if FIM_USE_CXX11
 	using vd_t = std::map<fim_fn_t,VNamespace> ;
-#else /* FIM_USE_CXX11 */
-	typedef std::map<fim_fn_t,VNamespace> vd_t;
 #endif /* FIM_USE_CXX11 */
 	vd_t vd_;
 #endif /* FIM_WANT_PIC_LVDN */
 #if FIM_USE_CXX11
-#else /* FIM_USE_CXX11 */
-	template<class T> struct ImgDscsCmp:public std::binary_function<typename T::value_type, typename T::mapped_type, bool>
-	{
-		public:
-		bool operator() (const typename T::value_type &vo, const typename T::mapped_type mo) const
-		{
-			return vo.second == mo;
-		}
-	};
 #endif /* FIM_USE_CXX11 */
 	ImgDscs::iterator li_;
 	ImgDscs::iterator fo(const key_type& sk, const ImgDscs::iterator & li)
 	{
 #if FIM_USE_CXX11
 		return std::find_if(li,end(),[&](ImgDscs::value_type v){return v.second == sk;});
-#else /* FIM_USE_CXX11 */
-		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 #endif /* FIM_USE_CXX11 */
 	}
 	ImgDscs::const_iterator fo(const key_type& sk, const ImgDscs::const_iterator & li)const
 	{
 #if FIM_USE_CXX11
 		return std::find_if(li,cend(),[&](ImgDscs::value_type v){return v.second == sk;});
-#else /* FIM_USE_CXX11 */
-		return std::find_if(li,end() ,std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 #endif /* FIM_USE_CXX11 */
 	}
 public:
@@ -260,8 +240,6 @@ public:
 	{
 #if FIM_USE_CXX11
 		return std::find_if(cbegin(),cend(),[&](ImgDscs::value_type v){return v.second == sk;});
-#else /* FIM_USE_CXX11 */
-		return std::find_if( begin(), end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 #endif /* FIM_USE_CXX11 */
 	}
 private:
@@ -317,8 +295,6 @@ public:
 							ss+=ds.substr(eci);
 #if FIM_USE_CXX11
 							return std::move(ss);
-#else /* FIM_USE_CXX11 */
-							return ss;
 #endif /* FIM_USE_CXX11 */
 #else /* FIM_WANT_DESC_VEXP */
 							return ds;

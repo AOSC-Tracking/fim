@@ -2,7 +2,7 @@
 /*
  string.h : Fim's string type
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -51,14 +51,6 @@ namespace fim
 #if FIM_WANT_LONG_INT
 #if FIM_USE_CXX11
 	string::string(int i):string(std::to_string(i)) { }
-#else /* FIM_USE_CXX11 */
-	string::string(int i)
-	{
-		fim_char_t buf[FIM_CHARS_FOR_INT];
-		snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",i);
-		buf[FIM_CHARS_FOR_INT-1]='\0';
-		append(buf);
-	}
 #endif /* FIM_USE_CXX11 */
 #endif /* FIM_WANT_LONG_INT */
 
@@ -66,32 +58,6 @@ namespace fim
 	string::string(fim_int i):string(std::to_string(i)) { }
 	string::string(size_t i):string(std::to_string(i)) { }
 	string::string(float i):string(std::to_string(i)) { }
-#else /* FIM_WANT_LONG_INT */
-	string::string(fim_int i)
-	{
-		fim_char_t buf[FIM_CHARS_FOR_INT];
-		fim_snprintf_fim_int(buf,i);
-		append(buf);
-	}
-
-	string::string(size_t i)
-	{
-		fim_char_t buf[FIM_CHARS_FOR_INT];
-#if FIM_USE_OLDCXX
-		snprintf(buf,FIM_CHARS_FOR_INT-1,"%u",(unsigned)i);
-#else
-		snprintf(buf,FIM_CHARS_FOR_INT-1,"%zd",i);
-#endif
-		buf[FIM_CHARS_FOR_INT-1]='\0';
-		append(buf);
-	}
-
-	string::string(float i)
-	{
-		fim_char_t buf[FIM_ATOX_BUFSIZE];
-		sprintf(buf,"%f",i);
-		assign(buf);
-	}
 #endif /* FIM_USE_CXX11 */
 
 	string::string(int * i)
