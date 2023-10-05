@@ -1656,7 +1656,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
 #if FIM_USE_CXX11
-    const char * xmlh = R"***(<?xml version="1.0" encoding="UTF-8")***"; // a raw string literal does not need backslashes
+    const char * xmlh = R"***(<?xml version="1.0" encoding="UTF-8")***"; // a raw string literal does not need escape sequences with backslash
 #endif /* FIM_USE_CXX11 */
     //fim_char_t command[FIM_PIPE_CMD_BUFSIZE]; /* FIXME: overflow risk ! */
 #endif /* FIM_WITH_LIBPNG  */

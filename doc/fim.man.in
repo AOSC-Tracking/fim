@@ -34,7 +34,7 @@ Further features are display of EXIF tags, JPEG comments, EXIF rotation/orientat
 As a default,
 .B
 fim
-displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM are supported via third party libraries. 
+displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, WEBP are supported via third party libraries. 
 Further formats are supported via external converters. 
 For XCF (Gimp's) images, will try to use 'xcftopnm'.
 For FIG vectorial images, will try to use 'fig2dev'.
