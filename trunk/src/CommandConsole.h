@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -188,10 +188,6 @@ class CommandConsole FIM_FINAL :
 	public:
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
 	CommandConsole& operator= (const CommandConsole&cc) = delete;
-#else /* FIM_USE_CXX11 */
-	private:
-	/* a disabled copy constructor (because private:) */
-	CommandConsole& operator= (const CommandConsole&cc) { return *this; }
 #endif /* FIM_USE_CXX11 */
 
 	public:

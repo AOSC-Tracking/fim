@@ -177,7 +177,7 @@
 #if FIM_USE_CXX11
 #define FIM_WANT_CROP 1 /* experimental, unfinished */
 #else /* FIM_USE_CXX11 */
-#define FIM_WANT_CROP 0 /* experimental, unfinished */
+#define Your compiler seems to predate C++11!
 #endif /* FIM_USE_CXX11 */
 #define FIM_WANT_MOUSE_CROP FIM_WANT_CROP /* experimental, unfinished */
 #define FIM_EXPERIMENTAL_IMG_NMSPC 1
@@ -229,12 +229,6 @@
 #define FIM_OVERRIDE override
 #define FIM_FINAL final
 #define FIM_NORETURN [[noreturn]]
-#else /* FIM_USE_CXX11 */
-#define FIM_NOEXCEPT
-#define FIM_CONSTEXPR const
-#define FIM_OVERRIDE 
-#define FIM_FINAL 
-#define FIM_NORETURN 
 #endif /* FIM_USE_CXX11 */
 #if FIM_USE_CXX14
 #define FIM_DEPRECATED(MSG) [[deprecated(MSG)]]
@@ -263,11 +257,6 @@ namespace fim
 	using fim_ds_t = string; /* file description */
 	using sym_keys_t = std::map<fim::string,fim_key_t >;	//symbol->code
 	using fim_cxr = fim::string; // command execution result
-	#else /* FIM_USE_CXX11 */
-	typedef string fim_fn_t; /* file name */
-	typedef string fim_ds_t; /* file description */
-	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
-	typedef fim::string fim_cxr; // command execution result
 	#endif /* FIM_USE_CXX11 */
 
 	void status(const fim_char_t *desc, const fim_char_t *info);
@@ -277,10 +266,6 @@ class ViewportState
 #if FIM_USE_CXX11
 	public:
 	fim_off_t	steps_{},hsteps_{},vsteps_{},top_{},left_{},panned_{} ;	/* viewport state variables */
-#else /* FIM_USE_CXX11 */
-	public:
-	fim_off_t	steps_,hsteps_,vsteps_,top_,left_,panned_ ;	/* viewport state variables */
-	ViewportState(void)	:steps_(0) ,hsteps_(0) ,vsteps_(0) ,top_(0) ,left_(0) ,panned_(0x0) {}
 #endif /* FIM_USE_CXX11 */
 };
 
@@ -570,8 +555,6 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #if FIM_USE_CXX11
 /* this default FIM_CNS_PUSHDIR_RE might be built based on build options */
 #define FIM_CNS_PUSHDIR_RE	R"***(\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|WEBP)$)***" 
-#else /* FIM_USE_CXX11 */
-#define FIM_CNS_PUSHDIR_RE	    "\\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|WEBP)$"
 #endif /* FIM_USE_CXX11 */
 #define FIM_CNS_ARCHIVE_RE	"\\.(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
 #define FIM_CNS_PIPEABLE_PATH_RE	"^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$"

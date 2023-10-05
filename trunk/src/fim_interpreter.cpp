@@ -285,8 +285,6 @@ Var ex(NodeType p)
 								na[i] = ss;
 #if FIM_USE_CXX11
 								fargs.emplace_back(std::move(na[i]));
-#else /* FIM_USE_CXX11 */
-								fargs.push_back(na[i]);
 #endif /* FIM_USE_CXX11 */
 							}
 							break;
@@ -365,8 +363,6 @@ Var ex(NodeType p)
 							{
 #if FIM_USE_CXX11
 								args.emplace_back(std::move(na[i]));
-#else /* FIM_USE_CXX11 */
-								args.push_back(na[i]);
 #endif /* FIM_USE_CXX11 */
 							}
 							break;

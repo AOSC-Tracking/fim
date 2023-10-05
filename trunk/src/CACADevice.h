@@ -2,7 +2,7 @@
 /*
  CACADevice.h : libcaca device Fim driver header file
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,9 +47,6 @@ class CACADevice FIM_FINAL:public DisplayDevice
 #if FIM_USE_CXX11
 	caca_canvas_t *cv_; // {} pending
 	caca_display_t *dp_; // {} pending
-#else /* FIM_USE_CXX11 */
-	caca_canvas_t *cv_;
-	caca_display_t *dp_;
 #endif /* FIM_USE_CXX11 */
 #endif
 	public:

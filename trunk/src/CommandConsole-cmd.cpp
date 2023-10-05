@@ -454,8 +454,6 @@ err:
 			{
 #if FIM_USE_CXX11
 				browser_.set_default_image(ImagePtr(std::move(stream_image)));
-#else /* FIM_USE_CXX11 */
-				browser_.set_default_image(stream_image);
 #endif /* FIM_USE_CXX11 */
 				browser_.push_path(FIM_STDIN_IMAGE_NAME);
 			}
@@ -872,8 +870,6 @@ err:
 #if FIM_WANT_PIC_CMTS_RELOAD
 #if FIM_USE_CXX11
 	/* */
-#else /* FIM_USE_CXX11 */
-	static void fim_cc_fetch(const std::pair<string,fim_char_t> & dfp){cc.id_.fetch(dfp.first,dfp.second);}
 #endif /* FIM_USE_CXX11 */
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */
 
@@ -889,8 +885,6 @@ err:
 #if FIM_USE_CXX11
 			for (auto & dfp : cc.browser_.dfl_) 
 				cc.id_.fetch(dfp.first,dfp.second);
-#else /* FIM_USE_CXX11 */
-			std::for_each(cc.browser_.dfl_.begin(),cc.browser_.dfl_.end(),fim_cc_fetch);
 #endif /* FIM_USE_CXX11 */
 			browser_.cache_.desc_update();
 		}

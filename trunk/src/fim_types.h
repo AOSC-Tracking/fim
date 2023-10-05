@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2022 Michele Martone
+ (c) 2011-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -76,20 +76,13 @@
 	enum fim_redraw_t { FIM_REDRAW_UNNECESSARY=0, FIM_REDRAW_NECESSARY=1};
 #if FIM_USE_CXX11
 	// TODO: move using aliases here ...
-#else /* FIM_USE_CXX11 */
-	// TODO: move typedefs here ...
 #endif /* FIM_USE_CXX11 */
 	// TODO: same also in CommandConsole.h
 
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
 
-#if FIM_USE_CXX11
 #define FIM_NULL nullptr
 #define FIM_ENUM_BASE : fim_flags_t /* In the future might want to add the class attribute to make the enums scoped. */
-#else /* FIM_USE_CXX11 */
-#define FIM_NULL NULL
-#define FIM_ENUM_BASE 
-#endif /* FIM_USE_CXX11 */
 
 #endif /* FIM_TYPES_FIM_H */

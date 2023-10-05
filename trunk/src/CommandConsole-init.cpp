@@ -443,8 +443,6 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		static_assert(std::is_polymorphic<Namespace>(),FIM_EMSG_ITE);
 		static_assert(std::is_polymorphic<MiniConsole>(),FIM_EMSG_ITE);
 		static_assert(*FIM_SYM_UNKNOWN_STRING==FIM_SYM_UNKNOWN_CHAR,FIM_EMSG_ICE);
-#else   /* FIM_USE_CXX11 */
-		assert(*FIM_SYM_UNKNOWN_STRING==FIM_SYM_UNKNOWN_CHAR);
 #endif /* FIM_USE_CXX11 */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{

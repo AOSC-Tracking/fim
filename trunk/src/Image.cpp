@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2023 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -140,9 +140,6 @@ namespace fim
 		//#include <execution>
 		//std::for_each(std::execution::parallel_policy,data,data+howmany,[](fim_byte_t & b){b = ~ b;});
 		std::for_each(data,data+howmany,[](fim_byte_t & b){b = ~ b;});
-#else /* FIM_USE_CXX11 */
-		for( fim_byte_t * p = data; p < data + howmany ;p++)
-			*p = ~ *p;
 #endif /* FIM_USE_CXX11 */
 	}
 

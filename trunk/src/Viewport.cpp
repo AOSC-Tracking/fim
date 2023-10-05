@@ -674,13 +674,6 @@ namespace fim
 			return do_pan({ (a1 ? a1 : a2 ) });
 		else
 			return do_pan({});
-#else /* FIM_USE_CXX11 */
-		args_t args;
-		if(a1)
-			args.push_back(a1);
-		if(a2)
-			args.push_back(a2);
-		return do_pan(args);
 #endif /* FIM_USE_CXX11 */
 	}
 

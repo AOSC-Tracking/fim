@@ -67,8 +67,6 @@ class fim_bitset_t FIM_FINAL :public std::vector<fim_bool_t>
 	void set(size_t pos, fim_bool_t value = true){ (*this)[pos]=value; }
 #if FIM_USE_CXX11
 	void negate(void){ for(auto bit : (*this)) bit = !bit;  }
-#else /* FIM_USE_CXX11 */
-	void negate(void){ size_t tsize = size(); for(size_t pos=0;pos<tsize;++pos) this->begin()[pos] = ! this->begin()[pos]; }
 #endif /* FIM_USE_CXX11 */
 }; /* fim_bitset_t */
 
@@ -176,31 +174,6 @@ class Browser FIM_FINAL
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
 	Browser& operator= (const Browser& rhs) = delete;
 	Browser(const Browser& rhs) = delete;
-#else /* FIM_USE_CXX11 */
-	private:
-	Browser& operator= (const Browser& rhs){return *this;/* a disabled copy constructor */}
-	explicit Browser(const Browser& rhs):
-		Namespace(rhs),
-		flist_(args_t()),
-#if FIM_WANT_PIC_LBFL
-		tlist_(args_t()),
-#endif /* FIM_WANT_PIC_LBFL */
-#if FIM_WANT_PIC_LBFL
-		llist_(args_t()),
-		limited_(false),
-#endif /* FIM_WANT_PIC_LBFL */
-		nofile_(),
-		commandConsole_(cc),
-#ifdef FIM_READ_STDIN_IMAGE
-		default_image_(FIM_NULL),
-#endif /* FIM_READ_STDIN_IMAGE */
-		last_regexp_(fim::string()),
-		last_src_dir_(0)
-		,cache_(Cache())
-#if FIM_WANT_BACKGROUND_LOAD
-		,pcache_(cache_)
-#endif /* FIM_WANT_BACKGROUND_LOAD */
-		{}
 #endif /* FIM_USE_CXX11 */
 	public:
 	fim_fn_t current(void)const;
