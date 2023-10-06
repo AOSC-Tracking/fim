@@ -2338,26 +2338,30 @@ found_a_loader:	/* we have a loader */
     	if(cc.getIntVariable(FIM_VID_RESIZE_HUGE_ON_LOAD)==1)
 	if( cc.current_viewport() && img->i.width>0 && img->i.width>0 )
 	{
-		fim_scale_t mf = 1.5; // max factor (of image to viewport)
-		fim_scale_t ef = 1.5; // estimation factor (of max viewport to current window)
-		fim_scale_t mswe = ef*cc.current_viewport()->viewport_width(); // max screen width estimate
-		fim_scale_t mshe = ef*cc.current_viewport()->viewport_height(); // max screen height estimate
-		fim_scale_t ws = FIM_INT_SCALE_FRAC(img->i.width  , mf*mswe);
-		fim_scale_t hs = FIM_INT_SCALE_FRAC(img->i.height , mf*mshe);
+		const fim_scale_t mf = FIM_CNS_HUGE_IMG_TO_VIEWPORT_PROPORTION; // max factor (of image to viewport)
+		const fim_scale_t ef = FIM_CNS_HUGE_IMG_TO_VIEWPORT_PROPORTION; // estimation factor (of max viewport to current window)
+		const fim_scale_t mswe = ef*cc.current_viewport()->viewport_width(); // max screen width estimate
+		const fim_scale_t mshe = ef*cc.current_viewport()->viewport_height(); // max screen height estimate
+		const fim_scale_t ws = FIM_INT_SCALE_FRAC(img->i.width  , mf*mswe);
+		const fim_scale_t hs = FIM_INT_SCALE_FRAC(img->i.height , mf*mshe);
+
 		if( ws > FIM_CNS_SCALEFACTOR_ONE && hs > FIM_CNS_SCALEFACTOR_ONE )
 		{
 			// std::cout << img->i.width << " " << img->i.height << std::endl;
 			// std::cout << ws << " " << hs << std::endl;
-			fim_scale_t sf = floor(FIM_MIN(ws,hs));
+			const fim_scale_t sf = floor(FIM_MIN(ws,hs));
 			struct ida_image *simg = FbiStuff::scale_image(img,1.0/sf,FIM_CNS_SCALEFACTOR_ONE
 #if FIM_WANT_MIPMAPS
 					,FIM_NULL
 #endif /* FIM_WANT_MIPMAPS */
 					);
 			if(simg)
-		       		FbiStuff::free_image(img),
+			{
+	    			if(vl)
+					FIM_VERB_PRINTF("image is huge (%d x %d): scaled it down to %d x %d\n", img->i.height, img->i.width, simg->i.height, simg->i.width);
+		       		FbiStuff::free_image(img);
 				img=simg;
-	    		if(vl)FIM_VERB_PRINTF("image huge: scaled it down\n");
+			}
 		}
 	}
 #endif /* FIM_WANT_RESIZE_HUGE_AFTER_LOAD */

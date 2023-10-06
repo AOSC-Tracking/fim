@@ -1,6 +1,10 @@
 	
 	FIM NEWS -- history of main user-visible changes in FIM.
 
+                Version 0.6-rc3 (unreleased)
+
+ * Minor documentation improvements.
+
                 Version 0.6-rc2
 
  * File dropping support in SDL2 mode and more responsive readline mode.
