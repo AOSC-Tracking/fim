@@ -549,6 +549,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EX_RES_STRING	"{regexp(s)}"
 #define FIM_CNS_EX_NUM_STRING	"{number}"
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
+#define FIM_CNS_EX_HELP_ITEM	"{help-item}"
 #define FIM_CNS_SHELL	"/bin/sh"
 #define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP" 
 #define FIM_CNS_DSFF_SN	"BMP, PCX" 
