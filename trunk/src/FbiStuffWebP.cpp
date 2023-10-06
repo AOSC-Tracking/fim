@@ -1,4 +1,4 @@
-/* $LastChangedDate: 2022-10-30 16:13:52 +0100 (Sun, 30 Oct 2022) $ */
+/* $LastChangedDate$ */
 /*
  FbiStuffWebP.cpp : fim functions to decode WebP files using libwebp
 

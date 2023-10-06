@@ -986,6 +986,26 @@ fi
 AM_CONDITIONAL(ENABLE_WEBP, test x$fim_handle_webp = xyes)
 
 dnl ================================================================================
+## avifile file handling
+AC_CHECK_HEADERS([avif/avif.h], [fim_handle_avif=yes;], [fim_handle_avif=no;])
+AC_ARG_ENABLE(avif, AS_HELP_STRING([--disable-avif],[Disable AVIF file support.]),
+[       if test x$enableval = xno ; then
+		fim_handle_avif =no
+        fi
+])
+if test x$fim_handle_avif = xyes; then
+	LIBS="$LIBS `pkg-config libavif --libs`";
+	CXXFLAGS="$CXXFLAGS `pkg-config libavif --cflags`";
+	AC_MSG_NOTICE([Enabling AVIF file format support.])
+	AC_DEFINE(FIM_WITH_LIBAVIF, 1, [AVIF file support.])
+	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffAVIF.o"
+else
+	AC_MSG_NOTICE([Disabling AVIF file format support.])
+	AC_DEFINE(FIM_WITH_LIBAVIF, 0, [AVIF file support.])
+fi
+AM_CONDITIONAL(ENABLE_AVIF, test x$fim_handle_avif = xyes)
+
+dnl ================================================================================
 
 ## png file handling
 
@@ -2179,6 +2199,7 @@ dnl
 	PS       file support (libspectre)  :*${fim_handle_ps:-no}
 	NEF/RAW  file support (libufraw)    :*${fim_handle_ufraw:-no}
 	TAR/ZIP/.. file support (libarchive):*${fim_handle_archive:-no}
+	AVIF     file support (libavif)     :*${fim_handle_avif:-no}
 	WEBP     file support (libwebp)     :*${fim_handle_webp:-no}
 	GraphicsMagick support (libGraphicsMagick):*${fim_handle_graphicsmagick:-no}
 

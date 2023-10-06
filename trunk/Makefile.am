@@ -53,6 +53,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/0_interlaced.gif \
 	$(top_srcdir)/media/special/0_truncated_bad.gif.bin \
 	$(top_srcdir)/media/special/0.webp \
+	$(top_srcdir)/media/special/0.avif \
 	$(top_srcdir)/media/special/truncated_bad.png.bin \
 	$(top_srcdir)/media/special/truncated_bad.jpg.bin \
 	$(top_srcdir)/media/special/0_gray.png \
@@ -421,6 +422,18 @@ if WITH_XFIG
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm # 
 else
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # 
+endif
+if ENABLE_AVIF
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.avif -c 'stdout _last_file_loader;quit' $(SNTZ)` = libavif
+else
+if WITH_LIBGRAPHICSMAGICK
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.avif -c 'stdout _last_file_loader;quit' $(SNTZ)` = libGraphicsMagick
+else
+if WITH_CONVERT
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.avif -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # assuming no other decoders exists, -X stops external converters
+	if which convert && convert identify -list format | grep -i avif; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.avif -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm ; fi # note: this would pass also with old pipe mechanism -- tiny file
+endif
+endif
 endif
 if ENABLE_WEBP
 	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.webp -c 'stdout _last_file_loader;quit' $(SNTZ)` = libwebp
