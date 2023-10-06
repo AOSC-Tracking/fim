@@ -148,7 +148,7 @@ Specify an alternative system-wide initialization file (default: @sysconfdir@/fi
 Similar to the \fB--execute-commands\fP option, but execute \fBcommands\fP after exiting the interactive mode, just before terminating the program.
 .TP
 \fB-h[s|d|l|m]\fP, \fB--help[=s|d|l|m]\fP
-Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. If further arguments follow, individual help messages will be shown instead.
+Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument \fB{help-item}\fP passed to \fBfim\fP, an individual help message will be shown. If \fB{help-item}\fP starts with a /, it will be treated as a search string (not a regexp, though).
 .TP
 \fB-k {keysym}\fP, \fB--keysym-press {keysym}\fP
 Execute any command bound (via the bind command) to a specified keysym at startup. A keysym can be prefixed by a repetition count number. You can specify the option multiple times to simulate multiple keystrokes. Presses entered via \fB--keysym-press\fP are processed before presses entered via \fB--chars-press\fP. See man \fR\fIfimrc\fR(5) for a list of keysyms and the use of bind.

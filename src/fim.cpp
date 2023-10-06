@@ -154,7 +154,8 @@ struct fim_options_t fim_options[] = {
 		    ,FIM_HELP_EXTRA_OPTS,
 	"Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man."
 #if FIM_WANT_HELP_ARGS
-	    " If further arguments follow, individual help messages will be shown instead."
+	    " For each further argument " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " passed to " FIM_MAN_fB("fim") ", an individual help message will be shown."
+	    " If " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " starts with a /, it will be treated as a search string (not a regexp, though)."
 #endif /* FIM_WANT_HELP_ARGS */
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
@@ -787,7 +788,7 @@ int fim_dump_man_page(void)
 			string(FIM_MAN_Bn("fim --" FIM_OSW_SCRIPT_FROM_STDIN " [{options}] < {scriptfile}"))+
 #endif /* FIM_READ_STDIN */
 #if FIM_WANT_HELP_ARGS
-			string(FIM_MAN_Bn("fim --help[=" FIM_HELP_EXTRA_OPTS "] [{help-item} ...] "))+
+			string(FIM_MAN_Bn("fim --help[=" FIM_HELP_EXTRA_OPTS "] [" FIM_CNS_EX_HELP_ITEM " ...] "))+
 #endif /* FIM_WANT_HELP_ARGS */
 			string("\n"
 			".SH DESCRIPTION\n"
@@ -1181,7 +1182,7 @@ FIM_NORETURN fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=F
 		}
 		std::cout << "\n Please read the documentation distributed with the program.\n"
 			  << " For further help, consult the online help in fim (:" FIM_FLT_HELP "), and man fim (1), fimrc (5).\n"
-			  << " Pre-configuration online help also available invoking --help {help-item}.\n"
+			  << " Pre-configuration online help also available invoking --help " FIM_CNS_EX_HELP_ITEM ".\n"
 			  << " For bug reporting read the " FIM_CNS_BUGS_FILE " file.\n";
 done:
 	    std::exit(code);
