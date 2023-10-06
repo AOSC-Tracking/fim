@@ -61,7 +61,7 @@ bind "F" "fliponce"
 bind "G" "toggleDesaturate"
 bind "H" "scale 'H'"
 bind "I" "toggleautonegate"
-bind "K" "if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}"
+bind "K" 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}'
 bind "M" "mirroronce"
 bind "N" "next10"
 bind "P" "prev10"
@@ -79,7 +79,7 @@ bind "_" "_scale_style='';scale '100%'"
 bind "`" "toggleLimitMarked"
 bind "a" "scale 'a'"
 bind "b" "prev"
-bind "c" "align "center""
+bind "c" 'align "center"'
 bind "d" "diagonal_nw"
 bind "f" "flip"
 bind "g" "color 'desaturate';redisplay"
@@ -100,9 +100,9 @@ bind "v" "toggleDisplayStatus"
 bind "w" "scale 'w'"
 bind "x" "diagonal_ne"
 bind "y" "widen" # widen horizontally the image
-bind "{" "font "prev";redisplay"
+bind "{" 'font "prev";redisplay'
 bind "|" "toggle_font_auto_scale;redisplay"
-bind "}" "font "next";redisplay"
+bind "}" 'font "next";redisplay'
 bind "F5" "refresh"
 bind "F11" "if(_device_string=='sdl' && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'mW0:0';_fullscreen=1;}else if(_device_string=='sdl' && _old_sw*_old_sh*_fullscreen){display 'reinit' 'rwm'._old_sw.':'._old_sh;_fullscreen=0;}" # Toggles full screen. Will show mouse cursor in full screen.
 bind "Up" "pan_up"

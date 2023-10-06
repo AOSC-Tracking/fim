@@ -99,7 +99,7 @@ err:
 		{
 			//first arg should be a valid key code
 			std::ostringstream oss;
-			oss << FIM_FLT_BIND" '" << args[0] << "' '" << bindings_[key] << "'\n";
+			oss << FIM_FLT_BIND " " << fim_auto_quote(args[0],3) << " " << fim_auto_quote(bindings_[key],3) << "\n";
 			return oss.str();
 		}
 		if(args.size()<2)
