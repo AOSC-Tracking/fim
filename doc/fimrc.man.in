@@ -539,7 +539,7 @@ list 'pushdirr' {dirname}: like pushdir, but will also push encountered director
 .fi
 list 'swap': will move the current image filename to the first in the list (you'll have to invoke reload to see the effect).
 .fi
-Of the above commands, several will be temporarily non available for the duration of a background load (enabled by --background-recursive), which will last until _loading_in_background is 0.
+Of the above commands, several will be temporarily not available for the duration of a background load (enabled by --background-recursive), which will last until _loading_in_background is 0.
 .fi
 
 .na
@@ -679,7 +679,7 @@ If given 'b', like 'a', provided that the image width exceeds 'w' or 'h'.
 .fi
 If {value} is a number, will scale relatively to the original image width.
 .fi
-If the number is followed by '%', the relative scale will be treated on a percent scale.
+If the number is followed by '%', the relative scale will be treated as a percentage.
 .fi
 If given '++'('+-'), will increment (decrement) the '_magnify_factor', '_reduce_factor' variables by '_scale_factor_delta'.
 .fi
@@ -901,7 +901,7 @@ _cached_images
 .na
 .B
 _caption_over_image
-[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background; if 3, image will be drawn possibly below. It will take at most half of the screen.
+[in,g:] if set not to 0, will display a custom comment string specified according to the value of _caption_over_image_fmt; if larger than 1, with black background; if 3, image will be drawn possibly below. It will take at most half of the screen.
 .fi
 .na
 .B
@@ -1321,7 +1321,7 @@ _sys_rc_file
 .na
 .B
 _use_exiftool
-[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment.
+[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this information will be appended to _comment; if 2, will go to _exiftool_comment.
 .fi
 .na
 .B

@@ -180,7 +180,7 @@ AC_ARG_VAR([LIBGIF],[libgif library (contributes to LIBS)])
 AC_ARG_VAR([LIBJPEG],[libjpeg library (contributes to LIBS)])
 AC_ARG_VAR([LIBPS],[libspectre library (contributes to LIBS)])
 AC_ARG_VAR([LIBDJVU],[libdjvu libdjvulibre (contributes to LIBS)])
-AC_ARG_VAR([LIBPOPPLER],[poppler libdjvulibre (contributes to LIBS)])
+AC_ARG_VAR([LIBPOPPLER],[poppler library (contributes to LIBS)])
 dnl
 AC_PATH_PROG([RM],[rm],[no])
 AC_PATH_PROG([SED],[sed],[no])
