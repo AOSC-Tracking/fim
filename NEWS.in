@@ -4,6 +4,8 @@
                 Version 0.7-trunk
 
  * Still work-in-progress. Please use stable branch 0.6 for now.
+# (r1991-r1992)
+ * Documentation improvements.
 # (r1990)
  * Experimental support for reading AVIF images via libavif.
 # (r1989)
@@ -13,10 +15,12 @@
 
                 Version 0.6-rc2
 
+# (r1983)
  * File dropping support in SDL2 mode and more responsive readline mode.
 
                 Version 0.6-rc1
 
+# (r1979-r1982)
  * Experimental support for SDL2.
 
                 Version 0.6-rc0
