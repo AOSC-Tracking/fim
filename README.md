@@ -172,6 +172,7 @@ Requirements are:
 	* libtiff		  ( http://www.libtiff.org/ )
 	* libdjvulibre	  ( https://djvu.sourceforge.net/ )
 	* libwebp         (https://github.com/webmproject/libwebp/)
+	* libavif         (https://github.com/AOMediaCodec/libavif/)
 	* ...
 
 

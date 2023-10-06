@@ -550,11 +550,11 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EX_NUM_STRING	"{number}"
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
 #define FIM_CNS_SHELL	"/bin/sh"
-#define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, WEBP" 
+#define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP" 
 #define FIM_CNS_DSFF_SN	"BMP, PCX" 
 #if FIM_USE_CXX11
 /* this default FIM_CNS_PUSHDIR_RE might be built based on build options */
-#define FIM_CNS_PUSHDIR_RE	R"***(\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|WEBP)$)***" 
+#define FIM_CNS_PUSHDIR_RE	R"***(\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$)***" 
 #endif /* FIM_USE_CXX11 */
 #define FIM_CNS_ARCHIVE_RE	"\\.(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
 #define FIM_CNS_PIPEABLE_PATH_RE	"^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$"

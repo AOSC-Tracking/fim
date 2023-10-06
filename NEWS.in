@@ -4,6 +4,8 @@
                 Version 0.7-trunk
 
  * Still work-in-progress. Please use stable branch 0.6 for now.
+# (r1990)
+ * Experimental support for reading AVIF images via libavif.
 # (r1989)
  * Experimental support for reading WebP images via libwebp.
 # (r1988)
