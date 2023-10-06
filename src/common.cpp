@@ -108,7 +108,19 @@ fim::string fim_auto_quote(const fim::string& arg, int quoted)
 		qc = '\'';
 	if (quoted == 2)
 		qc = '"';
-
+	if (quoted == 3)
+	{
+		const char * as = arg.c_str();
+		const auto sqi = strchr(as,'\'');
+		const auto dqi = strchr(as,'"');
+		
+		if (!sqi || ( sqi && dqi && sqi< dqi) )
+			qc = '\'';
+		if (!dqi || ( sqi && dqi && sqi>=dqi) )
+			qc = '"';
+		res = qc + ear + qc;
+		return res;
+	}
 	if(qc)
 		res+=qc;
 	if(qc == '\'')

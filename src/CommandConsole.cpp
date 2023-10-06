@@ -147,11 +147,11 @@ namespace fim
 				{
 					oss << FIM_FLT_BIND" ";
 			       		oss << fim_auto_quote(ikbi->second,0);
-					oss << " \"" << ((*bi).second);
+					oss << " " << fim_auto_quote((*bi).second,3);
 					if( bindings_help_.find((*bi).first) != bindings_help_.end() )
-						oss << "\" # " << bindings_help_.find((*bi).first) -> second << "\n";
+						oss << " # " << bindings_help_.find((*bi).first) -> second << "\n";
 					else
-						oss << "\"\n";
+						oss << "\n";
 				}
 		}
 		return oss.str();
