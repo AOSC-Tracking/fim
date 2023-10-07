@@ -73,12 +73,12 @@ struct fim_options_t{
 struct fim_options_t fim_options[] = {
     {"autozoom",   no_argument,       FIM_NULL, 'a',
 	"scale according to a best fit",FIM_NULL,
-	"Enable autozoom. " FIM_MAN_fB("fim") " will automagically pick a reasonable zoom factor when displaying a new image (as in " FIM_MAN_fB("fbi") ")."
+	"Enable autozoom. " "Automagically pick a reasonable zoom factor when displaying a new image (as in " FIM_MAN_fB("fbi") ")."
     },
     {FIM_OSW_BINARY,     optional_argument,       FIM_NULL, 'b',
 	"view any file as either a 1 or 24 bpp bitmap", "24|1",
 	"Display contents of binary files (of any filetype) as these were raw 24 or 1 bits per pixel pixelmaps.\n" 
-	"Image width will not exceed the value of the " FIM_MAN_fB(FIM_VID_PREFERRED_RENDERING_WIDTH) " variable.\n"
+	"The width of this image will not exceed the value of the " FIM_MAN_fB(FIM_VID_PREFERRED_RENDERING_WIDTH) " variable.\n"
 	"Regard this as an easter bunny option.\n"
 #if !FIM_WANT_RAW_BITS_RENDERING
 	// "(disabled)"
@@ -87,8 +87,8 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_TEXT,     no_argument,       FIM_NULL, 0x74657874,
 	"view any file as rendered text characters", FIM_NULL,
 	"Display contents of files (of any filetype) as these were text.\n" 
-	"Image width will not exceed the value of the " FIM_MAN_fB(FIM_VID_PREFERRED_RENDERING_WIDTH) " variable.\n"
-	"Non-printable characters will be displayed as \"" FIM_SYM_UNKNOWN_STRING "\".\n"
+	"The width of this image will not exceed the value of the " FIM_MAN_fB(FIM_VID_PREFERRED_RENDERING_WIDTH) " variable.\n"
+	"Non-printable characters are then displayed as \"" FIM_SYM_UNKNOWN_STRING "\".\n"
 	"Regard this as another easter bunny option.\n"
 #if !FIM_WANT_RAW_BITS_RENDERING
 	// "(disabled)"
@@ -115,7 +115,7 @@ struct fim_options_t fim_options[] = {
 	"execute {commands} just after initialization", "{commands}",
 	"Similar to the " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " option, but "
 	"execute " FIM_MAN_fB("commands") " earlier, just before reading the initialization file.\n"
-	"The special 'early' form " FIM_MAN_fB("=var=val") " will assign " FIM_MAN_fB("var") " to " FIM_MAN_fB("val") " immediately, before the interpreter is started.\n"
+	"The special 'early' form " FIM_MAN_fB("=var=val") " assigns " FIM_MAN_fB("var") " to " FIM_MAN_fB("val") " immediately, before the interpreter is started, and with no value quoting needed.\n"
 	"\n"
 	"For example,\n"
 	"-C '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"' starts fim no auto-scaling;\n"
@@ -154,8 +154,8 @@ struct fim_options_t fim_options[] = {
 		    ,FIM_HELP_EXTRA_OPTS,
 	"Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man."
 #if FIM_WANT_HELP_ARGS
-	    " For each further argument " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " passed to " FIM_MAN_fB("fim") ", an individual help message will be shown."
-	    " If " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " starts with a /, it will be treated as a search string (not a regexp, though)."
+	    " For each further argument " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " passed to " FIM_MAN_fB("fim") ", an individual help message is shown."
+	    " If " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " starts with a /, it is treated as a search string (not a regexp, though)."
 #endif /* FIM_WANT_HELP_ARGS */
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
@@ -186,7 +186,7 @@ struct fim_options_t fim_options[] = {
 	" If a '@' followed by and identifier " FIM_CNS_EX_VAR_STRING " is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value is substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
 #endif /* FIM_WANT_DESC_VEXP */
 #if FIM_WANT_PIC_LVDN
-      " Special comment lines like \"#!fim:var=val\" lead i:var to be assigned value val (unquoted) at image loading time (cached variable); i:var will not be assigned if var starts with an underscore ('_')."
+      " Special comment lines like \"#!fim:var=val\" lead i:var to be assigned value val (unquoted) at image loading time (cached variable), unless var starts with an underscore ('_')."
       " Special comment lines like \"#!fim:+=val\" add val to current description." 
       " Special comment lines like \"#!fim:^=val\" set val to be the base of each description." 
       " Special comment lines like \"#!fim:!=\" reset all cached variables." 
@@ -197,7 +197,7 @@ struct fim_options_t fim_options[] = {
       " with \"#!fim:=\", the last description line is reused;"
       " with \"#!fim:+\", what follows is appended to the last description line;"
       " with \"#!fim:^\", what follows is prepended to the last description line;"
-      " with \"#!fim:s/f/t\", the last description line will be used after substitution of occurrences of substring f with string t (f and t cannot contain newlines or a '/')."
+      " with \"#!fim:s/f/t\", the last description line is used and substituted substring t to occurrences of substring f (f and t cannot contain newlines or a '/')."
 #endif /* FIM_WANT_PIC_RCMT  */
       " If val is empty that variable is unset."
 #if FIM_WANT_PIC_LBFL
@@ -231,11 +231,11 @@ struct fim_options_t fim_options[] = {
     },
     {"no-rc-file",      no_argument,       FIM_NULL, 'N',
 	"do not read the personal initialization file at startup", FIM_NULL,
-	"No personal initialization file will be read (default is " FIM_CNS_USR_RC_COMPLETE_FILEPATH ") at startup."
+	"No personal initialization file is read (default is " FIM_CNS_USR_RC_COMPLETE_FILEPATH ") at startup."
     },
     {FIM_OSW_NO_ETC_FIMRC,      no_argument,       FIM_NULL, 0x4E4E,
 	"do not read the system-wide initialization file at startup", FIM_NULL,
-	"No system-wide initialization file will be read (default is " FIM_CNS_SYS_RC_FILEPATH ") at startup. "
+	"No system-wide initialization file is read (default is " FIM_CNS_SYS_RC_FILEPATH ") at startup. "
 	"See also " FIM_MAN_fB("--etc-fimrc") ". \n"
     },
     {"no-internal-config",      no_argument,       FIM_NULL, 0x4E4E4E,
@@ -271,7 +271,7 @@ struct fim_options_t fim_options[] = {
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
 // #ifndef FIM_WITH_NO_FRAMEBUFFER
-"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("S") " (e.g. " FIM_MAN_fB("fb=S") ") makes framebuffer initialization more picky: it will not tolerate running in a screen session.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("S") " (e.g. " FIM_MAN_fB("fb=S") ") makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
 // #endif /* FIM_WITH_NO_FRAMEBUFFER */
 //#ifdef FIM_WITH_LIBCACA
 "The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option (coloured Ascii Art) can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
@@ -300,17 +300,17 @@ struct fim_options_t fim_options[] = {
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
 	"open at specified byte offset",
 	"{bytes-offset[{:upper-offset}|{+offset-range}]}",
-"Use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP will be probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
+"Use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP are probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
     },
     {"pread-cmd",      required_argument,       FIM_NULL,  0x70726561, //prea(d)
 	"read image file in stdin from pipeline",
 	"{cmd-filter-pipeline}",
-	"Specify a shell command with " FIM_MAN_fB("{cmd-filter-pipeline}") ". If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it will be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which will be read and displayed.\n"
+	"Specify a shell command with " FIM_MAN_fB("{cmd-filter-pipeline}") ". If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it is be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which is read, decoded, and displayed.\n"
 	"This works by setting the internal " FIM_MAN_fB(FIM_VID_PREAD) " variable (empty by default)."
     },
     {"text-reading",      no_argument,       FIM_NULL, 'P',
 	"enable space-based scrolling through the document", FIM_NULL,
-	"Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
+	"Enable textreading mode.  This has the effect that fim displays images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
     },
     {"scroll",     required_argument, FIM_NULL, 's',
 	"set scroll variable value", "{value}",
@@ -322,8 +322,8 @@ struct fim_options_t fim_options[] = {
 	"Wait for " FIM_MAN_fB(FIM_CNS_EX_NUM_STRING) " of seconds (assigned to the " FIM_MAN_fB(FIM_VID_WANT_SLEEPS) " variable) after each image. "
 	"Implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command. "
 	"Can be interrupted by " FIM_KBD_COLON " or " FIM_KBD_ESC ". "
-	"The other keys will execute accordingly to their function but will not interrupt the slideshow. "
-	"Like in fbi, this will cycle forever, unless " FIM_MAN_fB("--once") " is specified."
+	"The other keys execute accordingly to their function but do not interrupt the slideshow. "
+	"Like in fbi, this cycles forever, unless " FIM_MAN_fB("--once") " is specified."
     },
     {"sanity-check",      no_argument,       FIM_NULL, 0x70617363,
 	"only perform a sanity check", FIM_NULL, /* Was -S until r1001 */
@@ -332,11 +332,11 @@ struct fim_options_t fim_options[] = {
     {"no-framebuffer",      no_argument,       FIM_NULL, 't',
 	"display images in text mode (as -o " FIM_DDN_INN_AA ")",FIM_NULL,
 	FIM_MAN_fB("fim") " Use an ASCII Art driver. If present, use either of libcaca (coloured), or aalib (monochrome). For more, see (man fimrc), (info aalib) or (apropos caca)).\n"
-	"If no ASCII Art driver was enabled at compile time, fim will not display any image at all."
+	"If no ASCII Art driver had been enabled at compile time, fim does not display any image at all."
     },
     {"vt",         required_argument, FIM_NULL, 'T',
 	"specify a virtual terminal for the framebufer", "{terminal}",
-	"The \\fBterminal\\fP will be used as virtual terminal device file (as in fbi).\n"
+	"The \\fBterminal\\fP is to be used as virtual terminal device file (as in fbi).\n"
 	"See (chvt (1)), (openvt (1)) for more info about this.\n"
 	"Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
@@ -397,7 +397,7 @@ struct fim_options_t fim_options[] = {
     },
     {"no-auto-scale",   no_argument,   FIM_NULL, '=' /*0x4E4053*/,
 	"do not use any auto-scaling", FIM_NULL,
-	"Do not scale the images after loading (will set '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"';)."
+	"Do not scale the images after loading (sets '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"';)."
     },
     {"autowindow",   no_argument,   FIM_NULL, 0x61757769,
 	"adapt window to image size",FIM_NULL,
@@ -412,8 +412,8 @@ struct fim_options_t fim_options[] = {
 	"Scale the image according to the screen height."
     },
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       FIM_NULL, 'W',
-	"will record any executed command to the a {scriptfile}", "{scriptfile}",
-	"All the characters that you type are recorded in the file " FIM_MAN_fB("{scriptout}") ", until you exit " FIM_MAN_fB("fim") ".  This is useful if you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the " FIM_MAN_fB("{scriptout}") " file exists, it will be not touched (as in Vim's -w). "
+	"record any executed command to the a {scriptfile}", "{scriptfile}",
+	"All the characters that you type are recorded in the file " FIM_MAN_fB("{scriptout}") ", until you exit " FIM_MAN_fB("fim") ".  This is useful if you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the " FIM_MAN_fB("{scriptout}") " file exists, it is not touched (as in Vim's -w). "
     },
     {"read-from-file",      required_argument,       FIM_NULL, 'L',
 	"read an image list from a file","{fileslistfile}",
@@ -426,7 +426,7 @@ struct fim_options_t fim_options[] = {
 	"Read file list from stdin: each line one file to load; use with --read-from-stdin-elds to control line breaking).\n"
 
 "\n"
-"Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
+"Note that these three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim exits with an error and warn about the ambiguity.\n"
 "\n"
 "See the section\n"
 ".B INVOCATION EXAMPLES\n"
@@ -435,7 +435,7 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_READ_STDIN */
     {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,
 	"endline delimiter character for --read-from-stdin/--read-from-file", "{delimiter-char}",
-	"Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter will be treated as names of files to load; the text after will be ignored. This is also useful e.g. to load description files (see --" FIM_OSW_LOAD_IMG_DSC_FILE ") as filename list files. Default is the newline character (0x0A)"
+	"Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter are be treated as names of files to load; the text after is ignored. This is also useful e.g. to load description files (see --" FIM_OSW_LOAD_IMG_DSC_FILE ") as filename list files. Default is the newline character (0x0A)"
 #ifdef HAVE_GETDELIM
 	"; to specify an ASCII NUL byte (0x00) use ''"
 #endif /* HAVE_GETDELIM */
@@ -456,7 +456,7 @@ struct fim_options_t fim_options[] = {
     {"resolution", required_argument, FIM_NULL, 'r',
 	"set SDL resolution", "{width:height}",
 	"Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --" FIM_OSW_OUTPUT_DEVICE ". "
-	"Shorthand value 'fullscreen' will be translated into 'W'. "
+	"Shorthand value 'fullscreen' is be translated into 'W'. "
     },
 #else /* FIM_WANT_R_SWITCH */
     {"resolution", required_argument, FIM_NULL, 'r', "Set resolution (UNFINISHED).", "{width:height}",
@@ -467,14 +467,14 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_RECURSIVE, optional_argument, FIM_NULL, 'R',
 	"push paths recursively", "{exp}",
 	"Push files/directories to the files list recursively. "
-	"The expression in variable " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which will be loaded in the list. "
+	"The expression in variable " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which are loaded in the list. "
 	"You can overwrite its value by optionally passing an expression " FIM_MAN_fB("{exp}") " here as argument. "
-	"If starting with '+' or '|', the expression following will be appended to it. "
+	"If starting with '+' or '|', the expression following is to be appended to it. "
     },
 #else /* FIM_WANT_RECURSE_FILTER_OPTION */
     {FIM_OSW_RECURSIVE, no_argument, FIM_NULL, 'R',
 	    "push paths recursively", FIM_NULL,
-	    "Push files/directories to the files list recursively. See variable " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " for extensions of filenames which will be loaded in the list. "			
+	    "Push files/directories to the files list recursively. See variable " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " for extensions of filenames which are loaded in the list. "			
     },
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 #if FIM_WANT_NOEXTPROPIPE
@@ -486,14 +486,14 @@ struct fim_options_t fim_options[] = {
 //#if FIM_WANT_BACKGROUND_LOAD
     {FIM_OSW_BGREC, no_argument, FIM_NULL, 'B',
 	    "push paths recursively in background", FIM_NULL,
-	    "Push files/directories to the files list recursively, in background during program execution. Any sorting options will be ignored."
+	    "Push files/directories to the files list recursively, in background during program execution. Any sorting options are ignored."
 	    " Experimental feature, unfinished."
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
 //#if FIM_EXPERIMENTAL_SHADOW_DIRS
     {"load-shadow-directory",   required_argument, FIM_NULL, 0x68696768,
 	    "add shadow directory for 'scale \"shadow\"'", "{dir}",
-	    "Add " FIM_MAN_fB("{dir}") " to the shadow directory list. Then 'scale \"shadow\"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved."
+	    "Add " FIM_MAN_fB("{dir}") " to the shadow directory list. Then 'scale \"shadow\"' temporarily substitutes the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved."
     },
 //#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
     { "/",   required_argument,       FIM_NULL, '/',
@@ -795,7 +795,7 @@ int fim_dump_man_page(void)
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
 			"It is capable of displaying image files using different graphical devices while offering a uniform look and feel.\n"
 			"Key bindings are customizable and specified in an initialization file.\n"
-			"Interaction with standard input and output is possible (especially in shell scripts).\n"
+			"Interaction with standard input and output is possible, especially in shell scripts.\n"
 			"An internal scripting language specialized for image viewing allows image navigation, scaling, manipulation of internal variables, command aliases, and vim-like autocommands.\n"
 			"The internal language can be interacted with via a command line mode capable of autocompletion and history (the readline mode).\n"
 			"Further features are display of EXIF tags, JPEG comments, EXIF rotation/orientation, load of \"description files\", faster load via image caching, command recording, and much more.\n\n"
@@ -803,7 +803,7 @@ int fim_dump_man_page(void)
 			"This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. "
 			"Graphical file formats " FIM_CNS_DSFF_SN " are supported natively, while " FIM_CNS_DSFF_SL " are supported via third party libraries. \n"
 			"Further formats are supported via external converters. \n"
-			"For XCF (Gimp's) images, will try to use '" FIM_EPR_XCFTOPNM "'.\nFor FIG vectorial images, will try to use '" FIM_EPR_FIG2DEV "'.\nFor DIA vectorial images, will try to use '" FIM_EPR_DIA "'.\nFor SVG vectorial images, will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
+			"For XCF (Gimp's) images, '" FIM_EPR_XCFTOPNM "' is used.\nFor FIG vectorial images, '" FIM_EPR_FIG2DEV "' is used.\nFor DIA vectorial images, '" FIM_EPR_DIA "' is used.\nFor SVG vectorial images, '" FIM_EPR_INKSCAPE "' is used.\nFor other formats ImageMagick's '" FIM_EPR_CONVERT "' is used.\n"
 #if FIM_HAS_TIMEOUT
 			"The converter is given " FIM_EXECLP_TIMEOUT " seconds for the conversion before a timeout.\n"
 #else /* FIM_HAS_TIMEOUT */
@@ -814,7 +814,7 @@ int fim_dump_man_page(void)
 				"See the " FIM_MAN_fB(FIM_VID_FILE_LOADER) " variable to change this default.\n\n")
 #ifdef FIM_READ_DIRS
 			+
-			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise this will be checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")
+			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, load files of supported formats contained there. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it is treated as a directory; otherwise that is checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")
 #endif /* FIM_READ_DIRS */
 			;
 
@@ -931,11 +931,11 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 ".nf\n"
 //"" FIM_ENV_FBFONT "		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
 "" FIM_ENV_FBFONT "		(just like in fbi) a Linux consolefont font file.\n"
-"If using a gzipped font, the " FIM_EPR_ZCAT " program will be used to uncompress it (via " FIM_MAN_fB("execvp(3)") ").\n"
-"If not specified, the following files will be probed and the first existing will be selected:\n\n");
+"If using a gzipped font file, the " FIM_EPR_ZCAT " program is used to uncompress it (via " FIM_MAN_fB("execvp(3)") ").\n"
+"If " FIM_ENV_FBFONT " is unset, the following files are probed and the first existing one is selected:\n\n");
 mp+=get_default_font_list();
 #if FIM_WANT_HARDCODED_FONT
-mp+="\nIf the special " FIM_DEFAULT_HARDCODEDFONT_STRING " string is specified, a hardcoded font will be used.";
+mp+="\nIf the special " FIM_DEFAULT_HARDCODEDFONT_STRING " string is specified, a hardcoded font is used.";
 #endif /* FIM_WANT_HARDCODED_FONT */
 mp+="\n";
 mp+=string(
@@ -944,13 +944,13 @@ mp+=string(
 //"			NOTE: Currently xfs is disabled.\n"
 "" FIM_ENV_FBGAMMA "		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is " FIM_CNS_GAMMA_DEFAULT_STR ".\n"
 "" FIM_ENV_FRAMEBUFFER "	(just like in fbi) user set framebuffer device file (applies only to the " FIM_DDN_INN_FB " mode).\n"
-"If unset, fim will probe for " FIM_DEFAULT_FB_FILE ".\n"
-"" FIM_CNS_TERM_VAR "		(only in fim) will influence the output device selection algorithm, especially if $" FIM_CNS_TERM_VAR "==\"screen\".\n"
+"If unset, fim probes for " FIM_DEFAULT_FB_FILE ".\n"
+"" FIM_CNS_TERM_VAR "		(only in fim) influences the output device selection algorithm, especially if $" FIM_CNS_TERM_VAR "==\"screen\".\n"
 "" FIM_ENV_SSH "	if set and no output device specified, assume we're over " FIM_MAN_fB("ssh") ", and give precedence to " FIM_DDN_INN_CACA ", then " FIM_DDN_INN_AA " (if present).\n"
 #if defined(FIM_WITH_LIBSDL)
-"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_SDL " driver will be probed by default.\n"
+"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_SDL " driver is probed by default.\n"
 #elif defined(FIM_WITH_LIBIMLIB2)
-"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_IL2 " driver will be probed by default.\n"
+"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_IL2 " driver is probed by default.\n"
 #endif /* FIM_WITH_LIBSDL */
 ".SH COMMON PROBLEMS\n"
 ".B fim\n"
@@ -977,7 +977,7 @@ mp+=string(
 ".B fim\n"
 "also needs access to the linux console (i.e. /dev/ttyN) for sane\n"
 "console switch handling.  That is obviously no problem for console\n"
-"logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will\n"
+"logins, but any kind of pseudo tty (xterm, ssh, screen, ...) will\n"
 ".B not\n"
 "work.\n"
 ".SH INVOCATION EXAMPLES\n"
@@ -1043,12 +1043,12 @@ FIM_MAN_Bn("fim\n-c 'pread \"vgrabbj -d /dev/video0 -o png\";reload'")
 "\n"
 FIM_MAN_Bn("fim\n-o " FIM_DDN_INN_AA " -c 'pread \"vgrabbj -d /dev/video0 -o png\";reload;system \"fbgrab\" \"asciime.png\"'")
 ".fi\n"
-"# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam\n"
+"# if running in framebuffer mode, saves a png screenshot with an ASCII rendering of an image grabbed from a webcam\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim\n" "-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;sleep 1;};'\n")
-"# will display a sequence of images grabbed from a webcam; circa 1 per second\n"
+"# display a sequence of images grabbed from a webcam; circa 1 per second\n"
 ".P\n"
 ".P\n"
 "\n"
@@ -1099,7 +1099,7 @@ FIM_MAN_fB("fim")
 ".B ~/.inputrc\n"
 "If "
 FIM_MAN_fB("fim")
-" is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see"
+" is built with GNU readline support, it is susceptible to changes in the user set ~/.inputrc configuration file contents.  For details, see"
 " (man " FIM_MAN_fR("readline") "(3))."
 "\n"
 );

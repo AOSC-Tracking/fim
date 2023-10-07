@@ -8,14 +8,14 @@ The short command options of fim are: -a -b -c -C -d -E -f -F -h -k -K -D -S -i 
 
 *
 -h is a fim command line option: -h[s|d|l|m], --help[=s|d|l|m]
-Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument {help-item} passed to fim, an individual help message will be shown. If {help-item} starts with a /, it will be treated as a search string (not a regexp, though).
+Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument {help-item} passed to fim, an individual help message is shown. If {help-item} starts with a /, it is treated as a search string (not a regexp, though).
 
 *
 The long command options of fim are: --autozoom --binary --as-text --cd-and-readdir --execute-commands --execute-commands-early --device --dump-reference-help --dump-default-fimrc --execute-script --etc-fimrc --final-commands --help --keysym-press --chars-press --load-image-descriptions-file --image-descriptions-file-separator --image-from-stdin --mark-from-image-descriptions-file --mode --no-rc-file --no-etc-fimrc-file --no-internal-config --no-commandline --no-history-save --no-history-load --no-history --script-from-stdin --output-device --offset --pread-cmd --text-reading --scroll --slideshow --sanity-check --no-framebuffer --vt --reverse --sort --sort-basename --sort-mtime --sort-fsize --random --random-no-seed --verbose --verbose-load --verbose-font-load --verbose-interpreter --version --autowidth --no-auto-scale --autowindow --no-stat-push --autoheight --write-scriptout --read-from-file --read-from-stdin --read-from-stdin-elds --autotop --quiet --resolution --recursive --no-pipe-load --background-recursive --load-shadow-directory --/ --// --once 
 
 *
 --help is a fim command line option: -h[s|d|l|m], --help[=s|d|l|m]
-Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument {help-item} passed to fim, an individual help message will be shown. If {help-item} starts with a /, it will be treated as a search string (not a regexp, though).
+Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument {help-item} passed to fim, an individual help message is shown. If {help-item} starts with a /, it is treated as a search string (not a regexp, though).
 
 *
 alias align autocmd autocmd_del basename bind cd clear commands color crop desc display dump_key_codes echo else eval exec font getenv goto help if info limit list load pan popen pread prefetch pwd quit recording redisplay reload rotate scale scroll set set_commandline_mode set_interactive_mode sleep status stderr stdout system variables unalias unbind while window
