@@ -5,17 +5,17 @@
 .SH NAME
 fim - \fBF\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBIM\fPproved, an universal image viewer
 .SH SYNOPSIS
-.B fim [{options}] [--] {imagepath} [{imagepaths}]
+.B fim [\fR\fI{options}\fR] [--] \fR\fI{imagepath}\fR [\fR\fI{imagepaths}\fR]
 .fi 
 .B fim --output-device {fb|sdl|ca|aa|imlib2|dumb} ...
 .fi 
-.B ... | fim [{options}] [--] [{imagepaths}] -
+.B ... | fim [\fR\fI{options}\fR] [--] [\fR\fI{imagepaths}\fR] -
 .fi 
-.B fim [{options}] [--] [{files}] - < {file_name_list_text_file}
+.B fim [\fR\fI{options}\fR] [--] [{files}] - < \fR\fI{file_name_list_text_file}\fR
 .fi 
-.B fim --image-from-stdin [{options}] < {imagefile}
+.B fim --image-from-stdin [\fR\fI{options}\fR] < \fR\fI{imagefile}\fR
 .fi 
-.B fim --script-from-stdin [{options}] < {scriptfile}
+.B fim --script-from-stdin [\fR\fI{options}\fR] < \fR\fI{scriptfile}\fR
 .fi 
 .B fim --help[=s|d|l|m] [\fR\fI{help-item}\fR ...] 
 .fi 
@@ -44,10 +44,10 @@ For other formats ImageMagick's 'convert' is used.
 The converter is given 15 seconds for the conversion before a timeout.
 
 
-If \fB{imagepath}\fP is a file, its format is guessed not by its name but by its contents. See the \fB_file_loader\fP variable to change this default.
+If \fR\fI{imagepath}\fR is a file, its format is guessed not by its name but by its contents. See the \fB_file_loader\fP variable to change this default.
 
 
-If \fB{imagepath}\fP is a directory, load files of supported formats contained there. If \fB{imagepath}\fP contains a trailing slash (/), it is treated as a directory; otherwise that is checked via \fBstat(2)\fP. To change this default, see description of the \fB_pushdir_re\fP variable and the \fB--no-stat-push\fP and \fB--recursive\fP options.
+If \fR\fI{imagepath}\fR is a directory, load files of supported formats contained there. If \fR\fI{imagepath}\fR contains a trailing slash (/), it is treated as a directory; otherwise that is checked via \fBstat(2)\fP. To change this default, see description of the \fB_pushdir_re\fP variable and the \fB--no-stat-push\fP and \fB--recursive\fP options.
 
 This man page describes 
 .B fim
@@ -74,7 +74,7 @@ The full commands specification is also accessible at runtime using the internal
 
 
 .SH OPTIONS
-Accepted command line \fB{options}\fP:
+Accepted command line \fB\fR\fI{options}\fR\fP:
 .TP
 \fB--\fP
 Treat arguments after \fB--\fP
@@ -105,10 +105,10 @@ Regard this as another easter bunny option.
 Step in the directory of the first file to be loaded, push other files from that directory, and jump back to the first file.
 Useful when invoking from a desktop environment.
 .TP
-\fB-c {commands}\fP, \fB--execute-commands {commands}\fP
-Execute \fBcommands\fP after reading the initialization file, just before entering the interactive mode.
-No semicolon (\fB;\fP) is required at the end of \fBcommands\fP.
-Do not forget quoting \fBcommands\fP in a manner suitable to your shell.
+\fB-c \fR\fI{commands}\fR\fP, \fB--execute-commands \fR\fI{commands}\fR\fP
+Execute \fR\fI{commands}\fR after reading the initialization file, just before entering the interactive mode.
+No semicolon (\fB;\fP) is required at the end of \fR\fI{commands}\fR.
+Do not forget quoting \fR\fI{commands}\fR in a manner suitable to your shell.
 So  -c next  is fine as it is.
 A more complicated example, with quotings:
 -c '*2;2pan_up;display;while(1){align "bottom";sleep "1" ; align "top"}'
@@ -117,8 +117,8 @@ size, pan twice up, display the image, and finally
 do an endless loop consisting of bottom and top aligning, alternated.
 
 .TP
-\fB-C {commands}\fP, \fB--execute-commands-early {commands}\fP
-Similar to the \fB--execute-commands\fP option, but execute \fBcommands\fP earlier, just before reading the initialization file.
+\fB-C \fR\fI{commands}\fR\fP, \fB--execute-commands-early \fR\fI{commands}\fR\fP
+Similar to the \fB--execute-commands\fP option, but execute \fR\fI{commands}\fR earlier, just before reading the initialization file.
 The special 'early' form \fB=var=val\fP assigns \fBvar\fP to \fBval\fP immediately, before the interpreter is started, and with no value quoting needed.
 
 For example,
@@ -128,7 +128,7 @@ the equivalent early form is:
 
 
 .TP
-\fB-d {framebuffer device}\fP, \fB--device {framebuffer device}\fP
+\fB-d \fR\fI{fbdev}\fR\fP, \fB--device \fR\fI{fbdev}\fR\fP
 Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .TP
 \fB--dump-reference-help[=man]\fP
@@ -137,29 +137,29 @@ Dump to stdout language reference help and quit.
 \fB--dump-default-fimrc\fP
 Dump default configuration (the one hardcoded in the fim executable) to standard output and quit.
 .TP
-\fB-E {scriptfile}\fP, \fB--execute-script {scriptfile}\fP
-Execute \fBscriptfile\fP after the default initialization file is read, and before executing \fB--execute-commands\fP commands.
+\fB-E \fR\fI{scriptfile}\fR\fP, \fB--execute-script \fR\fI{scriptfile}\fR\fP
+Execute \fR\fI{scriptfile}\fR after the default initialization file is read, and before executing \fB--execute-commands\fP commands.
 .TP
-\fB-f {fimrc}\fP, \fB--etc-fimrc {fimrc}\fP
+\fB-f \fR\fI{fimrc}\fR\fP, \fB--etc-fimrc \fR\fI{fimrc}\fR\fP
 Specify an alternative system-wide initialization file (default: @sysconfdir@/fimrc), to be read prior to any other configuration file. See also \fB--no-etc-fimrc-file\fP. 
 
 .TP
-\fB-F {commands}\fP, \fB--final-commands {commands}\fP
-Similar to the \fB--execute-commands\fP option, but execute \fBcommands\fP after exiting the interactive mode, just before terminating the program.
+\fB-F \fR\fI{commands}\fR\fP, \fB--final-commands \fR\fI{commands}\fR\fP
+Similar to the \fB--execute-commands\fP option, but execute \fR\fI{commands}\fR after exiting the interactive mode, just before terminating the program.
 .TP
 \fB-h[s|d|l|m]\fP, \fB--help[=s|d|l|m]\fP
 Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument \fB\fR\fI{help-item}\fR\fP passed to \fBfim\fP, an individual help message is shown. If \fB\fR\fI{help-item}\fR\fP starts with a /, it is treated as a search string (not a regexp, though).
 .TP
-\fB-k {keysym}\fP, \fB--keysym-press {keysym}\fP
+\fB-k \fR\fI{keysym}\fR\fP, \fB--keysym-press \fR\fI{keysym}\fR\fP
 Execute any command bound (via the bind command) to a specified keysym at startup. A keysym can be prefixed by a repetition count number. You can specify the option multiple times to simulate multiple keystrokes. Presses entered via \fB--keysym-press\fP are processed before presses entered via \fB--chars-press\fP. See man \fR\fIfimrc\fR(5) for a list of keysyms and the use of bind.
 .TP
-\fB-K {chars}\fP, \fB--chars-press {chars}\fP
+\fB-K \fR\fI{chars}\fR\fP, \fB--chars-press \fR\fI{chars}\fR\fP
 Input one or more keyboard characters at program startup (simulate keyboard presses). This option can be specified multiple times. Each additional time (or if the string is empty), a press of Enter (ASCII code 0x0D) key is prepended. Examples: -K '' simulates press of an Enter;  -K ':next;' activates the command line and enter "next;" without executing it;  -K ":next;" -K "next" executes "next", stays in the command line and enter keys "next";  -K ":next;" -K "" -K "next" executes "next", leaves the command line, and executes in sequence any command bound to keys 'n', 'e', 'x', 't'. Presses entered via \fB--chars-press\fP are processed after presses entered via \fB--keysym-press\fP. 
 .TP
-\fB-D {filename}\fP, \fB--load-image-descriptions-file {filename}\fP
-Load image descriptions from file \fBfilename\fP. Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via \fB--image-descriptions-file-separator\fP), then the description text. The description text is copied into the \fBi:_comment\fP variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment). If a '@' followed by and identifier \fR\fI{var}\fR is encountered, and i:\fR\fI{var}\fR is set, its value is substituted here. If "@#" is encountered, the remainder of the description line is ignored. Special comment lines like "#!fim:var=val" lead i:var to be assigned value val (unquoted) at image loading time (cached variable), unless var starts with an underscore ('_'). Special comment lines like "#!fim:+=val" add val to current description. Special comment lines like "#!fim:^=val" set val to be the base of each description. Special comment lines like "#!fim:!=" reset all cached variables. Special comment lines like "#!fim:/=dir" prepend dir to each file's basename. Special comment lines like "#!fim:\e=dir" prepend dir to each file's name. Special description text (to be associated to an image) begins with markers:  with "#!fim:=", the last description line is reused; with "#!fim:+", what follows is appended to the last description line; with "#!fim:^", what follows is prepended to the last description line; with "#!fim:s/f/t", the last description line is used and substituted substring t to occurrences of substring f (f and t cannot contain newlines or a '/'). If val is empty that variable is unset. These variables are stored also in an internal index used by the limit command. This option sets \fB_caption_over_image\fP=2, so that a caption is displayed over the image. A description file beginning with "#!fim:desc" can be loaded without specifying this switch.
+\fB-D \fR\fI{filename}\fR\fP, \fB--load-image-descriptions-file \fR\fI{filename}\fR\fP
+Load image descriptions from file \fR\fI{filename}\fR. Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via \fB--image-descriptions-file-separator\fP), then the description text. The description text is copied into the \fBi:_comment\fP variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment). If a '@' followed by and identifier \fR\fI{var}\fR is encountered, and i:\fR\fI{var}\fR is set, its value is substituted here. If "@#" is encountered, the remainder of the description line is ignored. Special comment lines like "#!fim:var=val" lead i:var to be assigned value val (unquoted) at image loading time (cached variable), unless var starts with an underscore ('_'). Special comment lines like "#!fim:+=val" add val to current description. Special comment lines like "#!fim:^=val" set val to be the base of each description. Special comment lines like "#!fim:!=" reset all cached variables. Special comment lines like "#!fim:/=dir" prepend dir to each file's basename. Special comment lines like "#!fim:\e=dir" prepend dir to each file's name. Special description text (to be associated to an image) begins with markers:  with "#!fim:=", the last description line is reused; with "#!fim:+", what follows is appended to the last description line; with "#!fim:^", what follows is prepended to the last description line; with "#!fim:s/f/t", the last description line is used and substituted substring t to occurrences of substring f (f and t cannot contain newlines or a '/'). If val is empty that variable is unset. These variables are stored also in an internal index used by the limit command. This option sets \fB_caption_over_image\fP=2, so that a caption is displayed over the image. A description file beginning with "#!fim:desc" can be loaded without specifying this switch.
 .TP
-\fB-S {sepchar}\fP, \fB--image-descriptions-file-separator {sepchar}\fP
+\fB-S \fR\fI{sepchar}\fR\fP, \fB--image-descriptions-file-separator \fR\fI{sepchar}\fR\fP
 A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file.
 .TP
 \fB-i\fP, \fB--image-from-stdin\fP
@@ -167,11 +167,11 @@ Read one single image from the standard input (the image data, not the filename)
 In the image list, this image takes the special name "<STDIN>".
 
 .TP
-\fB--mark-from-image-descriptions-file {filename}\fP
-Set those files specified in \fBfilename\fP (see --load-image-descriptions-file for the file format) as marked (see the list command).
+\fB--mark-from-image-descriptions-file \fR\fI{filename}\fR\fP
+Set those files specified in \fR\fI{filename}\fR (see --load-image-descriptions-file for the file format) as marked (see the list command).
 
 .TP
-\fB-m {vmode}\fP, \fB--mode {vmode}\fP
+\fB-m \fR\fI{vmode}\fR\fP, \fB--mode \fR\fI{vmode}\fR\fP
 Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP
 \fB-N\fP, \fB--no-rc-file\fP
@@ -212,17 +212,17 @@ The \fBimlib2\fP option requests imlib2 and is unfinished -- do not use it.
 The \fBdumb\fP test mode is not interactive.
 
 .TP
-\fB--offset {bytes-offset[{:upper-offset}|{+offset-range}]}\fP
-Use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper-offset\fP is specified, further bytes until \fBupper-offset\fP are probed. If \fB+offset-range\fP is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes.
+\fB--offset \fR\fI{bytes-offset[{:upper-offset}|{+offset-range}]}\fR\fP
+Use the specified \fR\fIoffset\fR (in bytes) for opening the specified files. If \fR\fI:upper-offset\fR is specified, further bytes until \fR\fIupper-offset\fR are probed. If \fR\fI+offset-range\fR is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes.
 .TP
-\fB--pread-cmd {cmd-filter-pipeline}\fP
-Specify a shell command with \fB{cmd-filter-pipeline}\fP. If the current filename matches "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$", it is be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which is read, decoded, and displayed.
+\fB--pread-cmd \fR\fI{cmd-filter-pipeline}\fR\fP
+Specify a shell command with \fR\fI{cmd-filter-pipeline}\fR. If the current filename matches "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$", it is be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which is read, decoded, and displayed.
 This works by setting the internal \fB_pread_cmd\fP variable (empty by default).
 .TP
 \fB-P\fP, \fB--text-reading\fP
 Enable textreading mode.  This has the effect that fim displays images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
 .TP
-\fB-s {value}\fP, \fB--scroll {value}\fP
+\fB-s \fR\fI{value}\fR\fP, \fB--scroll \fR\fI{value}\fR\fP
 Set scroll steps for internal variable \fB_steps\fP (default is 20%).
 .TP
 \fB--slideshow \fR\fI{number}\fR\fP
@@ -235,8 +235,8 @@ Perform a quick sanity check, just after the initialization, and terminate.
 \fBfim\fP Use an ASCII Art driver. If present, use either of libcaca (coloured), or aalib (monochrome). For more, see (man fimrc), (info aalib) or (apropos caca)).
 If no ASCII Art driver had been enabled at compile time, fim does not display any image at all.
 .TP
-\fB-T {terminal}\fP, \fB--vt {terminal}\fP
-The \fBterminal\fP is to be used as virtual terminal device file (as in fbi).
+\fB-T \fR\fI{terminal}\fR\fP, \fB--vt \fR\fI{terminal}\fR\fP
+The \fR\fI{terminal}\fR is to be used as virtual terminal device file (as in fbi).
 See (chvt (1)), (openvt (1)) for more info about this.
 Use (con2fb (1)) to map a terminal to a framebuffer device.
 
@@ -292,10 +292,10 @@ Sets \fB_push_checks\fP=0 before initialization, thus disabling file/dir existen
 \fB-H\fP, \fB--autoheight\fP
 Scale the image according to the screen height.
 .TP
-\fB-W {scriptfile}\fP, \fB--write-scriptout {scriptfile}\fP
-All the characters that you type are recorded in the file \fB{scriptout}\fP, until you exit \fBfim\fP.  This is useful if you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the \fB{scriptout}\fP file exists, it is not touched (as in Vim's -w). 
+\fB-W \fR\fI{scriptfile}\fR\fP, \fB--write-scriptout \fR\fI{scriptfile}\fR\fP
+All the characters that you type are recorded in the file \fR\fI{scriptfile}\fR, until you exit \fBfim\fP.  This is useful if you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the \fR\fI{scriptfile}\fR file exists, it is not touched (as in Vim's -w). 
 .TP
-\fB-L {fileslistfile}\fP, \fB--read-from-file {fileslistfile}\fP
+\fB-L \fR\fI{fileslistfile}\fR\fP, \fB--read-from-file \fR\fI{fileslistfile}\fR\fP
 Read file list from a file: each line one file to load (similar to \fB--read-from-stdin\fP; use \fB--read-from-stdin-elds\fP to control line breaking).
 
 
@@ -310,7 +310,7 @@ See the section
 below to read some useful (and unique) ways of employing fim.
 
 .TP
-\fB--read-from-stdin-elds {delimiter-char}\fP
+\fB--read-from-stdin-elds \fR\fI{delimiter-char}\fR\fP
 Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter are be treated as names of files to load; the text after is ignored. This is also useful e.g. to load description files (see --load-image-descriptions-file) as filename list files. Default is the newline character (0x0A); to specify an ASCII NUL byte (0x00) use ''.
 
 .TP
@@ -321,11 +321,11 @@ Align images to the top border (by setting '\fB_autotop\fP=1' after initializati
 Quiet execution mode. Sets _display_status=0;_display_busy=0;.
 
 .TP
-\fB-r {width:height}\fP, \fB--resolution {width:height}\fP
+\fB-r \fR\fI{width:height}\fR\fP, \fB--resolution \fR\fI{width:height}\fR\fP
 Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --output-device. Shorthand value 'fullscreen' is be translated into 'W'. 
 .TP
-\fB-R[{exp}]\fP, \fB--recursive[={exp}]\fP
-Push files/directories to the files list recursively. The expression in variable \fB_pushdir_re\fP (default: "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$") lists extensions of filenames which are loaded in the list. You can overwrite its value by optionally passing an expression \fB{exp}\fP here as argument. If starting with '+' or '|', the expression following is to be appended to it. 
+\fB-R[\fR\fI{exp}\fR]\fP, \fB--recursive[=\fR\fI{exp}\fR]\fP
+Push files/directories to the files list recursively. The expression in variable \fB_pushdir_re\fP (default: "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$") lists extensions of filenames which are loaded in the list. You can overwrite its value by optionally passing an expression \fR\fI{exp}\fR here as argument. If starting with '+' or '|', the expression following is to be appended to it. 
 .TP
 \fB-X\fP, \fB--no-pipe-load\fP
 Do not load via external converter programs: only use built-in file decoders.
@@ -333,13 +333,13 @@ Do not load via external converter programs: only use built-in file decoders.
 \fB-B\fP, \fB--background-recursive\fP
 Push files/directories to the files list recursively, in background during program execution. Any sorting options are ignored. Experimental feature, unfinished.
 .TP
-\fB--load-shadow-directory {dir}\fP
-Add \fB{dir}\fP to the shadow directory list. Then 'scale "shadow"' temporarily substitutes the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved.
+\fB--load-shadow-directory \fR\fI{dirname}\fR\fP
+Add \fR\fI{dirname}\fR to the shadow directory list. Then 'scale "shadow"' temporarily substitutes the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved.
 .TP
-\fB-/ {pattern}\fP, \fB--/ {pattern}\fP
+\fB-/ \fR\fI{pattern}\fR\fP, \fB--/ \fR\fI{pattern}\fR\fP
 After startup jump to pattern; short for -c '/'.
 .TP
-\fB--// {pattern}\fP
+\fB--// \fR\fI{pattern}\fR\fP
 After startup jump to pattern; as -c '/' but with search on the full path (with \fB_re_search_opts="f"\fP).
 .TP
 \fB-1\fP, \fB--once\fP

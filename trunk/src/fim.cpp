@@ -100,10 +100,10 @@ struct fim_options_t fim_options[] = {
 	    FIM_CNS_CMDSEP "Useful when invoking from a desktop environment."
     },
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       FIM_NULL, 'c',
-	"execute {commands} after initialization", "{commands}",
-	"Execute " FIM_MAN_fB("commands") " after reading the initialization file, just before entering the interactive mode.\n"
-	"No semicolon (" FIM_MAN_fB(";") ") is required at the end of " FIM_MAN_fB("commands") ".\n"
-	"Do not forget quoting " FIM_MAN_fB("commands") " in a manner suitable to your shell.\n"
+	"execute " FIM_CNS_EX_CMDS_STRING " after initialization", "" FIM_CNS_EX_CMDS_STRING "",
+	"Execute " FIM_CNS_EX_CMDS_STRING " after reading the initialization file, just before entering the interactive mode.\n"
+	"No semicolon (" FIM_MAN_fB(";") ") is required at the end of " FIM_CNS_EX_CMDS_STRING ".\n"
+	"Do not forget quoting " FIM_CNS_EX_CMDS_STRING " in a manner suitable to your shell.\n"
 	"So  -c next  is fine as it is.\n"
 	"A more complicated example, with quotings:\n"
 	"-c '*2;2pan_up;display;while(1){align \"bottom\";sleep \"1\" ; align \"top\"}'\n"
@@ -112,9 +112,9 @@ struct fim_options_t fim_options[] = {
 	"do an endless loop consisting of bottom and top aligning, alternated.\n"
     },
     {FIM_OSW_EXECUTE_COMMANDS_EARLY, required_argument,       FIM_NULL, 'C',
-	"execute {commands} just after initialization", "{commands}",
+	"execute " FIM_CNS_EX_CMDS_STRING " just after initialization", "" FIM_CNS_EX_CMDS_STRING "",
 	"Similar to the " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " option, but "
-	"execute " FIM_MAN_fB("commands") " earlier, just before reading the initialization file.\n"
+	"execute " FIM_CNS_EX_CMDS_STRING " earlier, just before reading the initialization file.\n"
 	"The special 'early' form " FIM_MAN_fB("=var=val") " assigns " FIM_MAN_fB("var") " to " FIM_MAN_fB("val") " immediately, before the interpreter is started, and with no value quoting needed.\n"
 	"\n"
 	"For example,\n"
@@ -124,7 +124,7 @@ struct fim_options_t fim_options[] = {
 	"\n"
     },
     {"device",     required_argument, FIM_NULL, 'd',
-	"specify a {framebuffer device}", "{framebuffer device}",
+	"specify a framebuffer device " FIM_CNS_EX_FBDEV_STRING, FIM_CNS_EX_FBDEV_STRING,
 	"Framebuffer device to use. Default is the one your vc is mapped to (as in fbi)."
     },
     {"dump-reference-help",      optional_argument /*no_argument*/,       FIM_NULL, 0x6472690a,
@@ -136,18 +136,18 @@ struct fim_options_t fim_options[] = {
 	"Dump default configuration (the one hardcoded in the fim executable) to standard output and quit."
     },
     {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       FIM_NULL, 'E',
-	"execute {scriptfile} after initialization", "{scriptfile}",
-	"Execute " FIM_MAN_fB("scriptfile") " after the default initialization file is read, and before executing " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " commands."
+	"execute " FIM_CNS_EX_SCRIPTFILE " after initialization", "" FIM_CNS_EX_SCRIPTFILE "",
+	"Execute " FIM_CNS_EX_SCRIPTFILE " after the default initialization file is read, and before executing " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " commands."
     },
     {FIM_OSW_ETC_FIMRC,       required_argument, FIM_NULL, 'f',
-	"specify custom initialization file", "{fimrc}",
+	"specify custom initialization file", FIM_CNS_EX_FIMRC_STRING,
 	"Specify an alternative system-wide initialization file (default: " FIM_CNS_SYS_RC_FILEPATH "), to be read prior to any other configuration file. "
 	"See also " FIM_MAN_fB("--" FIM_OSW_NO_ETC_FIMRC) ". \n"
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       FIM_NULL, 'F',
-	"execute {commands} just before exit", "{commands}",
+	"execute " FIM_CNS_EX_CMDS_STRING " just before exit", "" FIM_CNS_EX_CMDS_STRING "",
 	"Similar to the " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " option, but "
-	"execute " FIM_MAN_fB("commands") " after exiting the interactive mode, just before terminating the program."
+	"execute " FIM_CNS_EX_CMDS_STRING " after exiting the interactive mode, just before terminating the program."
     },
     {"help",       optional_argument,       FIM_NULL, 'h',
 	"print program invocation help and exit"
@@ -160,13 +160,13 @@ struct fim_options_t fim_options[] = {
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
     { FIM_OSW_KEYSYM_PRESS,   required_argument,       FIM_NULL, 'k',
-	"execute any command bound to keysym at startup","{keysym}",
+	"execute any command bound to keysym at startup", FIM_CNS_EX_KSY_STRING,
        	"Execute any command bound (via the " FIM_FLT_BIND " command) to a specified keysym at startup. A keysym can be prefixed by a repetition count number. You can specify the option multiple times to simulate multiple keystrokes. "
 	"Presses entered via " FIM_MAN_fB("--" FIM_OSW_KEYSYM_PRESS) " are processed before presses entered via " FIM_MAN_fB("--" FIM_OSW_CHARS_PRESS) ". "
 	"See man " FIM_MAN_fR("fimrc") "(5) for a list of keysyms and the use of " FIM_FLT_BIND "."
     },
     { FIM_OSW_CHARS_PRESS,   required_argument,       FIM_NULL, 'K',
-	"input keyboard characters at startup","{chars}",
+	"input keyboard characters at startup",FIM_CNS_EX_CHARS_STRING,
        	"Input one or more keyboard characters at program startup (simulate keyboard presses). "
 	"This option can be specified multiple times. "
 	"Each additional time (or if the string is empty), a press of " FIM_KBD_ENTER " (ASCII code " FIM_XSTRINGIFY(FIM_SYM_ENTER) ") key is prepended. "
@@ -179,8 +179,8 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
     {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D',
-	"load image descriptions file", "{filename}",
-	"Load image descriptions from file " FIM_MAN_fB("filename") ". Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via " FIM_MAN_fB("--" FIM_OSW_IMG_DSC_FILE_SEPC) "), then the description text. "
+	"load image descriptions file", FIM_CNS_EX_FN_STRING,
+	"Load image descriptions from file " FIM_CNS_EX_FN_STRING ". Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via " FIM_MAN_fB("--" FIM_OSW_IMG_DSC_FILE_SEPC) "), then the description text. "
 	"The description text is copied into the " FIM_MAN_fB("i:" FIM_VID_COMMENT) " variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_DESC_VEXP
 	" If a '@' followed by and identifier " FIM_CNS_EX_VAR_STRING " is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value is substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
@@ -208,7 +208,7 @@ struct fim_options_t fim_options[] = {
       " A description file beginning with \"" FIM_CNS_MAGIC_DESC "\" can be loaded without specifying this switch."
     },
     {FIM_OSW_IMG_DSC_FILE_SEPC,       required_argument,       FIM_NULL, /*0x69646673*/'S',
-	    "image descriptions file separator character", "{sepchar}",
+	    "image descriptions file separator character", FIM_CNS_EX_SEPCHAR,
 	    "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
     },
 #endif /* FIM_WANT_PIC_CMTS */
@@ -221,12 +221,12 @@ struct fim_options_t fim_options[] = {
 //#endif /* FIM_READ_STDIN_IMAGE */
 #if FIM_WANT_PIC_CMTS
     {"mark-from-image-descriptions-file",       required_argument,       FIM_NULL, 0x6d666466,
-	    "mark files from descriptionos list file", "{filename}",
-	    "Set those files specified in " FIM_MAN_fB("filename") " (see --" FIM_OSW_LOAD_IMG_DSC_FILE " for the file format) as marked (see the " FIM_FLT_LIST " command).\n"
+	    "mark files from descriptionos list file", FIM_CNS_EX_FN_STRING,
+	    "Set those files specified in " FIM_CNS_EX_FN_STRING " (see --" FIM_OSW_LOAD_IMG_DSC_FILE " for the file format) as marked (see the " FIM_FLT_LIST " command).\n"
     },
 #endif /* FIM_WANT_PIC_CMTS */
     {"mode",       required_argument, FIM_NULL, 'm',
-	"specify a video mode", "{vmode}",
+	"specify a video mode", FIM_CNS_EX_VMODE_STRING,
 	"Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
     {"no-rc-file",      no_argument,       FIM_NULL, 'N',
@@ -299,13 +299,13 @@ struct fim_options_t fim_options[] = {
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
 	"open at specified byte offset",
-	"{bytes-offset[{:upper-offset}|{+offset-range}]}",
-"Use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP are probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
+	FIM_ARG_MAN_SYNTAX("{bytes-offset[{:upper-offset}|{+offset-range}]}"),
+"Use the specified " FIM_ARG_MAN_SYNTAX("offset") " (in bytes) for opening the specified files. If " FIM_ARG_MAN_SYNTAX(":upper-offset") " is specified, further bytes until " FIM_ARG_MAN_SYNTAX("upper-offset") " are probed. If " FIM_ARG_MAN_SYNTAX("+offset-range") " is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
     },
     {"pread-cmd",      required_argument,       FIM_NULL,  0x70726561, //prea(d)
 	"read image file in stdin from pipeline",
-	"{cmd-filter-pipeline}",
-	"Specify a shell command with " FIM_MAN_fB("{cmd-filter-pipeline}") ". If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it is be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which is read, decoded, and displayed.\n"
+	FIM_CNS_EX_CMDFLTPL,
+	"Specify a shell command with " FIM_CNS_EX_CMDFLTPL ". If the current filename matches \"" FIM_CNS_PIPEABLE_PATH_RE "\", it is be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which is read, decoded, and displayed.\n"
 	"This works by setting the internal " FIM_MAN_fB(FIM_VID_PREAD) " variable (empty by default)."
     },
     {"text-reading",      no_argument,       FIM_NULL, 'P',
@@ -313,7 +313,7 @@ struct fim_options_t fim_options[] = {
 	"Enable textreading mode.  This has the effect that fim displays images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
     },
     {"scroll",     required_argument, FIM_NULL, 's',
-	"set scroll variable value", "{value}",
+	"set scroll variable value", FIM_CNS_EX_VALUE,
 	"Set scroll steps for internal variable " FIM_MAN_fB(FIM_VID_STEPS) " (default is " FIM_CNS_STEPS_DEFAULT ")."
     },
     {"slideshow",     required_argument, FIM_NULL, 0x7373,
@@ -335,8 +335,8 @@ struct fim_options_t fim_options[] = {
 	"If no ASCII Art driver had been enabled at compile time, fim does not display any image at all."
     },
     {"vt",         required_argument, FIM_NULL, 'T',
-	"specify a virtual terminal for the framebufer", "{terminal}",
-	"The \\fBterminal\\fP is to be used as virtual terminal device file (as in fbi).\n"
+	"specify a virtual terminal for the framebufer", FIM_CNS_EX_TERMINAL,
+	"The " FIM_CNS_EX_TERMINAL " is to be used as virtual terminal device file (as in fbi).\n"
 	"See (chvt (1)), (openvt (1)) for more info about this.\n"
 	"Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
@@ -412,11 +412,11 @@ struct fim_options_t fim_options[] = {
 	"Scale the image according to the screen height."
     },
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       FIM_NULL, 'W',
-	"record any executed command to the a {scriptfile}", "{scriptfile}",
-	"All the characters that you type are recorded in the file " FIM_MAN_fB("{scriptout}") ", until you exit " FIM_MAN_fB("fim") ".  This is useful if you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the " FIM_MAN_fB("{scriptout}") " file exists, it is not touched (as in Vim's -w). "
+	"record any executed command to the a " FIM_CNS_EX_SCRIPTFILE "", "" FIM_CNS_EX_SCRIPTFILE "",
+	"All the characters that you type are recorded in the file " FIM_CNS_EX_SCRIPTFILE ", until you exit " FIM_MAN_fB("fim") ".  This is useful if you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the " FIM_CNS_EX_SCRIPTFILE " file exists, it is not touched (as in Vim's -w). "
     },
     {"read-from-file",      required_argument,       FIM_NULL, 'L',
-	"read an image list from a file","{fileslistfile}",
+	"read an image list from a file", FIM_ARG_MAN_SYNTAX("{fileslistfile}"),
 	"Read file list from a file: each line one file to load (similar to " FIM_MAN_fB("--read-from-stdin") "; use " FIM_MAN_fB("--read-from-stdin-elds") " to control line breaking).\n"
 "\n"
     },
@@ -434,7 +434,7 @@ struct fim_options_t fim_options[] = {
     },
 #endif /* FIM_READ_STDIN */
     {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,
-	"endline delimiter character for --read-from-stdin/--read-from-file", "{delimiter-char}",
+	"endline delimiter character for --read-from-stdin/--read-from-file", FIM_ARG_MAN_SYNTAX("{delimiter-char}"),
 	"Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter are be treated as names of files to load; the text after is ignored. This is also useful e.g. to load description files (see --" FIM_OSW_LOAD_IMG_DSC_FILE ") as filename list files. Default is the newline character (0x0A)"
 #ifdef HAVE_GETDELIM
 	"; to specify an ASCII NUL byte (0x00) use ''"
@@ -454,7 +454,7 @@ struct fim_options_t fim_options[] = {
     },
 #if FIM_WANT_R_SWITCH
     {"resolution", required_argument, FIM_NULL, 'r',
-	"set SDL resolution", "{width:height}",
+	"set SDL resolution", FIM_CNS_EX_WHLH,
 	"Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --" FIM_OSW_OUTPUT_DEVICE ". "
 	"Shorthand value 'fullscreen' is be translated into 'W'. "
     },
@@ -465,10 +465,10 @@ struct fim_options_t fim_options[] = {
 #endif /* FIM_WANT_R_SWITCH */
 #if FIM_WANT_RECURSE_FILTER_OPTION
     {FIM_OSW_RECURSIVE, optional_argument, FIM_NULL, 'R',
-	"push paths recursively", "{exp}",
+	"push paths recursively", FIM_CNS_EX_EXP_STRING,
 	"Push files/directories to the files list recursively. "
 	"The expression in variable " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which are loaded in the list. "
-	"You can overwrite its value by optionally passing an expression " FIM_MAN_fB("{exp}") " here as argument. "
+	"You can overwrite its value by optionally passing an expression " FIM_CNS_EX_EXP_STRING " here as argument. "
 	"If starting with '+' or '|', the expression following is to be appended to it. "
     },
 #else /* FIM_WANT_RECURSE_FILTER_OPTION */
@@ -492,16 +492,16 @@ struct fim_options_t fim_options[] = {
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
 //#if FIM_EXPERIMENTAL_SHADOW_DIRS
     {"load-shadow-directory",   required_argument, FIM_NULL, 0x68696768,
-	    "add shadow directory for 'scale \"shadow\"'", "{dir}",
-	    "Add " FIM_MAN_fB("{dir}") " to the shadow directory list. Then 'scale \"shadow\"' temporarily substitutes the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved."
+	    "add shadow directory for 'scale \"shadow\"'", FIM_CNS_EX_DIRNAME,
+	    "Add " FIM_CNS_EX_DIRNAME " to the shadow directory list. Then 'scale \"shadow\"' temporarily substitutes the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved."
     },
 //#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
     { "/",   required_argument,       FIM_NULL, '/',
-	    "jump to file name matching pattern", "{pattern}",
+	    "jump to file name matching pattern", FIM_CNS_EX_PAT_STRING,
 	    "After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'."
     },
     {"//",   required_argument,       FIM_NULL, 0x2f2f0000,
-	    "jump to file path matching pattern","{pattern}","After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_MAN_fB(FIM_SYM_CMD_SLSL) ")."
+	    "jump to file path matching pattern", FIM_CNS_EX_PAT_STRING, "After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_MAN_fB(FIM_SYM_CMD_SLSL) ")."
     },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
     {"once",       no_argument,       FIM_NULL, '1',
@@ -775,17 +775,17 @@ int fim_dump_man_page(void)
 			".SH NAME\n"
 			"fim - \\fBF\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBIM\\fPproved, an universal image viewer\n"
 			".SH SYNOPSIS\n"
-			FIM_MAN_Bn("fim [{options}] [--] {imagepath} [{imagepaths}]")
+			FIM_MAN_Bn("fim [" FIM_CNS_EX_OPTIONS "] [--] " FIM_CNS_EX_IMPA_STRING " [" FIM_CNS_EX_IMPS_STRING "]")
 			FIM_MAN_Bn("fim --" FIM_OSW_OUTPUT_DEVICE " {"  FIM_DDN_VARS_NB "} ...")
-			FIM_MAN_Bn("... | fim [{options}] [--] [{imagepaths}] -"))+
+			FIM_MAN_Bn("... | fim [" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_IMPS_STRING "] -"))+
 #ifdef FIM_READ_STDIN
-			string(FIM_MAN_Bn("fim [{options}] [--] [{files}] - < {file_name_list_text_file}"))+
+			string(FIM_MAN_Bn("fim [" FIM_CNS_EX_OPTIONS "] [--] [{files}] - < " FIM_CNS_EX_FNLTF_STRING ))+
 #endif /* FIM_READ_STDIN */
 #ifdef FIM_READ_STDIN_IMAGE
-			string(FIM_MAN_Bn("fim --" FIM_OSW_IMAGE_FROM_STDIN " [{options}] < {imagefile}"))+
+			string(FIM_MAN_Bn("fim --" FIM_OSW_IMAGE_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_IMFL_STRING ))+
 #endif /* FIM_READ_STDIN_IMAGE */
 #ifdef FIM_READ_STDIN
-			string(FIM_MAN_Bn("fim --" FIM_OSW_SCRIPT_FROM_STDIN " [{options}] < {scriptfile}"))+
+			string(FIM_MAN_Bn("fim --" FIM_OSW_SCRIPT_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_SCRIPTFILE ))+
 #endif /* FIM_READ_STDIN */
 #if FIM_WANT_HELP_ARGS
 			string(FIM_MAN_Bn("fim --help[=" FIM_HELP_EXTRA_OPTS "] [" FIM_CNS_EX_HELP_ITEM " ...] "))+
@@ -814,11 +814,11 @@ int fim_dump_man_page(void)
 			"During conversion fim pauses for a second.\n"
 #endif /* FIM_HAS_TIMEOUT */
 			"\n")+
-			string("\n""If " FIM_MAN_fB("{imagepath}") " is a file, its format is guessed not by its name but by its contents. "
+			string("\n""If " FIM_CNS_EX_IMPA_STRING	" is a file, its format is guessed not by its name but by its contents. "
 				"See the " FIM_MAN_fB(FIM_VID_FILE_LOADER) " variable to change this default.\n\n")
 #ifdef FIM_READ_DIRS
 			+
-			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, load files of supported formats contained there. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it is treated as a directory; otherwise that is checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")
+			string("\n""If " FIM_CNS_EX_IMPA_STRING " is a directory, load files of supported formats contained there. If " FIM_CNS_EX_IMPA_STRING " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it is treated as a directory; otherwise that is checked via " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_MAN_fB(FIM_VID_PUSHDIR_RE) " variable and the " FIM_MAN_fB("--" FIM_OSW_NO_STAT_PUSH) " and " FIM_MAN_fB("--" FIM_OSW_RECURSIVE) " options.\n\n")
 #endif /* FIM_READ_DIRS */
 			;
 
@@ -834,7 +834,7 @@ int fim_dump_man_page(void)
 			"\nThe full commands specification is also accessible at runtime using the internal help system (typing :help).\n"
 			"\n"
 			"\n.SH OPTIONS\n"
-			"Accepted command line " FIM_MAN_fB("{options}") ":\n");
+			"Accepted command line " FIM_MAN_fB("" FIM_CNS_EX_OPTIONS "") ":\n");
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH PROGRAM RETURN STATUS\n");
 			mp+=string("The program return status is ")+string(FIM_ERR_NO_ERROR)+string(" on correct operation; ");
