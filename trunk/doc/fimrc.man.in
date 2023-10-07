@@ -32,7 +32,7 @@ This page explains the
 .B fim
 scripting language, which is used for the 
 .B fimrc
-configuration files, {scriptfile}s, or {commands} passed via command line {options}.
+configuration files, \fR\fI{scriptfile}\fRs, or \fR\fI{commands}\fR passed via command line \fR\fI{options}\fR.
 This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "\fB_console_key\fP" variable).
 One may exit from command line mode by pressing the Enter key on an empty line (a non empty command line would be submitted for execution), or the Esc key  (only in SDL mode).
 The general form of a fim command/program is shown in the next section.
@@ -150,22 +150,22 @@ The way some one-line statements are evaluated:
 
 .nf
 :       enter command line mode
-:{number}       jump to {number}^th image in the list
+:\fR\fI{number}\fR       jump to \fR\fI{number}\fR^th image in the list
 :^	        jump to first image in the list
 :$	        jump to last image in the list
-:*{factor}      scale the image by {factor}
-:{scale}%       scale the image to the desired {scale}
-:+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
-:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+:*\fR\fI{factor}\fR      scale the image by \fR\fI{factor}\fR
+:\fR\fI{scale}\fR%       scale the image to the desired \fR\fI{scale}\fR
+:+\fR\fI{scale}\fR%       scale the image up to the desired percentage \fR\fI{scale}\fR (relatively to the original)
+:-\fR\fI{scale}\fR%       scale the image down to the desired percentage \fR\fI{scale}\fR (relatively to the original)
 
-/{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/\fR\fI{regexp}\fR		 entering the pattern \fR\fI{regexp}\fR (with /) makes fim jump to the next image whose filename matches \fR\fI{regexp}\fR
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
 2,4 stdout '{}'	print three filenames to standard output.
 
 
-!{syscmd}		executes the {syscmd} quoted string as an argument to the  "system" fim command.
+!\fR\fI{syscmd}\fR		executes the \fR\fI{syscmd}\fR quoted string as an argument to the  "system" fim command.
 
 
 .SH COMMANDS REFERENCE
@@ -174,7 +174,7 @@ The way some one-line statements are evaluated:
 .B
 alias
 .fi
-alias [{identifier} [{commands} [{description}]]]
+alias [\fR\fI{identifier}\fR [\fR\fI{commands}\fR [\fR\fI{description}\fR]]]
 .fi
 Without arguments, lists the current aliases.
 .fi
@@ -200,7 +200,7 @@ align 'info': print internal alignment information.
 .B
 autocmd
 .fi
-autocmd {event} {pattern} {commands}: manipulate autocommands (inspired from Vim autocmd's).
+autocmd \fR\fI{event}\fR \fR\fI{pattern}\fR \fR\fI{commands}\fR: manipulate autocommands (inspired from Vim autocmd's).
 .fi
 Without arguments, list autocommands.
 .fi
@@ -215,23 +215,23 @@ autocmd_del
 .fi
 autocmd_del: specify autocommands to delete.
 .fi
-Usage: autocmd_del {event} {pattern} {commands}.
+Usage: autocmd_del \fR\fI{event}\fR \fR\fI{pattern}\fR \fR\fI{commands}\fR.
 .fi
 
 .na
 .B
 basename
 .fi
-basename {filename}: returns the basename of {filename} in the '_last_cmd_output' variable.
+basename \fR\fI{filename}\fR: returns the basename of \fR\fI{filename}\fR in the '_last_cmd_output' variable.
 .fi
 
 .na
 .B
 bind
 .fi
-bind [{keysym} [{commands}]]: bind a keyboard symbol/shortcut {keysym} to {commands}.
+bind [\fR\fI{keysym}\fR [\fR\fI{commands}\fR]]: bind a keyboard symbol/shortcut \fR\fI{keysym}\fR to \fR\fI{commands}\fR.
 .fi
-If {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to.
+If \fR\fI{keysym}\fR is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified \fR\fI{keysym}\fR to.
 .fi
 Use the '_verbose_keys' variable to discover (display device dependent) raw keys.
 .fi
@@ -244,11 +244,11 @@ You can get a list of valid symbols (keysyms) by invoking dump_key_codes or in t
 .B
 cd
 .fi
-cd {path}: change the current directory to {path}.
+cd \fR\fI{path}\fR: change the current directory to \fR\fI{path}\fR.
 .fi
-If {path} is a file, use its base directory name.
+If \fR\fI{path}\fR is a file, use its base directory name.
 .fi
-cd '-' changes to the previous current directory (before the last ':cd {path}' command).
+cd '-' changes to the previous current directory (before the last ':cd \fR\fI{path}\fR' command).
 .fi
 
 .na
@@ -292,11 +292,11 @@ crop
 .fi
 crop: crop image to a centered rectangle, half the width and half the height.
 .fi
-crop {p}: crop image to the middle {p} horizontal percent and {p} vertical percent of the image.
+crop \fR\fI{p}\fR: crop image to the middle \fR\fI{p}\fR horizontal percent and \fR\fI{p}\fR vertical percent of the image.
 .fi
-crop {w} {h}: crop image to the middle {w} horizontal percent and {h} vertical percent of the image.
+crop \fR\fI{w}\fR \fR\fI{h}\fR: crop image to the middle \fR\fI{w}\fR horizontal percent and \fR\fI{h}\fR vertical percent of the image.
 .fi
-crop {x1} {y1} {x2} {y2}: crop image to the area between the upper left ({x1},{y1}) and lower right ({x2},{y2}) corner.
+crop \fR\fI{x1}\fR \fR\fI{y1}\fR \fR\fI{x2}\fR \fR\fI{y2}\fR: crop image to the area between the upper left (\fR\fI{x1}\fR,\fR\fI{y1}\fR) and lower right (\fR\fI{x2}\fR,\fR\fI{y2}\fR) corner.
 .fi
 Units are intended as percentage (0 to 100).
 .fi
@@ -307,24 +307,24 @@ Note: still experimental functionality.
 .B
 desc
 .fi
-desc 'load' {filename} [{sepchar}]: load description file {filename}, using the optional {sepchar} character as separator.
+desc 'load' \fR\fI{filename}\fR [\fR\fI{sepchar}\fR]: load description file \fR\fI{filename}\fR, using the optional \fR\fI{sepchar}\fR character as separator.
 .fi
 desc 'reload': load once again description files specified at the command line with --load-image-descriptions-file, with respective separators.
 .fi
-desc ['-all'] ['-append'] ['-nooverw'] 'save' {filename} [{sepchar}]: save current list descriptions to file {filename}, using the optional {sepchar} character as separator, and if '-all' is present then save the variables, and if '-append' is present then only append, and if '-nooverw' is present then do not overwrite existing files.
+desc ['-all'] ['-append'] ['-nooverw'] 'save' \fR\fI{filename}\fR [\fR\fI{sepchar}\fR]: save current list descriptions to file \fR\fI{filename}\fR, using the optional \fR\fI{sepchar}\fR character as separator, and if '-all' is present then save the variables, and if '-append' is present then only append, and if '-nooverw' is present then do not overwrite existing files.
 .fi
-See documentation of --load-image-descriptions-file for the format of {filename}.
+See documentation of --load-image-descriptions-file for the format of \fR\fI{filename}\fR.
 .fi
 
 .na
 .B
 display
 .fi
-display ['reinit' {string}]|'resize' {w} {h}]: display the current file contents.
+display ['reinit' \fR\fI{string}\fR]|'resize' \fR\fI{w}\fR \fR\fI{h}\fR]: display the current file contents.
 .fi
-If 'reinit' switch is supplied, the {string} specifier is used to reinitialize (e.g.: change resolution, window system options) the display device.
+If 'reinit' switch is supplied, the \fR\fI{string}\fR specifier is used to reinitialize (e.g.: change resolution, window system options) the display device.
 .fi
-See documentation for the --output-device command line switch for allowed values of {string}.
+See documentation for the --output-device command line switch for allowed values of \fR\fI{string}\fR.
 .fi
 If 'resize' and no argument, ask the window manager to resize the window like the image.
 .fi
@@ -342,7 +342,7 @@ dump_key_codes: dump the active key codes (unescaped, for inspection purposes).
 .B
 echo
 .fi
-echo {args}: print the {args} on console.
+echo \fR\fI{args}\fR: print the \fR\fI{args}\fR on console.
 .fi
 
 .na
@@ -356,23 +356,23 @@ if(expression){action;}['else'{action;}]: see else.
 .B
 eval
 .fi
-eval {args}: evaluate {args} as commands, executing them.
+eval \fR\fI{args}\fR: evaluate \fR\fI{args}\fR as commands, executing them.
 .fi
 
 .na
 .B
 exec
 .fi
-exec {filename(s)}: execute script {filename(s)}.
+exec \fR\fI{filename(s)}\fR: execute script \fR\fI{filename(s)}\fR.
 .fi
 
 .na
 .B
 font
 .fi
-font 'scan' [{dirname}]: scan {dirname} or /usr/share/consolefonts looking for fonts in the internal fonts list.
+font 'scan' [\fR\fI{dirname}\fR]: scan \fR\fI{dirname}\fR or /usr/share/consolefonts looking for fonts in the internal fonts list.
 .fi
-font 'load' {filename}: load font {filename}.
+font 'load' \fR\fI{filename}\fR: load font \fR\fI{filename}\fR.
 .fi
 font 'next'/'prev': load next/previous font in the internal fonts list.
 .fi
@@ -383,16 +383,16 @@ font 'info': print current font filename.
 .B
 getenv
 .fi
-getenv {identifier}: create a variable with the same value as the '{identifier}' environment variable, but with an identifier prefixed by 'ENV_'. So e.g. getenv 'DISPLAY' creates 'ENV_DISPLAY'. Nothing is being printed; no variable is created if {identifier} is empty.
+getenv \fR\fI{identifier}\fR: create a variable with the same value as the '\fR\fI{identifier}\fR' environment variable, but with an identifier prefixed by 'ENV_'. So e.g. getenv 'DISPLAY' creates 'ENV_DISPLAY'. Nothing is being printed; no variable is created if \fR\fI{identifier}\fR is empty.
 .fi
 
 .na
 .B
 goto
 .fi
-goto {['+'|'-']{number}['%']['f'|'p'|'F'|'P']} | {/{regexp}/} | {?{filename}} | {'+//'} | {'+/'|'-/'}[C] | {{'+'|'-'}{identifier}['+']}: jump to an image.
+goto {['+'|'-']\fR\fI{number}\fR['%']['f'|'p'|'F'|'P']} | {/\fR\fI{regexp}\fR/} | {?\fR\fI{filename}\fR} | {'+//'} | {'+/'|'-/'}[C] | {{'+'|'-'}\fR\fI{identifier}\fR['+']}: jump to an image.
 .fi
-If {number} is given, and not surrounded by any specifier, go to image at index {number}.
+If \fR\fI{number}\fR is given, and not surrounded by any specifier, go to image at index \fR\fI{number}\fR.
 .fi
 If followed by '%', the effective index is computed as a percentage to the current available images.
 .fi
@@ -402,7 +402,7 @@ The 'f' specifier asks for the jump to occur within the files (same for 'F', but
 .fi
 The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing).
 .fi
-If /{regexp}/ is given, jump to the first image matching the given /{regexp}/ regular expression pattern.
+If /\fR\fI{regexp}\fR/ is given, jump to the first image matching the given /\fR\fI{regexp}\fR/ regular expression pattern.
 .fi
 If the argument starts with ?, jump to the filename following ?.
 .fi
@@ -410,7 +410,7 @@ If given '+//', jump to the first different image matching the last given regula
 .fi
 With '+/'C or '-/'C, jump to next or previous file according to C: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir).
 .fi
-If {identifier|identifier2...}] is encountered after a '+' or '-' sign, jump to the next or the previous image having a different value for any corresponding i:{identifier} (a trailing '+' requires a non empty value).
+If \fR\fI{identifier|identifier2...}]\fR is encountered after a '+' or '-' sign, jump to the next or the previous image having a different value for any corresponding i:\fR\fI{identifier}\fR (a trailing '+' requires a non empty value).
 .fi
 Match occurs on both file name and description, possibly loaded via desc or --load-image-descriptions-file; see also '_lastgotodirection' and '_re_search_opts'.
 .fi
@@ -423,9 +423,9 @@ Executes autocommands for events PreGoto and PostGoto. Keeping pressed shall acc
 .B
 help
 .fi
-help [{identifier}]: provide online help, assuming {identifier} is a variable, alias, or command identifier.
+help [\fR\fI{identifier}\fR]: provide online help, assuming \fR\fI{identifier}\fR is a variable, alias, or command identifier.
 .fi
-If {identifier} begins with '/', search on the help contents, and show a list of matching items.
+If \fR\fI{identifier}\fR begins with '/', search on the help contents, and show a list of matching items.
 .fi
 A list of commands can be obtained simply invoking 'commands'; a list of aliases with 'alias'; a list of bindings with 'bind'.
 .fi
@@ -505,7 +505,7 @@ list 'sort_basename': sort the file list according to base name.
 .fi
 list 'sort_comment': sort the file list according to the value of the _comment variable.
 .fi
-list 'sort_var' {var}: sort the file list according to the value of the i:{var} variable.
+list 'sort_var' \fR\fI{var}\fR: sort the file list according to the value of the i:\fR\fI{var}\fR variable.
 .fi
 list 'vars|variables': list variables in all i:* read from description file.
 .fi
@@ -515,15 +515,15 @@ list 'sort_mtime': sort the file list according to modification date.
 .fi
 list 'pop': remove the current file from the files list, and step back.
 .fi
-list 'remove' [{filename(s)}]: remove the current file, or the {filename(s)}, if specified.
+list 'remove' [\fR\fI{filename(s)}\fR]: remove the current file, or the \fR\fI{filename(s)}\fR, if specified.
 .fi
-list 'push' {filename(s)}: push {filename(s)} to the back of the files list.
+list 'push' \fR\fI{filename(s)}\fR: push \fR\fI{filename(s)}\fR to the back of the files list.
 .fi
 list 'filesnum': display the number of files in the files list.
 .fi
-list 'mark' [{args}]: mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file.
+list 'mark' [\fR\fI{args}\fR]: mark image file names for stdout printing at exit, with \fR\fI{args}\fR mark the ones matching according to the rules of the 'limit' command, otherwise the current file.
 .fi
-list 'unmark' [{args}]: unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file.
+list 'unmark' [\fR\fI{args}\fR]: unmark marked image file names, with \fR\fI{args}\fR unmark the ones matching according to the rules of the 'limit' command, otherwise the current file.
 .fi
 list 'marked': show which files have been marked so far.
 .fi
@@ -533,9 +533,9 @@ list 'markall': mark all the current list files.
 .fi
 list 'unmarkall': unmark all the marked files.
 .fi
-list 'pushdir' {dirname}: push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression '\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$\:'.
+list 'pushdir' \fR\fI{dirname}\fR: push all the files in \fR\fI{dirname}\fR, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression '\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$\:'.
 .fi
-list 'pushdirr' {dirname}: like pushdir, but also push encountered directory entries recursively.
+list 'pushdirr' \fR\fI{dirname}\fR: like pushdir, but also push encountered directory entries recursively.
 .fi
 list 'swap': move the current image filename to the first in the list (you'll have to invoke reload to see the effect).
 .fi
@@ -555,15 +555,15 @@ Executes autocommands for events PreLoad and PostLoad.
 .B
 pan
 .fi
-pan {vsteps}% {hsteps}%: pan the image to {vsteps} percentage steps from the top and {hsteps} percentage steps from left. 
+pan \fR\fI{vsteps}\fR% \fR\fI{hsteps}\fR%: pan the image to \fR\fI{vsteps}\fR percentage steps from the top and \fR\fI{hsteps}\fR percentage steps from left. 
 .fi
-pan {vsteps} {hsteps}: pan the image to {vsteps} pixels from the top and {hsteps} pixels from left. 
+pan \fR\fI{vsteps}\fR \fR\fI{hsteps}\fR: pan the image to \fR\fI{vsteps}\fR pixels from the top and \fR\fI{hsteps}\fR pixels from left. 
 .fi
-pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+-] [{steps}['%']]: pan the image {steps} pixels in the desired direction.
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+-] [\fR\fI{steps}\fR['%']]: pan the image \fR\fI{steps}\fR pixels in the desired direction.
 .fi
-If the '%' specifier is present, {steps} is treated as a percentage of current screen dimensions.
+If the '%' specifier is present, \fR\fI{steps}\fR is treated as a percentage of current screen dimensions.
 .fi
-If {steps} is not specified, the '_steps' variable is used.
+If \fR\fI{steps}\fR is not specified, the '_steps' variable is used.
 .fi
 If present, the '_hsteps' variable is considered for horizontal panning.
 .fi
@@ -580,14 +580,14 @@ Executes autocommands for events PrePan and PostPan.
 .B
 popen
 .fi
-popen {syscmd}: pipe a command, invoking popen(): spawns a shell, invoking '{syscmd}' and executing as fim commands the output of '{syscmd}'.
+popen \fR\fI{syscmd}\fR: pipe a command, invoking popen(): spawns a shell, invoking '\fR\fI{syscmd}\fR' and executing as fim commands the output of '\fR\fI{syscmd}\fR'.
 .fi
 
 .na
 .B
 pread
 .fi
-pread {args}: execute {args} as a shell command and read the output as an image file (using 'popen').
+pread \fR\fI{args}\fR: execute \fR\fI{args}\fR as a shell command and read the output as an image file (using 'popen').
 .fi
 
 .na
@@ -612,9 +612,9 @@ pwd: print the current directory name, and updates the '_pwd' variable.
 .B
 quit
 .fi
-quit [{number}]: terminate the program.
+quit [\fR\fI{number}\fR]: terminate the program.
 .fi
-If {number} is specified, use it as the program return status.
+If \fR\fI{number}\fR is specified, use it as the program return status.
 .fi
 Note that autocommand 'PostInteractiveCommand' does not trigger after this command.
 .fi
@@ -645,9 +645,9 @@ redisplay: re-display the current file contents.
 .B
 reload
 .fi
-reload [{arg}]: load the image into memory.
+reload [\fR\fI{arg}\fR]: load the image into memory.
 .fi
-If {arg} is present, force reloading, bypassing the cache (see also 'load').
+If \fR\fI{arg}\fR is present, force reloading, bypassing the cache (see also 'load').
 .fi
 Executes autocommands for events PreReload and PostReload.
 .fi
@@ -656,7 +656,7 @@ Executes autocommands for events PreReload and PostReload.
 .B
 rotate
 .fi
-rotate {number}: rotate the image the specified amount of degrees. If unspecified, by one. If you are interested in orthogonal rotations, see '_orientation' and related aliases.
+rotate \fR\fI{number}\fR: rotate the image the specified amount of degrees. If unspecified, by one. If you are interested in orthogonal rotations, see '_orientation' and related aliases.
 .fi
 Executes autocommands for events PreScale and PostScale.
 .fi
@@ -665,7 +665,7 @@ Executes autocommands for events PreScale and PostScale.
 .B
 scale
 .fi
-scale {['+'|'-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+-*/]'|['<'|'>']|'shadow'}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b').
+scale {['+'|'-']\fR\fI{value}\fR['%']|'*'\fR\fI{value}\fR|'w'|'h'|'a'|'b'|'+[+-*/]'|['<'|'>']|'shadow'}: scale the image according to a scale \fR\fI{value}\fR (e.g.: 0.5,40%,'w','h','a','b').
 .fi
 If given '*' and a value, multiply the current scale by that value.
 .fi
@@ -677,7 +677,7 @@ If given 'a', to the minimum of 'w' and 'h'.
 .fi
 If given 'b', like 'a', provided that the image width exceeds 'w' or 'h'.
 .fi
-If {value} is a number, scale relatively to the original image width.
+If \fR\fI{value}\fR is a number, scale relatively to the original image width.
 .fi
 If the number is followed by '%', the relative scale is treated as a percentage.
 .fi
@@ -707,9 +707,9 @@ set
 .fi
 set: returns a list of variables which are set.
 .fi
-set {identifier}: returns the value of variable {identifier}.
+set \fR\fI{identifier}\fR: returns the value of variable \fR\fI{identifier}\fR.
 .fi
-set {identifier} {commands}: sets variable {identifier} to value {commands}.
+set \fR\fI{identifier}\fR \fR\fI{commands}\fR: sets variable \fR\fI{identifier}\fR to value \fR\fI{commands}\fR.
 .fi
 
 .na
@@ -730,7 +730,7 @@ set_interactive_mode: set interactive mode.
 .B
 sleep
 .fi
-sleep [{number}=1]: sleep for the specified (default 1) number of seconds.
+sleep [\fR\fI{number}\fR=1]: sleep for the specified (default 1) number of seconds.
 .fi
 
 .na
@@ -744,21 +744,21 @@ status: set the status line to the collation of the given arguments.
 .B
 stderr
 .fi
-stderr {args}: writes to stderr its arguments {args}.
+stderr \fR\fI{args}\fR: writes to stderr its arguments \fR\fI{args}\fR.
 .fi
 
 .na
 .B
 stdout
 .fi
-stdout {args}: writes to stdout its arguments {args}.
+stdout \fR\fI{args}\fR: writes to stdout its arguments \fR\fI{args}\fR.
 .fi
 
 .na
 .B
 system
 .fi
-system {syscmd}: get the output of executing the {syscmd} system command. Uses the popen() system call. Usually popen invokes "/bin/sh -c {syscmd}". This might not handle a multi-word command; in that case you have to put it into a script. See 'man popen' for more.
+system \fR\fI{syscmd}\fR: get the output of executing the \fR\fI{syscmd}\fR system command. Uses the popen() system call. Usually popen invokes "/bin/sh -c \fR\fI{syscmd}\fR". This might not handle a multi-word command; in that case you have to put it into a script. See 'man popen' for more.
 .fi
 
 .na
@@ -772,16 +772,16 @@ variables: display the existing variables.
 .B
 unalias
 .fi
-unalias {identifier} | '-a': delete the alias {identifier} or all aliases (use '-a', not -a).
+unalias \fR\fI{identifier}\fR | '-a': delete the alias \fR\fI{identifier}\fR or all aliases (use '-a', not -a).
 .fi
 
 .na
 .B
 unbind
 .fi
-unbind {keysym}: unbind the action associated to a specified {keysym}
+unbind \fR\fI{keysym}\fR: unbind the action associated to a specified \fR\fI{keysym}\fR
 .fi
-If {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to.
+If \fR\fI{keysym}\fR is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified \fR\fI{keysym}\fR to.
 .fi
 Use the '_verbose_keys' variable to discover (display device dependent) raw keys.
 .fi
@@ -790,7 +790,7 @@ Use the '_verbose_keys' variable to discover (display device dependent) raw keys
 .B
 while
 .fi
-while(expression){action;}: A conditional cycle construct.
+while(\fR\fIexpression\fR){\fR\fIaction\fR;}: A conditional cycle construct.
 .fi
 May be interrupted by hitting the 'Esc' or the ':' key.
 .fi
@@ -799,7 +799,7 @@ May be interrupted by hitting the 'Esc' or the ':' key.
 .B
 window
 .fi
-window {args}: this command is disabled.
+window \fR\fI{args}\fR: this command is disabled.
 .fi
 
 .SH KEYSYMS REFERENCE
@@ -1470,7 +1470,7 @@ alias
 alias
 .B
 "magnify"
-"scale '+'" # magnify the displayed image by the _magnify_factor variable or {args}
+"scale '+'" # magnify the displayed image by the _magnify_factor variable or \fR\fI{args}\fR
 .fi
 alias
 .B
@@ -1505,7 +1505,7 @@ alias
 alias
 .B
 "reduce"
-"scale '-'" # reduce the displayed image by _reduce_factor or {args}
+"scale '-'" # reduce the displayed image by _reduce_factor or \fR\fI{args}\fR
 .fi
 alias
 .B

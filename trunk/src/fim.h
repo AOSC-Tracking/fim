@@ -531,7 +531,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_REVISION_NUMBER (-1)
 #endif /* SVN_REVISION_NUMBER */
 #define FIM_CNS_MAGIC_DESC	"#!fim:desc"
-#define FIM_CNS_MAN_SYNTAX(KW)	KW
+#define FIM_CNS_MAN_SYNTAX(KW)	FIM_MAN_fR(KW)
 #define FIM_CNS_EX_KSY_STRING	FIM_CNS_MAN_SYNTAX("{keysym}")
 #define FIM_CNS_EX_CMD_STRING	FIM_CNS_MAN_SYNTAX("{command}")
 #define FIM_CNS_EX_FN_STRING	FIM_CNS_MAN_SYNTAX("{filename}")
