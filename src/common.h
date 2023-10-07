@@ -45,7 +45,7 @@ fim::string fim_dirname(const fim::string& arg);
 fim::string fim_auto_quote(const fim::string& arg, int quoted=0);
 fim::string fim_shell_arg_escape(const fim::string& arg, bool quoted=true);
 fim::string fim_key_escape(const fim::string uk);
-fim::string fim_man_to_text(const fim::string ms);
+fim::string fim_man_to_text(const fim::string ms, bool keep_nl=false);
 void fim_perror(const fim_char_t *s);
 //void fim_tolowers(fim_char_t *s);
 //void fim_touppers(fim_char_t *s);
