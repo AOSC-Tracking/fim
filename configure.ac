@@ -1691,6 +1691,15 @@ AC_ARG_ENABLE(xcftopnm, AS_HELP_STRING([--disable-xcftopnm],[Fim will try to use
 ],[ fim_cv_xcftopnm=yes ]
 )
 
+AC_ARG_ENABLE(xcf2pnm, AS_HELP_STRING([--disable-xcf2pnm],[Fim will try to use xcf2pnm (Gimp) for opening XCF format files.]),
+[       if test x$enableval = xno; then
+		fim_cv_xcf2pnm=no
+	else
+                fim_cv_xcf2pnm=yes
+        fi
+],[ fim_cv_xcf2pnm=yes ]
+)
+
 dnl ==================
 
 fim_cv_inkscape=yes
@@ -1769,6 +1778,7 @@ AC_ARG_ENABLE(optimizations, AS_HELP_STRING([--enable-optimizations],[Will try t
 
 dnl ==================
 AH_TEMPLATE([FIM_TRY_XCFTOPNM])
+AH_TEMPLATE([FIM_TRY_XCF2PNM])
 AH_TEMPLATE([FIM_TRY_CONVERT])
 AH_TEMPLATE([FIM_TRY_INKSCAPE])
 AH_TEMPLATE([FIM_TRY_XFIG])
@@ -1806,6 +1816,14 @@ AC_CHECK_PROG(have_xcftopnm,xcftopnm,yes,no)
 dnl      		AC_MSG_WARN([Fim will try to invoke 'xcftopnm' to handle XCF format files, even if no 'xcftopnm' is currently in the program path: please install the Gimp package to obviate the problem or re-configure with --disable-xcftopnm.])
 	else
 		fim_cv_xcftopnm=no
+	fi
+
+AC_CHECK_PROG(have_xcf2pnm,xcf2pnm,yes,no)
+        if test x$have_xcf2pnm = xyes -a x$fim_cv_xcf2pnm = xyes ; then
+		true
+dnl      		AC_MSG_WARN([Fim will try to invoke 'xcf2pnm' to handle XCF format files, even if no 'xcf2pnm' is currently in the program path: please install the Gimp package to obviate the problem or re-configure with --disable-xcf2pnm.])
+	else
+		fim_cv_xcf2pnm=no
 	fi
 
 AC_CHECK_PROG(have_inkscape,inkscape,yes,no)
@@ -1858,6 +1876,10 @@ dnl ==================
 
         if test x$fim_cv_xcftopnm = xyes ; then
 		AC_DEFINE([FIM_TRY_XCFTOPNM])
+	fi
+
+        if test x$fim_cv_xcf2pnm = xyes ; then
+		AC_DEFINE([FIM_TRY_XCF2PNM])
 	fi
 
         if test x$fim_cv_inkscape = xyes ; then
@@ -2175,6 +2197,7 @@ dnl	use C++ standard (98/11/14/17)      : ${fim_cxx_standard} dnl may revive thi
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
 	use 'xcftopnm' for XCF files        :*${fim_cv_xcftopnm}
+	use 'xcf2pnm' for XCF files         :*${fim_cv_xcf2pnm}
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	use 'convert' for unrecognized files:*${fim_cv_convert}

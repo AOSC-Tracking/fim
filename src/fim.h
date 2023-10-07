@@ -380,6 +380,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
  */
 #define FIM_EPR_FIG2DEV		"fig2dev"
 #define FIM_EPR_XCFTOPNM	"xcftopnm"
+#define FIM_EPR_XCF2PNM		"xcf2pnm"
 #define FIM_EPR_DIA		"dia"
 #define FIM_EPR_INKSCAPE	"inkscape"
 #define FIM_EPR_CONVERT		"convert"

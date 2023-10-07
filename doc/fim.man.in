@@ -36,7 +36,7 @@ As a default,
 fim
 displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP are supported via third party libraries. 
 Further formats are supported via external converters. 
-For XCF (Gimp's) images, 'xcftopnm' is used.
+For XCF (Gimp's) images, 'xcftopnm' or 'xcf2pnm' is used.
 For FIG vectorial images, 'fig2dev' is used.
 For DIA vectorial images, 'dia' is used.
 For SVG vectorial images, 'inkscape' is used.
