@@ -1690,6 +1690,7 @@ AC_ARG_ENABLE(xcftopnm, AS_HELP_STRING([--disable-xcftopnm],[Fim will try to use
         fi
 ],[ fim_cv_xcftopnm=yes ]
 )
+AM_CONDITIONAL(WITH_XCFTOPNM, test x$fim_cv_xcftopnm = xyes)
 
 AC_ARG_ENABLE(xcf2pnm, AS_HELP_STRING([--disable-xcf2pnm],[Fim will try to use xcf2pnm (Gimp) for opening XCF format files.]),
 [       if test x$enableval = xno; then
@@ -1699,6 +1700,7 @@ AC_ARG_ENABLE(xcf2pnm, AS_HELP_STRING([--disable-xcf2pnm],[Fim will try to use x
         fi
 ],[ fim_cv_xcf2pnm=yes ]
 )
+AM_CONDITIONAL(WITH_XCF2PNM, test x$fim_cv_xcf2pnm = xyes)
 
 dnl ==================
 
