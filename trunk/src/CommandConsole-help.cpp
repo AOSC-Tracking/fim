@@ -100,7 +100,7 @@ manmode:
 			".B fim --" FIM_OSW_CHARS_PRESS " " ":{commands} --" FIM_OSW_CHARS_PRESS " '' [ {options} ]\n.fi\n"
 			"\n"
 		".SH DESCRIPTION\n"
-			"This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line {options}.\n"
+			"This page explains the \n.B fim\nscripting language, which is used for the \n.B fimrc\nconfiguration files, " FIM_CNS_EX_SCRIPTFILE "s, or " FIM_CNS_EX_CMDS_STRING " passed via command line " FIM_CNS_EX_OPTIONS ".\n"
 			"This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \"" FIM_SYM_CONSOLE_KEY_STR "\" key (or rather, the key code specified by the \"" FIM_MAN_fB(FIM_VID_CONSOLE_KEY) "\" variable).\n"
 			"One may exit from command line mode by pressing the " FIM_KBD_ENTER " key on an empty line (a non empty command line would be submitted for execution), or the " FIM_KBD_ESC " key "
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER

@@ -531,28 +531,48 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_REVISION_NUMBER (-1)
 #endif /* SVN_REVISION_NUMBER */
 #define FIM_CNS_MAGIC_DESC	"#!fim:desc"
-#define FIM_CNS_EX_KSY_STRING	"{keysym}"
-#define FIM_CNS_EX_CMD_STRING	"{command}"
-#define FIM_CNS_EX_FN_STRING	"{filename}"
-#define FIM_CNS_EX_FNS_STRING	"{filename(s)}"
-#define FIM_CNS_EX_KC_STRING	"{keycode}"
-#define FIM_CNS_EX_ID_STRING	"{identifier}"
-#define FIM_CNS_EX_VAR_STRING	"{var}"
-#define FIM_CNS_EX_IDS_STRING	"{identifier|identifier2...}]"
-#define FIM_CNS_EX_EXP_STRING	"{expression}"
-#define FIM_CNS_EX_PAT_STRING	"{pattern}"
-#define FIM_CNS_EX_CMDS_STRING	"{commands}"
-#define FIM_CNS_EX_EVT_STRING	"{event}"
-#define FIM_CNS_EX_ARGS_STRING	"{args}"
-#define FIM_CNS_EX_DSC_STRING	"{description}"
-#define FIM_CNS_EX_PATH_STRING	"{path}"
-#define FIM_CNS_EX_SYSC_STRING	"{syscmd}"
-#define FIM_CNS_EX_FCT_STRING	"{factor}"
-#define FIM_CNS_EX_RE_STRING	"{regexp}"
-#define FIM_CNS_EX_RES_STRING	"{regexp(s)}"
-#define FIM_CNS_EX_NUM_STRING	"{number}"
-#define FIM_CNS_EX_SCALE_STRING	"{scale}"
-#define FIM_CNS_EX_HELP_ITEM	"{help-item}"
+#define FIM_CNS_MAN_SYNTAX(KW)	KW
+#define FIM_CNS_EX_KSY_STRING	FIM_CNS_MAN_SYNTAX("{keysym}")
+#define FIM_CNS_EX_CMD_STRING	FIM_CNS_MAN_SYNTAX("{command}")
+#define FIM_CNS_EX_FN_STRING	FIM_CNS_MAN_SYNTAX("{filename}")
+#define FIM_CNS_EX_FNS_STRING	FIM_CNS_MAN_SYNTAX("{filename(s)}")
+#define FIM_CNS_EX_KC_STRING	FIM_CNS_MAN_SYNTAX("{keycode}")
+#define FIM_CNS_EX_DIRNAME	FIM_CNS_MAN_SYNTAX("{dirname}")
+#define FIM_CNS_EX_ID_STRING	FIM_CNS_MAN_SYNTAX("{identifier}")
+#define FIM_CNS_EX_VAR_STRING	FIM_CNS_MAN_SYNTAX("{var}")
+#define FIM_CNS_EX_VALUE	FIM_CNS_MAN_SYNTAX("{value}")
+#define FIM_CNS_EX_IDS_STRING	FIM_CNS_MAN_SYNTAX("{identifier|identifier2...}]")
+#define FIM_CNS_EX_EXP_STRING	FIM_CNS_MAN_SYNTAX("{expression}")
+#define FIM_CNS_EX_NBEXP_STRING FIM_CNS_MAN_SYNTAX("expression")
+#define FIM_CNS_EX_PAT_STRING	FIM_CNS_MAN_SYNTAX("{pattern}")
+#define FIM_CNS_EX_CMDS_STRING	FIM_CNS_MAN_SYNTAX("{commands}")
+#define FIM_CNS_EX_EVT_STRING	FIM_CNS_MAN_SYNTAX("{event}")
+#define FIM_CNS_EX_ARGS_STRING	FIM_CNS_MAN_SYNTAX("{args}")
+#define FIM_CNS_EX_ARG_STRING	FIM_CNS_MAN_SYNTAX("{arg}")
+#define FIM_CNS_EX_DSC_STRING	FIM_CNS_MAN_SYNTAX("{description}")
+#define FIM_CNS_EX_PATH_STRING	FIM_CNS_MAN_SYNTAX("{path}")
+#define FIM_CNS_EX_SYSC_STRING	FIM_CNS_MAN_SYNTAX("{syscmd}")
+#define FIM_CNS_EX_FCT_STRING	FIM_CNS_MAN_SYNTAX("{factor}")
+#define FIM_CNS_EX_ACT_STRING	FIM_CNS_MAN_SYNTAX("action") // yes, no brackets
+#define FIM_CNS_EX_RE_STRING	FIM_CNS_MAN_SYNTAX("{regexp}")
+#define FIM_CNS_EX_RES_STRING	FIM_CNS_MAN_SYNTAX("{regexp(s)}")
+#define FIM_CNS_EX_NUM_STRING	FIM_CNS_MAN_SYNTAX("{number}")
+#define FIM_CNS_EX_SCALE_STRING	FIM_CNS_MAN_SYNTAX("{scale}")
+#define FIM_CNS_EX_HELP_ITEM	FIM_CNS_MAN_SYNTAX("{help-item}")
+#define FIM_CNS_EX_OPTIONS	FIM_CNS_MAN_SYNTAX("{options}")
+#define FIM_CNS_EX_SCRIPTFILE	FIM_CNS_MAN_SYNTAX("{scriptfile}")
+#define FIM_CNS_EX_STRING	FIM_CNS_MAN_SYNTAX("{string}")
+#define FIM_CNS_EX_SEPCHAR	FIM_CNS_MAN_SYNTAX("{sepchar}")
+#define FIM_CNS_EX_VSTEPS	FIM_CNS_MAN_SYNTAX("{vsteps}")
+#define FIM_CNS_EX_HSTEPS	FIM_CNS_MAN_SYNTAX("{hsteps}")
+#define FIM_CNS_EX_STEPS	FIM_CNS_MAN_SYNTAX("{steps}")
+#define FIM_CNS_EX_P	FIM_CNS_MAN_SYNTAX("{p}")
+#define FIM_CNS_EX_W	FIM_CNS_MAN_SYNTAX("{w}")
+#define FIM_CNS_EX_H	FIM_CNS_MAN_SYNTAX("{h}")
+#define FIM_CNS_EX_X1	FIM_CNS_MAN_SYNTAX("{x1}")
+#define FIM_CNS_EX_X2	FIM_CNS_MAN_SYNTAX("{x2}")
+#define FIM_CNS_EX_Y1	FIM_CNS_MAN_SYNTAX("{y1}")
+#define FIM_CNS_EX_Y2	FIM_CNS_MAN_SYNTAX("{y2}")
 #define FIM_CNS_SHELL	"/bin/sh"
 #define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP" 
 #define FIM_CNS_DSFF_SN	"BMP, PCX" 
@@ -1095,15 +1115,15 @@ namespace fim
 #define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN " ['bottom'|'top'|'left'|right']: if image larger than drawing area, align one side of the image to the border." FIM_CNS_CMDSEP FIM_FLT_ALIGN " 'center': align equally far from all sides." FIM_CNS_CMDSEP FIM_FLT_ALIGN " 'info': print internal alignment information."
 #define FIM_CMD_HELP_AUTOCMD FIM_FLT_AUTOCMD " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING ": manipulate autocommands (inspired from Vim autocmd's)." FIM_CNS_CMDSEP "Without arguments, list autocommands." FIM_CNS_CMDSEP "With arguments, specifies for which type of event and which current file open, which commands to execute." FIM_CNS_CMDSEP "See the default built-in configuration files for examples."
 #define FIM_CMD_HELP_AUTOCMD_DEL FIM_FLT_AUTOCMD_DEL ": specify autocommands to delete." FIM_CNS_CMDSEP "Usage: " FIM_FLT_AUTOCMD_DEL " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING "."
-#define FIM_CMD_HELP_BASENAME FIM_FLT_BASENAME" {filename}: returns the basename of {filename} in the '" FIM_VID_LAST_CMD_OUTPUT "' variable."
+#define FIM_CMD_HELP_BASENAME FIM_FLT_BASENAME" " FIM_CNS_EX_FN_STRING ": returns the basename of " FIM_CNS_EX_FN_STRING " in the '" FIM_VID_LAST_CMD_OUTPUT "' variable."
 #define FIM_CMD_HELP_BIND FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]]: bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "." FIM_CNS_CMDSEP FIM_CNS_RAW_KEYS_MESG FIM_CNS_CMDSEP "Key binding is dynamical, so you can rebind keys even during program's execution." FIM_CNS_CMDSEP "You can get a list of valid symbols (keysyms) by invoking " FIM_FLT_DUMP_KEY_CODES " or in the man page."
-#define FIM_CMD_HELP_LIST	FIM_FLT_LIST ": display the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'reverse': reverse the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'clear': clear the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort': sort the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_basename': sort the file list according to base name." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_comment': sort the file list according to the value of the " FIM_VID_COMMENT " variable." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_var' " FIM_CNS_EX_VAR_STRING ": sort the file list according to the value of the i:" FIM_CNS_EX_VAR_STRING " variable." FIM_CNS_CMDSEP FIM_FLT_LIST " 'vars|variables': list variables in all i:* read from description file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_fsize': sort the file list according to file size." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_mtime': sort the file list according to modification date. " FIM_CNS_CMDSEP FIM_FLT_LIST " 'pop': remove the current file from the files list, and step back." FIM_CNS_CMDSEP FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "]: remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified." FIM_CNS_CMDSEP FIM_FLT_LIST " 'push' " FIM_CNS_EX_FNS_STRING ": push " FIM_CNS_EX_FNS_STRING " to the back of the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'filesnum': display the number of files in the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'mark' [{args}]: mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'unmark' [{args}]: unmark marked image file names, with {args} unmark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'marked': show which files have been marked so far." FIM_CNS_CMDSEP FIM_FLT_LIST " 'dumpmarked': dump to stdout the marked files (you usually want to 'unmarkall' afterwards)." FIM_CNS_CMDSEP FIM_FLT_LIST " 'markall': mark all the current list files." FIM_CNS_CMDSEP FIM_FLT_LIST " 'unmarkall': unmark all the marked files." FIM_CNS_CMDSEP FIM_FLT_LIST " 'pushdir' {dirname}: push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression '" FIM_CNS_PUSHDIR_RE "'." FIM_CNS_CMDSEP FIM_FLT_LIST " 'pushdirr' {dirname}: like pushdir, but also push encountered directory entries recursively." FIM_CNS_CMDSEP FIM_FLT_LIST " 'swap': move the current image filename to the first in the list (you'll have to invoke " FIM_FLT_RELOAD " to see the effect)." FIM_CNS_CMDSEP "Of the above commands, several are temporarily not available for the duration of a background load (enabled by --" FIM_OSW_BGREC "), which lasts until " FIM_VID_LOADING_IN_BACKGROUND " is 0."
+#define FIM_CMD_HELP_LIST	FIM_FLT_LIST ": display the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'reverse': reverse the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'clear': clear the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort': sort the file list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_basename': sort the file list according to base name." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_comment': sort the file list according to the value of the " FIM_VID_COMMENT " variable." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_var' " FIM_CNS_EX_VAR_STRING ": sort the file list according to the value of the i:" FIM_CNS_EX_VAR_STRING " variable." FIM_CNS_CMDSEP FIM_FLT_LIST " 'vars|variables': list variables in all i:* read from description file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_fsize': sort the file list according to file size." FIM_CNS_CMDSEP FIM_FLT_LIST " 'sort_mtime': sort the file list according to modification date. " FIM_CNS_CMDSEP FIM_FLT_LIST " 'pop': remove the current file from the files list, and step back." FIM_CNS_CMDSEP FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "]: remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified." FIM_CNS_CMDSEP FIM_FLT_LIST " 'push' " FIM_CNS_EX_FNS_STRING ": push " FIM_CNS_EX_FNS_STRING " to the back of the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'filesnum': display the number of files in the files list." FIM_CNS_CMDSEP FIM_FLT_LIST " 'mark' [" FIM_CNS_EX_ARGS_STRING "]: mark image file names for stdout printing at exit, with " FIM_CNS_EX_ARGS_STRING " mark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'unmark' [" FIM_CNS_EX_ARGS_STRING "]: unmark marked image file names, with " FIM_CNS_EX_ARGS_STRING " unmark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file." FIM_CNS_CMDSEP FIM_FLT_LIST " 'marked': show which files have been marked so far." FIM_CNS_CMDSEP FIM_FLT_LIST " 'dumpmarked': dump to stdout the marked files (you usually want to 'unmarkall' afterwards)." FIM_CNS_CMDSEP FIM_FLT_LIST " 'markall': mark all the current list files." FIM_CNS_CMDSEP FIM_FLT_LIST " 'unmarkall': unmark all the marked files." FIM_CNS_CMDSEP FIM_FLT_LIST " 'pushdir' " FIM_CNS_EX_DIRNAME ": push all the files in " FIM_CNS_EX_DIRNAME ", when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression '" FIM_CNS_PUSHDIR_RE "'." FIM_CNS_CMDSEP FIM_FLT_LIST " 'pushdirr' " FIM_CNS_EX_DIRNAME ": like pushdir, but also push encountered directory entries recursively." FIM_CNS_CMDSEP FIM_FLT_LIST " 'swap': move the current image filename to the first in the list (you'll have to invoke " FIM_FLT_RELOAD " to see the effect)." FIM_CNS_CMDSEP "Of the above commands, several are temporarily not available for the duration of a background load (enabled by --" FIM_OSW_BGREC "), which lasts until " FIM_VID_LOADING_IN_BACKGROUND " is 0."
 #define FIM_CMD_HELP_CLEAR FIM_FLT_CLEAR ": clear the virtual console."
 #define FIM_CMD_HELP_CROP \
 	FIM_FLT_CROP ": crop image to a centered rectangle, half the width and half the height.\n" \
-	FIM_FLT_CROP " {p}: crop image to the middle {p} horizontal percent and {p} vertical percent of the image.\n" \
-	FIM_FLT_CROP " {w} {h}: crop image to the middle {w} horizontal percent and {h} vertical percent of the image.\n" \
-	FIM_FLT_CROP " {x1} {y1} {x2} {y2}: crop image to the area between the upper left ({x1},{y1}) and lower right ({x2},{y2}) corner.\n"\
+	FIM_FLT_CROP " " FIM_CNS_EX_P ": crop image to the middle " FIM_CNS_EX_P " horizontal percent and " FIM_CNS_EX_P " vertical percent of the image.\n" \
+	FIM_FLT_CROP " " FIM_CNS_EX_W " " FIM_CNS_EX_H ": crop image to the middle " FIM_CNS_EX_W " horizontal percent and " FIM_CNS_EX_H " vertical percent of the image.\n" \
+	FIM_FLT_CROP " " FIM_CNS_EX_X1 " " FIM_CNS_EX_Y1 " " FIM_CNS_EX_X2 " " FIM_CNS_EX_Y2 ": crop image to the area between the upper left (" FIM_CNS_EX_X1 "," FIM_CNS_EX_Y1 ") and lower right (" FIM_CNS_EX_X2 "," FIM_CNS_EX_Y2 ") corner.\n"\
 	"Units are intended as percentage (0 to 100).\n" \
 	"Note: still experimental functionality."
 #define FIM_CMD_HELP_COMMANDS FIM_FLT_COMMANDS ": display the existing commands."
@@ -1121,8 +1141,8 @@ namespace fim
 #define FIM_CMD_HELP_ELSE FIM_CNS_IFELSE ": see " FIM_FLT_ELSE "."
 #define FIM_CMD_HELP_EXEC FIM_FLT_EXEC " " FIM_CNS_EX_FNS_STRING ": execute script " FIM_CNS_EX_FNS_STRING "."
 #define FIM_CMD_HELP_FONT \
-		FIM_FLT_FONT " 'scan' [{dirname}]: scan {dirname} or " FIM_LINUX_CONSOLEFONTS_DIR " looking for fonts in the internal fonts list."\
-	FIM_CNS_CMDSEP FIM_FLT_FONT " 'load' {filename}: load font {filename}."\
+		FIM_FLT_FONT " 'scan' [" FIM_CNS_EX_DIRNAME "]: scan " FIM_CNS_EX_DIRNAME " or " FIM_LINUX_CONSOLEFONTS_DIR " looking for fonts in the internal fonts list."\
+	FIM_CNS_CMDSEP FIM_FLT_FONT " 'load' " FIM_CNS_EX_FN_STRING ": load font " FIM_CNS_EX_FN_STRING "."\
 	FIM_CNS_CMDSEP FIM_FLT_FONT " 'next'/'prev': load next/previous font in the internal fonts list."\
 	FIM_CNS_CMDSEP FIM_FLT_FONT " 'info': print current font filename."
 #define FIM_CMD_HELP_CD			FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING ": change the current directory to " FIM_CNS_EX_PATH_STRING "." FIM_CNS_CMDSEP "If " FIM_CNS_EX_PATH_STRING " is a file, use its base directory name." FIM_CNS_CMDSEP FIM_FLT_CD " '-' changes to the previous current directory (before the last ':" FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING "' command)."
@@ -1132,16 +1152,16 @@ namespace fim
 // #define FIM_CMD_HELP_LIMIT   // missing
 #define FIM_CMD_HELP_LOAD   FIM_FLT_LOAD ": load the image, if not yet loaded (see also '" FIM_FLT_RELOAD "')." FIM_CMD_ACM_INFO(FIM_ACM_PRELOAD,FIM_ACM_POSTLOAD)
 #define FIM_CMD_HELP_PAN    \
-	FIM_FLT_PAN " {vsteps}% {hsteps}%: pan the image to {vsteps} percentage steps from the top and {hsteps} percentage steps from left. " FIM_CNS_CMDSEP \
-	FIM_FLT_PAN " {vsteps} {hsteps}: pan the image to {vsteps} pixels from the top and {hsteps} pixels from left. " FIM_CNS_CMDSEP \
-	FIM_FLT_PAN " {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+-] [{steps}['%']]: pan the image {steps} pixels in the desired direction." FIM_CNS_CMDSEP "If the '%' specifier is present, {steps} is treated as a percentage of current screen dimensions." FIM_CNS_CMDSEP "If {steps} is not specified, the '" FIM_VID_STEPS "' variable is used." FIM_CNS_CMDSEP "If present, the '" FIM_VID_HSTEPS "' variable is considered for horizontal panning." FIM_CNS_CMDSEP "A '+' (or '-') sign at the end of the first argument jumps to next (or previous) if border is reached." FIM_CNS_CMDSEP "If present, the '" FIM_VID_VSTEPS "' variable is considered for vertical panning." FIM_CNS_CMDSEP "The variables may be terminated by the \'%\' specifier." FIM_CMD_ACM_INFO(FIM_ACM_PREPAN,FIM_ACM_POSTPAN)
+	FIM_FLT_PAN " " FIM_CNS_EX_VSTEPS "% " FIM_CNS_EX_HSTEPS "%: pan the image to " FIM_CNS_EX_VSTEPS " percentage steps from the top and " FIM_CNS_EX_HSTEPS " percentage steps from left. " FIM_CNS_CMDSEP \
+	FIM_FLT_PAN " " FIM_CNS_EX_VSTEPS " " FIM_CNS_EX_HSTEPS ": pan the image to " FIM_CNS_EX_VSTEPS " pixels from the top and " FIM_CNS_EX_HSTEPS " pixels from left. " FIM_CNS_CMDSEP \
+	FIM_FLT_PAN " {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+-] [" FIM_CNS_EX_STEPS "['%']]: pan the image " FIM_CNS_EX_STEPS " pixels in the desired direction." FIM_CNS_CMDSEP "If the '%' specifier is present, " FIM_CNS_EX_STEPS " is treated as a percentage of current screen dimensions." FIM_CNS_CMDSEP "If " FIM_CNS_EX_STEPS " is not specified, the '" FIM_VID_STEPS "' variable is used." FIM_CNS_CMDSEP "If present, the '" FIM_VID_HSTEPS "' variable is considered for horizontal panning." FIM_CNS_CMDSEP "A '+' (or '-') sign at the end of the first argument jumps to next (or previous) if border is reached." FIM_CNS_CMDSEP "If present, the '" FIM_VID_VSTEPS "' variable is considered for vertical panning." FIM_CNS_CMDSEP "The variables may be terminated by the \'%\' specifier." FIM_CMD_ACM_INFO(FIM_ACM_PREPAN,FIM_ACM_POSTPAN)
 #define FIM_CMD_HELP_POPEN FIM_FLT_POPEN " " FIM_CNS_EX_SYSC_STRING ": pipe a command, invoking popen(): spawns a shell, invoking '" FIM_CNS_EX_SYSC_STRING "' and executing as fim commands the output of '" FIM_CNS_EX_SYSC_STRING "'."
 #define FIM_CMD_HELP_PREAD FIM_FLT_PREAD " " FIM_CNS_EX_ARGS_STRING ": execute " FIM_CNS_EX_ARGS_STRING " as a shell command and read the output as an image file (using '" FIM_FLT_POPEN "')."
 #define FIM_CMD_HELP_PREFETCH FIM_FLT_PREFETCH ": prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening." FIM_CMD_ACM_INFO(FIM_ACM_PREPREFETCH,FIM_ACM_POSTPREFETCH) FIM_CNS_CMDSEP "See also the '" FIM_VID_WANT_PREFETCH "' variable."
-#define FIM_CMD_HELP_QUIT FIM_FLT_QUIT " [{number}]: terminate the program." FIM_CNS_CMDSEP "If {number} is specified, use it as the program return status." FIM_CNS_CMDSEP "Note that autocommand '" FIM_ACM_POSTINTERACTIVECOMMAND "' does not trigger after this command."
+#define FIM_CMD_HELP_QUIT FIM_FLT_QUIT " [" FIM_CNS_EX_NUM_STRING "]: terminate the program." FIM_CNS_CMDSEP "If " FIM_CNS_EX_NUM_STRING " is specified, use it as the program return status." FIM_CNS_CMDSEP "Note that autocommand '" FIM_ACM_POSTINTERACTIVECOMMAND "' does not trigger after this command."
 #define FIM_CMD_HELP_RECORDING FIM_FLT_RECORDING " 'start': start recording the executed commands. " FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'stop': stop  recording the executed commands." FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'dump': dump in the console the record buffer." FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'execute': execute the record buffer." FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'repeat_last': repeat the last performed action."
 #define FIM_CMD_HELP_REDISPLAY  FIM_FLT_REDISPLAY ": re-display the current file contents."
-#define FIM_CMD_HELP_RELOAD FIM_FLT_RELOAD" [{arg}]: load the image into memory." FIM_CNS_CMDSEP "If {arg} is present, force reloading, bypassing the cache (see also '" FIM_FLT_LOAD "')." FIM_CMD_ACM_INFO(FIM_ACM_PRERELOAD,FIM_ACM_POSTRELOAD)
+#define FIM_CMD_HELP_RELOAD FIM_FLT_RELOAD" [" FIM_CNS_EX_ARG_STRING "]: load the image into memory." FIM_CNS_CMDSEP "If " FIM_CNS_EX_ARG_STRING " is present, force reloading, bypassing the cache (see also '" FIM_FLT_LOAD "')." FIM_CMD_ACM_INFO(FIM_ACM_PRERELOAD,FIM_ACM_POSTRELOAD)
 #define FIM_CMD_HELP_ROTATE FIM_FLT_ROTATE " " FIM_CNS_EX_NUM_STRING ": rotate the image the specified amount of degrees. If unspecified, by one. If you are interested in orthogonal rotations, see '" FIM_VID_ORIENTATION "' and related aliases." FIM_CMD_ACM_INFO(FIM_ACM_PRESCALE,FIM_ACM_POSTSCALE)
 #define FIM_CMD_HELP_SCROLL FIM_FLT_SCROLL ": scroll down the image, going next when hitting the bottom." FIM_CNS_CMDSEP FIM_FLT_SCROLL " 'forward': scroll the image as we were reading left to right (see '" FIM_VID_SKIP_SCROLL "' variable)." FIM_CMD_ACM_INFO(FIM_ACM_PREPAN,FIM_ACM_POSTPAN)
 #define FIM_CMD_HELP_SET_CONSOLE_MODE FIM_FLT_SET_CONSOLE_MODE ": set console mode."
@@ -1153,7 +1173,7 @@ namespace fim
 #define FIM_CMD_HELP_VARIABLES FIM_FLT_VARIABLES ": display the existing variables."
 #define FIM_CMD_HELP_UNALIAS FIM_FLT_UNALIAS " " FIM_CNS_EX_ID_STRING " | '-a': delete the alias " FIM_CNS_EX_ID_STRING " or all aliases (use '-a', not -a)."
 #define FIM_CMD_HELP_UNBIND FIM_FLT_UNBIND " " FIM_CNS_EX_KSY_STRING ": unbind the action associated to a specified " FIM_CNS_EX_KSY_STRING FIM_CNS_CMDSEP FIM_CNS_RAW_KEYS_MESG ""
-#define FIM_CMD_HELP_WHILE "while(expression){action;}: A conditional cycle construct." FIM_CNS_CMDSEP "May be interrupted by hitting the '" FIM_KBD_ESC "' or the '" FIM_KBD_COLON "' key."
+#define FIM_CMD_HELP_WHILE "while(" FIM_CNS_EX_NBEXP_STRING "){" FIM_CNS_EX_ACT_STRING ";}: A conditional cycle construct." FIM_CNS_CMDSEP "May be interrupted by hitting the '" FIM_KBD_ESC "' or the '" FIM_KBD_COLON "' key."
 #define FIM_CMD_HELP_SET	FIM_FLT_SET ": returns a list of variables which are set." FIM_CNS_CMDSEP FIM_FLT_SET " " FIM_CNS_EX_ID_STRING ": returns the value of variable " FIM_CNS_EX_ID_STRING "." FIM_CNS_CMDSEP FIM_FLT_SET " " FIM_CNS_EX_ID_STRING " " FIM_CNS_EX_CMDS_STRING ": sets variable " FIM_CNS_EX_ID_STRING " to value " FIM_CNS_EX_CMDS_STRING "." 
 #define FIM_CMD_HELP_PWD	FIM_FLT_PWD ": print the current directory name, and updates the '" FIM_VID_PWD "' variable."
 #define FIM_CMD_HELP_EVAL	FIM_FLT_EVAL " " FIM_CNS_EX_ARGS_STRING ": evaluate " FIM_CNS_EX_ARGS_STRING " as commands, executing them."
@@ -1164,10 +1184,10 @@ namespace fim
 #define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW " " FIM_CNS_EX_ARGS_STRING ": manipulates the window system windows; each value of " FIM_CNS_EX_ARGS_STRING " shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']."
 #endif /* FIM_DISABLE_WINDOW_SPLITTING */
 #define FIM_CMD_HELP_GOTO 	FIM_FLT_GOTO " {['+'|'-']" FIM_CNS_EX_NUM_STRING "['%']['f'|'p'|'F'|'P']} | {/" FIM_CNS_EX_RE_STRING "/} | {" FIM_SYM_BW_SEARCH_KEY_STR FIM_CNS_EX_FN_STRING "} | {'+//'} | {'+/'|'-/'}[C] | {{'+'|'-'}" FIM_CNS_EX_ID_STRING "['+']}: jump to an image." FIM_CNS_CMDSEP "If " FIM_CNS_EX_NUM_STRING " is given, and not surrounded by any specifier, go to image at index " FIM_CNS_EX_NUM_STRING "." FIM_CNS_CMDSEP "If followed by '%', the effective index is computed as a percentage to the current available images." FIM_CNS_CMDSEP "If prepended by '-' or '+', the jump is relative to the current index." FIM_CNS_CMDSEP "The 'f' specifier asks for the jump to occur within the files (same for 'F', but accelerates if keep pressing)." FIM_CNS_CMDSEP "The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing)." FIM_CNS_CMDSEP "If /" FIM_CNS_EX_RE_STRING "/ is given, jump to the first image matching the given /" FIM_CNS_EX_RE_STRING "/ regular expression pattern." FIM_CNS_CMDSEP "If the argument starts with " FIM_SYM_BW_SEARCH_KEY_STR ", jump to the filename following " FIM_SYM_BW_SEARCH_KEY_STR "." FIM_CNS_CMDSEP "If given '+//', jump to the first different image matching the last given regular expression pattern." FIM_CNS_CMDSEP "With '+/'C or '-/'C, jump to next or previous file according to C: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir)." FIM_CNS_CMDSEP "If " FIM_CNS_EX_IDS_STRING " is encountered after a '+' or '-' sign, jump to the next or the previous image having a different value for any corresponding i:" FIM_CNS_EX_ID_STRING " (a trailing '+' requires a non empty value)." FIM_CNS_CMDSEP "Match occurs on both file name and description, possibly loaded via " FIM_FLT_DESC " or --" FIM_OSW_LOAD_IMG_DSC_FILE "; see also '" FIM_VID_LASTGOTODIRECTION "' and '" FIM_VID_RE_SEARCH_OPTS "'." FIM_CNS_CMDSEP " You can specify multiple arguments to " FIM_FLT_GOTO ": those after the first one triggering a jump are ignored." FIM_CMD_ACM_INFO(FIM_ACM_PREGOTO,FIM_ACM_POSTGOTO) " Keeping pressed shall accelerate images browsing."
-#define FIM_CMD_HELP_SCALE	FIM_FLT_SCALE " {['+'|'-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+-*/]'|['<'|'>']|'shadow'}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b')." FIM_CNS_CMDSEP "If given '*' and a value, multiply the current scale by that value." FIM_CNS_CMDSEP "If given 'w', scale according to the screen width." FIM_CNS_CMDSEP "If given 'h', scale to the screen height." FIM_CNS_CMDSEP "If given 'a', to the minimum of 'w' and 'h'." FIM_CNS_CMDSEP "If given 'b', like 'a', provided that the image width exceeds 'w' or 'h'." FIM_CNS_CMDSEP "If {value} is a number, scale relatively to the original image width." FIM_CNS_CMDSEP "If the number is followed by '%', the relative scale is treated as a percentage." FIM_CNS_CMDSEP "If given '++'('+-'), increment (decrement) the '" FIM_VID_MAGNIFY_FACTOR "', '" FIM_VID_REDUCE_FACTOR "' variables by '" FIM_VID_SCALE_FACTOR_DELTA "'." FIM_CNS_CMDSEP "If given '+*'('+/'), multiply (divide) the '" FIM_VID_MAGNIFY_FACTOR "', '" FIM_VID_REDUCE_FACTOR "' variables by '" FIM_VID_SCALE_FACTOR_MULTIPLIER "'." FIM_CNS_CMDSEP "If given '<' (or '>'), shrink (or magnify) image using nearest mipmap (cached pre-scaled version). If given 'shadow' as a parameter, search a same-named file in one of the directories specified to --load-shadow-dir." FIM_CMD_ACM_INFO(FIM_ACM_PRESCALE,FIM_ACM_POSTSCALE)
+#define FIM_CMD_HELP_SCALE	FIM_FLT_SCALE " {['+'|'-']" FIM_CNS_EX_VALUE "['%']|'*'" FIM_CNS_EX_VALUE "|'w'|'h'|'a'|'b'|'+[+-*/]'|['<'|'>']|'shadow'}: scale the image according to a scale " FIM_CNS_EX_VALUE " (e.g.: 0.5,40%,'w','h','a','b')." FIM_CNS_CMDSEP "If given '*' and a value, multiply the current scale by that value." FIM_CNS_CMDSEP "If given 'w', scale according to the screen width." FIM_CNS_CMDSEP "If given 'h', scale to the screen height." FIM_CNS_CMDSEP "If given 'a', to the minimum of 'w' and 'h'." FIM_CNS_CMDSEP "If given 'b', like 'a', provided that the image width exceeds 'w' or 'h'." FIM_CNS_CMDSEP "If " FIM_CNS_EX_VALUE " is a number, scale relatively to the original image width." FIM_CNS_CMDSEP "If the number is followed by '%', the relative scale is treated as a percentage." FIM_CNS_CMDSEP "If given '++'('+-'), increment (decrement) the '" FIM_VID_MAGNIFY_FACTOR "', '" FIM_VID_REDUCE_FACTOR "' variables by '" FIM_VID_SCALE_FACTOR_DELTA "'." FIM_CNS_CMDSEP "If given '+*'('+/'), multiply (divide) the '" FIM_VID_MAGNIFY_FACTOR "', '" FIM_VID_REDUCE_FACTOR "' variables by '" FIM_VID_SCALE_FACTOR_MULTIPLIER "'." FIM_CNS_CMDSEP "If given '<' (or '>'), shrink (or magnify) image using nearest mipmap (cached pre-scaled version). If given 'shadow' as a parameter, search a same-named file in one of the directories specified to --load-shadow-dir." FIM_CMD_ACM_INFO(FIM_ACM_PRESCALE,FIM_ACM_POSTSCALE)
 #define FIM_CMD_HELP_HELP	FIM_FLT_HELP " [" FIM_CNS_EX_ID_STRING "]: provide online help, assuming " FIM_CNS_EX_ID_STRING " is a variable, alias, or command identifier." FIM_CNS_CMDSEP "If " FIM_CNS_EX_ID_STRING " begins with '" FIM_CNS_SLASH_STRING "', search on the help contents, and show a list of matching items." FIM_CNS_CMDSEP "A list of commands can be obtained simply invoking '" FIM_FLT_COMMANDS "'; a list of aliases with '" FIM_FLT_ALIAS "'; a list of bindings with '" FIM_FLT_BIND "'."
-#define FIM_FLT_HELP_DESC FIM_FLT_DESC " 'load' {filename} [{sepchar}]: load description file {filename}, using the optional {sepchar} character as separator." FIM_CNS_CMDSEP FIM_FLT_DESC " 'reload': load once again description files specified at the command line with --" FIM_OSW_LOAD_IMG_DSC_FILE ", with respective separators." FIM_CNS_CMDSEP FIM_FLT_DESC " ['-all'] ['-append'] ['-nooverw'] 'save' {filename} [{sepchar}]: save current list descriptions to file {filename}, using the optional {sepchar} character as separator, and if '-all' is present then save the variables, and if '-append' is present then only append, and if '-nooverw' is present then do not overwrite existing files." FIM_CNS_CMDSEP "See documentation of --" FIM_OSW_LOAD_IMG_DSC_FILE " for the format of {filename}."
-#define FIM_FLT_HELP_DISPLAY FIM_FLT_DISPLAY " ['reinit' {string}]|'resize' {w} {h}]: display the current file contents." FIM_CNS_CMDSEP "If 'reinit' switch is supplied, the '{string}' specifier is used to reinitialize (e.g.: change resolution, window system options) the display device." FIM_CNS_CMDSEP "See documentation for the --" FIM_OSW_OUTPUT_DEVICE " command line switch for allowed values of {string}." FIM_CNS_CMDSEP "If 'resize' and no argument, ask the window manager to resize the window like the image." FIM_CNS_CMDSEP "If 'resize' and two arguments, these are used to reset width and height of the current window."
+#define FIM_FLT_HELP_DESC FIM_FLT_DESC " 'load' " FIM_CNS_EX_FN_STRING " [" FIM_CNS_EX_SEPCHAR "]: load description file " FIM_CNS_EX_FN_STRING ", using the optional " FIM_CNS_EX_SEPCHAR " character as separator." FIM_CNS_CMDSEP FIM_FLT_DESC " 'reload': load once again description files specified at the command line with --" FIM_OSW_LOAD_IMG_DSC_FILE ", with respective separators." FIM_CNS_CMDSEP FIM_FLT_DESC " ['-all'] ['-append'] ['-nooverw'] 'save' " FIM_CNS_EX_FN_STRING " [" FIM_CNS_EX_SEPCHAR "]: save current list descriptions to file " FIM_CNS_EX_FN_STRING ", using the optional " FIM_CNS_EX_SEPCHAR " character as separator, and if '-all' is present then save the variables, and if '-append' is present then only append, and if '-nooverw' is present then do not overwrite existing files." FIM_CNS_CMDSEP "See documentation of --" FIM_OSW_LOAD_IMG_DSC_FILE " for the format of " FIM_CNS_EX_FN_STRING "."
+#define FIM_FLT_HELP_DISPLAY FIM_FLT_DISPLAY " ['reinit' " FIM_CNS_EX_STRING "]|'resize' " FIM_CNS_EX_W " " FIM_CNS_EX_H "]: display the current file contents." FIM_CNS_CMDSEP "If 'reinit' switch is supplied, the " FIM_CNS_EX_STRING " specifier is used to reinitialize (e.g.: change resolution, window system options) the display device." FIM_CNS_CMDSEP "See documentation for the --" FIM_OSW_OUTPUT_DEVICE " command line switch for allowed values of " FIM_CNS_EX_STRING "." FIM_CNS_CMDSEP "If 'resize' and no argument, ask the window manager to resize the window like the image." FIM_CNS_CMDSEP "If 'resize' and two arguments, these are used to reset width and height of the current window."
 
 /*  */
 #define FIM_CNS_SLIDESHOW_CMD FIM_FLT_RELOAD "; i:fresh=1; while(" FIM_VID_FILEINDEX " <= " FIM_VID_FILELISTLEN "-" FIM_VID_LOOP_ONCE "){sleep " FIM_VID_WANT_SLEEPS "; next;} sleep " FIM_VID_WANT_SLEEPS "; "
@@ -1265,7 +1285,7 @@ namespace fim
 #define FIM_STRINGIFY(X) #X
 #define FIM_MAN_Bn(X) ".B " X "\n.fi \n" /* bold newline */
 #define FIM_MAN_fB(X) "\\fB" X "\\fP" /* bold inline */
-#define FIM_MAN_fR(X) "\\fR\\fI" X "\\fR"
+#define FIM_MAN_fR(X) "\\fR\\fI" X "\\fR" /* underline */
 #define FIM_MAN_iB "\\:" /* invisible break */
 
 #endif /* FIM_FIM_H */
