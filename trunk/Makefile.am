@@ -54,6 +54,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/0_truncated_bad.gif.bin \
 	$(top_srcdir)/media/special/0.webp \
 	$(top_srcdir)/media/special/0.avif \
+	$(top_srcdir)/media/special/0.xcf \
 	$(top_srcdir)/media/special/truncated_bad.png.bin \
 	$(top_srcdir)/media/special/truncated_bad.jpg.bin \
 	$(top_srcdir)/media/special/0_gray.png \
@@ -422,6 +423,12 @@ if WITH_XFIG
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = ppm # 
 else
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/ciao.fig -c 'stdout _last_file_loader;quit' $(SNTZ)` = 0 # 
+endif
+if WITH_XCF2PNM
+	if which xcf2pnm ; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.xcf -c 'stdout i:_buffered_in_tmpfile;quit'` != '0'; fi
+endif
+if WITH_XCFTOPNM
+	if which xcftopnm ; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.xcf -c 'stdout i:_buffered_in_tmpfile;quit'` != '0'; fi
 endif
 if ENABLE_AVIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.avif -c 'stdout _last_file_loader;quit' $(SNTZ)` = libavif

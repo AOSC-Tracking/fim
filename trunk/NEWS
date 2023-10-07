@@ -3,7 +3,7 @@
 
                 Version 0.7-trunk
 
- * Load XCF files via xcf2pnm.
+ * Load XCF (Gimp) files via the xcf2pnm utility.
  * Still work-in-progress. Please use stable branch 0.6 for now.
  * Documentation and self-documentation improvements.
  * Experimental support for reading AVIF images via libavif.
