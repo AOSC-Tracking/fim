@@ -1937,6 +1937,7 @@ with_offset:
 			unlink(tpfn);
 			loader = &ppm_loader;
 			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+			if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_CONVERT);
         		goto found_a_loader;
 		}
     }
@@ -2101,6 +2102,7 @@ probe_loader:
 			unlink(tpfn.c_str());
 			loader = &png_loader;
 			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+			if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_DIA);
 		}
    	}
    }
@@ -2118,6 +2120,7 @@ probe_loader:
 		goto shall_skip_header;
 	}
 	loader = &ppm_loader;
+	if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_FIG2DEV);
     }
 #endif /* FIM_TRY_XFIG */
 #ifdef FIM_TRY_XCFTOPNM
@@ -2132,6 +2135,7 @@ probe_loader:
 		goto shall_skip_header;
 	}
 	loader = &ppm_loader;
+	if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_XCFTOPNM);
     }
 #endif /* FIM_TRY_XCFTOPNM */
 #ifdef FIM_TRY_XCF2PNM
@@ -2152,6 +2156,7 @@ probe_loader:
 			unlink(tpfn);
 			loader = &ppm_loader;
 			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+			if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_XCF2PNM);
 		}
 	}
 	loader = &ppm_loader;
@@ -2190,6 +2195,7 @@ probe_loader:
 			unlink(tpfn);
 			loader = &png_loader;
 			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+			if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_INKSCAPE);
 		}
 	}
     }
@@ -2242,6 +2248,7 @@ probe_loader:
 			unlink(tpfn);
 			loader = &ppm_loader;
 			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+			if(nsp) nsp->setVariable(FIM_VID_EXTERNAL_CONVERTER,FIM_EPR_CONVERT);
 		}
 	}
     }
