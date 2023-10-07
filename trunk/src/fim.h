@@ -723,6 +723,7 @@ namespace fim
 #endif /* FIM_WANT_IMAGE_LOAD_TIME */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in,i:,g:] specify a file loader to use (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image." */
 #define FIM_VID_FILE_BUFFERED_FROM 		"_buffered_in_tmpfile"		/* "[out,i:] if an image has been temporarily converted and decoded from a temporary file, its name is here." */
+#define FIM_VID_EXTERNAL_CONVERTER 		"_external_decoder_program"	/* "[out,i:] if an image has been decoded via an external program, its name is here." */
 #define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in,g:] if set to 1 and a user-specified file loader fails, probe for a different loader." */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[in,g:] if 1, do not load the ~/.fimrc configuration file at startup." */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[in,g:] if 1, do not attempt using external programs to decode a file of an unknown format." */

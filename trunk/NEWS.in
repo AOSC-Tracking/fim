@@ -3,9 +3,11 @@
 
                 Version 0.7-trunk
 
+ * Still work-in-progress. Please use stable branch 0.6 for now
+# (r1997)
+ * When loading via an external converter, keep track of it in i:_external_decoder_program.
 # (r1995-r1996)
  * Load XCF (Gimp) files via the xcf2pnm utility.
- * Still work-in-progress. Please use stable branch 0.6 for now.
 # (r1991-r1994)
  * Documentation and self-documentation improvements.
 # (r1990)

@@ -20,6 +20,7 @@ fim_var_help_db[FIM_VID_DEFAULT_ETC_FIMRC]= "[in,g:] string with the global conf
 fim_var_help_db[FIM_VID_IMAGE_LOAD_TIME]= "[out,i:] time taken to load the file and decode the image, in seconds." ;
 fim_var_help_db[FIM_VID_FILE_LOADER]= "[in,i:,g:] specify a file loader to use (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image." ;
 fim_var_help_db[FIM_VID_FILE_BUFFERED_FROM]= "[out,i:] if an image has been temporarily converted and decoded from a temporary file, its name is here." ;
+fim_var_help_db[FIM_VID_EXTERNAL_CONVERTER]= "[out,i:] if an image has been decoded via an external program, its name is here." ;
 fim_var_help_db[FIM_VID_RETRY_LOADER_PROBE]= "[in,g:] if set to 1 and a user-specified file loader fails, probe for a different loader." ;
 fim_var_help_db[FIM_VID_NO_RC_FILE]= "[in,g:] if 1, do not load the ~/.fimrc configuration file at startup." ;
 fim_var_help_db[FIM_VID_NO_EXTERNAL_LOADERS]= "[in,g:] if 1, do not attempt using external programs to decode a file of an unknown format." ;

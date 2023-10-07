@@ -3,8 +3,9 @@
 
                 Version 0.7-trunk
 
+ * Still work-in-progress. Please use stable branch 0.6 for now
+ * When loading via an external converter, keep track of it in i:_external_decoder_program.
  * Load XCF (Gimp) files via the xcf2pnm utility.
- * Still work-in-progress. Please use stable branch 0.6 for now.
  * Documentation and self-documentation improvements.
  * Experimental support for reading AVIF images via libavif.
  * Experimental support for reading WebP images via libwebp.
