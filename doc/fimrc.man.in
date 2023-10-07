@@ -30,7 +30,7 @@ fimrc - \fB fim \fP configuration file and language reference
 .SH DESCRIPTION
 This page explains the 
 .B fim
-language, which is used for the 
+scripting language, which is used for the 
 .B fimrc
 configuration files, {scriptfile}s, or {commands} passed via command line {options}.
 This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "\fB_console_key\fP" variable).
@@ -322,7 +322,7 @@ display
 .fi
 display ['reinit' {string}]|'resize' {w} {h}]: display the current file contents.
 .fi
-If 'reinit' switch is supplied, the '{string}' specifier is used to reinitialize (e.g.: change resolution, window system options) the display device.
+If 'reinit' switch is supplied, the {string} specifier is used to reinitialize (e.g.: change resolution, window system options) the display device.
 .fi
 See documentation for the --output-device command line switch for allowed values of {string}.
 .fi
@@ -1007,6 +1007,11 @@ _downscale_huge_at_load
 .B
 _exiftool_comment
 [out,g:] comment extracted via the exiftool interface; see _use_exiftool.
+.fi
+.na
+.B
+_external_decoder_program
+[out,i:] if an image has been decoded via an external program, its name is here.
 .fi
 .na
 .B

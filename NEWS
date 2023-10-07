@@ -4,16 +4,16 @@
                 Version 0.7-trunk
 
  * Still work-in-progress. Please use stable branch 0.6 for now
- * When loading via an external converter, keep track of it in i:_external_decoder_program.
- * Load XCF (Gimp) files via the xcf2pnm utility.
- * Documentation and self-documentation improvements.
- * Experimental support for reading AVIF images via libavif.
- * Experimental support for reading WebP images via libwebp.
- * FIM requires a compiler supporting at least C++11.
+ * When loading via an external converter, keep track of it in i:_external_decoder_program
+ * Load XCF (Gimp) files via the xcf2pnm utility
+ * Documentation and self-documentation improvements
+ * Experimental support for reading AVIF images via libavif
+ * Experimental support for reading WebP images via libwebp
+ * FIM requires a compiler supporting at least C++11
 
                 Version 0.6-rc2
 
- * File dropping support in SDL2 mode and more responsive readline mode.
+ * File dropping support in SDL2 mode and more responsive readline mode
 
                 Version 0.6-rc1
 
