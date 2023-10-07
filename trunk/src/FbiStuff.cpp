@@ -2134,6 +2134,29 @@ probe_loader:
 	loader = &ppm_loader;
     }
 #endif /* FIM_TRY_XCFTOPNM */
+#ifdef FIM_TRY_XCF2PNM
+    if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_XCF2PNM " ..\n");
+    if (FIM_NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
+    {
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_XCF2PNM), "*");
+	/* a gimp xcf file was found, and we try to use xcf2pnm (fim) */
+	if(FIM_NULL!=(fp=FIM_TIMED_EXECLP(FIM_EPR_XCF2PNM,filename,"-o",tpfn.c_str(),FIM_NULL))&&0==fim_fclose(fp))
+    	{
+		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
+		{
+			cc.set_status_bar(FIM_MSG_FAILED_PIPE(FIM_EPR_XCF2PNM), "*");
+			goto shall_skip_header;
+		}
+		else
+		{
+			unlink(tpfn);
+			loader = &ppm_loader;
+			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
+		}
+	}
+	loader = &ppm_loader;
+    }
+#endif /* FIM_TRY_XCF2PNM */
 //#if 0
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 

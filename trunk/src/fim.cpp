@@ -803,7 +803,11 @@ int fim_dump_man_page(void)
 			"This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. "
 			"Graphical file formats " FIM_CNS_DSFF_SN " are supported natively, while " FIM_CNS_DSFF_SL " are supported via third party libraries. \n"
 			"Further formats are supported via external converters. \n"
-			"For XCF (Gimp's) images, '" FIM_EPR_XCFTOPNM "' is used.\nFor FIG vectorial images, '" FIM_EPR_FIG2DEV "' is used.\nFor DIA vectorial images, '" FIM_EPR_DIA "' is used.\nFor SVG vectorial images, '" FIM_EPR_INKSCAPE "' is used.\nFor other formats ImageMagick's '" FIM_EPR_CONVERT "' is used.\n"
+			"For XCF (Gimp's) images, '" FIM_EPR_XCFTOPNM "' or '" FIM_EPR_XCF2PNM "' is used.\n"
+			"For FIG vectorial images, '" FIM_EPR_FIG2DEV "' is used.\n"
+			"For DIA vectorial images, '" FIM_EPR_DIA "' is used.\n"
+			"For SVG vectorial images, '" FIM_EPR_INKSCAPE "' is used.\n"
+			"For other formats ImageMagick's '" FIM_EPR_CONVERT "' is used.\n"
 #if FIM_HAS_TIMEOUT
 			"The converter is given " FIM_EXECLP_TIMEOUT " seconds for the conversion before a timeout.\n"
 #else /* FIM_HAS_TIMEOUT */
