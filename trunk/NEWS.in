@@ -4,7 +4,7 @@
                 Version 0.7-trunk
 
  * Still work-in-progress. Please use stable branch 0.6 for now.
-# (r1991-r1993)
+# (r1991-r1994)
  * Documentation and self-documentation improvements.
 # (r1990)
  * Experimental support for reading AVIF images via libavif.

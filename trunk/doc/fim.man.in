@@ -26,7 +26,7 @@ fim
 is a `swiss army knife' for displaying image files.
 It is capable of displaying image files using different graphical devices while offering a uniform look and feel.
 Key bindings are customizable and specified in an initialization file.
-Interaction with standard input and output is possible (especially in shell scripts).
+Interaction with standard input and output is possible, especially in shell scripts.
 An internal scripting language specialized for image viewing allows image navigation, scaling, manipulation of internal variables, command aliases, and vim-like autocommands.
 The internal language can be interacted with via a command line mode capable of autocompletion and history (the readline mode).
 Further features are display of EXIF tags, JPEG comments, EXIF rotation/orientation, load of "description files", faster load via image caching, command recording, and much more.
@@ -36,18 +36,18 @@ As a default,
 fim
 displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP are supported via third party libraries. 
 Further formats are supported via external converters. 
-For XCF (Gimp's) images, will try to use 'xcftopnm'.
-For FIG vectorial images, will try to use 'fig2dev'.
-For DIA vectorial images, will try to use 'dia'.
-For SVG vectorial images, will try to use 'inkscape'.
-For other formats will try to use ImageMagick's 'convert' executable.
+For XCF (Gimp's) images, 'xcftopnm' is used.
+For FIG vectorial images, 'fig2dev' is used.
+For DIA vectorial images, 'dia' is used.
+For SVG vectorial images, 'inkscape' is used.
+For other formats ImageMagick's 'convert' is used.
 The converter is given 15 seconds for the conversion before a timeout.
 
 
 If \fB{imagepath}\fP is a file, its format is guessed not by its name but by its contents. See the \fB_file_loader\fP variable to change this default.
 
 
-If \fB{imagepath}\fP is a directory, therein contained files of supported formats will be loaded. If \fB{imagepath}\fP contains a trailing slash (/), it will be treated as a directory; otherwise this will be checked via \fBstat(2)\fP. To change this default, see description of the \fB_pushdir_re\fP variable and the \fB--no-stat-push\fP and \fB--recursive\fP options.
+If \fB{imagepath}\fP is a directory, load files of supported formats contained there. If \fB{imagepath}\fP contains a trailing slash (/), it is treated as a directory; otherwise that is checked via \fBstat(2)\fP. To change this default, see description of the \fB_pushdir_re\fP variable and the \fB--no-stat-push\fP and \fB--recursive\fP options.
 
 This man page describes 
 .B fim
@@ -86,18 +86,18 @@ and as filenames otherwise.
 
 .TP
 \fB-a\fP, \fB--autozoom\fP
-Enable autozoom. \fBfim\fP will automagically pick a reasonable zoom factor when displaying a new image (as in \fBfbi\fP).
+Enable autozoom. Automagically pick a reasonable zoom factor when displaying a new image (as in \fBfbi\fP).
 .TP
 \fB-b[24|1]\fP, \fB--binary[=24|1]\fP
 Display contents of binary files (of any filetype) as these were raw 24 or 1 bits per pixel pixelmaps.
-Image width will not exceed the value of the \fB_preferred_rendering_width\fP variable.
+The width of this image will not exceed the value of the \fB_preferred_rendering_width\fP variable.
 Regard this as an easter bunny option.
 
 .TP
 \fB--as-text\fP
 Display contents of files (of any filetype) as these were text.
-Image width will not exceed the value of the \fB_preferred_rendering_width\fP variable.
-Non-printable characters will be displayed as " ".
+The width of this image will not exceed the value of the \fB_preferred_rendering_width\fP variable.
+Non-printable characters are then displayed as " ".
 Regard this as another easter bunny option.
 
 .TP
@@ -119,7 +119,7 @@ do an endless loop consisting of bottom and top aligning, alternated.
 .TP
 \fB-C {commands}\fP, \fB--execute-commands-early {commands}\fP
 Similar to the \fB--execute-commands\fP option, but execute \fBcommands\fP earlier, just before reading the initialization file.
-The special 'early' form \fB=var=val\fP will assign \fBvar\fP to \fBval\fP immediately, before the interpreter is started.
+The special 'early' form \fB=var=val\fP assigns \fBvar\fP to \fBval\fP immediately, before the interpreter is started, and with no value quoting needed.
 
 For example,
 -C '\fB_scale_style\fP=" "' starts fim no auto-scaling;
@@ -148,7 +148,7 @@ Specify an alternative system-wide initialization file (default: @sysconfdir@/fi
 Similar to the \fB--execute-commands\fP option, but execute \fBcommands\fP after exiting the interactive mode, just before terminating the program.
 .TP
 \fB-h[s|d|l|m]\fP, \fB--help[=s|d|l|m]\fP
-Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument \fB{help-item}\fP passed to \fBfim\fP, an individual help message will be shown. If \fB{help-item}\fP starts with a /, it will be treated as a search string (not a regexp, though).
+Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man. For each further argument \fB{help-item}\fP passed to \fBfim\fP, an individual help message is shown. If \fB{help-item}\fP starts with a /, it is treated as a search string (not a regexp, though).
 .TP
 \fB-k {keysym}\fP, \fB--keysym-press {keysym}\fP
 Execute any command bound (via the bind command) to a specified keysym at startup. A keysym can be prefixed by a repetition count number. You can specify the option multiple times to simulate multiple keystrokes. Presses entered via \fB--keysym-press\fP are processed before presses entered via \fB--chars-press\fP. See man \fR\fIfimrc\fR(5) for a list of keysyms and the use of bind.
@@ -157,7 +157,7 @@ Execute any command bound (via the bind command) to a specified keysym at startu
 Input one or more keyboard characters at program startup (simulate keyboard presses). This option can be specified multiple times. Each additional time (or if the string is empty), a press of Enter (ASCII code 0x0D) key is prepended. Examples: -K '' simulates press of an Enter;  -K ':next;' activates the command line and enter "next;" without executing it;  -K ":next;" -K "next" executes "next", stays in the command line and enter keys "next";  -K ":next;" -K "" -K "next" executes "next", leaves the command line, and executes in sequence any command bound to keys 'n', 'e', 'x', 't'. Presses entered via \fB--chars-press\fP are processed after presses entered via \fB--keysym-press\fP. 
 .TP
 \fB-D {filename}\fP, \fB--load-image-descriptions-file {filename}\fP
-Load image descriptions from file \fBfilename\fP. Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via \fB--image-descriptions-file-separator\fP), then the description text. The description text is copied into the \fBi:_comment\fP variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment). If a '@' followed by and identifier {var} is encountered, and i:{var} is set, its value is substituted here. If "@#" is encountered, the remainder of the description line is ignored. Special comment lines like "#!fim:var=val" lead i:var to be assigned value val (unquoted) at image loading time (cached variable); i:var will not be assigned if var starts with an underscore ('_'). Special comment lines like "#!fim:+=val" add val to current description. Special comment lines like "#!fim:^=val" set val to be the base of each description. Special comment lines like "#!fim:!=" reset all cached variables. Special comment lines like "#!fim:/=dir" prepend dir to each file's basename. Special comment lines like "#!fim:\e=dir" prepend dir to each file's name. Special description text (to be associated to an image) begins with markers:  with "#!fim:=", the last description line is reused; with "#!fim:+", what follows is appended to the last description line; with "#!fim:^", what follows is prepended to the last description line; with "#!fim:s/f/t", the last description line will be used after substitution of occurrences of substring f with string t (f and t cannot contain newlines or a '/'). If val is empty that variable is unset. These variables are stored also in an internal index used by the limit command. This option sets \fB_caption_over_image\fP=2, so that a caption is displayed over the image. A description file beginning with "#!fim:desc" can be loaded without specifying this switch.
+Load image descriptions from file \fBfilename\fP. Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via \fB--image-descriptions-file-separator\fP), then the description text. The description text is copied into the \fBi:_comment\fP variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment). If a '@' followed by and identifier {var} is encountered, and i:{var} is set, its value is substituted here. If "@#" is encountered, the remainder of the description line is ignored. Special comment lines like "#!fim:var=val" lead i:var to be assigned value val (unquoted) at image loading time (cached variable), unless var starts with an underscore ('_'). Special comment lines like "#!fim:+=val" add val to current description. Special comment lines like "#!fim:^=val" set val to be the base of each description. Special comment lines like "#!fim:!=" reset all cached variables. Special comment lines like "#!fim:/=dir" prepend dir to each file's basename. Special comment lines like "#!fim:\e=dir" prepend dir to each file's name. Special description text (to be associated to an image) begins with markers:  with "#!fim:=", the last description line is reused; with "#!fim:+", what follows is appended to the last description line; with "#!fim:^", what follows is prepended to the last description line; with "#!fim:s/f/t", the last description line is used and substituted substring t to occurrences of substring f (f and t cannot contain newlines or a '/'). If val is empty that variable is unset. These variables are stored also in an internal index used by the limit command. This option sets \fB_caption_over_image\fP=2, so that a caption is displayed over the image. A description file beginning with "#!fim:desc" can be loaded without specifying this switch.
 .TP
 \fB-S {sepchar}\fP, \fB--image-descriptions-file-separator {sepchar}\fP
 A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file.
@@ -175,10 +175,10 @@ Set those files specified in \fBfilename\fP (see --load-image-descriptions-file 
 Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP
 \fB-N\fP, \fB--no-rc-file\fP
-No personal initialization file will be read (default is ~/.fimrc) at startup.
+No personal initialization file is read (default is ~/.fimrc) at startup.
 .TP
 \fB--no-etc-fimrc-file\fP
-No system-wide initialization file will be read (default is @sysconfdir@/fimrc) at startup. See also \fB--etc-fimrc\fP. 
+No system-wide initialization file is read (default is @sysconfdir@/fimrc) at startup. See also \fB--etc-fimrc\fP. 
 
 .TP
 \fB--no-internal-config\fP
@@ -203,7 +203,7 @@ Read commands from stdin before entering in interactive mode.
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.
 The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim --version\fP.
-The \fBfb\fP option selects the Linux framebuffer. Presence of option \fBS\fP (e.g. \fBfb=S\fP) makes framebuffer initialization more picky: it will not tolerate running in a screen session.
+The \fBfb\fP option selects the Linux framebuffer. Presence of option \fBS\fP (e.g. \fBfb=S\fP) makes framebuffer initialization more picky: it does not tolerate running in a screen session.
 The \fBca\fP option (coloured Ascii Art) can be specified as \fBca\fP\fB[={['w']}] \fP; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
 The \fBaa\fP (monochrome Ascii Art) option can be specified as \fBaa[={['w'|'W']}]\fP; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
 Please note that the readline (internal command line) functionality in \fBca\fP and \fBaa\fP modes is limited.
@@ -213,30 +213,30 @@ The \fBdumb\fP test mode is not interactive.
 
 .TP
 \fB--offset {bytes-offset[{:upper-offset}|{+offset-range}]}\fP
-Use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper-offset\fP is specified, further bytes until \fBupper-offset\fP will be probed. If \fB+offset-range\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes.
+Use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper-offset\fP is specified, further bytes until \fBupper-offset\fP are probed. If \fB+offset-range\fP is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes.
 .TP
 \fB--pread-cmd {cmd-filter-pipeline}\fP
-Specify a shell command with \fB{cmd-filter-pipeline}\fP. If the current filename matches "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$", it will be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which will be read and displayed.
+Specify a shell command with \fB{cmd-filter-pipeline}\fP. If the current filename matches "^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$", it is be substituted to any occurrence of '{}'. The resulting command output is assumed to be file data, which is read, decoded, and displayed.
 This works by setting the internal \fB_pread_cmd\fP variable (empty by default).
 .TP
 \fB-P\fP, \fB--text-reading\fP
-Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
+Enable textreading mode.  This has the effect that fim displays images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
 .TP
 \fB-s {value}\fP, \fB--scroll {value}\fP
 Set scroll steps for internal variable \fB_steps\fP (default is 20%).
 .TP
 \fB--slideshow {number}\fP
-Interruptible slideshow mode. Wait for \fB{number}\fP of seconds (assigned to the \fB_want_sleep_seconds\fP variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex <= _filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys will execute accordingly to their function but will not interrupt the slideshow. Like in fbi, this will cycle forever, unless \fB--once\fP is specified.
+Interruptible slideshow mode. Wait for \fB{number}\fP of seconds (assigned to the \fB_want_sleep_seconds\fP variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex <= _filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys execute accordingly to their function but do not interrupt the slideshow. Like in fbi, this cycles forever, unless \fB--once\fP is specified.
 .TP
 \fB--sanity-check\fP
 Perform a quick sanity check, just after the initialization, and terminate.
 .TP
 \fB-t\fP, \fB--no-framebuffer\fP
 \fBfim\fP Use an ASCII Art driver. If present, use either of libcaca (coloured), or aalib (monochrome). For more, see (man fimrc), (info aalib) or (apropos caca)).
-If no ASCII Art driver was enabled at compile time, fim will not display any image at all.
+If no ASCII Art driver had been enabled at compile time, fim does not display any image at all.
 .TP
 \fB-T {terminal}\fP, \fB--vt {terminal}\fP
-The \fBterminal\fP will be used as virtual terminal device file (as in fbi).
+The \fBterminal\fP is to be used as virtual terminal device file (as in fbi).
 See (chvt (1)), (openvt (1)) for more info about this.
 Use (con2fb (1)) to map a terminal to a framebuffer device.
 
@@ -281,7 +281,7 @@ Print to stdout program version, compile flags, enabled features, linked librari
 Scale the image according to the screen width.
 .TP
 \fB-=\fP, \fB--no-auto-scale\fP
-Do not scale the images after loading (will set '\fB_scale_style\fP=" "';).
+Do not scale the images after loading (sets '\fB_scale_style\fP=" "';).
 .TP
 \fB--autowindow\fP
 Resize the window size (if supported by the video mode) to the image size. Don't use this with other image scaling options.
@@ -293,7 +293,7 @@ Sets \fB_push_checks\fP=0 before initialization, thus disabling file/dir existen
 Scale the image according to the screen height.
 .TP
 \fB-W {scriptfile}\fP, \fB--write-scriptout {scriptfile}\fP
-All the characters that you type are recorded in the file \fB{scriptout}\fP, until you exit \fBfim\fP.  This is useful if you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the \fB{scriptout}\fP file exists, it will be not touched (as in Vim's -w). 
+All the characters that you type are recorded in the file \fB{scriptout}\fP, until you exit \fBfim\fP.  This is useful if you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the \fB{scriptout}\fP file exists, it is not touched (as in Vim's -w). 
 .TP
 \fB-L {fileslistfile}\fP, \fB--read-from-file {fileslistfile}\fP
 Read file list from a file: each line one file to load (similar to \fB--read-from-stdin\fP; use \fB--read-from-stdin-elds\fP to control line breaking).
@@ -303,7 +303,7 @@ Read file list from a file: each line one file to load (similar to \fB--read-fro
 \fB -, \fP\fB--read-from-stdin\fP
 Read file list from stdin: each line one file to load; use with --read-from-stdin-elds to control line breaking).
 
-Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
+Note that these three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim exits with an error and warn about the ambiguity.
 
 See the section
 .B INVOCATION EXAMPLES
@@ -311,7 +311,7 @@ below to read some useful (and unique) ways of employing fim.
 
 .TP
 \fB--read-from-stdin-elds {delimiter-char}\fP
-Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter will be treated as names of files to load; the text after will be ignored. This is also useful e.g. to load description files (see --load-image-descriptions-file) as filename list files. Default is the newline character (0x0A); to specify an ASCII NUL byte (0x00) use ''.
+Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter are be treated as names of files to load; the text after is ignored. This is also useful e.g. to load description files (see --load-image-descriptions-file) as filename list files. Default is the newline character (0x0A); to specify an ASCII NUL byte (0x00) use ''.
 
 .TP
 \fB-A\fP, \fB--autotop\fP
@@ -322,19 +322,19 @@ Quiet execution mode. Sets _display_status=0;_display_busy=0;.
 
 .TP
 \fB-r {width:height}\fP, \fB--resolution {width:height}\fP
-Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --output-device. Shorthand value 'fullscreen' will be translated into 'W'. 
+Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --output-device. Shorthand value 'fullscreen' is be translated into 'W'. 
 .TP
 \fB-R[{exp}]\fP, \fB--recursive[={exp}]\fP
-Push files/directories to the files list recursively. The expression in variable \fB_pushdir_re\fP (default: "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$") lists extensions of filenames which will be loaded in the list. You can overwrite its value by optionally passing an expression \fB{exp}\fP here as argument. If starting with '+' or '|', the expression following will be appended to it. 
+Push files/directories to the files list recursively. The expression in variable \fB_pushdir_re\fP (default: "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$") lists extensions of filenames which are loaded in the list. You can overwrite its value by optionally passing an expression \fB{exp}\fP here as argument. If starting with '+' or '|', the expression following is to be appended to it. 
 .TP
 \fB-X\fP, \fB--no-pipe-load\fP
 Do not load via external converter programs: only use built-in file decoders.
 .TP
 \fB-B\fP, \fB--background-recursive\fP
-Push files/directories to the files list recursively, in background during program execution. Any sorting options will be ignored. Experimental feature, unfinished.
+Push files/directories to the files list recursively, in background during program execution. Any sorting options are ignored. Experimental feature, unfinished.
 .TP
 \fB--load-shadow-directory {dir}\fP
-Add \fB{dir}\fP to the shadow directory list. Then 'scale "shadow"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved.
+Add \fB{dir}\fP to the shadow directory list. Then 'scale "shadow"' temporarily substitutes the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved.
 .TP
 \fB-/ {pattern}\fP, \fB--/ {pattern}\fP
 After startup jump to pattern; short for -c '/'.
@@ -399,8 +399,8 @@ distributed with fim.
 .SH AFFECTING ENVIRONMENT VARIABLES
 .nf
 FBFONT		(just like in fbi) a Linux consolefont font file.
-If using a gzipped font, the zcat program will be used to uncompress it (via \fBexecvp(3)\fP).
-If not specified, the following files will be probed and the first existing will be selected:
+If using a gzipped font file, the zcat program is used to uncompress it (via \fBexecvp(3)\fP).
+If FBFONT is unset, the following files are probed and the first existing one is selected:
 
 /usr/share/consolefonts/Lat15-Terminus16.psf.gz
 /usr/share/kbd/consolefonts/cp866-8x16.psf.gz
@@ -428,13 +428,13 @@ If not specified, the following files will be probed and the first existing will
 /usr/share/consolefonts/default.psf.gz
 fim://
 
-If the special fim:// string is specified, a hardcoded font will be used.
+If the special fim:// string is specified, a hardcoded font is used.
 FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is 1.0.
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
-If unset, fim will probe for /dev/fb0.
-TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
-SSH_TTY		if set and no output device specified, assume we're over \fBssh\fP, and give precedence to ca, then aa (if present).
-DISPLAY	If this variable is set, then the sdl driver will be probed by default.
+If unset, fim probes for /dev/fb0.
+TERM		(only in fim) influences the output device selection algorithm, especially if $TERM=="screen".
+SSH_TTY	if set and no output device specified, assume we're over \fBssh\fP, and give precedence to ca, then aa (if present).
+DISPLAY	If this variable is set, then the sdl driver is probed by default.
 .SH COMMON PROBLEMS
 .B fim
 needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
@@ -460,7 +460,7 @@ and set these lines like here:
 .B fim
 also needs access to the linux console (i.e. /dev/ttyN) for sane
 console switch handling.  That is obviously no problem for console
-logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
+logins, but any kind of pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
 .SH INVOCATION EXAMPLES
@@ -540,7 +540,7 @@ from standard input before displaying files in the directory
 -o aa -c 'pread "vgrabbj -d /dev/video0 -o png";reload;system "fbgrab" "asciime.png"'
 .fi 
 .fi
-# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam
+# if running in framebuffer mode, saves a png screenshot with an ASCII rendering of an image grabbed from a webcam
 .P
 .P
 
@@ -548,7 +548,7 @@ from standard input before displaying files in the directory
 -c 'while(1){pread "vgrabbj -d /dev/video0 -o png";reload;sleep 1;};'
 
 .fi 
-# will display a sequence of images grabbed from a webcam; circa 1 per second
+# display a sequence of images grabbed from a webcam; circa 1 per second
 .P
 .P
 
@@ -577,7 +577,7 @@ The personal \fBfim\fP initialization file (executed at startup, after the syste
 File where to load from or save. See (man \fR\fIfimrc\fR(5),  man \fR\fIreadline\fR(3)).
 .TP 15
 .B ~/.inputrc
-If \fBfim\fP is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man \fR\fIreadline\fR(3)).
+If \fBfim\fP is built with GNU readline support, it is susceptible to changes in the user set ~/.inputrc configuration file contents.  For details, see (man \fR\fIreadline\fR(3)).
 .SH SEE ALSO
 Other \fBfim\fP man pages: \fR\fIfimgs\fR(1), \fR\fIfimrc\fR(1).
 .fi
