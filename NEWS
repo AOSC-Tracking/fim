@@ -10,6 +10,7 @@
  * Experimental support for reading AVIF images via libavif
  * Experimental support for reading WebP images via libwebp
  * FIM requires a compiler supporting at least C++11
+ * More tests.
 
                 Version 0.6-rc2
 
