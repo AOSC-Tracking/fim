@@ -50,9 +50,7 @@ enum fim_tii_t /* test image index  */ {
 };
 
 /* pixel intensity float */
-#if FIM_USE_CXX11
 	using fim_pif_t = float;
-#endif /* FIM_USE_CXX11 */
 
 class Image FIM_FINAL 
 #ifdef FIM_NAMESPACES
@@ -183,7 +181,6 @@ class Image FIM_FINAL
 	void set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip);
 	void get_irs(char *irs)const;
 }; /* class Image */
-#if FIM_USE_CXX11
 #if FIM_IMG_NAKED_PTRS
 	using ImagePtr = Image*;
 	using ImageCPtr = const Image*;
@@ -191,7 +188,6 @@ class Image FIM_FINAL
 	using ImagePtr = std::shared_ptr<Image>;
 	using ImageCPtr = std::shared_ptr<const Image>;
 #endif /* FIM_IMG_NAKED_PTRS */
-#endif /* FIM_USE_CXX11 */
 } /* namespace fim */
 #if FIM_WANT_PIC_LVDN
 	class VNamespace FIM_FINAL: public Namespace
@@ -215,32 +211,22 @@ class ImgDscs FIM_FINAL: public std::map<fim_fn_t,fim_ds_t>
 {
 	public:
 #if FIM_WANT_PIC_LVDN
-#if FIM_USE_CXX11
 	using vd_t = std::map<fim_fn_t,VNamespace> ;
-#endif /* FIM_USE_CXX11 */
 	vd_t vd_;
 #endif /* FIM_WANT_PIC_LVDN */
-#if FIM_USE_CXX11
-#endif /* FIM_USE_CXX11 */
 	ImgDscs::iterator li_;
 	ImgDscs::iterator fo(const key_type& sk, const ImgDscs::iterator & li)
 	{
-#if FIM_USE_CXX11
 		return std::find_if(li,end(),[&](ImgDscs::value_type v){return v.second == sk;});
-#endif /* FIM_USE_CXX11 */
 	}
 	ImgDscs::const_iterator fo(const key_type& sk, const ImgDscs::const_iterator & li)const
 	{
-#if FIM_USE_CXX11
 		return std::find_if(li,cend(),[&](ImgDscs::value_type v){return v.second == sk;});
-#endif /* FIM_USE_CXX11 */
 	}
 public:
 	ImgDscs::const_iterator fo(const key_type& sk)const
 	{
-#if FIM_USE_CXX11
 		return std::find_if(cbegin(),cend(),[&](ImgDscs::value_type v){return v.second == sk;});
-#endif /* FIM_USE_CXX11 */
 	}
 private:
 	ImgDscs::iterator fi(const key_type& sk)
@@ -293,9 +279,7 @@ public:
 									ss+=ds.substr(bci,eci-bci); // might issue warning instead
 							}
 							ss+=ds.substr(eci);
-#if FIM_USE_CXX11
 							return std::move(ss);
-#endif /* FIM_USE_CXX11 */
 #else /* FIM_WANT_DESC_VEXP */
 							return ds;
 #endif /* FIM_WANT_DESC_VEXP */
@@ -530,14 +514,12 @@ public:
 	void shrink_to_fit(void)
 	{
 		/* note we cannot it->first.shrink_to_fit(), */
-#if FIM_USE_CXX11
 		for( auto it =     begin();it !=     end(); ++it )
 			it->second.shrink_to_fit();
 #if FIM_WANT_PIC_LVDN
 		for( auto it = vd_.begin();it != vd_.end(); ++it )
 			it->second.shrink_to_fit();
 #endif /* FIM_WANT_PIC_LVDN */
-#endif /* FIM_USE_CXX11 */
 	}
 	size_t byte_size(void)const
 	{

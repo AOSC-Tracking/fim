@@ -44,10 +44,8 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	fim_char_t *bitmap;
 #endif
 #if ( FIM_WANTS_CACA_VERSION == 1 )
-#if FIM_USE_CXX11
 	caca_canvas_t *cv_; // {} pending
 	caca_display_t *dp_; // {} pending
-#endif /* FIM_USE_CXX11 */
 #endif
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE

@@ -10,7 +10,7 @@
  * Load XCF (Gimp) files via the xcf2pnm utility
 # (r1991-r1994,r1998-r1999)
  * Documentation and self-documentation improvements
-# (r1990)
+# (r1990,r2000)
  * Experimental support for reading AVIF images via libavif
 # (r1989)
  * Experimental support for reading WebP images via libwebp

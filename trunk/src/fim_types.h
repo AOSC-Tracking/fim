@@ -74,9 +74,7 @@
 	typedef size_t fim_size_t;	/* always size_t */
 	typedef size_t fim_pxc_t;	/* pixel count */
 	enum fim_redraw_t { FIM_REDRAW_UNNECESSARY=0, FIM_REDRAW_NECESSARY=1};
-#if FIM_USE_CXX11
 	// TODO: move using aliases here ...
-#endif /* FIM_USE_CXX11 */
 	// TODO: same also in CommandConsole.h
 
 /* we wait for variadic macros support in standard C++ */

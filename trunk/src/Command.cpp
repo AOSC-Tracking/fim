@@ -24,11 +24,9 @@ namespace fim
 {
 	const fim_cmd_id & Command::cmd(void)const{return cmd_;}
 	const fim::string & Command::getHelp(void)const{return help_;}
-#if FIM_USE_CXX11
 	fim::string Command::execute(const args_t&args)
 	{
 		assert(cmf_);
 		return (cmf_)(args);
 	}
-#endif /* FIM_USE_CXX11 */
 } /* namespace fim */

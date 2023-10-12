@@ -49,16 +49,12 @@ namespace fim
 	}
 
 #if FIM_WANT_LONG_INT
-#if FIM_USE_CXX11
 	string::string(int i):string(std::to_string(i)) { }
-#endif /* FIM_USE_CXX11 */
 #endif /* FIM_WANT_LONG_INT */
 
-#if FIM_USE_CXX11
 	string::string(fim_int i):string(std::to_string(i)) { }
 	string::string(size_t i):string(std::to_string(i)) { }
 	string::string(float i):string(std::to_string(i)) { }
-#endif /* FIM_USE_CXX11 */
 
 	string::string(int * i)
 	{

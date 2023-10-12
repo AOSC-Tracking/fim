@@ -213,23 +213,19 @@
 #endif /* HAVE_FILESYSTEM */
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #ifndef FIM_EXPERIMENTAL_SHADOW_DIRS
-#if FIM_USE_CXX11
 #if FIM_READ_DIRS
 #define FIM_EXPERIMENTAL_SHADOW_DIRS 1 /* 1: at load time  2: at view time */
 #endif /* FIM_READ_DIRS */
-#endif /* FIM_USE_CXX11 */
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 
 #define FIM_EXPERIMENTAL_FONT_CMD HAVE_DIRENT_H /*  */
 #define FIM_WANT_HELP_ARGS 1 /*  */
 #define FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL 1 /* the larger the image, the more scroll steps  */
-#if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
 #define FIM_CONSTEXPR constexpr
 #define FIM_OVERRIDE override
 #define FIM_FINAL final
 #define FIM_NORETURN [[noreturn]]
-#endif /* FIM_USE_CXX11 */
 #if FIM_USE_CXX14
 #define FIM_DEPRECATED(MSG) [[deprecated(MSG)]]
 #else /* FIM_USE_CXX14 */
@@ -252,21 +248,17 @@
 	fim::string fim_help_opt(const char*qs, const char dl);
 namespace fim
 {
-	#if FIM_USE_CXX11
 	using fim_fn_t = string; /* file name */
 	using fim_ds_t = string; /* file description */
 	using sym_keys_t = std::map<fim::string,fim_key_t >;	//symbol->code
 	using fim_cxr = fim::string; // command execution result
-	#endif /* FIM_USE_CXX11 */
 
 	void status(const fim_char_t *desc, const fim_char_t *info);
 
 class ViewportState
 {
-#if FIM_USE_CXX11
 	public:
 	fim_off_t	steps_{},hsteps_{},vsteps_{},top_{},left_{},panned_{} ;	/* viewport state variables */
-#endif /* FIM_USE_CXX11 */
 };
 
 	class Browser;
@@ -587,10 +579,8 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SHELL	"/bin/sh"
 #define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP" 
 #define FIM_CNS_DSFF_SN	"BMP, PCX" 
-#if FIM_USE_CXX11
 /* this default FIM_CNS_PUSHDIR_RE might be built based on build options */
 #define FIM_CNS_PUSHDIR_RE	R"***(\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$)***" 
-#endif /* FIM_USE_CXX11 */
 #define FIM_CNS_ARCHIVE_RE	"\\.(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
 #define FIM_CNS_PIPEABLE_PATH_RE	"^[/A-Za-z0-9_.][/A-Za-z0-9_.-]*$"
 #define FIM_CNS_BPP_INVALID	0

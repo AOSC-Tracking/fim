@@ -233,9 +233,7 @@ ret:		return key;
 
 		if( bi != bindings_.end() )
 		{
-#if FIM_USE_CXX11
 			bindings_.erase(bi);
-#endif /* FIM_USE_CXX11 */
 			oss << c << ": successfully unbound.\n";
 			bindings_help_.erase(c); // if key c existent, erases associated help msg.
 		}
@@ -509,9 +507,7 @@ err:
 		/*
 		 * an internal alias member function
 		 */
-#if FIM_USE_CXX11
 		return fcmd_alias({a,c,d});
-#endif /* FIM_USE_CXX11 */
 	}
 
 	fim_char_t * CommandConsole::command_generator (const fim_char_t *text,int state,int mask)const
@@ -1238,9 +1234,7 @@ rlnull:
 	fim::string CommandConsole::marked_files_clear(void)
 	{
 		marked_files_.erase(marked_files_.begin(),marked_files_.end());
-#if FIM_USE_CXX11
 		return {};
-#endif /* FIM_USE_CXX11 */
 	}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 
@@ -2305,10 +2299,8 @@ err:
 						lfc.push_back(fr);
 				}
 				closedir(dir);
-#if FIM_USE_CXX11
 				for(auto & fs : fc)
 					fim_free_fs_font(fs.second), fs.second=FIM_NULL;
-#endif /* FIM_USE_CXX11 */
 				fc.erase(fc.begin(),fc.end());
 				fc=lfc;
 

@@ -451,9 +451,7 @@ err:
 #ifdef FIM_READ_STDIN_IMAGE
 			if(stream_image)
 			{
-#if FIM_USE_CXX11
 				browser_.set_default_image(ImagePtr(std::move(stream_image)));
-#endif /* FIM_USE_CXX11 */
 				browser_.push_path(FIM_STDIN_IMAGE_NAME);
 			}
 #else /* FIM_READ_STDIN_IMAGE */
@@ -867,9 +865,7 @@ err:
 	}
 
 #if FIM_WANT_PIC_CMTS_RELOAD
-#if FIM_USE_CXX11
 	/* */
-#endif /* FIM_USE_CXX11 */
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */
 
 	fim_cxr CommandConsole::fcmd_desc(const args_t& args)
@@ -881,10 +877,8 @@ err:
 #if FIM_WANT_PIC_CMTS_RELOAD
 		if ( args.size()-aoc > 0 && args[aoc] == "reload" )
 		{
-#if FIM_USE_CXX11
 			for (auto & dfp : cc.browser_.dfl_) 
 				cc.id_.fetch(dfp.first,dfp.second);
-#endif /* FIM_USE_CXX11 */
 			browser_.cache_.desc_update();
 		}
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */

@@ -23,9 +23,7 @@
 #include "fim.h"
 
 #ifdef HAVE_SYS_TIME_H
-#if FIM_USE_CXX11
 #include <cstdint>
-#endif /* FIM_USE_CXX11 */
 #include <unistd.h>
 typedef uint64_t fim_time_t;
 #else /* HAVE_SYS_TIME_H */
@@ -43,14 +41,12 @@ class Cache FIM_FINAL
 #else
 #endif /* FIM_NAMESPACES */
 {
-#if FIM_USE_CXX11
 	using cachels_t =  std::map<cache_key_t,fim::ImagePtr >;	//key -> image
 	using lru_t = std::map<cache_key_t,fim_time_t >;	//image -> time
 	using ccachels_t = std::map<cache_key_t,int >;	//key -> counter
 	using vcachels_t = std::map<cache_key_t,ViewportState >;	//key -> viewport state
 	//using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> >;	//key -> clones
 	//using cuc_t = std::map<fim::ImagePtr,int >;	//image -> clones usage counter
-#endif /* FIM_USE_CXX11 */
 
 #if FIM_IMG_NAKED_PTRS
 	FIM_DEPRECATED("Please build without FIM_IMG_NAKED_PTRS (naked pointers): portions of fim code (e.g. avoiding leaks in multipage documents memory management) are not functional in the older standard.")
@@ -83,11 +79,9 @@ class Cache FIM_FINAL
 	fim_time_t get_reltime(void)const;
 	public:
 	Cache(void);
-#if FIM_USE_CXX11
 	public:
 	/* a deleted member function (e.g. not even a be'friend'ed class can call it) */
 	Cache& operator= (const Cache&rhs) = delete;
-#endif /* FIM_USE_CXX11 */
 	public:
 	bool freeCachedImage(ImagePtr image, const ViewportState *vsp, bool force);
 	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
