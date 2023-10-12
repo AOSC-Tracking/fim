@@ -11,6 +11,7 @@
  * Experimental support for reading WebP images via libwebp
  * FIM requires a compiler supporting at least C++11
  * More tests.
+ * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts.
 
                 Version 0.6-rc2
 

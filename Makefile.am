@@ -726,6 +726,8 @@ if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "                    goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/icon_smile.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==2);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c "_re_search_opts=' ';goto '/due/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c "_re_search_opts='D';goto '/due/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==3);' # test goto query
 	rm $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm
 endif
 endif

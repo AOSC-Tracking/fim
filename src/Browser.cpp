@@ -1249,6 +1249,7 @@ ret:
 #if FIM_WANT_PIC_CMTS
 			/* If filename does not match, we look for match on description. */
 			if(!hm)
+			if ( rso && strchr(rso,'D') )
 			{
 				/* FIXME: in the long run need a uniform decision on whether comments are to be accessed by full path or basename. */
 				const fim_char_t * bfstm = fim_basename_of(fstm);

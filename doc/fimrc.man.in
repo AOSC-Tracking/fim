@@ -412,7 +412,7 @@ With '+/'C or '-/'C, jump to next or previous file according to C: if 's' if sam
 .fi
 If \fR\fI{identifier|identifier2...}]\fR is encountered after a '+' or '-' sign, jump to the next or the previous image having a different value for any corresponding i:\fR\fI{identifier}\fR (a trailing '+' requires a non empty value).
 .fi
-Match occurs on both file name and description, possibly loaded via desc or --load-image-descriptions-file; see also '_lastgotodirection' and '_re_search_opts'.
+Matching can occur on both file name and description, possibly loaded via desc or --load-image-descriptions-file; see also '_lastgotodirection' and '_re_search_opts'.
 .fi
  You can specify multiple arguments to goto: those after the first one triggering a jump are ignored.
 .fi
@@ -1251,7 +1251,7 @@ _pwd
 .na
 .B
 _re_search_opts
-[in,g:] affects regexp-based searches; if an empty string, defaults apply; if it contains 'i' ('I'), case insensitive (sensitive) searches occur; if it contains 'b', match on basename, if contains 'f' on full pathname.
+[in,g:] affects regexp-based searches; if an empty string, defaults apply; if it contains 'i' ('I'), case insensitive (sensitive) searches occur; if it contains 'b', match on basename, if contains 'f' on full pathname; if it contains 'D', match on description.
 .fi
 .na
 .B
@@ -1588,7 +1588,7 @@ if(_load_fim_history==''){_load_fim_history=1;}
 if(_verbose_keys==''){_verbose_keys=0;}
 if(_display_busy==''){_display_busy=1;}
 if(_ignorecase==''){_ignorecase=1;}
-if(_re_search_opts==''){_re_search_opts='bi';}
+if(_re_search_opts==''){_re_search_opts='biD';}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}
