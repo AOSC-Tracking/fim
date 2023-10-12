@@ -720,6 +720,12 @@ if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smile.ppm -K '' -K q -F 'quit !(_fileindex==2);' # test slash search
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F 'quit !(_fileindex==0);' # test slash search
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "goto '?$(top_srcdir)/media/icon_smile.ppm'" -K '' -K q -F 'quit !(_fileindex==2);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='i';goto '/ICON_SMILE.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==2);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='I';goto '/ICON_SMILE.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts=' ';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "                    goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/icon_smile.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==2);' # test goto query
 	rm $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm
 endif
 endif
