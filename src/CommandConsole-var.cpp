@@ -248,8 +248,6 @@ err:
 		if( const Namespace *nsp = c_rns(varname) )
 			return nsp->getVariable(rnid(varname));
 		else
-#if FIM_USE_CXX11
 			return {};
-#endif /* FIM_USE_CXX11 */
 	}
 } /* namespace fim */

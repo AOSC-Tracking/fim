@@ -37,11 +37,9 @@
 
 #define FIM_DIFFERENT_VARS FIM_WANT_PIC_LVDN && FIM_USE_CXX11 /* experimental */
 
-#if FIM_USE_CXX11
 #include <utility>	/* std::swap */
 #include <random>	/* std::random_device */
 #include <algorithm>	/* std::shuffle */
-#endif /* FIM_USE_CXX11 */
 
 #if FIM_WANT_FLIST_STAT 
 #include <sstream>	// std::istringstream 
@@ -290,10 +288,8 @@ ret:
 
 	std::ostream& Browser::print(std::ostream& os)const
 	{
-#if FIM_USE_CXX11
 		for(auto le : flist_)
 			os << le << FIM_CNS_NEWLINE;
-#endif /* FIM_USE_CXX11 */
 		return os;
 	}
 
@@ -301,11 +297,9 @@ ret:
 	void Browser::set_default_image(ImagePtr stdin_image)
 	{
 		FIM_PR('*');
-#if FIM_USE_CXX11
 		if( !stdin_image || !stdin_image->check_valid() )
 			goto ret;
 		default_image_ = std::move(stdin_image);
-#endif /* FIM_USE_CXX11 */
 		if(!cache_.setAndCacheStdinCachedImage(default_image_))
 			std::cerr << FIM_EMSG_CACHING_STDIN;
 ret:
@@ -700,7 +694,6 @@ nop:
 			++ lehsof;
 #ifdef FIM_REMOVE_FAILED
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
-#if FIM_USE_CXX11
 				do_filter({c});
 #if FIM_WANT_GOTOLAST
 				/* on failed load, try jumping to last meaningful file */
@@ -711,7 +704,6 @@ nop:
 						flist_.set_cf(li-1);
 				}
 #endif
-#endif /* FIM_USE_CXX11 */
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
 				{
@@ -731,9 +723,7 @@ ret:
 	fim::string Browser::reload(void)
 	{
 		if( n_files() )
-#if FIM_USE_CXX11
 			return fcmd_reload({});
-#endif /* FIM_USE_CXX11 */
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1179,7 +1169,6 @@ ret:
 		 *	if dts==true, do time() based seeding
 		 *	TODO: it would be cool to support a user supplied seed value
 		 */
-#if FIM_USE_CXX11
 		std::random_device rd;
 		std::mt19937 g(rd());
 		if( dts )
@@ -1187,7 +1176,6 @@ ret:
 		else
 			g.seed(std::mt19937::default_seed);
 		std::shuffle(flist_.begin(),flist_.end(),g);
-#endif /* FIM_USE_CXX11 */
 		return current();
 	}
 
@@ -1295,9 +1283,7 @@ nop:
 	fim::string Browser::goto_image(fim_int n, bool isfg)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
-#if FIM_USE_CXX11
 		const auto N = flist_.size();
-#endif /* FIM_USE_CXX11 */
 		FIM_PR('*');
 
 		if( !N )
@@ -2546,9 +2532,7 @@ ret:
 			if(dopush)
 				push_back(fim::fle_t(*fit,stat_s));
 		}
-#if FIM_USE_CXX11
 		this->shrink_to_fit();
-#endif /* FIM_USE_CXX11 */
 	}
 
 	const fim::string flist_t::pop(const fim::string& filename, bool advance)
@@ -2558,9 +2542,7 @@ ret:
 		if( filename != FIM_CNS_EMPTY_STRING )
 		{
 			const size_t idx = std::find(this->begin(),this->end(),filename) - this->begin();
-#if FIM_USE_CXX11
 			this->erase(std::remove_if(this->begin(),this->end(),[&](const fim::fle_t&fl)->bool{return fim::string(fl)==filename;}),this->end());
-#endif
 			if (idx < cf_)
 				cf_--;
 		}
@@ -2589,9 +2571,7 @@ ret:
 					this->_sort(FIM_SYM_SORT_FN);
 					mlist.reserve(this->size()+clist.size());
 					std::set_union(clist.begin(),clist.end(),this->begin(),this->end(),std::back_inserter(mlist));
-#if FIM_USE_CXX11
 					mlist.shrink_to_fit();
-#endif /* FIM_USE_CXX11 */
 					this->assign(mlist.begin(),mlist.end());
 	}
 
@@ -2601,22 +2581,18 @@ ret:
 					this->_sort(FIM_SYM_SORT_FN);
 					mlist.reserve(this->size()+clist.size());
 					std::set_difference(clist.begin(),clist.end(),this->begin(),this->end(),std::back_inserter(mlist));
-#if FIM_USE_CXX11
 					mlist.shrink_to_fit();
-#endif /* FIM_USE_CXX11 */
 					this->assign(mlist.begin(),mlist.end());
 	}
 
 void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
 {
 	size_t ecount = 0;
-#if FIM_USE_CXX11
 	const auto bit=this->begin();
 	const auto eit=this->end();
 	for(auto fit=bit;fit!=eit;++fit)
 		if(bs.at(fit-bit) != negative)
 			this->erase(fit-ecount),ecount++;
-#endif /* FIM_USE_CXX11 */
 	// TODO: updating cf_ here would make sense, but is redundant
 }
 	fim_bool_t flist_t::pop_current(void)
@@ -2630,14 +2606,12 @@ void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
 flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) const
 {
 	flist_t nlist;
-#if FIM_USE_CXX11
 	const auto bit=this->cbegin();
 	const auto eit=this->cend();
 	for(auto fit=bit;fit!=eit;++fit)
 		if(bs.at(fit-bit) != positive )
 			nlist.emplace_back(*fit);// this might spare constructor
 			//nlist.push_back(*fit);
-#endif /* FIM_USE_CXX11 */
 	return nlist;
 }
 

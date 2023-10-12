@@ -21,12 +21,9 @@
 #ifndef FIM_COMMAND_H
 #define FIM_COMMAND_H
 #include "fim.h"
-#if FIM_USE_CXX11
 #include <functional>
-#endif /* FIM_USE_CXX11 */
 namespace fim
 {
-#if FIM_USE_CXX11
 	using fim_cmd_id = fim::string; // command id
 	using fim_cls = fim::string; // command line statement
 
@@ -53,6 +50,5 @@ class Command FIM_FINAL
 	Command::Command(fim_cmd_id cmd, fim::string help, O*op, fim::string(O::*fp)(const args_t&))
 	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
 
-#endif /* FIM_USE_CXX11 */
 } /* namespace fim */
 #endif /* FIM_COMMAND_H */

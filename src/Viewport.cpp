@@ -669,12 +669,10 @@ namespace fim
 
 	bool Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)
 	{
-#if FIM_USE_CXX11
 		if(a1 || a2)
 			return do_pan({ (a1 ? a1 : a2 ) });
 		else
 			return do_pan({});
-#endif /* FIM_USE_CXX11 */
 	}
 
 	bool Viewport::do_pan(const args_t& args)

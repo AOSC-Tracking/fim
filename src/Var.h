@@ -258,9 +258,7 @@ class Var FIM_FINAL
 	std::ostream& print(std::ostream& os)const;
 	size_t size(void) const { return sizeof(Var) + this->s_.capacity(); }
 	void shrink_to_fit(void) {
-#if FIM_USE_CXX11
 	       	this->s_.shrink_to_fit();
-#endif /* FIM_USE_CXX11 */
        	}
 	int find(const fim_char_t c)const{const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s_.c_str()) && (r=strchr(s_.c_str(),c)))return r-p; return -1; }
 };

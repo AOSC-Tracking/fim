@@ -62,12 +62,10 @@ namespace fim
 		fim_err_t scroll_down(void);
 		fim_err_t scroll_up(void);
 		virtual size_t byte_size(void)const;
-#if FIM_USE_CXX11
 		public:
 		/* deleted member functions cannot be called not even by be'friend'ed clases */
 		MiniConsole& operator= (const MiniConsole&rhs) = delete;
 		MiniConsole(const MiniConsole& rhs) = delete;
-#endif /* FIM_USE_CXX11 */
 		private:
 #if FIM_WANT_OBSOLETE
 		int line_length(int li);

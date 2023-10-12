@@ -22,9 +22,7 @@
 #define FIM_BROWSER_H
 #include "fim.h"
 #include <algorithm> // std::count
-#if FIM_USE_CXX11
 #include <memory> // std::unique_ptr
-#endif /* FIM_USE_CXX11 */
 
 #define FIM_FLAG_NONREC 0 /* let this be zero */
 #define FIM_FLAG_DEFAULT FIM_FLAG_NONREC
@@ -65,9 +63,7 @@ class fim_bitset_t FIM_FINAL :public std::vector<fim_bool_t>
 	size_t count(void)const{return std::count(this->begin(),this->end(),true);}
 	fim_bool_t any(void)const{return count()!=0;}
 	void set(size_t pos, fim_bool_t value = true){ (*this)[pos]=value; }
-#if FIM_USE_CXX11
 	void negate(void){ for(auto bit : (*this)) bit = !bit;  }
-#endif /* FIM_USE_CXX11 */
 }; /* fim_bitset_t */
 
 /*
@@ -169,12 +165,10 @@ class Browser FIM_FINAL
 #if FIM_WANT_PIC_CMTS_RELOAD
 	std::vector<std::pair<string,fim_char_t> > dfl_; // FIXME: should be private
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */
-#if FIM_USE_CXX11
 	public:
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
 	Browser& operator= (const Browser& rhs) = delete;
 	Browser(const Browser& rhs) = delete;
-#endif /* FIM_USE_CXX11 */
 	public:
 	fim_fn_t current(void)const;
 	fim::string regexp_goto(const args_t& args, fim_int src_dir=1);

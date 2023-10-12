@@ -184,11 +184,9 @@ class CommandConsole FIM_FINAL :
 	//const fim_char_t*get_prompt(void)const{return prompt_;}
 
 	CommandConsole(void);
-#if FIM_USE_CXX11
 	public:
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
 	CommandConsole& operator= (const CommandConsole&cc) = delete;
-#endif /* FIM_USE_CXX11 */
 
 	public:
 	bool redisplay(void);

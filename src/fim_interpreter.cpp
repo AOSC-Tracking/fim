@@ -283,9 +283,7 @@ Var ex(NodeType p)
 								fim::string ss = na[i].c_str();
 								ss.substitute( "[{][}]", fl[fi] );
 								na[i] = ss;
-#if FIM_USE_CXX11
 								fargs.emplace_back(std::move(na[i]));
-#endif /* FIM_USE_CXX11 */
 							}
 							break;
 						}
@@ -361,9 +359,7 @@ Var ex(NodeType p)
 							DBG("Args: "<<na.size()<<FIM_SYM_ENDL)
 				          		for(fim_size_t i=0;i<na.size();++i)
 							{
-#if FIM_USE_CXX11
 								args.emplace_back(std::move(na[i]));
-#endif /* FIM_USE_CXX11 */
 							}
 							break;
 						}

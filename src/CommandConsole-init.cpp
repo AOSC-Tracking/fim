@@ -29,9 +29,7 @@
 #include "readline.h"
 #endif /* FIM_USE_READLINE */
 
-#if FIM_USE_CXX11
 #include <type_traits>
-#endif /* FIM_USE_CXX11 */
 
 namespace fim
 {
@@ -431,7 +429,6 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		load_or_save_history(true);
 #endif /* FIM_USE_READLINE */
 
-#if FIM_USE_CXX11
 		static_assert(std::is_signed<fim_int>(),FIM_EMSG_ITE);
 		static_assert(std::is_floating_point<fim_scale_t>(),FIM_EMSG_ITE);
 		static_assert(std::is_floating_point<fim_angle_t>(),FIM_EMSG_ITE);
@@ -443,7 +440,6 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		static_assert(std::is_polymorphic<Namespace>(),FIM_EMSG_ITE);
 		static_assert(std::is_polymorphic<MiniConsole>(),FIM_EMSG_ITE);
 		static_assert(*FIM_SYM_UNKNOWN_STRING==FIM_SYM_UNKNOWN_CHAR,FIM_EMSG_ICE);
-#endif /* FIM_USE_CXX11 */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
 			fim_err_t errval = FIM_ERR_NO_ERROR;
