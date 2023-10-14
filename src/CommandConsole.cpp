@@ -63,7 +63,7 @@ extern fim_sys_int yyparse();
 #include <chrono>
 #endif /* */
 
-#define FIM_CNS_IFELSE "if(expression){action;}['else'{action;}]"
+#define FIM_CNS_IFELSE "if(" FIM_CNS_EX_NBEXP_STRING "){" FIM_CNS_EX_ACT_STRING ";}['else'{" FIM_CNS_EX_ACT_STRING ";}]"
 
 namespace fim
 {
@@ -391,7 +391,7 @@ ret:		return key;
 #if FIM_WANT_PIC_LVDN
 		" {'-list'|'-listall'} 'variable'|"
 #endif /* FIM_WANT_PIC_LVDN */
-		"['-further'|'-merge'|'-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE "."
+		"['-further'|'-merge'|'-subtract'] [{" FIM_CNS_EX_NBEXP_STRING "} |{" FIM_CNS_EX_VARIABLE_STRING "} " FIM_CNS_EX_VALUE "]: A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE "."
 #if FIM_WANT_PIC_LVDN
 		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' only, will list the current description variable ids."
 		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' 'id', will list set values for the variable 'id'."
@@ -399,24 +399,24 @@ ret:		return key;
 		FIM_CNS_CMDSEP " If '-further' is present, will start with the current list; if not, with the full list."
 		FIM_CNS_CMDSEP " If '-merge' is present, new matches will be merged in the existing list and sorted."
 		FIM_CNS_CMDSEP " If '-subtract' is present, sort and filter out matches."
-		FIM_CNS_CMDSEP " If {variable} and {values} are provided, limit to files having property {variable} set to {value}."
+		FIM_CNS_CMDSEP " If {" FIM_CNS_EX_VARIABLE_STRING "} and {values} are provided, limit to files having property {" FIM_CNS_EX_VARIABLE_STRING "} set to " FIM_CNS_EX_VALUE "."
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-		FIM_CNS_CMDSEP " If {expression} is one exclamation point ('!'), will limit to the currently marked files only."
+		FIM_CNS_CMDSEP " If {" FIM_CNS_EX_NBEXP_STRING "} is one exclamation point ('!'), will limit to the currently marked files only."
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #if FIM_WANT_LIMIT_DUPBN
-		FIM_CNS_CMDSEP " If {expression} is '~!' will limit to files with unique basename."
+		FIM_CNS_CMDSEP " If {" FIM_CNS_EX_NBEXP_STRING "} is '~!' will limit to files with unique basename."
 		FIM_CNS_CMDSEP " if '~=', to files with duplicate basename."
 		FIM_CNS_CMDSEP " if '~^', to the first of the files with duplicate basename."
 		FIM_CNS_CMDSEP " if '~$', to the last of the files with duplicate basename."
 #endif /* FIM_WANT_LIMIT_DUPBN */
-		FIM_CNS_CMDSEP " On '~i' [MINIDX][-][MAXIDX], (each a number possibly followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX."
+		FIM_CNS_CMDSEP " On '~i' [" FIM_ARG_MAN_SYNTAX("MINIDX")"][-][" FIM_ARG_MAN_SYNTAX("MAXIDX") "], (each a number possibly followed by a multiplier 'K') will limit on filenames in position " FIM_ARG_MAN_SYNTAX("MINIDX") " to " FIM_ARG_MAN_SYNTAX("MAXIDX") "."
 #if FIM_WANT_FLIST_STAT 
 		FIM_CNS_CMDSEP " On '~z' will limit to files having the current file's size."
-		FIM_CNS_CMDSEP " on '~z' [MINSIZE][-][MAXSIZE], (each a number possibly followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits."
+		FIM_CNS_CMDSEP " on '~z' [" FIM_ARG_MAN_SYNTAX("MINSIZE") "][-][" FIM_ARG_MAN_SYNTAX("MAXSIZE") "], (each a number possibly followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits."
 		FIM_CNS_CMDSEP " on '~d' will limit to files having the current file's date +- one day."
-		FIM_CNS_CMDSEP " on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's 'st_mtime', in seconds) within this interval."
+		FIM_CNS_CMDSEP " on '~d' [" FIM_ARG_MAN_SYNTAX("MINTIME") "][-][" FIM_ARG_MAN_SYNTAX("MAXTIME") "], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as " FIM_ARG_MAN_SYNTAX("DD") "/" FIM_ARG_MAN_SYNTAX("MM") "/" FIM_ARG_MAN_SYNTAX("YYYY") ") will limit on file time (struct stat's 'st_mtime', in seconds) within this interval."
 #endif /* FIM_WANT_FLIST_STAT */
-		FIM_CNS_CMDSEP " For other values of {expression}, limit to files whose description string matches {expression}."
+		FIM_CNS_CMDSEP " For other values of {" FIM_CNS_EX_NBEXP_STRING "}, limit to files whose description string matches {" FIM_CNS_EX_NBEXP_STRING "}."
 		FIM_CNS_CMDSEP " Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
 #endif /* FIM_WANT_PIC_LBFL */
 		addCommand(Command(FIM_FLT_LIST,FIM_CMD_HELP_LIST,&browser_,&Browser::fcmd_list));
