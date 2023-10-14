@@ -10,21 +10,21 @@ fimrc - \fB fim \fP configuration file and language reference
 .fi
 .B @sysconfdir@/fimrc
 .fi
-.B fim --script-from-stdin [ {options} ] < {scriptfile}
+.B fim --script-from-stdin [ \fR\fI{options}\fR ] < \fR\fI{scriptfile}\fR
 .fi
-.B fim --execute-script {scriptfile} [ {options} ]
+.B fim --execute-script \fR\fI{scriptfile}\fR [ \fR\fI{options}\fR ]
 .fi
-.B fim --execute-commands {commands} [ {options} ]
+.B fim --execute-commands \fR\fI{commands}\fR [ \fR\fI{options}\fR ]
 .fi
-.B fim --final-commands {commands} [ {options} ]
+.B fim --final-commands \fR\fI{commands}\fR [ \fR\fI{options}\fR ]
 .fi
-.B fim --write-scriptout {scriptfile} [ {options} ]  
+.B fim --write-scriptout \fR\fI{scriptfile}\fR [ \fR\fI{options}\fR ]  
 .fi
-.B fim --write-scriptout /dev/stdout [ {options} ]
+.B fim --write-scriptout /dev/stdout [ \fR\fI{options}\fR ]
 .fi
-.B fim --chars-press :{commands} [ {options} ]
+.B fim --chars-press :\fR\fI{commands}\fR [ \fR\fI{options}\fR ]
 .fi
-.B fim --chars-press :{commands} --chars-press '' [ {options} ]
+.B fim --chars-press :\fR\fI{commands}\fR --chars-press '' [ \fR\fI{options}\fR ]
 .fi
 
 .SH DESCRIPTION
@@ -158,9 +158,9 @@ The way some one-line statements are evaluated:
 :+\fR\fI{scale}\fR%       scale the image up to the desired percentage \fR\fI{scale}\fR (relatively to the original)
 :-\fR\fI{scale}\fR%       scale the image down to the desired percentage \fR\fI{scale}\fR (relatively to the original)
 
-/\fR\fI{regexp}\fR		 entering the pattern \fR\fI{regexp}\fR (with /) makes fim jump to the next image whose filename matches \fR\fI{regexp}\fR
-/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
-/png		 a shortcut for /.*png.*
+/\fR\fI{regexp}\fR		 entering the pattern \fR\fI{regexp}\fR (with '/') makes fim jump to the next image whose filename matches \fR\fI{regexp}\fR
+/*.png$		 entering this pattern (with '/') makes fim jump to the next image whose filename ends with 'png'
+/png		 a shortcut for '/.*png.*'
 
 2,4 stdout '{}'	print three filenames to standard output.
 
@@ -269,19 +269,19 @@ commands: display the existing commands.
 .B
 color
 .fi
-color [desaturate]: desaturate the displayed image colors.
+color ['desaturate']: desaturate the displayed image colors.
 .fi
-color [negate]: negate the displayed image colors.
+color ['negate']: negate the displayed image colors.
 .fi
-color [colorblind|c|deuteranopia|d]: simulate a form of the deuteranopia color vision deficiency (cvd).
+color ['colorblind'|'c'|'deuteranopia'|'d']: simulate a form of the deuteranopia color vision deficiency (cvd).
 .fi
-color [protanopia|p]: simulate a form of the protanopia cvd.
+color ['protanopia'|'p']: simulate a form of the protanopia cvd.
 .fi
-color [tritanopia|t]: simulate a form of the tritanopia cvd.
+color ['tritanopia'|'t']: simulate a form of the tritanopia cvd.
 .fi
-color [daltonize|D]: if following a cvd specification, attempts correcting it.
+color ['daltonize'|'D']: if following a cvd specification, attempts correcting it.
 .fi
-color [identity]: populate the image with 'RGB identity' pixels.
+color ['identity']: populate the image with 'RGB identity' pixels.
 .fi
 To get back the original, you have to reload the image.
 .fi
@@ -349,7 +349,7 @@ echo \fR\fI{args}\fR: print the \fR\fI{args}\fR on console.
 .B
 else
 .fi
-if(expression){action;}['else'{action;}]: see else.
+if(\fR\fIexpression\fR){\fR\fIaction\fR;}['else'{\fR\fIaction\fR;}]: see else.
 .fi
 
 .na
@@ -390,7 +390,7 @@ getenv \fR\fI{identifier}\fR: create a variable with the same value as the '\fR\
 .B
 goto
 .fi
-goto {['+'|'-']\fR\fI{number}\fR['%']['f'|'p'|'F'|'P']} | {/\fR\fI{regexp}\fR/} | {?\fR\fI{filename}\fR} | {'+//'} | {'+/'|'-/'}[C] | {{'+'|'-'}\fR\fI{identifier}\fR['+']}: jump to an image.
+goto {['+'|'-']\fR\fI{number}\fR['%']['f'|'p'|'F'|'P']} | {/\fR\fI{regexp}\fR/} | {?\fR\fI{filename}\fR} | {'+//'} | {'+/'|'-/'}[\fR\fIC\fR] | {{'+'|'-'}\fR\fI{identifier}\fR['+']}: jump to an image.
 .fi
 If \fR\fI{number}\fR is given, and not surrounded by any specifier, go to image at index \fR\fI{number}\fR.
 .fi
@@ -408,7 +408,7 @@ If the argument starts with ?, jump to the filename following ?.
 .fi
 If given '+//', jump to the first different image matching the last given regular expression pattern.
 .fi
-With '+/'C or '-/'C, jump to next or previous file according to C: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir).
+With '+/'\fR\fIC\fR or '-/'\fR\fIC\fR, jump to the next or the previous file according to \fR\fIC\fR: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir).
 .fi
 If \fR\fI{identifier|identifier2...}]\fR is encountered after a '+' or '-' sign, jump to the next or the previous image having a different value for any corresponding i:\fR\fI{identifier}\fR (a trailing '+' requires a non empty value).
 .fi
@@ -434,7 +434,7 @@ A list of commands can be obtained simply invoking 'commands'; a list of aliases
 .B
 if
 .fi
-if(expression){action;}['else'{action;}]: see 'else'.
+if(\fR\fIexpression\fR){\fR\fIaction\fR;}['else'{\fR\fIaction\fR;}]: see 'else'.
 .fi
 
 .na
@@ -448,7 +448,7 @@ info: display information about the current file.
 .B
 limit
 .fi
-limit  {'-list'|'-listall'} 'variable'|['-further'|'-merge'|'-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via --load-image-descriptions-file.
+limit  {'-list'|'-listall'} 'variable'|['-further'|'-merge'|'-subtract'] [{\fR\fIexpression\fR} |{\fR\fIvariable\fR} \fR\fI{value}\fR]: A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via --load-image-descriptions-file.
 .fi
  If invoked with '-list'/'-listall' only, will list the current description variable ids.
 .fi
@@ -460,11 +460,11 @@ limit  {'-list'|'-listall'} 'variable'|['-further'|'-merge'|'-subtract'] [{expre
 .fi
  If '-subtract' is present, sort and filter out matches.
 .fi
- If {variable} and {values} are provided, limit to files having property {variable} set to {value}.
+ If {\fR\fIvariable\fR} and {values} are provided, limit to files having property {\fR\fIvariable\fR} set to \fR\fI{value}\fR.
 .fi
- If {expression} is one exclamation point ('!'), will limit to the currently marked files only.
+ If {\fR\fIexpression\fR} is one exclamation point ('!'), will limit to the currently marked files only.
 .fi
- If {expression} is '~!' will limit to files with unique basename.
+ If {\fR\fIexpression\fR} is '~!' will limit to files with unique basename.
 .fi
  if '~=', to files with duplicate basename.
 .fi
@@ -472,17 +472,17 @@ limit  {'-list'|'-listall'} 'variable'|['-further'|'-merge'|'-subtract'] [{expre
 .fi
  if '~$\:', to the last of the files with duplicate basename.
 .fi
- On '~i' [MINIDX][-][MAXIDX], (each a number possibly followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX.
+ On '~i' [\fR\fIMINIDX\fR][-][\fR\fIMAXIDX\fR], (each a number possibly followed by a multiplier 'K') will limit on filenames in position \fR\fIMINIDX\fR to \fR\fIMAXIDX\fR.
 .fi
  On '~z' will limit to files having the current file's size.
 .fi
- on '~z' [MINSIZE][-][MAXSIZE], (each a number possibly followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits.
+ on '~z' [\fR\fIMINSIZE\fR][-][\fR\fIMAXSIZE\fR], (each a number possibly followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits.
 .fi
  on '~d' will limit to files having the current file's date +- one day.
 .fi
- on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's 'st_mtime', in seconds) within this interval.
+ on '~d' [\fR\fIMINTIME\fR][-][\fR\fIMAXTIME\fR], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as \fR\fIDD\fR/\fR\fIMM\fR/\fR\fIYYYY\fR) will limit on file time (struct stat's 'st_mtime', in seconds) within this interval.
 .fi
- For other values of {expression}, limit to files whose description string matches {expression}.
+ For other values of {\fR\fIexpression\fR}, limit to files whose description string matches {\fR\fIexpression\fR}.
 .fi
  Invoked with no arguments, the original browsable files list is restored.
 .fi
@@ -507,7 +507,7 @@ list 'sort_comment': sort the file list according to the value of the _comment v
 .fi
 list 'sort_var' \fR\fI{var}\fR: sort the file list according to the value of the i:\fR\fI{var}\fR variable.
 .fi
-list 'vars|variables': list variables in all i:* read from description file.
+list 'vars'|'variables': list variables in all i:* read from description file.
 .fi
 list 'sort_fsize': sort the file list according to file size.
 .fi
@@ -1563,7 +1563,7 @@ Part of the default configuration comes from the \fB_fim_default_config_file_con
 One can skip its loading by using the \fB_no_default_configuration\fP variable.
 
 .nf
-# $LastChangedDate: 2023-03-09 00:38:06 +0100 (Thu, 09 Mar 2023) $
+# $LastChangedDate: 2023-10-13 01:22:56 +0200 (Fri, 13 Oct 2023) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.

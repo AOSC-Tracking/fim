@@ -115,7 +115,7 @@ struct fim_options_t fim_options[] = {
 	"execute " FIM_CNS_EX_CMDS_STRING " just after initialization", "" FIM_CNS_EX_CMDS_STRING "",
 	"Similar to the " FIM_MAN_fB("--" FIM_OSW_EXECUTE_COMMANDS) " option, but "
 	"execute " FIM_CNS_EX_CMDS_STRING " earlier, just before reading the initialization file.\n"
-	"The special 'early' form " FIM_MAN_fB("=var=val") " assigns " FIM_MAN_fB("var") " to " FIM_MAN_fB("val") " immediately, before the interpreter is started, and with no value quoting needed.\n"
+	"If " FIM_CNS_EX_CMDS_STRING " takes the special 'early' form " FIM_ARG_MAN_SYNTAX("=var=val") ", it assigns value " FIM_ARG_MAN_SYNTAX("val") " to variable " FIM_ARG_MAN_SYNTAX("var") " immediately, before the interpreter is started, and with no value quoting needed.\n"
 	"\n"
 	"For example,\n"
 	"-C '" FIM_MAN_fB(FIM_VID_SCALE_STYLE) "=\" \"' starts fim no auto-scaling;\n"
@@ -154,8 +154,8 @@ struct fim_options_t fim_options[] = {
 		    ,FIM_HELP_EXTRA_OPTS,
 	"Print program invocation help, and exit. Depending on the option, output can be: short, descriptive, long from man, or complete man."
 #if FIM_WANT_HELP_ARGS
-	    " For each further argument " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " passed to " FIM_MAN_fB("fim") ", an individual help message is shown."
-	    " If " FIM_MAN_fB(FIM_CNS_EX_HELP_ITEM) " starts with a /, it is treated as a search string (not a regexp, though)."
+	    " For each further argument " FIM_CNS_EX_HELP_ITEM " passed to " FIM_MAN_fB("fim") ", an individual help message is shown."
+	    " If " FIM_CNS_EX_HELP_ITEM " starts with a /, it is treated as a search string (not a regexp, though)."
 #endif /* FIM_WANT_HELP_ARGS */
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
@@ -186,20 +186,20 @@ struct fim_options_t fim_options[] = {
 	" If a '@' followed by and identifier " FIM_CNS_EX_VAR_STRING " is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value is substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
 #endif /* FIM_WANT_DESC_VEXP */
 #if FIM_WANT_PIC_LVDN
-      " Special comment lines like \"#!fim:var=val\" lead i:var to be assigned value val (unquoted) at image loading time (cached variable), unless var starts with an underscore ('_')."
-      " Special comment lines like \"#!fim:+=val\" add val to current description." 
-      " Special comment lines like \"#!fim:^=val\" set val to be the base of each description." 
+      " Special comment lines like \"#!fim:" FIM_CNS_EX_VAR_STRING "=" FIM_CNS_EX_VAL_STRING "\" lead i:" FIM_CNS_EX_VAR_STRING " to be assigned value " FIM_CNS_EX_VAL_STRING " (unquoted) at image loading time (cached variable), unless " FIM_CNS_EX_VAR_STRING " starts with an underscore ('_')."
+      " Special comment lines like \"#!fim:+=" FIM_CNS_EX_VAL_STRING "\" add " FIM_CNS_EX_VAL_STRING " to current description." 
+      " Special comment lines like \"#!fim:^=" FIM_CNS_EX_VAL_STRING "\" set " FIM_CNS_EX_VAL_STRING " to be the base of each description." 
       " Special comment lines like \"#!fim:!=\" reset all cached variables." 
-      " Special comment lines like \"#!fim:/=dir\" prepend dir to each file's basename." 
-      " Special comment lines like \"#!fim:\\e=dir\" prepend dir to each file's name."  /* '\e' stays for '\ ' in man pages */
+      " Special comment lines like \"#!fim:/=" FIM_CNS_EX_DIR_STRING "\" prepend " FIM_CNS_EX_DIR_STRING " to each file's basename." 
+      " Special comment lines like \"#!fim:\\e=" FIM_CNS_EX_DIR_STRING "\" prepend " FIM_CNS_EX_DIR_STRING " to each file's name."  /* '\e' stays for '\ ' in man pages */
 #if FIM_WANT_PIC_RCMT 
       " Special description text (to be associated to an image) begins with markers: "
       " with \"#!fim:=\", the last description line is reused;"
       " with \"#!fim:+\", what follows is appended to the last description line;"
       " with \"#!fim:^\", what follows is prepended to the last description line;"
-      " with \"#!fim:s/f/t\", the last description line is used and substituted substring t to occurrences of substring f (f and t cannot contain newlines or a '/')."
+      " with \"#!fim:s/" FIM_CNS_EX_F "/" FIM_CNS_EX_T "\", the last description line is used and substituted substring " FIM_CNS_EX_T " to occurrences of substring " FIM_CNS_EX_F " (" FIM_CNS_EX_F " and " FIM_CNS_EX_T " cannot contain newlines or a '/')."
 #endif /* FIM_WANT_PIC_RCMT  */
-      " If val is empty that variable is unset."
+      " If " FIM_CNS_EX_VAL_STRING " is empty that variable is unset."
 #if FIM_WANT_PIC_LBFL
       " These variables are stored also in an internal index used by the " FIM_FLT_LIMIT " command."
 #endif /* FIM_WANT_PIC_LBFL */
@@ -271,7 +271,7 @@ struct fim_options_t fim_options[] = {
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
 // #ifndef FIM_WITH_NO_FRAMEBUFFER
-"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("S") " (e.g. " FIM_MAN_fB("fb=S") ") makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("'S'") " (e.g. '" FIM_MAN_fB("fb=S") "') makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
 // #endif /* FIM_WITH_NO_FRAMEBUFFER */
 //#ifdef FIM_WITH_LIBCACA
 "The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option (coloured Ascii Art) can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
@@ -300,7 +300,7 @@ struct fim_options_t fim_options[] = {
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
 	"open at specified byte offset",
 	FIM_ARG_MAN_SYNTAX("{bytes-offset[{:upper-offset}|{+offset-range}]}"),
-"Use the specified " FIM_ARG_MAN_SYNTAX("offset") " (in bytes) for opening the specified files. If " FIM_ARG_MAN_SYNTAX(":upper-offset") " is specified, further bytes until " FIM_ARG_MAN_SYNTAX("upper-offset") " are probed. If " FIM_ARG_MAN_SYNTAX("+offset-range") " is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among K,M,G (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
+"Use the specified " FIM_ARG_MAN_SYNTAX("offset") " (in bytes) for opening the specified files. If " FIM_ARG_MAN_SYNTAX(":upper-offset") " is specified, further bytes until " FIM_ARG_MAN_SYNTAX("upper-offset") " are probed. If " FIM_ARG_MAN_SYNTAX("+offset-range") " is specified instead, that many additional bytes are to be probed.  Use this option to search damaged file systems for image files. Appending a modifier among 'K','M','G' (case irrelevant) to an offset number changes the unit to be respectively 2^10, 2^20, or 2^30 bytes."
     },
     {"pread-cmd",      required_argument,       FIM_NULL,  0x70726561, //prea(d)
 	"read image file in stdin from pipeline",
@@ -314,12 +314,12 @@ struct fim_options_t fim_options[] = {
     },
     {"scroll",     required_argument, FIM_NULL, 's',
 	"set scroll variable value", FIM_CNS_EX_VALUE,
-	"Set scroll steps for internal variable " FIM_MAN_fB(FIM_VID_STEPS) " (default is " FIM_CNS_STEPS_DEFAULT ")."
+	"Set scroll steps for internal variable " FIM_MAN_fB(FIM_VID_STEPS) " (default is \"" FIM_CNS_STEPS_DEFAULT "\")."
     },
     {"slideshow",     required_argument, FIM_NULL, 0x7373,
 	"interruptible slideshow mode", FIM_CNS_EX_NUM_STRING,
 	"Interruptible slideshow mode. "
-	"Wait for " FIM_MAN_fB(FIM_CNS_EX_NUM_STRING) " of seconds (assigned to the " FIM_MAN_fB(FIM_VID_WANT_SLEEPS) " variable) after each image. "
+	"Wait for " FIM_CNS_EX_NUM_STRING " of seconds (assigned to the " FIM_VID_WANT_SLEEPS " variable) after each image. "
 	"Implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command. "
 	"Can be interrupted by " FIM_KBD_COLON " or " FIM_KBD_ESC ". "
 	"The other keys execute accordingly to their function but do not interrupt the slideshow. "
@@ -498,10 +498,10 @@ struct fim_options_t fim_options[] = {
 //#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
     { "/",   required_argument,       FIM_NULL, '/',
 	    "jump to file name matching pattern", FIM_CNS_EX_PAT_STRING,
-	    "After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'."
+	    "After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "' " FIM_CNS_EX_PAT_STRING "."
     },
     {"//",   required_argument,       FIM_NULL, 0x2f2f0000,
-	    "jump to file path matching pattern", FIM_CNS_EX_PAT_STRING, "After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_MAN_fB(FIM_SYM_CMD_SLSL) ")."
+	    "jump to file path matching pattern", FIM_CNS_EX_PAT_STRING, "After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "'" FIM_CNS_EX_PAT_STRING " but with search on the full path (with " FIM_MAN_fB(FIM_SYM_CMD_SLSL) ")."
     },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
     {"once",       no_argument,       FIM_NULL, '1',
@@ -779,7 +779,7 @@ int fim_dump_man_page(void)
 			FIM_MAN_Bn("fim --" FIM_OSW_OUTPUT_DEVICE " {"  FIM_DDN_VARS_NB "} ...")
 			FIM_MAN_Bn("... | fim [" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_IMPS_STRING "] -"))+
 #ifdef FIM_READ_STDIN
-			string(FIM_MAN_Bn("fim [" FIM_CNS_EX_OPTIONS "] [--] [{files}] - < " FIM_CNS_EX_FNLTF_STRING ))+
+			string(FIM_MAN_Bn("fim [" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_FILES_STRING "] - < " FIM_CNS_EX_FNLTF_STRING ))+
 #endif /* FIM_READ_STDIN */
 #ifdef FIM_READ_STDIN_IMAGE
 			string(FIM_MAN_Bn("fim --" FIM_OSW_IMAGE_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_IMFL_STRING ))+
