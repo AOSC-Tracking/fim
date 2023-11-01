@@ -187,6 +187,28 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
 		#endif /* FIM_WITH_LIBSDL */
 
+		#ifdef FIM_WITH_LIBGTK
+		if(device.find(FIM_DDN_INN_GTK)==0)
+		{
+			DisplayDevice *gtkd=FIM_NULL;
+			gtkd=new GTKDevice(
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+					mc_,
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+					dopts
+					);
+			if(gtkd && gtkd->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete gtkd ; gtkd=FIM_NULL;}
+			if(gtkd && displaydevice_==FIM_NULL)
+			{
+				displaydevice_=gtkd;
+				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_GTK);
+				mangle_tcattr_=false;
+			}
+			else
+				device_failure=true;
+		}
+		#endif /* FIM_WITH_LIBGTK */
+
 		#ifdef FIM_WITH_LIBCACA
 		if(device.find(FIM_DDN_INN_CACA)==0)
 		{
@@ -270,6 +292,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#ifndef FIM_WITH_LIBSDL
 					|| device==FIM_DDN_INN_SDL
 		#endif /* FIM_WITH_LIBSDL */
+		#ifndef FIM_WITH_LIBGTK
+					|| device==FIM_DDN_INN_GTK
+		#endif /* FIM_WITH_LIBGTK */
 		#ifdef FIM_WITH_NO_FRAMEBUFFER
 					|| device==FIM_DDN_INN_FB
 		#endif /* FIM_WITH_NO_FRAMEBUFFER */
