@@ -36,15 +36,17 @@ class GTKDevice : public DisplayDevice {
 	fim_err_t display(const void*, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_flags_t){return 0;}
 	fim_coo_t get_chars_per_line() const {return 0;}
 	fim_coo_t get_chars_per_column() const {return 0;}
-	fim_coo_t width() const {return 0;}
+	fim_coo_t width() const;
+	fim_coo_t height() const;
 	fim_bpp_t get_bpp() const {return 0;}
-	fim_coo_t height() const {return 0;}
 	fim_coo_t status_line_height() const {return 0;}
 	fim_err_t status_line(const fim_char_t*) {return 0;}
 	fim_bool_t handle_console_switch() {return 0;}
 	fim_err_t clear_rect(fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t) {return 0;}
 	fim_err_t fill_rect(fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_color_t) {return 0;}
 	fim_err_t fs_puts(fim::fs_font*, fim_coo_t, fim_coo_t, const fim_char_t*) {return 0;}
+	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
+	fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 };
 #endif /* FIM_WITH_LIBGTK */
 #endif /* FIM_GTKDEVICE_H */

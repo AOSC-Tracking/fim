@@ -251,8 +251,8 @@ static int fim_post_rl_getc(int c)
 	return c;
 }
 
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
-static int fim_rl_sdl_aa_getc_hook(void)
+#if defined(FIM_WITH_LIBGTK) || defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
+static int fim_rl_gtk_sdl_aa_getc_hook(void)
 {
 	//unsigned int c;
 	fim_key_t c;
@@ -287,7 +287,7 @@ static int fim_rl_sdl_aa_getc_hook(void)
 //void fim_rl_prep_dummy(int meta_flag){}
 //void fim_rl_deprep_dummy(void){}
 
-int fim_rl_sdl_aa_getc(FILE * fd)
+int fim_rl_gtk_sdl_aa_getc(FILE * fd)
 {
 	FIM_PR("")
 	return 0;/* yes, a dummy function instead of getc() */
@@ -444,14 +444,15 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
 	if(	false
 		|| g_fim_output_device.find(FIM_DDN_INN_SDL)==0
+		|| g_fim_output_device.find(FIM_DDN_INN_GTK)==0
 		/* uncommenting the following may give problems; but commenting it will break X11-backed aalib input ..  */ 
 		|| g_fim_output_device.find(FIM_DDN_INN_AA)==0
 		|| g_fim_output_device.find(FIM_DDN_INN_CACA)==0
 		|| g_fim_output_device.find(FIM_DDN_INN_IL2)==0
 	)
 	{
-		rl_getc_function=fim_rl_sdl_aa_getc;
-		rl_event_hook   =fim_rl_sdl_aa_getc_hook;
+		rl_getc_function=fim_rl_gtk_sdl_aa_getc;
+		rl_event_hook   =fim_rl_gtk_sdl_aa_getc_hook;
 //		rl_prep_term_function=fim_rl_prep_dummy;
 //		rl_deprep_term_function=fim_rl_deprep_dummy;
 
