@@ -702,6 +702,9 @@ class fim_mipmap_t FIM_FINAL
 #ifdef FIM_WITH_LIBSDL
 #include "SDLDevice.h"
 #endif /* FIM_WITH_LIBSDL */
+#ifdef FIM_WITH_LIBGTK
+#include "GTKDevice.h"
+#endif /* FIM_WITH_LIBGTK */
 #ifdef FIM_WITH_LIBCACA
 #include "CACADevice.h"
 #endif /* FIM_WITH_LIBCACA */
@@ -949,6 +952,14 @@ namespace fim
 #define FIM_DDN_ICI_FB	 ""
 #endif /* FIM_WITH_NO_FRAMEBUFFER */
 
+#define FIM_DDN_INN_GTK	 "gtk"
+#define FIM_DDN_VAR_GTK	 "gtk"
+#ifdef FIM_WITH_LIBGTK
+#define FIM_DDN_ICI_GTK	 "gtk|"
+#else /* FIM_WITH_LIBGTK */
+#define FIM_DDN_ICI_GTK	 ""
+#endif /* FIM_WITH_LIBGTK */
+
 #define FIM_DDN_INN_SDL	 "sdl"
 #define FIM_DDN_VAR_SDL	 "sdl"
 #ifdef FIM_WITH_LIBSDL
@@ -987,7 +998,7 @@ namespace fim
 
 #define FIM_DDN_VARS_NB	 FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_CACA "|" FIM_DDN_INN_AA  "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_DUMB
 #define FIM_DDN_VARS	 "[" FIM_DDN_VARS_NB "]" 
-#define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_CACA FIM_DDN_ICI_AA FIM_DDN_ICI_IL2 FIM_DDN_INN_DUMB "]" 
+#define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_CACA FIM_DDN_ICI_AA FIM_DDN_ICI_GTK FIM_DDN_ICI_IL2 FIM_DDN_INN_DUMB "]" 
 
 #define FIM_HELP_EXTRA_OPTS "s|d|l|m"
 

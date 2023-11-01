@@ -192,6 +192,10 @@ endif
 	test "`(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
 
 
+.PHONY: gtktests
+gtktests: all
+	@echo "[!] TESTS: No GTK test yet..."
+
 .PHONY: sdltests
 sdltests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
@@ -818,6 +822,9 @@ if ENABLE_IMLIB2
 endif
 if ENABLE_SDL
 	@if test -n "$(DISPLAY)"; then make sdltests; fi
+endif
+if ENABLE_GTK
+	@if test -n "$(DISPLAY)"; then make gtktests; fi
 endif
 if HAVE_FIMGS
 	make fimgstests

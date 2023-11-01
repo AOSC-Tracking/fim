@@ -1066,6 +1066,9 @@ mp+=string(
 #ifdef FIM_WITH_LIBSDL
 "The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
 #endif /* FIM_WITH_LIBSDL */
+#ifdef FIM_WITH_LIBGTK
+"The GTK driver is still under construction.\n"
+#endif /* FIM_WITH_LIBGTK */
 );
 mp+=string(
 ".SH BUGS\n"
@@ -2006,10 +2009,13 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#endif /* FIM_WITH_LIBCACA */
 			}
 			else
-			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2)
+			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2) || defined(FIM_WITH_LIBGTK)
 			/* check to see if we are under X */
 			if( fim_getenv(FIM_ENV_DISPLAY) && *fim_getenv(FIM_ENV_DISPLAY) )
 			{
+	#ifdef FIM_WITH_LIBGTK
+				g_fim_output_device=FIM_DDN_INN_GTK;
+	#endif /* FIM_WITH_LIBGTK */
 	#ifdef FIM_WITH_LIBIMLIB2
 				g_fim_output_device=FIM_DDN_INN_IL2;
 	#endif /* FIM_WITH_LIBIMLIB2 */
@@ -2216,6 +2222,9 @@ extern "C" {
 	#ifdef FIM_WITH_LIBSDL
 		" " FIM_DDN_INN_SDL
 	#endif /* FIM_WITH_LIBSDL */
+	#ifdef FIM_WITH_LIBGTK
+		" " FIM_DDN_INN_GTK
+	#endif /* FIM_WITH_LIBGTK */
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		" " FIM_DDN_INN_FB
 #endif //#ifndef FIM_WITH_NO_FRAMEBUFFER

@@ -46,6 +46,7 @@ if FIM_WANT_HARDCODED_CONSOLEFONT
 FontServer.$(OBJEXT): default_font_byte_array.h
 endif
 SDLDevice.$(OBJEXT): default_icon_byte_array.h
+GTKDevice.$(OBJEXT): default_icon_byte_array.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -135,6 +136,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/Benchmarkable.h \
 	$(srcdir)/CACADevice.h \
 	$(srcdir)/SDLDevice.h \
+	$(srcdir)/GTKDevice.h \
 	$(srcdir)/Arg.h \
 	$(srcdir)/Browser.h \
 	$(srcdir)/Cache.h \
@@ -174,6 +176,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/AADevice.cpp \
 	$(srcdir)/CACADevice.cpp \
 	$(srcdir)/SDLDevice.cpp \
+	$(srcdir)/GTKDevice.cpp \
 	$(srcdir)/Arg.cpp \
 	$(srcdir)/Browser.cpp \
 	$(srcdir)/Cache.cpp \

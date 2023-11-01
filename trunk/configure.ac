@@ -1270,6 +1270,18 @@ AM_CONDITIONAL(ENABLE_SDL, test x$fim_handle_sdl = xyes)
 
 dnl ================================================================================
 
+## gtk driver
+
+AM_CONDITIONAL(ENABLE_GTK, [test x$fim_handle_gtk = xyes])
+PKG_CHECK_MODULES(GTK, gtk+-3.0) dnl sets GTK_CFLAGS GTK_LIBS
+# keep this line commented or next line empty or it may break configure. (PKG_CHECK_MODULES-related)
+AC_CHECK_LIB([m], [g_free],
+  [ have_gtk=yes; LIBS+=" $GTK_LIBS"; CXXFLAGS+=" $GTK_CFLAGS";
+    AC_DEFINE([FIM_WITH_LIBGTK],[1],[We have GTK])],
+  [ have_gtk=no; fim_handle_gtk=no; AC_MSG_WARN([*** GTK driver won't be added (GTK library not found) ***])]
+  )
+dnl ================================================================================
+
 AH_TEMPLATE([FIM_WANT_EXIFTOOL])
 fim_cv_exiftool=no
 AC_ARG_ENABLE(exiftool, AS_HELP_STRING([--enable-exiftool],[Turns on exiftool support (EXPERIMENTAL, shall provide the EXIFTOOLLINK variable with library or object files and EXIFTOOLCXXFLAGS). Not recommended: slow. Use --enable-exif instead.]),
@@ -2207,6 +2219,7 @@ dnl
 dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
+	X          (GTK3) support (-o gtk)  : ${fim_handle_gtk}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
 	Colour ASCII art (libcaca) support  : ${fim_cv_libcaca}
 	X        (Imlib2) support(-o imlib2):*${fim_handle_imlib2:-no}
