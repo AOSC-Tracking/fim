@@ -194,7 +194,7 @@ endif
 
 .PHONY: gtktests
 gtktests: all
-	@echo "[!] TESTS: No GTK test yet..."
+	if test -n "$(DISPLAY)"; then $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -K q ; fi
 
 .PHONY: sdltests
 sdltests: all
