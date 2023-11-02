@@ -79,6 +79,7 @@ static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 {
 	gboolean handled = TRUE;
 	fim_key_ = 0;
+
 	if (event->keyval == GDK_KEY_Control_L)
 	{
 		if (event->type == GDK_KEY_RELEASE)
@@ -105,7 +106,7 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 	window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 	gtk_window_set_position(GTK_WINDOW(window_), GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size(GTK_WINDOW(window_), FIM_DEFAULT_WINDOW_WIDTH, FIM_DEFAULT_WINDOW_HEIGHT);
-	gtk_window_set_title(GTK_WINDOW(window_), wtitle_.c_str());
+	set_wm_caption(wtitle_.c_str());
 	gtk_widget_add_events(GTK_WIDGET(window_), GDK_BUTTON_PRESS_MASK);
 	grid_ = gtk_grid_new();
 	menubar_ = gtk_menu_bar_new();
@@ -138,7 +139,6 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 
 	g_signal_connect(G_OBJECT(window_), "key-press-event", G_CALLBACK(cb_key_pressed), NULL);
 	g_signal_connect(G_OBJECT(window_), "key-release-event", G_CALLBACK(cb_key_pressed), NULL);
-
 	accel_group_ = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(window_), accel_group_);
 	gtk_widget_show_all(GTK_WIDGET(window_));
@@ -213,6 +213,36 @@ done:
 	return c;
 }
 
+fim_key_t GTKDevice::set_wm_caption(const fim_char_t *msg)
+{
+	const fim_err_t rc = FIM_ERR_NO_ERROR;
+	gtk_window_set_title(window_, msg);
+	return rc;
+}
 
+fim_coo_t GTKDevice::get_chars_per_line() const
+{
+	return width() / f_->swidth();
+}
+
+fim_coo_t GTKDevice::get_chars_per_column(void) const
+{
+	return height() / f_->sheight();
+}
+
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+GTKDevice::GTKDevice(MiniConsole& mc_, fim::string opts): DisplayDevice (mc_)
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
+GTKDevice::GTKDevice(fim::string opts):DisplayDevice()
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+{
+	FontServer::fb_text_init1(fontname_,&f_);
+}
+
+fim_err_t GTKDevice::status_line(const fim_char_t *msg)
+{
+	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, msg);
+	return FIM_ERR_NO_ERROR;
+}
 #endif /* FIM_WITH_LIBGTK */
 #pragma GCC pop_options
