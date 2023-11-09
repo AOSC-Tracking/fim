@@ -37,16 +37,21 @@ class GTKDevice : public DisplayDevice {
 	fim_coo_t get_chars_per_column() const;
 	fim_coo_t width() const;
 	fim_coo_t height() const;
-	fim_bpp_t get_bpp() const {return 8;}
-	fim_coo_t status_line_height() const {return 0;}
+	fim_bpp_t get_bpp() const;
+	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 	fim_err_t status_line(const fim_char_t*);
 	fim_bool_t handle_console_switch() {return 0;}
-	fim_err_t clear_rect(fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t) {return 0;}
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT FIM_OVERRIDE;
 	fim_err_t fill_rect(fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_color_t) {return 0;}
-	fim_err_t fs_puts(fim::fs_font*, fim_coo_t, fim_coo_t, const fim_char_t*) {return 0;}
+	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT FIM_OVERRIDE ;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
+	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT;
 	fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
+	static const fim_coo_t border_height_=1;
+	static const int Bpp_{3};
+private:
+	inline void setpixel(fim_byte_t* rgb, fim_coo_t x, fim_coo_t y, fim_byte_t r, fim_byte_t g, fim_byte_t b);
 };
 #endif /* FIM_WITH_LIBGTK */
 #endif /* FIM_GTKDEVICE_H */
