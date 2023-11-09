@@ -69,16 +69,28 @@ namespace fim
 	GtkAccelGroup *accel_group_{};
 	const std::string wtitle_ {"GTK-FIM -- no status yet"};
 	bool control_pressed_{false};
-	fim_key_t fim_key_{0};
+	fim_key_t last_pressed_key_{0};
+	GdkPixbuf * pixbuf{};
 
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
+void alloc_pixbuf(int nw, int nh)
+{
+	const auto alpha = FALSE; /* in gmacros.h */
+
+	if(pixbuf)
+		g_object_unref(pixbuf);
+
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, alpha, 8 /*get_bpp()*/, nw, nh);
+	memset(gdk_pixbuf_get_pixels(pixbuf), 0x0, 3*nw*nh); // black
+}
+
 static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 {
 	gboolean handled = TRUE;
-	fim_key_ = 0;
+	last_pressed_key_ = 0;
 
 	if (event->keyval == GDK_KEY_Control_L)
 	{
@@ -87,17 +99,34 @@ static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 		if (event->type == GDK_KEY_PRESS)
 			control_pressed_ = false;
 	}
+
 	if ((event->type == GDK_KEY_PRESS) /*&& (event->state & GDK_CONTROL_MASK)*/)
 	{
+		FIM_GTK_INPUT_DEBUG(&last_pressed_key_,"");
 		std::string kst;
 
 		if ( event->state & GDK_CONTROL_MASK )
 			kst += "C-";
-		fim_key_ = event->keyval;
+		last_pressed_key_ = event->keyval;
 	}
 	else
 		handled = FALSE;
 	return handled;
+}
+
+static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
+{
+	// invoked by gtk_test_widget_wait_for_draw
+	const fim_coo_t nw = gtk_widget_get_allocated_width(drawingarea),
+			nh = gtk_widget_get_allocated_height(drawingarea);
+
+	if (!pixbuf || gdk_pixbuf_get_width(pixbuf) != gtk_widget_get_allocated_width(drawingarea) 
+	            || gdk_pixbuf_get_height(pixbuf) != gtk_widget_get_allocated_height(drawingarea) )
+		alloc_pixbuf(nw,nh);
+
+	gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
+	cairo_paint (cr);
+	return FALSE;
 }
 
 fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
@@ -139,26 +168,30 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 
 	g_signal_connect(G_OBJECT(window_), "key-press-event", G_CALLBACK(cb_key_pressed), NULL);
 	g_signal_connect(G_OBJECT(window_), "key-release-event", G_CALLBACK(cb_key_pressed), NULL);
+	g_signal_connect(G_OBJECT(drawingarea_), "draw", G_CALLBACK(cb_do_draw), NULL);
+
 	accel_group_ = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(window_), accel_group_);
 	gtk_widget_show_all(GTK_WIDGET(window_));
 	gtk_widget_hide(cmdline_entry_);
 
+	gtk_test_widget_wait_for_draw(GTK_WIDGET(window_)); // to get proper window size
 	return FIM_ERR_NO_ERROR;
 }
 
 static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_int *keypressp, bool want_poll)
 {
-	if ( fim_key_ )
+	if ( last_pressed_key_ )
 	{
-		FIM_GTK_DBG_COUT << "PRESSED " << fim_key_ << " \n";
+		FIM_GTK_DBG_COUT << "PRESSED " << last_pressed_key_ << " \n";
 	}
 
 	gtk_main_iteration();
 
-	if ( fim_key_ )
+	if ( last_pressed_key_ )
 	{
-		* c = fim_key_;
+		* c = last_pressed_key_;
+		last_pressed_key_ = 0; // to emit once is enough
 		return 1;
 	}
 	return 0;
@@ -167,13 +200,13 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 fim_coo_t GTKDevice::width() const
 {
 	// FIXME: temporary
-	return gtk_widget_get_allocated_width((GtkWidget*)window_);
+	return gtk_widget_get_allocated_width((GtkWidget*)drawingarea_);
 }
 
 fim_coo_t GTKDevice::height() const
 {
 	// FIXME: temporary
-	return gtk_widget_get_allocated_height((GtkWidget*)window_);
+	return gtk_widget_get_allocated_height((GtkWidget*)drawingarea_);
 }
 
 fim_sys_int GTKDevice::get_input(fim_key_t * c, bool want_poll)
@@ -242,6 +275,103 @@ GTKDevice::GTKDevice(fim::string opts):DisplayDevice()
 fim_err_t GTKDevice::status_line(const fim_char_t *msg)
 {
 	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, msg);
+	return FIM_ERR_NO_ERROR;
+}
+
+fim_err_t GTKDevice::display(
+	const void *ida_image_img, // source image structure
+	fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
+	fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+	fim_coo_t icskip,	// input columns to skip for each line
+	fim_coo_t oroff,fim_coo_t ocoff,// row and column offset of the first output pixel
+	fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
+	fim_coo_t ocskip,// output columns to skip for each line
+	fim_flags_t flags// some flags
+)
+{
+	const fim_coo_t ww_ = width();
+	const fim_coo_t wh_ = height();
+
+	FIM_GTK_DBG_COUT << "DISPLAY\n";
+
+	gint Bpp_{get_bpp()} ;
+
+	if (!pixbuf || gdk_pixbuf_get_width(pixbuf) != gtk_widget_get_allocated_width(drawingarea_) 
+	            || gdk_pixbuf_get_height(pixbuf) != gtk_widget_get_allocated_height(drawingarea_) )
+		alloc_pixbuf(ww_,wh_);
+
+	fim_byte_t* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
+
+	if( iroff <0 ) return -2;
+	if( icoff <0 ) return -3;
+	if( irows <=0 ) return -4;
+	if( icols <=0 ) return -5;
+	if( icskip<0 ) return -6;
+	if( oroff <0 ) return -7;
+	if( ocoff <0 ) return -8;
+	if( orows <=0 ) return -9;
+	if( ocols <=0 ) return -10;
+	if( ocskip<0 ) return -11;
+	if( flags <0 ) return -12;
+
+	if( iroff>irows ) return -2-3*100 ;
+	if( icoff>icols ) return -3-5*100;
+//	if( oroff>orows ) return -7-9*100;//EXP
+//	if( ocoff>ocols ) return -8-10*100;//EXP
+	if( oroff>height() ) return -7-9*100;//EXP
+	if( ocoff>width()) return -8-10*100;//EXP
+
+	if( icskip<icols ) return -6-5*100;
+	if( ocskip<ocols ) return -11-10*100;
+	
+	orows  = FIM_MIN( orows, height());
+	ocols  = FIM_MIN( ocols,  width()); 
+	ocskip = width(); 	//FIXME maybe this is not enough and should be commented or rewritten!
+
+	if( orows  > height() ) return -9 -99*100;
+	if( ocols  >  width() ) return -10-99*100;
+	if( ocskip <  width() ) return -11-99*100;
+	if( icskip<icols ) return -6-5*100;
+
+	ocskip = width();// output columns to skip for each line
+
+	if(icols<ocols) { ocoff+=(ocols-icols-1)/2; ocols-=(ocols-icols-1)/2; }
+	if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
+
+	fim_coo_t ytimesw;
+
+	fim_coo_t idr,idc,lor,loc;
+
+	idr = iroff-oroff;
+	idc = icoff-ocoff;
+
+	lor = oroff+(FIM_MIN(orows,irows-iroff));
+	loc = ocoff+(FIM_MIN(ocols,icols-icoff));
+
+	fim_coo_t ii,ij;
+	fim_coo_t oi,oj;
+	fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
+	fim_byte_t * srcp;
+
+	clear_rect(  0, width()-1, 0, height()-1); 
+	memset(gdk_pixbuf_get_pixels(pixbuf),255,3*width()*height()); // white background, temporary (FIXME)
+
+	for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
+	for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
+	{
+		ii    = oi + idr;
+		ij    = oj + idc;
+		
+		if(mirror)ij=((icols-1)-ij);
+		if( flip )ii=((irows-1)-ii);
+		srcp  = ((fim_byte_t*)rgb)+(3*(ii*icskip+ij));
+
+		gdk_pixbuf_get_pixels(pixbuf)[3*(oi*ocskip+oj)+0]=srcp[2];
+		gdk_pixbuf_get_pixels(pixbuf)[3*(oi*ocskip+oj)+1]=srcp[1];
+		gdk_pixbuf_get_pixels(pixbuf)[3*(oi*ocskip+oj)+2]=srcp[0];
+	}
+
+	gtk_widget_queue_draw(GTK_WIDGET(window_));
 	return FIM_ERR_NO_ERROR;
 }
 #endif /* FIM_WITH_LIBGTK */

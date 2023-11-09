@@ -32,12 +32,12 @@ class GTKDevice : public DisplayDevice {
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_err_t initialize(fim::sym_keys_t&);
 	void finalize() {}
-	fim_err_t display(const void*, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_flags_t){return 0;}
+	fim_err_t display(const void*, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_flags_t);
 	fim_coo_t get_chars_per_line() const;
 	fim_coo_t get_chars_per_column() const;
 	fim_coo_t width() const;
 	fim_coo_t height() const;
-	fim_bpp_t get_bpp() const {return 0;}
+	fim_bpp_t get_bpp() const {return 8;}
 	fim_coo_t status_line_height() const {return 0;}
 	fim_err_t status_line(const fim_char_t*);
 	fim_bool_t handle_console_switch() {return 0;}
