@@ -42,7 +42,7 @@ class GTKDevice : public DisplayDevice {
 	fim_err_t status_line(const fim_char_t*);
 	fim_bool_t handle_console_switch() {return 0;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT FIM_OVERRIDE;
-	fim_err_t fill_rect(fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_color_t) {return 0;}
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT FIM_OVERRIDE;
 	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT FIM_OVERRIDE ;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT;
