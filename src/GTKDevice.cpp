@@ -64,7 +64,9 @@ namespace fim
 	GtkWindow *window_{};
 	GtkWidget *grid_{};
 	GtkWidget *menubar_{};
+#if !FIM_GTK_WITH_RENDERED_STATUSBAR
 	GtkWidget *statusbar_{};
+#endif
 	GtkWidget *drawingarea_{};
 	guint context_id{};
 	GtkWidget *cmdline_entry_{};
@@ -165,7 +167,49 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 	return FALSE;
 }
 
-fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
+static void keys_setup(fim::sym_keys_t&sym_keys)
+{
+	// populate GDK key code -> FIM key code
+	std::map<fim_key_t,std::string> key_syms;
+
+	if (!key_syms.size())
+	{
+		key_syms[GDK_KEY_Page_Up] = FIM_KBD_PAGEUP;
+		key_syms[GDK_KEY_Page_Down] = FIM_KBD_PAGEDOWN;
+		key_syms[GDK_KEY_Left] = FIM_KBD_LEFT;
+		key_syms[GDK_KEY_Right] = FIM_KBD_RIGHT;
+		key_syms[GDK_KEY_Up] = FIM_KBD_UP;
+		key_syms[GDK_KEY_Down] = FIM_KBD_DOWN;
+		key_syms[GDK_KEY_space] = FIM_KBD_SPACE;
+		key_syms[GDK_KEY_End] = FIM_KBD_END;
+		key_syms[GDK_KEY_Home] = FIM_KBD_HOME;
+		key_syms[GDK_KEY_BackSpace] = FIM_KBD_BACKSPACE;
+		key_syms[GDK_KEY_Tab] = FIM_KBD_TAB;
+		key_syms[GDK_KEY_Return] = FIM_KBD_ENTER;
+		key_syms[GDK_KEY_Pause] = FIM_KBD_PAUSE;
+		key_syms[GDK_KEY_Insert] = FIM_KBD_INS;
+		key_syms[GDK_KEY_Delete] = FIM_KBD_DEL;
+		key_syms[GDK_KEY_Menu] = FIM_KBD_MENU;
+		key_syms[GDK_KEY_Control_L] = "LeftControl";
+		key_syms[GDK_KEY_Control_R] = "RightControl";
+		key_syms[GDK_KEY_Escape] = "Esc";
+		key_syms[GDK_KEY_colon] = FIM_KBD_COLON;
+		key_syms[GDK_KEY_plus] = FIM_KBD_PLUS;
+		key_syms[GDK_KEY_minus] = FIM_KBD_MINUS;
+		// key_syms[GDK_KEY_function] = "Fn";
+		// see /usr/include/gtk-3.0/gdk/gdkkeysyms.h
+		// TODO: there is redundancy around here.
+		for (fim_key_t k = '!'; k <= '~' ; ++ k )
+			key_syms[k] = k;
+		for (fim_key_t k = GDK_KEY_F1; k <= GDK_KEY_F12; ++ k )
+			key_syms[k] = "F" + std::to_string(1+k-GDK_KEY_F1);
+		for (const auto & ks: key_syms)
+			sym_keys[ks.second] = ks.first;
+		cc.key_syms_update();
+	}
+}
+
+fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 {
 	gtk_init(NULL, NULL);
 	window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -175,6 +219,7 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 	gtk_widget_add_events(GTK_WIDGET(window_), GDK_BUTTON_PRESS_MASK);
 	grid_ = gtk_grid_new();
 	menubar_ = gtk_menu_bar_new();
+#if !FIM_GTK_WITH_RENDERED_STATUSBAR
 	statusbar_ = gtk_statusbar_new();
 	gtk_widget_set_vexpand(GTK_WIDGET(statusbar_), FALSE);
 	gtk_widget_set_hexpand(GTK_WIDGET(statusbar_), TRUE);
@@ -183,13 +228,18 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 	gtk_widget_set_margin_bottom(GTK_WIDGET(statusbar_), 0);
 	gtk_widget_set_margin_start(GTK_WIDGET(statusbar_), 0);
 	gtk_widget_set_margin_end(GTK_WIDGET(statusbar_), 0);
+#endif
 	drawingarea_ = gtk_drawing_area_new();
 	gtk_widget_set_vexpand(GTK_WIDGET(drawingarea_), TRUE);
 	gtk_widget_set_hexpand(GTK_WIDGET(drawingarea_), TRUE);
+#if !FIM_GTK_WITH_RENDERED_STATUSBAR
 	context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar_), "context");
 	gtk_statusbar_push (GTK_STATUSBAR(statusbar_), context_id, "Waiting for you to do something...");
 	gtk_grid_attach(GTK_GRID(grid_), GTK_WIDGET(drawingarea_), 0, 1, 1, 1);
 	gtk_grid_attach_next_to(GTK_GRID(grid_), GTK_WIDGET(statusbar_), GTK_WIDGET(drawingarea_), GTK_POS_BOTTOM, 1, 1);
+#else
+	gtk_grid_attach(GTK_GRID(grid_), GTK_WIDGET(drawingarea_), 0, 1, 1, 1);
+#endif
 	cmdline_entry_ = gtk_entry_new();
 	// TODO: GTK-specific autocompletion
 	gtk_widget_set_vexpand(GTK_WIDGET(cmdline_entry_), FALSE);
@@ -200,7 +250,9 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 	gtk_widget_set_margin_start(GTK_WIDGET(cmdline_entry_), 0);
 	gtk_widget_set_margin_end(GTK_WIDGET(cmdline_entry_), 0);
 	gtk_entry_set_has_frame(GTK_ENTRY(cmdline_entry_), FALSE);
+#if !FIM_GTK_WITH_RENDERED_STATUSBAR
 	gtk_grid_attach_next_to(GTK_GRID(grid_), GTK_WIDGET(cmdline_entry_), GTK_WIDGET(statusbar_), GTK_POS_BOTTOM, 1, 1);
+#endif
 	// TODO: handle "destroy"
 	gtk_container_add(GTK_CONTAINER(window_), grid_);
 
@@ -213,7 +265,7 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 
 	accel_group_ = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(window_), accel_group_);
-	// TODO: need proper keys setup
+	keys_setup(sym_keys);
 	// TODO: need to populate menus and if needed, rebuild them
 	gtk_widget_show_all(GTK_WIDGET(window_));
 	gtk_widget_hide(cmdline_entry_);
@@ -577,5 +629,21 @@ void GTKDevice::setpixel(fim_byte_t* rgb, fim_coo_t x, fim_coo_t y, fim_byte_t r
 	rgb[1] = g;
 	rgb[2] = b;
 }
+
+fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT
+{
+	fim_coo_t y;
+	/*
+	 * This could be optimized
+	 * */
+	fim_byte_t* rgb = ((fim_byte_t*)(gdk_pixbuf_get_pixels(pixbuf)));
+
+	for(y=y1;y<=y2;++y)
+	{
+		fim_memset(rgb + y*pitch_ + x1*Bpp_,color, (x2-x1+1)* Bpp_);
+	}
+	return FIM_ERR_NO_ERROR;
+}
+
 #endif /* FIM_WITH_LIBGTK */
 #pragma GCC pop_options
