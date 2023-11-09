@@ -253,7 +253,16 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 #if !FIM_GTK_WITH_RENDERED_STATUSBAR
 	gtk_grid_attach_next_to(GTK_GRID(grid_), GTK_WIDGET(cmdline_entry_), GTK_WIDGET(statusbar_), GTK_POS_BOTTOM, 1, 1);
 #endif
-	// TODO: handle "destroy"
+	g_signal_connect(G_OBJECT(window_), "destroy", G_CALLBACK(
+			[]()
+			{
+				g_object_unref(pixbuf);
+				pixbuf = NULL;
+				gtk_container_remove (GTK_CONTAINER(grid_), drawingarea_);
+				drawingarea_ = NULL;
+				last_pressed_key_ = cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
+			}
+		), NULL);
 	gtk_container_add(GTK_CONTAINER(window_), grid_);
 
 	g_signal_connect(G_OBJECT(window_), "key-press-event", G_CALLBACK(cb_key_pressed), NULL);
@@ -302,13 +311,16 @@ fim_coo_t GTKDevice::width() const
 fim_coo_t GTKDevice::height() const
 {
 	// FIXME: temporary
-	return gtk_widget_get_allocated_height((GtkWidget*)drawingarea_);
+	fim_coo_t h = 0;
+	if(drawingarea_)
+		h = gtk_widget_get_allocated_height((GtkWidget*)drawingarea_);
+	return h;
 }
 
 fim_sys_int GTKDevice::get_input(fim_key_t * c, bool want_poll)
 {
 	int keypress_ = 0;
-		GdkEventKey event_;
+	GdkEventKey event_;
 	const fim_sys_int iv = get_input_inner(c,&event_,&keypress_,want_poll);
 	return iv;
 }
