@@ -76,6 +76,7 @@ namespace fim
 	fim_key_t last_pressed_key_{0};
 	GdkPixbuf * pixbuf{};
 	fim_coo_t pitch_{};
+	fim_coo_t nw_{}, nh_{};
 
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -102,6 +103,9 @@ void alloc_pixbuf(int nw, int nh)
 {
 	const auto alpha = FALSE; /* in gmacros.h */
 
+	nw_ = nw;
+	nh_ = nh;
+
 	FIM_GTK_DBG_COUT << nw << " " << nh << "\n";
 	if(pixbuf)
 		g_object_unref(pixbuf);
@@ -117,7 +121,7 @@ static gboolean cb_window_event(GtkWidget *window__unused, GdkEventKey* event)
 
 	// related to alloc_pixbuf
 
-	cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_)); // TODO: need to detected resize and only then call it
+	cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_));
 	return FALSE;
 }
 
@@ -154,13 +158,14 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 	const fim_coo_t nw = gtk_widget_get_allocated_width(drawingarea),
 			nh = gtk_widget_get_allocated_height(drawingarea);
 
-	FIM_GTK_DBG_COUT << " " << gdk_pixbuf_get_width(pixbuf) << " " << gdk_pixbuf_get_height(pixbuf) << " -> " << nw << " " << nh << "\n";
+	FIM_GTK_DBG_COUT << " " << nw_ << " " << nh_ << " -> " << nw << " " << nh << "\n";
 
-	if (!pixbuf || gdk_pixbuf_get_width(pixbuf) != gtk_widget_get_allocated_width(drawingarea) 
-	            || gdk_pixbuf_get_height(pixbuf) != gtk_widget_get_allocated_height(drawingarea) )
-		alloc_pixbuf(nw,nh);
-
-	cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_)); // TODO: need to detected resize and only then call it
+	const bool nrsz = ( nw_ != nw || nh_ != nh );
+	if ( !pixbuf || nrsz )
+	{
+		alloc_pixbuf(nw, nh);
+		cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_));
+	}
 
 	gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
 	cairo_paint (cr);
