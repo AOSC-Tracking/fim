@@ -32,6 +32,8 @@
 #define FIM_GTK_DEBUG 1
 #undef FIM_GTK_DEBUG
 
+#define FIM_GTK_WITH_RENDERED_STATUSBAR 1 /* 1 to render, 0 to use statusbar_ */
+
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
 #define FIM_GTK_INPUT_DEBUG(C,MSG)  \
@@ -71,20 +73,50 @@ namespace fim
 	bool control_pressed_{false};
 	fim_key_t last_pressed_key_{0};
 	GdkPixbuf * pixbuf{};
+	fim_coo_t pitch_{};
 
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
+static gboolean cb_window_state_event(GtkWidget *window__unused, GdkEventKey* event)
+{
+	// minimize/maximize
+	// TODO: need implementation
+	return FALSE;
+}
+
+static fim_bpp_t _get_bpp(void) {
+	// FIXME: is displaced
+	return 8;
+}
+
+fim_bpp_t GTKDevice::get_bpp(void)const
+{
+	return _get_bpp();
+}
+
 void alloc_pixbuf(int nw, int nh)
 {
 	const auto alpha = FALSE; /* in gmacros.h */
 
+	FIM_GTK_DBG_COUT << nw << " " << nh << "\n";
 	if(pixbuf)
 		g_object_unref(pixbuf);
 
-	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, alpha, 8 /*get_bpp()*/, nw, nh);
-	memset(gdk_pixbuf_get_pixels(pixbuf), 0x0, 3*nw*nh); // black
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, alpha, _get_bpp(), nw, nh);
+	pitch_ = nw * 3; // TODO: use Bpp_
+	memset(gdk_pixbuf_get_pixels(pixbuf), 0x0, 3*nw*nh); // black // TODO: use Bpp_ not 3
+}
+
+static gboolean cb_window_event(GtkWidget *window__unused, GdkEventKey* event)
+{
+	FIM_GTK_DBG_COUT << " \n";
+
+	// related to alloc_pixbuf
+
+	cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_)); // TODO: need to detected resize and only then call it
+	return FALSE;
 }
 
 static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
@@ -120,9 +152,13 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 	const fim_coo_t nw = gtk_widget_get_allocated_width(drawingarea),
 			nh = gtk_widget_get_allocated_height(drawingarea);
 
+	FIM_GTK_DBG_COUT << " " << gdk_pixbuf_get_width(pixbuf) << " " << gdk_pixbuf_get_height(pixbuf) << " -> " << nw << " " << nh << "\n";
+
 	if (!pixbuf || gdk_pixbuf_get_width(pixbuf) != gtk_widget_get_allocated_width(drawingarea) 
 	            || gdk_pixbuf_get_height(pixbuf) != gtk_widget_get_allocated_height(drawingarea) )
 		alloc_pixbuf(nw,nh);
+
+	cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_)); // TODO: need to detected resize and only then call it
 
 	gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
 	cairo_paint (cr);
@@ -155,6 +191,7 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 	gtk_grid_attach(GTK_GRID(grid_), GTK_WIDGET(drawingarea_), 0, 1, 1, 1);
 	gtk_grid_attach_next_to(GTK_GRID(grid_), GTK_WIDGET(statusbar_), GTK_WIDGET(drawingarea_), GTK_POS_BOTTOM, 1, 1);
 	cmdline_entry_ = gtk_entry_new();
+	// TODO: GTK-specific autocompletion
 	gtk_widget_set_vexpand(GTK_WIDGET(cmdline_entry_), FALSE);
 	gtk_widget_set_hexpand(GTK_WIDGET(cmdline_entry_), TRUE);
 	gtk_widget_set_valign(GTK_WIDGET(cmdline_entry_), GTK_ALIGN_END);
@@ -164,18 +201,25 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&)
 	gtk_widget_set_margin_end(GTK_WIDGET(cmdline_entry_), 0);
 	gtk_entry_set_has_frame(GTK_ENTRY(cmdline_entry_), FALSE);
 	gtk_grid_attach_next_to(GTK_GRID(grid_), GTK_WIDGET(cmdline_entry_), GTK_WIDGET(statusbar_), GTK_POS_BOTTOM, 1, 1);
+	// TODO: handle "destroy"
 	gtk_container_add(GTK_CONTAINER(window_), grid_);
 
 	g_signal_connect(G_OBJECT(window_), "key-press-event", G_CALLBACK(cb_key_pressed), NULL);
 	g_signal_connect(G_OBJECT(window_), "key-release-event", G_CALLBACK(cb_key_pressed), NULL);
+	g_signal_connect(G_OBJECT(window_), "window-state-event", G_CALLBACK(cb_window_state_event), NULL);
+	g_signal_connect(G_OBJECT(window_), "configure-event", G_CALLBACK(cb_window_event), NULL);
 	g_signal_connect(G_OBJECT(drawingarea_), "draw", G_CALLBACK(cb_do_draw), NULL);
+	// TODO: handle events in drawingarea_ and cmdline_entry_
 
 	accel_group_ = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(window_), accel_group_);
+	// TODO: need proper keys setup
+	// TODO: need to populate menus and if needed, rebuild them
 	gtk_widget_show_all(GTK_WIDGET(window_));
 	gtk_widget_hide(cmdline_entry_);
 
 	gtk_test_widget_wait_for_draw(GTK_WIDGET(window_)); // to get proper window size
+	FIM_GTK_DBG_COUT << "\n";
 	return FIM_ERR_NO_ERROR;
 }
 
@@ -274,8 +318,30 @@ GTKDevice::GTKDevice(fim::string opts):DisplayDevice()
 
 fim_err_t GTKDevice::status_line(const fim_char_t *msg)
 {
+	// FIXME: need to unify and cleanup together with SDL's and other versions
+#if FIM_GTK_WITH_RENDERED_STATUSBAR
+		fim_err_t errval = FIM_ERR_NO_ERROR;
+		fim_coo_t y,ys=3;// FIXME
+		if(get_chars_per_column()<1)
+			goto done;
+		y = height() - f_->sheight() - ys;
+		if(y<0 )
+			goto done;
+		clear_rect(0, width()-1, y+1,y+f_->sheight()+ys-1);
+		fs_puts(f_, 0, y+ys, msg);
+		fill_rect(0,width()-1, y, y, FIM_CNS_WHITE);
+
+#if (FIM_WITH_LIBSDL_VERSION == 1)
+#else /* FIM_WITH_LIBSDL_VERSION */
+//redraw
+#endif /* FIM_WITH_LIBSDL_VERSION */
+done:
+		return errval;
+#else
 	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, msg);
+	FIM_GTK_DBG_COUT << ":" << msg << "\n";
 	return FIM_ERR_NO_ERROR;
+#endif
 }
 
 fim_err_t GTKDevice::display(
@@ -292,9 +358,7 @@ fim_err_t GTKDevice::display(
 	const fim_coo_t ww_ = width();
 	const fim_coo_t wh_ = height();
 
-	FIM_GTK_DBG_COUT << "DISPLAY\n";
-
-	gint Bpp_{get_bpp()} ;
+	FIM_GTK_DBG_COUT << "DISPLAY  ocskip:" << ocskip << "\n";
 
 	if (!pixbuf || gdk_pixbuf_get_width(pixbuf) != gtk_widget_get_allocated_width(drawingarea_) 
 	            || gdk_pixbuf_get_height(pixbuf) != gtk_widget_get_allocated_height(drawingarea_) )
@@ -354,7 +418,8 @@ fim_err_t GTKDevice::display(
 	fim_byte_t * srcp;
 
 	clear_rect(  0, width()-1, 0, height()-1); 
-	memset(gdk_pixbuf_get_pixels(pixbuf),255,3*width()*height()); // white background, temporary (FIXME)
+	//memset(gdk_pixbuf_get_pixels(pixbuf),255,Bpp_*width()*height()); // white background, temporary (FIXME)
+	memset(gdk_pixbuf_get_pixels(pixbuf),0x0,Bpp_*width()*height()); // black background, temporary (FIXME)
 
 	for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 	for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
@@ -364,15 +429,153 @@ fim_err_t GTKDevice::display(
 		
 		if(mirror)ij=((icols-1)-ij);
 		if( flip )ii=((irows-1)-ii);
-		srcp  = ((fim_byte_t*)rgb)+(3*(ii*icskip+ij));
+		srcp  = ((fim_byte_t*)rgb)+(Bpp_*(ii*icskip+ij));
 
-		gdk_pixbuf_get_pixels(pixbuf)[3*(oi*ocskip+oj)+0]=srcp[2];
-		gdk_pixbuf_get_pixels(pixbuf)[3*(oi*ocskip+oj)+1]=srcp[1];
-		gdk_pixbuf_get_pixels(pixbuf)[3*(oi*ocskip+oj)+2]=srcp[0];
+		gdk_pixbuf_get_pixels(pixbuf)[Bpp_*(oi*ocskip+oj)+0]=srcp[2];
+		gdk_pixbuf_get_pixels(pixbuf)[Bpp_*(oi*ocskip+oj)+1]=srcp[1];
+		gdk_pixbuf_get_pixels(pixbuf)[Bpp_*(oi*ocskip+oj)+2]=srcp[0];
 	}
 
 	gtk_widget_queue_draw(GTK_WIDGET(window_));
 	return FIM_ERR_NO_ERROR;
+}
+
+	fim_coo_t GTKDevice::status_line_height(void)const
+	{
+		return f_ ? border_height_ + f_->sheight() : 0;
+	}
+
+
+	fim_err_t GTKDevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT
+	{
+		fim_coo_t y;
+		/*
+		 * */
+		fim_byte_t* rgb = ((fim_byte_t*)(gdk_pixbuf_get_pixels(pixbuf)));
+
+		for(y=y1;y<=y2;++y)
+		{
+			fim_bzero(rgb + y*(pitch_) + x1*Bpp_, (x2-x1+1)* Bpp_);
+		}
+		return FIM_ERR_NO_ERROR;
+	}
+
+fim_err_t GTKDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT
+{
+    fim_sys_int i,c/*,j,w*/;
+
+    for (i = 0; str[i] != '\0'; i++) {
+	c = (fim_byte_t)str[i];
+	if (FIM_NULL == f_->eindex[c])
+	    continue;
+	/* clear with bg color */
+//	w = (f_->eindex[c]->width+1)*Bpp_;
+#if 0
+#ifdef FIM_IS_SLOWER_THAN_FBI
+	for (j = 0; j < f_->sheight(); j++) {
+/////	    memset_combine(start,0x20,w);
+	    fim_bzero(start,w);
+	    start += fb_fix.line_length;
+	}
+#else
+	//sometimes we can gather multiple calls..
+	if(fb_fix.line_length==w)
+	{
+		//contiguous case
+		fim_bzero(start,w*f_->sheight());
+	    	start += fb_fix.line_length*f_->sheight();
+	}
+	else
+	for (j = 0; j < f_->sheight(); j++) {
+	    fim_bzero(start,w);
+	    start += fb_fix.line_length;
+	}
+#endif
+#endif
+	/* draw character */
+	//fs_render_fb(fb_fix.line_length,f_->eindex[c],f_->gindex[c]);
+	fs_render_fb(x,y,f_->eindex[c],f_->gindex[c]);
+	x += f_->eindex[c]->swidth();
+	/* FIXME : SLOW ! */
+	if (((fim_coo_t)x) > width() - f_->swidth())
+		goto err;
+    }
+    // FIXME
+	return FIM_ERR_NO_ERROR;
+err:
+	return FIM_ERR_GENERIC;
+}
+
+void GTKDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT
+{
+	// FIXME: unify this with other driver's versions
+/* 
+ * These preprocessor macros should serve *only* for font handling purposes.
+ * */
+#define BIT_ORDER       BitmapFormatBitOrderMSB
+#ifdef BYTE_ORDER
+#undef BYTE_ORDER
+#endif
+#define BYTE_ORDER      BitmapFormatByteOrderMSB
+#define SCANLINE_UNIT   BitmapFormatScanlineUnit8
+#define SCANLINE_PAD    BitmapFormatScanlinePad8
+#define EXTENTS         BitmapFormatImageRectMin
+
+#define SCANLINE_PAD_BYTES 1
+#define GLWIDTHBYTESPADDED(bits, nBytes)                                    \
+        ((nBytes) == 1 ? (((bits)  +  7) >> 3)          /* pad to 1 byte  */\
+        :(nBytes) == 2 ? ((((bits) + 15) >> 3) & ~1)    /* pad to 2 bytes */\
+        :(nBytes) == 4 ? ((((bits) + 31) >> 3) & ~3)    /* pad to 4 bytes */\
+        :(nBytes) == 8 ? ((((bits) + 63) >> 3) & ~7)    /* pad to 8 bytes */\
+        : 0)
+
+	fim_coo_t row,bit,x;
+	FIM_CONSTEXPR Uint8 rc = 0xff, gc = 0xff, bc = 0xff;
+	// const Uint8 rc = 0x00, gc = 0x00, bc = 0xff;
+	const fim_sys_int bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
+	const Uint16 incr = pitch_ / Bpp_;
+
+	fim_byte_t* rgb = ((fim_byte_t*)(gdk_pixbuf_get_pixels(pixbuf)));
+	for (row = 0; row < (charInfo->ascent + charInfo->descent); row++)
+	{
+		for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++, x++) 
+		{
+			if (data[bit>>3] & fs_masktab[bit&7])
+			{	// WARNING !
+#if FIM_FONT_MAGNIFY_FACTOR == 0
+				const fim_int fim_fmf = fim::fim_fmf_; 
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
+#if FIM_FONT_MAGNIFY_FACTOR <  0
+				fim_int fim_fmf = fim::fim_fmf_; 
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
+#if FIM_FONT_MAGNIFY_FACTOR == 1
+				setpixel(rgb,x_+x,(y+row)*incr,rc,gc,bc);
+#else	/* FIM_FONT_MAGNIFY_FACTOR */
+				for(fim_coo_t mi = 0; mi < fim_fmf; ++mi)
+				for(fim_coo_t mj = 0; mj < fim_fmf; ++mj)
+					setpixel(rgb,x_+fim_fmf*x+mj,(y+fim_fmf*row+mi)*incr,rc,gc,bc);
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
+			}
+		}
+		data += bpr;
+	}
+
+#undef BIT_ORDER
+#undef BYTE_ORDER
+#undef SCANLINE_UNIT
+#undef SCANLINE_PAD
+#undef EXTENTS
+#undef SCANLINE_PAD_BYTES
+#undef GLWIDTHBYTESPADDED
+}
+
+void GTKDevice::setpixel(fim_byte_t* rgb, fim_coo_t x, fim_coo_t y, fim_byte_t r, fim_byte_t g, fim_byte_t b)
+{
+	// FIXME: x+y is horror (style inherited from other drivers though)
+	rgb += (x+y) * Bpp_;
+	rgb[0] = r;
+	rgb[1] = g;
+	rgb[2] = b;
 }
 #endif /* FIM_WITH_LIBGTK */
 #pragma GCC pop_options
