@@ -77,10 +77,19 @@ namespace fim
 	GdkPixbuf * pixbuf{};
 	fim_coo_t pitch_{};
 	fim_coo_t nw_{}, nh_{};
+	int full_screen_{};
 
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #pragma GCC diagnostic ignored "-Wunused-variable"
+
+static void toggle_fullscreen(const bool full_screen)
+{
+	if (full_screen)
+		gtk_window_fullscreen (GTK_WINDOW(window_));
+	else
+		gtk_window_unfullscreen (GTK_WINDOW(window_));
+}
 
 static gboolean cb_window_state_event(GtkWidget *window__unused, GdkEventKey* event)
 {
@@ -164,7 +173,7 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 	if ( !pixbuf || nrsz )
 	{
 		alloc_pixbuf(nw, nh);
-		cc.display_resize(gtk_widget_get_allocated_width((GtkWidget*)drawingarea_),gtk_widget_get_allocated_height((GtkWidget*)drawingarea_));
+		cc.display_resize(nw, nh);
 	}
 
 	gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
@@ -429,9 +438,9 @@ fim_err_t GTKDevice::display(
 
 	FIM_GTK_DBG_COUT << "DISPLAY  ocskip:" << ocskip << "\n";
 
-	if (!pixbuf || gdk_pixbuf_get_width(pixbuf) != gtk_widget_get_allocated_width(drawingarea_) 
-	            || gdk_pixbuf_get_height(pixbuf) != gtk_widget_get_allocated_height(drawingarea_) )
-		alloc_pixbuf(ww_,wh_);
+	if (!pixbuf || nw_ != ww_ 
+	            || nh_ != wh_ )
+		alloc_pixbuf(ww_, wh_);
 
 	fim_byte_t* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 
@@ -661,6 +670,24 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 	}
 	return FIM_ERR_NO_ERROR;
 }
+
+	fim_err_t GTKDevice::reinit(const fim_char_t *rs)
+	{
+		FIM_GTK_DBG_COUT << ":" << rs << "\n";
+
+		if (strchr(rs, 'W'))
+			full_screen_=1;
+		else
+			full_screen_=0;
+		toggle_fullscreen(full_screen_);
+
+		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR )
+		{
+			// opts_ = rs;
+			return FIM_ERR_NO_ERROR;
+		}
+		return FIM_ERR_GENERIC;
+	}
 
 #endif /* FIM_WITH_LIBGTK */
 #pragma GCC pop_options

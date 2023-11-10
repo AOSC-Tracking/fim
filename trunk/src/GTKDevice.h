@@ -31,6 +31,7 @@ class GTKDevice : public DisplayDevice {
 	GTKDevice(fim::string opts);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_err_t initialize(fim::sym_keys_t&);
+	virtual fim_err_t reinit(const fim_char_t *rs) FIM_OVERRIDE;
 	void finalize() {}
 	fim_err_t display(const void*, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_flags_t);
 	fim_coo_t get_chars_per_line() const;
