@@ -30,7 +30,7 @@
 
 #define FIM_BROWSER_INSPECT 0
 #if FIM_BROWSER_INSPECT
-#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),/*(getImage()?getImage()->getIntVariable(FIM_VID_PAGES):-1)*/-1,current().c_str());
+#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,(int)getGlobalIntVariable(FIM_VID_FILEINDEX),(int)getGlobalIntVariable(FIM_VID_FILELISTLEN),(int)getGlobalIntVariable(FIM_VID_PAGE),/*(getImage()?getImage()->getIntVariable(FIM_VID_PAGES):-1)*/-1,current().c_str());
 #else /* FIM_BROWSER_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_BROWSER_INSPECT */

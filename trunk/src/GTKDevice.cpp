@@ -56,6 +56,9 @@ std::cout.unsetf ( std::ios::hex ); \
 #endif /* FIM_GTK_DEBUG */
 #define FIM_WANT_POSITION_DISPLAYED FIM_WANT_MOUSE_PAN && 0
 
+#define FIM_GTK_KEYSYM_TO_RL(X) ((X) | (1<<31)) // after FIM_SDL_KEYSYM_TO_RL
+#define FIM_GTK_KEYSYM_TO_RL_CTRL(X) 1+((X)-'a') // after FIM_SDL_KEYSYM_TO_RL_CTRL
+
 namespace fim
 {
 	extern fim_int fim_fmf_; /* FIXME */
@@ -139,7 +142,7 @@ static gboolean cb_window_event(GtkWidget *window__unused, GdkEventKey* event)
 
 static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 {
-	gboolean handled = TRUE;
+	gboolean handled = FALSE;
 	last_pressed_key_ = 0;
 
 	if (event->keyval == GDK_KEY_Control_L)
@@ -158,9 +161,32 @@ static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 		if ( event->state & GDK_CONTROL_MASK )
 			kst += "C-";
 		last_pressed_key_ = event->keyval;
+
+		if (last_pressed_key_ < 0x100) // isalpha & co don't require this
+		if (isalpha(last_pressed_key_)) // if (last_pressed_key_ >= 'a') && (last_pressed_key_ <= 'z')
+		if (isalnum(last_pressed_key_))
+		if (isprint(last_pressed_key_))
+		{
+			if ( event->state & GDK_CONTROL_MASK )
+				last_pressed_key_ = FIM_GTK_KEYSYM_TO_RL_CTRL(last_pressed_key_),
+				handled = TRUE;
+			if ( event->state & GDK_MOD1_MASK )
+				last_pressed_key_ = FIM_GTK_KEYSYM_TO_RL(last_pressed_key_),
+				handled = TRUE;
+		}
+		if (        last_pressed_key_ == GDK_KEY_Shift_L
+			 || last_pressed_key_ == GDK_KEY_Shift_R
+			 || last_pressed_key_ == GDK_KEY_Alt_L
+			 || last_pressed_key_ == GDK_KEY_Alt_R
+			 || last_pressed_key_ == GDK_KEY_Control_L
+			 || last_pressed_key_ == GDK_KEY_Control_R
+			)
+			last_pressed_key_ = 0;
+		if (last_pressed_key_ && handled == FALSE && last_pressed_key_ < 0x100)
+			handled = TRUE;
+		FIM_GTK_DBG_COUT << " handled=" << handled << "  last_pressed_key_=" << ((int)last_pressed_key_) << std::endl;
+		// lots of garbage codes can still go in
 	}
-	else
-		handled = FALSE;
 	return handled;
 }
 
@@ -400,7 +426,7 @@ GTKDevice::GTKDevice(fim::string opts):DisplayDevice()
 
 fim_err_t GTKDevice::status_line(const fim_char_t *msg)
 {
-	// FIXME: need to unify and cleanup together with SDL's and other versions
+		// FIXME: need to unify and cleanup together with SDL's and other versions
 #if FIM_GTK_WITH_RENDERED_STATUSBAR
 		fim_err_t errval = FIM_ERR_NO_ERROR;
 		fim_coo_t y,ys=3;// FIXME
