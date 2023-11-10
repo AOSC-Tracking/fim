@@ -19,6 +19,10 @@
 */
 
 // TODO: this is work in progress, don't use it.
+// - need to cache more vars and eliminate redundancy of gdk_pixbuf_get_pixels()
+// - move vars to (anyway singleton) class
+// - ...
+
 #include "fim.h"
 
 #ifdef FIM_WITH_LIBGTK
@@ -408,12 +412,8 @@ fim_err_t GTKDevice::status_line(const fim_char_t *msg)
 		clear_rect(0, width()-1, y+1,y+f_->sheight()+ys-1);
 		fs_puts(f_, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y, FIM_CNS_WHITE);
-
-#if (FIM_WITH_LIBSDL_VERSION == 1)
-#else /* FIM_WITH_LIBSDL_VERSION */
-//redraw
-#endif /* FIM_WITH_LIBSDL_VERSION */
 done:
+		gtk_widget_queue_draw(GTK_WIDGET(drawingarea_));
 		return errval;
 #else
 	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, msg);
