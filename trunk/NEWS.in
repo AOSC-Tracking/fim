@@ -4,7 +4,7 @@
                 Version 0.7-trunk
 
  * Still work-in-progress. Please use stable branch 0.6 for now
-# (r2005-r2013)
+# (r2005-r2014)
  * New graphical windowed output mode via GTK, selected with -o gtk (in progress)
 # (r1997)
  * When loading via an external converter, keep track of it in i:_external_decoder_program

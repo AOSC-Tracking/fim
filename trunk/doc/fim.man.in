@@ -556,6 +556,7 @@ from standard input before displaying files in the directory
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
 The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
+The GTK driver is still under construction.
 .SH BUGS
 \fBfim\fP has bugs. Please read the 
 .B BUGS
