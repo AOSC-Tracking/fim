@@ -75,7 +75,7 @@ namespace fim
 	bool control_pressed_{false};
 	fim_key_t last_pressed_key_{0};
 	GdkPixbuf * pixbuf{};
-	fim_coo_t pitch_{};
+	fim_coo_t rowstride_{};
 	fim_coo_t nw_{}, nh_{};
 	int full_screen_{};
 
@@ -114,14 +114,13 @@ void alloc_pixbuf(int nw, int nh)
 
 	nw_ = nw;
 	nh_ = nh;
-
-	FIM_GTK_DBG_COUT << nw << " " << nh << "\n";
 	if(pixbuf)
 		g_object_unref(pixbuf);
-
 	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, alpha, _get_bpp(), nw, nh);
-	pitch_ = nw * 3; // TODO: use Bpp_
-	memset(gdk_pixbuf_get_pixels(pixbuf), 0x0, 3*nw*nh); // black // TODO: use Bpp_ not 3
+	assert ( gdk_pixbuf_get_n_channels (pixbuf) == 3 );
+	rowstride_ = gdk_pixbuf_get_rowstride (pixbuf);
+	FIM_GTK_DBG_COUT << " nw:" << nw << " nh:" << nh << " pitch/3:" << rowstride_/GTKDevice::Bpp_ << "\n";
+	memset (gdk_pixbuf_get_pixels(pixbuf), 0x0, rowstride_*nh); // black
 }
 
 static gboolean cb_window_event(GtkWidget *window__unused, GdkEventKey* event)
@@ -167,9 +166,10 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 	const fim_coo_t nw = gtk_widget_get_allocated_width(drawingarea),
 			nh = gtk_widget_get_allocated_height(drawingarea);
 
-	FIM_GTK_DBG_COUT << " " << nw_ << " " << nh_ << " -> " << nw << " " << nh << "\n";
-
 	const bool nrsz = ( nw_ != nw || nh_ != nh );
+
+	FIM_GTK_DBG_COUT << " " << nw_ << " " << nh_ << " " << (nrsz?'-':'=') <<  "-> " << nw << " " << nh << "  " << rowstride_/GTKDevice::Bpp_ << "\n";
+
 	if ( !pixbuf || nrsz )
 	{
 		alloc_pixbuf(nw, nh);
@@ -178,7 +178,7 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 
 	gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
 	cairo_paint (cr);
-	return FALSE;
+	return TRUE;
 }
 
 static void keys_setup(fim::sym_keys_t&sym_keys)
@@ -436,11 +436,7 @@ fim_err_t GTKDevice::display(
 	const fim_coo_t ww_ = width();
 	const fim_coo_t wh_ = height();
 
-	FIM_GTK_DBG_COUT << "DISPLAY  ocskip:" << ocskip << "\n";
-
-	if (!pixbuf || nw_ != ww_ 
-	            || nh_ != wh_ )
-		alloc_pixbuf(ww_, wh_);
+	FIM_GTK_DBG_COUT << "DISPLAY  ocskip:" << ocskip << "  ocols:" << ocols << " rowstride_/Bpp:" << rowstride_/Bpp_ << "  " << ((rowstride_) == (Bpp_*ocskip)) << "\n";
 
 	fim_byte_t* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 
@@ -496,8 +492,6 @@ fim_err_t GTKDevice::display(
 	fim_byte_t * srcp;
 
 	clear_rect(  0, width()-1, 0, height()-1); 
-	//memset(gdk_pixbuf_get_pixels(pixbuf),255,Bpp_*width()*height()); // white background, temporary (FIXME)
-	memset(gdk_pixbuf_get_pixels(pixbuf),0x0,Bpp_*width()*height()); // black background, temporary (FIXME)
 
 	for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 	for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
@@ -509,9 +503,9 @@ fim_err_t GTKDevice::display(
 		if( flip )ii=((irows-1)-ii);
 		srcp  = ((fim_byte_t*)rgb)+(Bpp_*(ii*icskip+ij));
 
-		gdk_pixbuf_get_pixels(pixbuf)[Bpp_*(oi*ocskip+oj)+0]=srcp[2];
-		gdk_pixbuf_get_pixels(pixbuf)[Bpp_*(oi*ocskip+oj)+1]=srcp[1];
-		gdk_pixbuf_get_pixels(pixbuf)[Bpp_*(oi*ocskip+oj)+2]=srcp[0];
+		gdk_pixbuf_get_pixels(pixbuf)[rowstride_*oi+Bpp_*(oj)+0]=srcp[2];
+		gdk_pixbuf_get_pixels(pixbuf)[rowstride_*oi+Bpp_*(oj)+1]=srcp[1];
+		gdk_pixbuf_get_pixels(pixbuf)[rowstride_*oi+Bpp_*(oj)+2]=srcp[0];
 	}
 
 	gtk_widget_queue_draw(GTK_WIDGET(window_));
@@ -533,7 +527,7 @@ fim_err_t GTKDevice::display(
 
 		for(y=y1;y<=y2;++y)
 		{
-			fim_bzero(rgb + y*(pitch_) + x1*Bpp_, (x2-x1+1)* Bpp_);
+			fim_bzero(rgb + y*(rowstride_) + x1*Bpp_, (x2-x1+1)* Bpp_);
 		}
 		return FIM_ERR_NO_ERROR;
 	}
@@ -611,7 +605,7 @@ void GTKDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 	FIM_CONSTEXPR Uint8 rc = 0xff, gc = 0xff, bc = 0xff;
 	// const Uint8 rc = 0x00, gc = 0x00, bc = 0xff;
 	const fim_sys_int bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
-	const Uint16 incr = pitch_ / Bpp_;
+	const Uint16 incr = rowstride_ / Bpp_;
 
 	fim_byte_t* rgb = ((fim_byte_t*)(gdk_pixbuf_get_pixels(pixbuf)));
 	for (row = 0; row < (charInfo->ascent + charInfo->descent); row++)
@@ -627,11 +621,11 @@ void GTKDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 				fim_int fim_fmf = fim::fim_fmf_; 
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
 #if FIM_FONT_MAGNIFY_FACTOR == 1
-				setpixel(rgb,x_+x,(y+row)*incr,rc,gc,bc);
+				setpixel(rgb,x_+x,(y+row),rc,gc,bc);
 #else	/* FIM_FONT_MAGNIFY_FACTOR */
 				for(fim_coo_t mi = 0; mi < fim_fmf; ++mi)
 				for(fim_coo_t mj = 0; mj < fim_fmf; ++mj)
-					setpixel(rgb,x_+fim_fmf*x+mj,(y+fim_fmf*row+mi)*incr,rc,gc,bc);
+					setpixel(rgb,x_+fim_fmf*x+mj,(y+fim_fmf*row+mi),rc,gc,bc);
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
 			}
 		}
@@ -649,8 +643,8 @@ void GTKDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 
 void GTKDevice::setpixel(fim_byte_t* rgb, fim_coo_t x, fim_coo_t y, fim_byte_t r, fim_byte_t g, fim_byte_t b)
 {
-	// FIXME: x+y is horror (style inherited from other drivers though)
-	rgb += (x+y) * Bpp_;
+	// style modified from other drivers; would need some unity and cleanliness though
+	rgb += y * rowstride_ + x * Bpp_;
 	rgb[0] = r;
 	rgb[1] = g;
 	rgb[2] = b;
@@ -666,7 +660,7 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 
 	for(y=y1;y<=y2;++y)
 	{
-		fim_memset(rgb + y*pitch_ + x1*Bpp_,color, (x2-x1+1)* Bpp_);
+		fim_memset(rgb + y*rowstride_ + x1*Bpp_,color, (x2-x1+1)* Bpp_);
 	}
 	return FIM_ERR_NO_ERROR;
 }
