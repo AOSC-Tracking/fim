@@ -292,7 +292,7 @@ int fim_rl_gtk_sdl_aa_getc(FILE * fd)
 	FIM_PR("")
 	return 0;/* yes, a dummy function instead of getc() */
 }
-#endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2) */
+#endif /* defined(FIM_WITH_LIBGTK) || defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2) */
 
 int fim_rl_getc(FILE * fd)
 {
@@ -441,7 +441,7 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 		rl_redisplay_function=redisplay;
 	        rl_event_hook=fim_pre_input_hook;
 	}
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
+#if defined(FIM_WITH_LIBGTK) || defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBCACA) || defined(FIM_WITH_LIBIMLIB2)
 	if(	false
 		|| g_fim_output_device.find(FIM_DDN_INN_SDL)==0
 		|| g_fim_output_device.find(FIM_DDN_INN_GTK)==0
@@ -457,10 +457,9 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 //		rl_deprep_term_function=fim_rl_deprep_dummy;
 
 		/*
-                 * FIXME : The following hack uses SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT, all -0x100 ..
-                 *         (/usr/include/SDL/SDL_keysym.h)
-                 *
-                 *         Regard this as a problem.
+                 * FIXME : The following hack uses special codes for arrows, all -0x100 ..
+		 * for SDL: SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT  (/usr/include/SDL/SDL_keysym.h)
+                 * for GTK: GDK_KEY_Up, GDK_KEY_Down, GDK_KEY_Left, GDK_KEY_Right.
 		 */
  		rl_bind_keyseq("\x11", rl_get_previous_history);	// up
  		rl_bind_keyseq("\x12", rl_get_next_history);		// down

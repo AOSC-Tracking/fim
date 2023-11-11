@@ -23,7 +23,6 @@
 // - move vars to (anyway singleton) class
 // - in command line mode, clicking on menus may input command there
 // - full screen mode to hide scrolldown menu
-// - fix arrows in command line mode
 // - ...
 
 #include <map>
@@ -1005,6 +1004,14 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 
 	if ( last_pressed_key_ )
 	{
+		if (want_poll) // hack: only set if in readline mode
+			switch (last_pressed_key_)
+			{
+				case(GDK_KEY_Up):   last_pressed_key_=0x111; break;
+				case(GDK_KEY_Down): last_pressed_key_=0x112; break;
+				case(GDK_KEY_Right):last_pressed_key_=0x113; break;
+				case(GDK_KEY_Left): last_pressed_key_=0x114; break;
+			}
 		* c = last_pressed_key_;
 		last_pressed_key_ = 0; // to emit once is enough
 		return 1;
