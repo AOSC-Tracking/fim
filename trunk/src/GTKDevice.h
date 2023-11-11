@@ -51,6 +51,7 @@ class GTKDevice : public DisplayDevice {
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 	static const fim_coo_t border_height_=1;
 	static const int Bpp_{3};
+	fim::string opts_;
 private:
 	inline void setpixel(fim_byte_t* rgb, fim_coo_t x, fim_coo_t y, fim_byte_t r, fim_byte_t g, fim_byte_t b);
 };

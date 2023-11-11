@@ -280,8 +280,18 @@ struct fim_options_t fim_options[] = {
 "The " FIM_MAN_fB(FIM_DDN_INN_AA) " (monochrome Ascii Art) option can be specified as " FIM_MAN_fB(FIM_DDN_INN_AA "[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
 //#endif /* FIM_WITH_AALIB */
 "Please note that the readline (internal command line) functionality in " FIM_MAN_fB(FIM_DDN_INN_CACA) " and " FIM_MAN_fB(FIM_DDN_INN_AA) " modes is limited.\n"
-#if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option (graphical windowed mode) may be specified as  \\fBsdl" FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
+#if defined(FIM_WANT_SDL_OPTIONS_STRING) || defined(FIM_WITH_LIBGTK)
+"If the graphical windowed mode is "
+#if FIM_WANT_SDL_OPTIONS_STRING
+" \\fBsdl\\fP "
+#if FIM_WITH_LIBGTK
+" or "
+#endif
+#endif
+#if FIM_WITH_LIBGTK
+" \\fBgtk\\fP "
+#endif
+" it can be follwed by \\fB " FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
 " where " FIM_MAN_fB("width") " and " FIM_MAN_fB("height") " are integer numbers specifying the desired resolution "
 " (if " FIM_MAN_fB("height") " not specified, it takes the value of " FIM_MAN_fB("width") ");"
 " the " FIM_MAN_fB("'w'") " character requests windowed mode (instead of " FIM_MAN_fB("'W'") " for fullscreen);"
@@ -291,10 +301,12 @@ struct fim_options_t fim_options[] = {
 " the " FIM_MAN_fB("'%'") " character requests to treat " FIM_MAN_fB("width") " and " FIM_MAN_fB("height")
 " as percentage of possible window resolution."
 " The same letters uppercase request explicit negation of the mentioned features.\n"
-#endif /* FIM_WANT_SDL_OPTIONS_STRING */
+" In \\fB" "gtk" "\\fP mode there is a menu bar, which can be disabled with " FIM_MAN_fB("'b'") "."
+" The \\fB" "gtk" "\\fP option is still in progress, and therefore incomplete."
+#endif /* FIM_WANT_SDL_OPTIONS_STRING FIM_WITH_LIBGTK */
 //#ifdef FIM_WITH_LIBIMLIB2
-"The \\fB" "imlib2" "\\fP option requests imlib2 and is unfinished -- do not use it.\n"
-"The " FIM_MAN_fB(FIM_DDN_INN_DUMB) " test mode is not interactive.\n"
+" The \\fB" "imlib2" "\\fP option requests imlib2 and is unfinished -- do not use it.\n"
+" The " FIM_MAN_fB(FIM_DDN_INN_DUMB) " test mode is not interactive.\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,

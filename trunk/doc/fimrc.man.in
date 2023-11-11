@@ -1563,7 +1563,7 @@ Part of the default configuration comes from the \fB_fim_default_config_file_con
 One can skip its loading by using the \fB_no_default_configuration\fP variable.
 
 .nf
-# $LastChangedDate: 2023-10-13 01:22:56 +0200 (Fri, 13 Oct 2023) $
+# $LastChangedDate: 2023-11-10 01:25:53 +0100 (Fri, 10 Nov 2023) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
