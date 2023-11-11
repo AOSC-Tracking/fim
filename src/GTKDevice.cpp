@@ -22,6 +22,8 @@
 // - need to cache more vars and eliminate redundancy of gdk_pixbuf_get_pixels()
 // - move vars to (anyway singleton) class
 // - in command line mode, clicking on menus may input command there
+// - full screen mode to hide scrolldown menu
+// - fix arrows in command line mode
 // - ...
 
 #include <map>
@@ -111,6 +113,7 @@ namespace fim
 	fim_coo_t rowstride_{};
 	fim_coo_t nw_{}, nh_{};
 	int full_screen_{};
+	int show_menubar_{1};
 
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -985,7 +988,9 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 	gtk_widget_hide(cmdline_entry_);
 
 	gtk_test_widget_wait_for_draw(GTK_WIDGET(window_)); // to get proper window size
+	reinit(opts_.c_str());
 	FIM_GTK_DBG_COUT << "\n";
+
 	return FIM_ERR_NO_ERROR;
 }
 
@@ -1077,10 +1082,11 @@ fim_coo_t GTKDevice::get_chars_per_column(void) const
 }
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-GTKDevice::GTKDevice(MiniConsole& mc_, fim::string opts): DisplayDevice (mc_)
+GTKDevice::GTKDevice(MiniConsole& mc_, fim::string opts): DisplayDevice (mc_),
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-GTKDevice::GTKDevice(fim::string opts):DisplayDevice()
+GTKDevice::GTKDevice(fim::string opts):DisplayDevice(),
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	opts_(opts)
 {
 	FontServer::fb_text_init1(fontname_,&f_);
 }
@@ -1361,6 +1367,16 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 		else
 			full_screen_=0;
 		toggle_fullscreen(full_screen_);
+
+		if (strchr(rs, 'b'))
+			show_menubar_=0;
+		else
+			show_menubar_=1;
+
+		if ( show_menubar_ )
+			gtk_widget_show_all (menubar_);
+		else
+			gtk_widget_hide (menubar_);
 
 		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR )
 		{
