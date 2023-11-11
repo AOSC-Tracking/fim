@@ -21,6 +21,7 @@
 // TODO: this is work in progress, don't use it.
 // - need to cache more vars and eliminate redundancy of gdk_pixbuf_get_pixels()
 // - move vars to (anyway singleton) class
+// - in command line mode, clicking on menus may input command there
 // - ...
 
 #include <map>
@@ -341,47 +342,28 @@ static const char *sym_strstr(const char *haystack, const char *needle)
 		return NULL;
 }
 
-void do_print_var_val(GtkWidget *, const char* var)
-{
-#if FIM_GTK_WITH_RENDERED_STATUSBAR
-	// FIXME: need to call GTKDevice::status_line(vars_vals_[var].c_str());
-#else
-	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, vars_vals_[var].c_str());
-#endif
-}
-
 std::string do_get_item_help(const char* item)
 {
-	std::string hs;
-	if ( help_.find(item) != help_.end() )
-		hs = help_.find(item)->second;
-	return hs;
+	const auto ih = cc.get_help(item, 'l');
+	return ih;
 }
 
 void do_print_item_help(GtkWidget *, const char* item)
 {
-	std::string hs = do_get_item_help(item);
-	if (hs.empty())
-	{
-		hs += "no help string found for '";
-		hs += item;
-		hs += "', sorry";
-	}
-#if FIM_GTK_WITH_RENDERED_STATUSBAR
-	// FIXME
-#else
-	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, hs.c_str());
-#endif
+	cc.execute("echo", { do_get_item_help(item) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
+	//cc.execute("help", { item } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
-void do_exec_alias(GtkWidget *, const char* alias)
+void cb_cc_exec(GtkWidget *, const char* cmd)
 {
-	// TODO: here interfacing with CommandConsole is needed.
-#if FIM_GTK_WITH_RENDERED_STATUSBAR
-	// FIXME
-#else
-	gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, alias);
-#endif
+	cc.execute(cmd, {});
+	return;
+}
+
+void do_print_var_val(GtkWidget *, const char* var)
+{
+	const auto vv = cc.getStringVariable(var) + "\n";
+	cc.execute("echo", { std::string(var) + " is: " + std::string(vv)} ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
 void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
@@ -402,7 +384,7 @@ void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
 			if ( help_or_cmd )
 				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( do_print_item_help ), (void*) ali.first.c_str() ); // TODO; need specific help mechanism..
 			else
-				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK(do_exec_alias), (void*) ali.second.c_str() );
+				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( cb_cc_exec ), (void*) ali.first.c_str() );
 		}
 
 		gtk_menu_shell_append(GTK_MENU_SHELL(aliaMenu_), aliMi);
@@ -474,7 +456,7 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
 			if ( help_or_press )
 				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( do_print_item_help ), (void*) cmd.c_str() );
 			else
-				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( cmd_funcs_[cmd] ), NULL);
+				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( cb_cc_exec ), (void*) cmd.c_str());
 		}
 		else
 			if(verbose_) std::cout << "Warning: no command found for " << cmd << std::endl;
@@ -507,6 +489,7 @@ void do_rebuild_help_bindings_menu(GtkWidget *keysMi, const bool help_or_press)
 
 			gtk_widget_add_accelerator(keyMi, "activate", accel_group_, key, mmask, GTK_ACCEL_VISIBLE);
 		}
+
 		if ( cmd_funcs_.find(sc.second) != cmd_funcs_.end() )
 		{
 			if ( help_or_press )
@@ -846,6 +829,11 @@ static void refresh_commands(void) {
 static void do_init_cmd_funcs(void)
 {
 	// bind actual functionality to commands
+	aliases_["widen"] = "whatever";
+	vars_vals_["_filelistlen"] = "whatever";
+	vars_help_["_filelistlen"] = "whatever";
+	vars_vals_["_all_file_loaders"] = "whatever";
+	vars_help_["_all_file_loaders"] = "whatever";
 	cmd_funcs_["open"] = [](){ cb_open_file(NULL); };
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
 	cmd_funcs_["rebuild_limit_menu"] = [](){ };
