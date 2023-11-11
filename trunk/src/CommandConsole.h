@@ -343,9 +343,9 @@ class CommandConsole FIM_FINAL :
 	const FimWindow& current_window(void)const;
 #endif /* FIM_WINDOWS */
 	fim::string get_variables_list(void)const;
-	fim::string get_aliases_list(void)const;
 	fim::string get_commands_list(void)const;
 	public:
+	fim::string get_aliases_list(void)const;
 
 	void printHelpMessage(const fim_char_t *pn="fim")const;
 	void appendPostInitCommand(const fim::string& c);
