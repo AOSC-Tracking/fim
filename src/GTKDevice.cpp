@@ -371,7 +371,7 @@ static gboolean cb_open_file( GtkMenuItem*);
 
 void cb_cc_exec(GtkWidget *, const char* cmd)
 {
-	if( 0 <= strcmp(cmd, "open") )
+	if( 0 == strncmp(cmd, "open", 4) )
 		cb_open_file(NULL);
 	else
 		cc.execute(xtrcttkn(cmd).c_str(), {});
