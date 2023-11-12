@@ -23,6 +23,7 @@
 // - move vars to (anyway singleton) class
 // - in command line mode, clicking on menus may input command there
 // - full screen mode to hide scrolldown menu
+// - clean up FIM's finalization with GTK's finalization
 // - ...
 
 #include <map>
@@ -756,7 +757,6 @@ repeat:
 			else
 				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK(cmd_funcs_[cmd]), NULL);
 #endif
-			//if ( cmd_funcs_.find(cmd) != cmd_funcs_.end() )
 			if ( true )
 			{
 				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK(cmd_funcs_["man_fimrc"]), NULL);
@@ -847,24 +847,12 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 	return TRUE;
 }
 
-static void refresh_commands(void) {
-	cmd_funcs_["another_unmapped_cmd"] = [](){ std::cout << "another unmapped cmd\n"; };
-	seq_to_cmd_[" "] = "repeat"; // FIXME: non-existing command
-	cmd_to_seq_["repeat"] = " ";
-}
-
 static void do_init_cmd_funcs(void)
 {
 	// bind actual functionality to commands
 	cmd_funcs_["open"] = [](){ cb_open_file(NULL); };
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
 	cmd_funcs_["rebuild_limit_menu"] = [](){ };
-	//cmd_funcs_["refresh_commands"] = [](){ refresh_commands(); do_rebuild_help_variables_menu(varsMi_,true);do_rebuild_help_variables_menu(varsMi_,false); }; // only for testing add_new_alias_and_variable
-	cmd_funcs_["refresh_commands"] = [](){
-		refresh_commands(); 
-		// do_rebuild_help_menus();
-		std::cout << "rebuilt help menus"; 
-	};
 	cmd_funcs_["toggle_flip"] = [](){ };
 	cmd_funcs_["toggle_mirror"] = [](){  };
 	cmd_funcs_["toggle_verbose"] = [](){ };
@@ -877,19 +865,14 @@ static void do_init_cmd_funcs(void)
 	cmd_funcs_["scale_set_manual"] = [](){ };
 	cmd_funcs_["scale_set_auto_width"] = [](){ }; // __radio__autowidth__2
 	cmd_funcs_["unlimit_list"] = [](){ std::cout << "unlimit list\n"; };
-	cmd_funcs_["add_new_alias_and_variable"] = [](){ 
-		std::cout << "adding custom alias and variable\n";
-		help_["new_variable"]="new_variable help is: ...";
-		help_["new_alias"]="new_alias help is: ...";
-		// do_rebuild_help_menus(); // for demo purposes
-		// TODO: reinit autocompletion
-	};
+	// TODO: something to reinit autocompletion
 }
 
 void do_rebuild_help_menus(void)
 {
 	if (menubar_)
 		gtk_container_remove (GTK_CONTAINER(grid_), menubar_);
+
 	menu_items_ = {};
 	check_menu_items_ = {};
 	group_widgets_ = {};
@@ -911,6 +894,7 @@ void do_rebuild_help_menus(void)
 		add_to_menubar(menu_spec);
 	//for (size_t i = 0; i < sizeof(menu_specs_)/sizeof(menu_specs_[0]) ; i++)
 		//add_to_menubar(menu_specs_[i]);
+	gtk_widget_show_all (GTK_WIDGET(menubar_));
 //	gtk_widget_show_all (GTK_WIDGET(window_));
 //	gtk_widget_hide (cmdline_entry_);
 } /* do_rebuild_help_menus */
@@ -1377,7 +1361,7 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 			full_screen_=0;
 		toggle_fullscreen(full_screen_);
 
-		if (strchr(rs, 'b'))
+		if (strchr(rs, 'b')) // TODO: FIXME: barely documented
 			show_menubar_=0;
 		else
 			show_menubar_=1;
@@ -1387,11 +1371,15 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 		else
 			gtk_widget_hide (menubar_);
 
+		if (strchr(rs, 'f')) // TODO: FIXME: undocumented
+			do_rebuild_help_menus();
+
 		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR )
 		{
 			// opts_ = rs;
 			return FIM_ERR_NO_ERROR;
 		}
+
 		return FIM_ERR_GENERIC;
 	}
 
