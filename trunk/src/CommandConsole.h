@@ -342,8 +342,8 @@ class CommandConsole FIM_FINAL :
 #ifdef FIM_WINDOWS
 	const FimWindow& current_window(void)const;
 #endif /* FIM_WINDOWS */
-	fim::string get_variables_list(void)const;
 	public:
+	fim::string get_variables_list(void)const;
 	fim::string get_commands_list(void)const;
 	fim::string get_aliases_list(void)const;
 
