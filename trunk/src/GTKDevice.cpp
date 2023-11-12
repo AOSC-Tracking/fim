@@ -1348,6 +1348,27 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 	{
 		FIM_GTK_DBG_COUT << ":" << rs << "\n";
 
+		if( rs)
+		if(*rs && isdigit(*rs))
+		{
+			fim_coo_t current_w = width();
+			fim_coo_t current_h = height();
+			if(const int si = sscanf(rs,"%d:%d",&current_w,&current_h))
+			{
+				if ( si == 1)
+					current_h = current_w;
+				if ( strrchr(rs,'%') && !strrchr(rs,'%')[1] )
+					current_w = FIM_MIN(current_w, 100),
+					current_h = FIM_MIN(current_h, 100);
+				gtk_window_resize (window_, FIM_MAX(current_w,0), FIM_MAX(current_h,0));
+			}
+			else
+			{
+				current_w = current_h = 0;
+				std::cerr << "user specification of resolution (\""<<rs<<"\") wrong: it shall be in \"width:height\" format! \n";
+			}
+		}
+
 		if (strchr(rs, 'W'))
 			full_screen_=1;
 		else
