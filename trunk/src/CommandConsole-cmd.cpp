@@ -237,7 +237,7 @@ err:
 					<< getStringVariable(item) << "\nand description:\n" 
 					<< fim_var_help_db_query(item) << "\n";
 			if( oss.str() != FIM_CNS_EMPTY_STRING )
-				return oss.str();
+				return fim_man_to_text(oss.str(),true);
 			else
 				return item + ": no such command, alias, bound key or variable.\n";
 		}

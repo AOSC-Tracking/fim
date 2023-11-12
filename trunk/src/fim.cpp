@@ -1183,11 +1183,8 @@ FIM_NORETURN fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=F
 		case required_argument:
 		//std::cout << " <arg>";
 		if(fim_options[i].optdesc)
-		       	std::cout << " =" << fim_options[i].optdesc; else std::cout << " =<arg>";
-		break;
-		case optional_argument:
-		if(fim_options[i].optdesc)
-		       	std::cout << " " << fim_options[i].optdesc; else std::cout << "[=arg]";
+		       	std::cout << " =" << fim_man_to_text(fim_options[i].optdesc,true);
+		else std::cout << ( (fim_options[i].has_arg==required_argument) ? " =<arg>" : "[=arg]" );
 		break;
 		default:
 		;
@@ -1195,13 +1192,13 @@ FIM_NORETURN fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=F
 		if(helparg&&*helparg=='d')
 			std::cout << "\t\t " << fim_options[i].desc;
 		if(helparg&&*helparg=='l')
-			std::cout << "\t\t " << fim_man_to_text(fim_options[i].mandesc);
+			std::cout << "\t\t " << fim_man_to_text(fim_options[i].mandesc,true);
 		std::cout << FIM_SYM_ENDL;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
 		std::cout << "\n Please read the documentation distributed with the program.\n"
 			  << " For further help, consult the online help in fim (:" FIM_FLT_HELP "), and man fim (1), fimrc (5).\n"
-			  << " Pre-configuration online help also available invoking --help " FIM_CNS_EX_HELP_ITEM ".\n"
+			  << " Pre-configuration online help also available invoking --help " << fim_man_to_text(FIM_CNS_EX_HELP_ITEM,true) << ".\n"
 			  << " For bug reporting read the " FIM_CNS_BUGS_FILE " file.\n";
 done:
 	    std::exit(code);

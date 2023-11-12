@@ -677,6 +677,8 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=s | wc -l` -eq `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -l`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=s | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=l | wc -c`
+	! $(FIM_EXE) $(FIMNORCOPTS) --help=s      | grep '\\fR'
+	! $(FIM_EXE) $(FIMNORCOPTS) --help=s desc | grep '\\fR'
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l | wc -l` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -l`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help _last_cmd_output | wc -l` = 5
@@ -690,12 +692,12 @@ endif
 	test `$(FIM_EXE) $(FIMNORCOPTS)  -h      -R          | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS)  -h      -R       -R | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS)  -hs     -R          | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS)  -hd     -R          | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS)  -hd     -R          | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS)  -hl     -R          | wc -c`
-	test `$(FIM_EXE) $(FIMNORCOPTS)  -hl     -R          | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS)  -hm     -R          | wc -c`
+	test `$(FIM_EXE) $(FIMNORCOPTS)  -hl     -R          | wc -c` -eq `$(FIM_EXE) $(FIMNORCOPTS)  -hm     -R          | wc -c`
 if WANT_READ_STDIN_IMAGE
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help   --read-from-stdin | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help   --read-from-stdin --read-from-stdin | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=s --read-from-stdin | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=d --read-from-stdin | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=d --read-from-stdin | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=l --read-from-stdin | wc -c`
-	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l --read-from-stdin | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m --read-from-stdin | wc -c`
+	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l --read-from-stdin | wc -c` -eq `$(FIM_EXE) $(FIMNORCOPTS) --help=m --read-from-stdin | wc -c`
 	test `$(FIM_EXE) $(FIMNORCOPTS) --help=l --read-from-stdin | wc -l` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m --read-from-stdin | wc -l`
 endif
 #	if $(CXX11TEST); then $(FIM_EXE) $(FIMNORCOPTS) -o dumb --background-recursive -B . -kK -kq -F 'if(_filelistlen==1)quit 255'; fi # -kK triggers a yield (often, not always)
