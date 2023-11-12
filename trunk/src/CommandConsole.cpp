@@ -2715,4 +2715,9 @@ void CommandConsole::push_key_press(const char *cp)
 }
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 
+CommandConsole::bindings_t CommandConsole::get_bindings(void)const
+{
+	return bindings_;
+}
+
 } /* namespace fim */

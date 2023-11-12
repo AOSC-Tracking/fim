@@ -86,10 +86,10 @@ namespace fim
 	GtkWidget *lmitMenu_{}; // TODO: FIXME: temporary
 	std::vector<GtkWidget *> lms3Miv{4}; // TODO: FIXME: temporary
 	int hist_n_{}; // TODO: FIXME: temporary
-	std::map<std::string,std::string> seq_to_cmd_; // TODO: FIXME: temporary
 	std::map<std::string,std::string> cmd_to_seq_; // TODO: FIXME: temporary
 	std::map<std::string,void(*)(void)> cmd_funcs_; // TODO: FIXME: temporary
 	std::map<std::string,std::string> help_; // TODO: FIXME: temporary
+	CommandConsole::bindings_t bindings_;
 	std::string aliases_;
 	std::string commands_;
 	std::string variables_;
@@ -468,9 +468,9 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
 		if ( csi != cmd_to_seq_.end() )
 		{
 			const auto & cs = *csi;
-			const auto & sc = *seq_to_cmd_.find(cs.second);
+			const auto & sc = std::string("sequence");// *seq_to_cmd_.find(cs.second);
 			//const std::string & seq = sc.first;
-			const km_t km = str_to_km(sc.first.c_str());
+			const km_t km = str_to_km(sc.c_str()); // FIXME: stub for now -- need to recover binding
 
 			if ( km.first )
 			{
@@ -506,26 +506,30 @@ void do_rebuild_help_bindings_menu(GtkWidget *keysMi, const bool help_or_press)
 	if(keysMi && keysMenu_) // workaround around warnings in gtk_menu_item_set_submenu
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(keysMi), keysMenu_);
 
-	for (const auto & sc : seq_to_cmd_)
+	for (const auto & bc : bindings_)
 	{
-		GtkWidget * const keyMi = gtk_menu_item_new_with_label(sc.second.c_str());
-		gtk_widget_set_tooltip_text(keyMi, (sc.second + " ...").c_str() );
-		const km_t km = str_to_km(sc.first.c_str());
+		const auto ks = cc.find_key_syms(bc.first);
+		GtkWidget * const keyMi = gtk_menu_item_new_with_label((bc.second).c_str());
+		gtk_widget_set_tooltip_text(keyMi, (bc.second + " ...").c_str() );
+		const km_t km = str_to_km(ks.c_str()); // FIXME: need update
 
-		if ( km.first )
+		//if ( km.first )
+		if (true)
 		{
-			const fim_key_t key = km.first;
+			//const fim_key_t key = km.first;
+			const fim_key_t key = bc.first;
 			const GdkModifierType mmask = km.second;
 
 			gtk_widget_add_accelerator(keyMi, "activate", accel_group_, key, mmask, GTK_ACCEL_VISIBLE);
 		}
 
-		if ( cmd_funcs_.find(sc.second) != cmd_funcs_.end() )
+		if ( true )
+		//if ( cmd_funcs_.find(bc.second) != cmd_funcs_.end() )
 		{
 			if ( help_or_press )
-				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( do_print_item_help ), (void*) sc.second.c_str() );
+				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( do_print_item_help ), (void*) bc.second.c_str() );
 			else
-				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( cmd_funcs_[sc.second] ), NULL);
+				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( cb_cc_exec ), (void*) bc.second.c_str() );
 		}
 
 		gtk_menu_shell_append(GTK_MENU_SHELL(keysMenu_), keyMi);
@@ -885,6 +889,7 @@ void do_rebuild_help_menus(void)
 	gtk_widget_set_margin_bottom(GTK_WIDGET(menubar_), 0);
 	gtk_grid_attach_next_to (GTK_GRID(grid_), GTK_WIDGET(menubar_), GTK_WIDGET(drawingarea_), GTK_POS_TOP, 1, 1);
 
+	bindings_ = cc.get_bindings(); // note: this invalidates widgets
 	aliases_ = cc.get_aliases_list(); // note: this invalidates widgets
 	commands_ = cc.get_commands_list(); // note: this invalidates widgets
 	variables_ = cc.get_variables_list(); // note: this invalidates widgets
@@ -963,9 +968,8 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 	g_signal_connect(G_OBJECT(drawingarea_), "draw", G_CALLBACK(cb_do_draw), NULL);
 	// TODO: handle events in drawingarea_ and cmdline_entry_
 
-	do_rebuild_help_menus();
-
 	accel_group_ = gtk_accel_group_new();
+	do_rebuild_help_menus();
 	gtk_window_add_accel_group(GTK_WINDOW(window_), accel_group_);
 	keys_setup(sym_keys);
 	// TODO: need to populate menus and if needed, rebuild them

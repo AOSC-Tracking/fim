@@ -79,7 +79,9 @@ class CommandConsole FIM_FINAL :
 	/*
 	 * bindings of key codes to actions (compounds of commands)
 	 */
+	public:
 	typedef std::map<fim_key_t,fim_cmd_id> bindings_t;		//code->commands
+	private:
 	bindings_t bindings_;		//code->commands
 	typedef std::map<fim_key_t,fim::string> bindings_help_t; // code->help
 	bindings_help_t bindings_help_;		//code->commands
@@ -89,7 +91,9 @@ class CommandConsole FIM_FINAL :
 	 */
 	sym_keys_t	sym_keys_;	//symbol->code
 
+	public:
 	typedef std::map<fim_key_t, fim::string> key_syms_t;//code->symbol
+	private:
 	key_syms_t key_syms_;//code->symbol
 
 	private:
@@ -346,6 +350,7 @@ class CommandConsole FIM_FINAL :
 	fim::string get_variables_list(void)const;
 	fim::string get_commands_list(void)const;
 	fim::string get_aliases_list(void)const;
+	bindings_t get_bindings(void)const;
 
 	void printHelpMessage(const fim_char_t *pn="fim")const;
 	void appendPostInitCommand(const fim::string& c);
