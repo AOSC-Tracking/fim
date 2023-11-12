@@ -367,9 +367,14 @@ void do_print_item_help(GtkWidget *, const char* item)
 	cc.execute("echo", { do_get_item_help(std::string(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
+static gboolean cb_open_file( GtkMenuItem*);
+
 void cb_cc_exec(GtkWidget *, const char* cmd)
 {
-	cc.execute(xtrcttkn(cmd).c_str(), {});
+	if( 0 <= strcmp(cmd, "open") )
+		cb_open_file(NULL);
+	else
+		cc.execute(xtrcttkn(cmd).c_str(), {});
 }
 
 void do_print_var_val(GtkWidget *, const char* var)
@@ -590,14 +595,10 @@ void cb_on_open_response (GtkDialog *dialog, int response)
 {
 	if (response == GTK_RESPONSE_ACCEPT) {
 		std::string msg ("opening ");
-		char * const fn = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		char * const fn = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); // FIXME: need gtk_file_chooser_add_filter ...
 		msg += fn;
+		cc.push(fn); // FIXME: preliminary
 		g_free (fn);
-#if FIM_GTK_WITH_RENDERED_STATUSBAR
-// FIXME
-#else
-		gtk_statusbar_push(GTK_STATUSBAR(statusbar_), context_id, msg.c_str());
-#endif
 	}
 	gtk_widget_destroy (GTK_WIDGET(dialog));
 	dialog = NULL;
@@ -852,7 +853,6 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 static void do_init_cmd_funcs(void)
 {
 	// bind actual functionality to commands
-	cmd_funcs_["open"] = [](){ cb_open_file(NULL); };
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
 	cmd_funcs_["rebuild_limit_menu"] = [](){ };
 	cmd_funcs_["toggle_flip"] = [](){ };
