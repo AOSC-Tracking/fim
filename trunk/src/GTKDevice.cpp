@@ -42,7 +42,6 @@
 
 #define FIM_GTK_WITH_RENDERED_STATUSBAR 1 /* 1 to render, 0 to use statusbar_ */
 #define FIM_GTK_WITH_MENUBAR 1
-#define FIM_GTK_USE_NUL_SEPARATED_TOKENS 1
 
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
@@ -356,6 +355,7 @@ std::string do_get_item_help(const char* item)
 
 static std::string xtrcttkn(const char* cmd)
 {
+	// extract token from longer C string into string
 	const auto sc = strchr(cmd, ' ');
 	std::string cmds;
 	cmds = std::string(cmd, sc ? sc : cmd+strlen(cmd));
@@ -364,7 +364,7 @@ static std::string xtrcttkn(const char* cmd)
 
 void do_print_item_help(GtkWidget *, const char* item)
 {
-	cc.execute("echo", { do_get_item_help(std::string(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
+	cc.execute("echo", { do_get_item_help(xtrcttkn(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
 static gboolean cb_open_file( GtkMenuItem*);
@@ -395,9 +395,6 @@ void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
 	for (auto a0 = 0UL, a1 = aliases_.find(' '); a0 < a1 && a1!=std::string::npos ; a0 = a1+1, a1 = aliases_.find(' ',a1+1) )
 	{
 		const auto alias = aliases_.substr(a0,a1-a0);
-#if FIM_GTK_USE_NUL_SEPARATED_TOKENS
-		aliases_[a1] = FIM_SYM_CHAR_NUL;
-#endif /* FIM_GTK_USE_NUL_SEPARATED_TOKENS */
 		void * ap = (void*) (aliases_.c_str()+a0);
 		GtkWidget * const aliMi = gtk_menu_item_new_with_label(alias.c_str());
 		gtk_widget_set_tooltip_text(aliMi, alias.c_str() );
@@ -425,9 +422,6 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd)
 	for (auto v0 = 0UL, v1 = variables_.find(' '); v0 < v1 && v1!=std::string::npos ; v0 = v1+1, v1 = variables_.find(' ',v1+1) )
 	{
 		const auto var = variables_.substr(v0,v1-v0);
-#if FIM_GTK_USE_NUL_SEPARATED_TOKENS
-		variables_[v1] = FIM_SYM_CHAR_NUL;
-#endif /* FIM_GTK_USE_NUL_SEPARATED_TOKENS */
 		void * vp = (void*) (variables_.c_str()+v0);
 		if(verbose_) std::cout << "VAR: " << var << std::endl;
 		GtkWidget * const varMi = gtk_menu_item_new_with_label(var.c_str());
@@ -458,9 +452,6 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
 	for (auto c0 = 0UL, c1 = commands_.find(' '); c0 < c1 && c1!=std::string::npos ; c0 = c1+1, c1 = commands_.find(' ',c1+1) )
 	{
 		const auto cmd = commands_.substr(c0,c1-c0);
-#if FIM_GTK_USE_NUL_SEPARATED_TOKENS
-		commands_[c1] = FIM_SYM_CHAR_NUL;
-#endif /* FIM_GTK_USE_NUL_SEPARATED_TOKENS */
 		void * cp = (void*) (commands_.c_str()+c0);
 		// TODO: what about cmd_to_seq_?
 		const auto & csi = cmd_to_seq_.find(cmd);
@@ -872,6 +863,7 @@ static void do_init_cmd_funcs(void)
 
 void do_rebuild_help_menus(void)
 {
+	// build/rebuild menus from scratch (not showing them)
 	if (menubar_)
 		gtk_container_remove (GTK_CONTAINER(grid_), menubar_);
 
@@ -897,7 +889,7 @@ void do_rebuild_help_menus(void)
 		add_to_menubar(menu_spec);
 	//for (size_t i = 0; i < sizeof(menu_specs_)/sizeof(menu_specs_[0]) ; i++)
 		//add_to_menubar(menu_specs_[i]);
-	gtk_widget_show_all (GTK_WIDGET(menubar_));
+//	gtk_widget_show_all (GTK_WIDGET(menubar_));
 //	gtk_widget_show_all (GTK_WIDGET(window_));
 //	gtk_widget_hide (cmdline_entry_);
 } /* do_rebuild_help_menus */
@@ -967,7 +959,6 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 	// TODO: handle events in drawingarea_ and cmdline_entry_
 
 	accel_group_ = gtk_accel_group_new();
-	do_rebuild_help_menus();
 	gtk_window_add_accel_group(GTK_WINDOW(window_), accel_group_);
 	keys_setup(sym_keys);
 	// TODO: need to populate menus and if needed, rebuild them
@@ -975,7 +966,7 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 	gtk_widget_hide(cmdline_entry_);
 
 	gtk_test_widget_wait_for_draw(GTK_WIDGET(window_)); // to get proper window size
-	reinit(opts_.c_str());
+	reinit((opts_+"f").c_str());
 	FIM_GTK_DBG_COUT << "\n";
 
 	return FIM_ERR_NO_ERROR;
@@ -1361,20 +1352,24 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 			full_screen_=1;
 		else
 			full_screen_=0;
-		toggle_fullscreen(full_screen_);
+		if (strchr(rs, 'W') || strchr(rs, 'W'))
+			toggle_fullscreen(full_screen_);
+
+		if (strchr(rs, 'f')) // TODO: FIXME: undocumented
+			do_rebuild_help_menus();
 
 		if (strchr(rs, 'b')) // TODO: FIXME: barely documented
 			show_menubar_=0;
 		else
 			show_menubar_=1;
 
-		if ( show_menubar_ )
-			gtk_widget_show_all (menubar_);
-		else
-			gtk_widget_hide (menubar_);
-
-		if (strchr(rs, 'f')) // TODO: FIXME: undocumented
-			do_rebuild_help_menus();
+		if (strchr(rs, 'b') || strchr(rs, 'B') || strchr(rs, 'f'))
+		{
+			if ( show_menubar_ )
+				gtk_widget_show_all (menubar_);
+			else
+				gtk_widget_hide (menubar_);
+		}
 
 		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR )
 		{
