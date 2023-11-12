@@ -303,6 +303,7 @@ const char * const menu_specs_ [] = {
 "_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u",
 "_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *",
 "_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *",
+"_Custom actions/_Submenu/_Next  next *",
 "_Custom actions/_Add menu...  menu_dialog",
 "_Custom actions/_Toggle full screen view  toggle_fullscreen",
 "_All actions/_Commands  FimMenuCommands/",
@@ -353,9 +354,6 @@ std::string do_get_item_help(const char* item)
 	return ih;
 }
 
-#if FIM_GTK_USE_NUL_SEPARATED_TOKENS
-#define xtrcttkn(X) std::string(X)
-#else /* FIM_GTK_USE_NUL_SEPARATED_TOKENS */
 static std::string xtrcttkn(const char* cmd)
 {
 	const auto sc = strchr(cmd, ' ');
@@ -363,11 +361,10 @@ static std::string xtrcttkn(const char* cmd)
 	cmds = std::string(cmd, sc ? sc : cmd+strlen(cmd));
 	return cmds;
 }
-#endif /* FIM_GTK_USE_NUL_SEPARATED_TOKENS */
 
 void do_print_item_help(GtkWidget *, const char* item)
 {
-	cc.execute("echo", { do_get_item_help(xtrcttkn(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
+	cc.execute("echo", { do_get_item_help(std::string(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
 void cb_cc_exec(GtkWidget *, const char* cmd)
@@ -431,10 +428,10 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd)
 		GtkWidget * const varMi = gtk_menu_item_new_with_label(var.c_str());
 		// perhaps still need check if variable proper..
 		if (help_or_cmd)
-			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(xtrcttkn(var).c_str()) + " ... and click to see help...").c_str() ),
+			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) + " ... and click to see help...").c_str() ),
 			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_item_help ), (void*) vp );
 		else
-			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(xtrcttkn(var).c_str()) + " ... and click to see value ...").c_str() ),
+			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) + " ... and click to see value ...").c_str() ),
 			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_var_val ), (void*) vp );
 		gtk_menu_shell_append(GTK_MENU_SHELL(varsMenu_), varMi);
 		gtk_widget_show(varMi);
@@ -763,7 +760,7 @@ repeat:
 #endif
 			if ( true )
 			{
-				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK(cmd_funcs_["man_fimrc"]), NULL);
+				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), (void*)b );
 				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], cmd.c_str());
 			}
 			else
@@ -840,10 +837,11 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 		std::cout << "Warning: wrong dialog termination : " << result << "\n";
 	else
 	{
-		const std::string rspns = gtk_entry_get_text(GTK_ENTRY(entry));
-		std::cout << "Using menu spec : " << rspns << " after getting code " << result << "\n";
-		if (rspns.size())
-			add_to_menubar(rspns.c_str()),
+		// TODO: FIXME: this is not yet ready
+		const std::string menubarspec_ = gtk_entry_get_text(GTK_ENTRY(entry));
+		std::cout << "Using menu spec : " << menubarspec_ << " after getting code " << result << "\n";
+		if (menubarspec_.size())
+			add_to_menubar(menubarspec_.c_str()),
 			gtk_widget_show_all(menubar_);
 	}
 	gtk_widget_destroy (dialog);
