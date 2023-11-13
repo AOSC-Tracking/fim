@@ -25,6 +25,7 @@
 // - full screen mode to hide scrolldown menu
 // - update and sync widgets with vars' value
 // - clean up FIM's finalization with GTK's finalization
+// - toggle__ needs error-tolerance
 // - ...
 
 #include <map>
@@ -294,13 +295,18 @@ const char * const menu_specs_ [] = {
 "_File/_Prev  prev  p",
 //"_List/_Limit list  FimMenuLimit/", // FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated.
 "_List/_Unlimit list  unlimit_list  u",
-"_View/_Mirror  toggle_mirror  m",
-"_View/_Flip  toggle_flip  f",
+"_View/_Mirror  toggle__i:mirrored__1__0  m",
+"_View/Automirror  toggle___automirror__1__0  ",
+"_View/_Flip  toggle__i:flipped__1__0  f",
+"_View/Autoflip  toggle___autoflip__1__0  ",
 "_View/scale: _auto  scale_set_auto  a  scale: by _hand (manual)  scale_set_manual  m  scale: by _width  scale_set_auto_width  w",
 "_View/_Verbose  toggle_verbose  v",
 "_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11",
 "_Custom actions/scaling: _auto  scale_set_auto  a  scaling: manual  scale_set_manual  m  scaling: by _width  scale_set_auto_width  w",
-"_Custom actions/_Toggle flipped flag  toggle_flip  f",
+"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f",
+"_Custom actions/Verbose keys  toggle___verbose_keys__1__0  ",
+"_Custom actions/Desaturate  toggle___autodesaturate__1__0  ",
+"_Custom actions/Autonegate  toggle___autonegate__1__0  ",
 "_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /",
 "_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u",
 "_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *",
@@ -399,7 +405,7 @@ static void sync_toggle_menu(const std::string cmd)
 	if ( check_menu_items_.find(cmd) != check_menu_items_.end() )
 		for ( const auto & cmi : check_menu_items_[cmd] )
 		{
-			auto val = cc.getStringVariable(vid);
+			const auto val = cc.getStringVariable(vid);
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), (val == val1 ? TRUE : FALSE));
 		}
 	return;		
@@ -428,6 +434,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 				cc.execute("set", {vid, val1}, true);
 			else
 				cc.execute("set", {vid, val2}, true);
+			cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
 		}
 		else
 			cc.execute(xtrcttkn(cmd).c_str(), {});
@@ -907,7 +914,6 @@ static void do_init_cmd_funcs(void)
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
 	cmd_funcs_["rebuild_limit_menu"] = [](){ };
 	cmd_funcs_["toggle_flip"] = [](){ };
-	cmd_funcs_["toggle_mirror"] = [](){  };
 	cmd_funcs_["toggle_verbose"] = [](){ };
 	cmd_funcs_["toggle_statusbar"] = [](){ };
 	cmd_funcs_["toggle_menubar"] = [](){ };
