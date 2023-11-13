@@ -389,6 +389,28 @@ static toggle_choices_t get_toggle_choices(const std::string & cmd)
 	return {vid,vv1,vv2};
 }
 
+static void sync_toggle_menu(const std::string cmd)
+{
+	const toggle_choices_t tct = get_toggle_choices(cmd);
+	const std::string vid = std::get<0>(tct);
+	const std::string val1 = std::get<1>(tct);
+	const std::string val2 = std::get<2>(tct);
+
+	if ( check_menu_items_.find(cmd) != check_menu_items_.end() )
+		for ( const auto & cmi : check_menu_items_[cmd] )
+		{
+			auto val = cc.getStringVariable(vid);
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), (val == val1 ? TRUE : FALSE));
+		}
+	return;		
+}
+
+void sync_toggle_menus()
+{
+	for ( const auto & cmi : check_menu_items_ )
+		sync_toggle_menu(cmi.first);
+}
+
 static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 {
 	if( 0 == strncmp(cmd, "open", 4) )
@@ -398,12 +420,14 @@ static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 		if( 0 == strncmp(cmd, "toggle__", 5) ) // TODO: FIXME: this will need documentation
 		{
 			const toggle_choices_t tct = get_toggle_choices(xtrcttkn(cmd));
-			static std::string tvs = std::get<0>(tct);
+			const std::string vid = std::get<0>(tct);
+			const std::string val1 = std::get<1>(tct);
+			const std::string val2 = std::get<2>(tct);
 
 			if ( gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(wdgt) ) )
-				cc.execute("set", {tvs, std::get<1>(tct)}, true);
+				cc.execute("set", {vid, val1}, true);
 			else
-				cc.execute("set", {tvs, std::get<2>(tct)}, true);
+				cc.execute("set", {vid, val2}, true);
 		}
 		else
 			cc.execute(xtrcttkn(cmd).c_str(), {});
@@ -756,7 +780,7 @@ repeat:
 			if ( b == strstr(b, "toggle__") ) // TODO: FIXME: this will need documentation
 			{
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
-				check_menu_items_[cmd].insert((GtkWidget*) menu_items_[add]),
+				check_menu_items_[xtrcttkn(cmd.c_str())].insert((GtkWidget*) menu_items_[add]), // or vid?
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_items_[add]), FALSE);
 			}
 			else
@@ -765,7 +789,7 @@ repeat:
 				{
 					if(verbose_) std:: cout << "RADIO " << add << "\n";
 					menu_items_[add] = (GtkMenuItem*) gtk_radio_menu_item_new_with_mnemonic(menuGr, lbl.c_str()),
-					check_menu_items_[cmd].insert((GtkWidget*) menu_items_[add]),
+					// check_menu_items_[vid].insert((GtkWidget*) menu_items_[add]), // TODO: need a different container, e.g. radio_menu_items_
 					menuGr = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menu_items_[add])),
 					radioset.insert((GtkWidget*) menu_items_[add]);
 				}
@@ -1016,6 +1040,7 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 	}
 
 	gtk_main_iteration();
+	sync_toggle_menus();
 
 	if ( last_pressed_key_ )
 	{
