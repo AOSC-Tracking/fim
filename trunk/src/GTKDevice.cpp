@@ -233,6 +233,7 @@ static gboolean cb_do_draw(GtkWidget *drawingarea, cairo_t * cr)
 	if ( !pixbuf || nrsz )
 	{
 		alloc_pixbuf(nw, nh);
+		FIM_GTK_DBG_COUT << gtk_widget_get_allocated_height((GtkWidget*)window_) << " " << gtk_widget_get_allocated_height(drawingarea) << "\n"; // FIXME: display_resize is messy
 		cc.display_resize(nw, nh);
 	}
 
@@ -1344,28 +1345,42 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 	return FIM_ERR_NO_ERROR;
 }
 
+	fim_err_t GTKDevice::resize(fim_coo_t w, fim_coo_t h)
+	{
+		// FIXME: this mechanism is messy, because gtk_widget_get_allocated_height(drawingarea_) != gtk_widget_get_allocated_height(window_)
+		if (w != gtk_widget_get_allocated_width((GtkWidget*)drawingarea_) || h != gtk_widget_get_allocated_height((GtkWidget*)drawingarea_))
+			gtk_window_resize (window_, w, h);
+		return FIM_ERR_NO_ERROR;
+	}
+	
 	fim_err_t GTKDevice::reinit(const fim_char_t *rs)
 	{
 		FIM_GTK_DBG_COUT << ":" << rs << "\n";
 
-		if( rs)
-		if(*rs && isdigit(*rs))
+		if( rs && *rs )
 		{
 			fim_coo_t current_w = width();
 			fim_coo_t current_h = height();
-			if(const int si = sscanf(rs,"%d:%d",&current_w,&current_h))
+			auto os = rs;
+			while ( *os && ! isdigit(*os) )
+				++os;
+			if ( *os && isdigit(*os) )
 			{
-				if ( si == 1)
-					current_h = current_w;
-				if ( strrchr(rs,'%') && !strrchr(rs,'%')[1] )
-					current_w = FIM_MIN(current_w, 100),
-					current_h = FIM_MIN(current_h, 100);
-				gtk_window_resize (window_, FIM_MAX(current_w,0), FIM_MAX(current_h,0));
-			}
-			else
-			{
-				current_w = current_h = 0;
-				std::cerr << "user specification of resolution (\""<<rs<<"\") wrong: it shall be in \"width:height\" format! \n";
+				if(const int si = sscanf(os,"%d:%d",&current_w,&current_h))
+				{
+					if ( si == 1)
+						current_h = current_w;
+					if ( strrchr(os,'%') && !strrchr(os,'%')[1] )
+						current_w = FIM_MIN(current_w, 100),
+						current_h = FIM_MIN(current_h, 100);
+					if (current_w && current_h)
+						gtk_window_resize (window_, current_w, current_h); // notice actual resize is postponed
+				}
+				else
+				{
+					current_w = current_h = 0;
+					std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
+				}
 			}
 		}
 
@@ -1373,7 +1388,7 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 			full_screen_=1;
 		else
 			full_screen_=0;
-		if (strchr(rs, 'W') || strchr(rs, 'W'))
+		if (strchr(rs, 'w') || strchr(rs, 'W'))
 			toggle_fullscreen(full_screen_);
 
 		if (strchr(rs, 'f')) // TODO: FIXME: undocumented
@@ -1392,8 +1407,9 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 				gtk_widget_hide (menubar_);
 		}
 
-		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR )
+		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR ) // notice nw_ and nh_ still at old value
 		{
+			// if reinit called from constructor it returns error
 			// opts_ = rs;
 			return FIM_ERR_NO_ERROR;
 		}

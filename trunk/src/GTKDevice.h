@@ -54,6 +54,7 @@ class GTKDevice : public DisplayDevice {
 	fim::string opts_;
 private:
 	inline void setpixel(fim_byte_t* rgb, fim_coo_t x, fim_coo_t y, fim_byte_t r, fim_byte_t g, fim_byte_t b);
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE ;
 };
 #endif /* FIM_WITH_LIBGTK */
 #endif /* FIM_GTKDEVICE_H */
