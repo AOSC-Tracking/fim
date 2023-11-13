@@ -1705,7 +1705,9 @@ autocmd "PostReload"  "" "cacalib_fix";
 autocmd "PostLoad"    "" "cacalib_fix";
 alias "refresh" "desc 'reload';redisplay;" "reloads and displays image description";
 bind "F5" "refresh";
-bind "F11" "if( (_device_string=='sdl' || _device_string=='gtk' ) && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'mW0:0';_fullscreen=1;}else if( (_device_string=='sdl' || _device_string=='gtk' ) && _old_sw*_old_sh*_fullscreen){display 'reinit' 'rwm'._old_sw.':'._old_sh;_fullscreen=0;}" "Toggles full screen. Will show mouse cursor in full screen.";
+alias "toggle_fullscreen" "if( (_device_string=='sdl' || _device_string=='gtk' ) && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'mW0:0';_fullscreen=1;}else if( (_device_string=='sdl' || _device_string=='gtk' ) && _old_sw*_old_sh*_fullscreen){display 'reinit' 'rwm'._old_sw.':'._old_sh;_fullscreen=0;}_gtk_fullscreen=_fullscreen;" "Toggles full screen. Will show mouse cursor in full screen.";
+alias "_gtk_check_for_toggle_fullscreen" "if( _device_string=='gtk' && _gtk_fullscreen != _fullscreen){toggle_fullscreen;}";
+bind "F11" "toggle_fullscreen";
 
 autocmd "PostReload"  "" "i:fresh=1" ;
 autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
@@ -1715,6 +1717,7 @@ autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "if(_want_prefetch>0){prefetch;}";
 autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "idempotent_cmd"; # Bug workaround: without it console scroll is broken.
+autocmd "PostInteractiveCommand"   "" "_gtk_check_for_toggle_fullscreen";
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';}" "goes forward 10 images";
 alias "prev10" "i=0;while(i<10){i=i+1;prev;display;sleep '1';}" "goes backward 10 images";

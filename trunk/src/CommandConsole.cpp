@@ -782,7 +782,7 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
-        fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args)
+        fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args, bool as_interactive)
 	{
 		/*
 		 * Single tokenized commands with arguments.
@@ -791,6 +791,14 @@ ret:
 		/* first determine whether cmd is an alias */
 		const fim::string ocmd=aliasRecall(cmd);
 		const int int0 = (args.size()>0) ? atoi(args[0].c_str()) : 1;
+
+		if (as_interactive)
+		{
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
+			execute(cmd, args, false);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
+			return FIM_CNS_EMPTY_RESULT;
+		}
 
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{

@@ -23,10 +23,12 @@
 // - move vars to (anyway singleton) class
 // - in command line mode, clicking on menus may input command there
 // - full screen mode to hide scrolldown menu
+// - update and sync widgets with vars' value
 // - clean up FIM's finalization with GTK's finalization
 // - ...
 
 #include <map>
+#include <tuple>
 #include "fim.h"
 
 #ifdef FIM_WITH_LIBGTK
@@ -296,7 +298,7 @@ const char * const menu_specs_ [] = {
 "_View/_Flip  toggle_flip  f",
 "_View/scale: _auto  scale_set_auto  a  scale: by _hand (manual)  scale_set_manual  m  scale: by _width  scale_set_auto_width  w",
 "_View/_Verbose  toggle_verbose  v",
-"_Window/_Fullscreen  toggle_fullscreen  F11",
+"_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11",
 "_Custom actions/scaling: _auto  scale_set_auto  a  scaling: manual  scale_set_manual  m  scaling: by _width  scale_set_auto_width  w",
 "_Custom actions/_Toggle flipped flag  toggle_flip  f",
 "_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /",
@@ -305,7 +307,7 @@ const char * const menu_specs_ [] = {
 "_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *",
 "_Custom actions/_Submenu/_Next  next *",
 "_Custom actions/_Add menu...  menu_dialog",
-"_Custom actions/_Toggle full screen view  toggle_fullscreen",
+"_Custom actions/_Toggle full screen view  toggle___gtk_fullscreen__1__0",
 "_All actions/_Commands  FimMenuCommands/",
 "_All actions/_Aliases  FimMenuAliases/",
 "_All actions/_Key Bindings  FimMenuKeyBindings/",
@@ -370,12 +372,42 @@ void do_print_item_help(GtkWidget *, const char* item)
 
 static gboolean cb_open_file( GtkMenuItem*);
 
-void cb_cc_exec(GtkWidget *, const char* cmd)
+
+using toggle_choices_t = std::tuple<std::string,std::string,std::string>;
+
+static toggle_choices_t get_toggle_choices(const std::string & cmd)
+{
+	const auto s1p = cmd.find("__");
+	const auto wid = std::string(cmd,0, s1p);
+	const auto s2p = cmd.find("__", s1p+2);
+	const auto vid = std::string(cmd, s1p+2, s2p-s1p-2);
+	const auto s3p = cmd.find("__", s2p+2);
+	const auto vv1 = std::string(cmd, s2p+2, s3p-s2p-2);
+	const auto s4p = cmd.find("__", s3p+2);
+	const auto vv2 = std::string(cmd, s3p+2, s4p-s3p-2);
+
+	return {vid,vv1,vv2};
+}
+
+static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 {
 	if( 0 == strncmp(cmd, "open", 4) )
 		cb_open_file(NULL);
 	else
-		cc.execute(xtrcttkn(cmd).c_str(), {});
+	{
+		if( 0 == strncmp(cmd, "toggle__", 5) ) // TODO: FIXME: this will need documentation
+		{
+			const toggle_choices_t tct = get_toggle_choices(xtrcttkn(cmd));
+			static std::string tvs = std::get<0>(tct);
+
+			if ( gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(wdgt) ) )
+				cc.execute("set", {tvs, std::get<1>(tct)}, true);
+			else
+				cc.execute("set", {tvs, std::get<2>(tct)}, true);
+		}
+		else
+			cc.execute(xtrcttkn(cmd).c_str(), {});
+	}
 }
 
 void do_print_var_val(GtkWidget *, const char* var)
@@ -716,14 +748,17 @@ repeat:
 	if ( ( e = strstr(b, st) ) || ( e = b + strlen(b) ) )
 	{
 		const auto cmd = std::string(b,0,e-b);
+		std::string tooltip;
 
 		if ( menu_items_.find(add) == menu_items_.end() )
 		{
 			if(verbose_) std:: cout << "COMMAND " << e-b << ":" << cmd << "\n";
-			if ( b == strstr(b, "toggle") )
+			if ( b == strstr(b, "toggle__") ) // TODO: FIXME: this will need documentation
+			{
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
 				check_menu_items_[cmd].insert((GtkWidget*) menu_items_[add]),
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_items_[add]), FALSE);
+			}
 			else
 			{
 				if (tc > 2)
@@ -754,7 +789,7 @@ repeat:
 			if ( true )
 			{
 				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), (void*)b );
-				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], cmd.c_str());
+				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], (tooltip.size() ? tooltip.c_str() : cmd.c_str()) );
 			}
 			else
 			{

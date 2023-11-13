@@ -104,7 +104,7 @@ bind "{" 'font "prev";redisplay'
 bind "|" "toggle_font_auto_scale;redisplay"
 bind "}" 'font "next";redisplay'
 bind "F5" "refresh"
-bind "F11" "if( (_device_string=='sdl' || _device_string=='gtk' ) && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'mW0:0';_fullscreen=1;}else if( (_device_string=='sdl' || _device_string=='gtk' ) && _old_sw*_old_sh*_fullscreen){display 'reinit' 'rwm'._old_sw.':'._old_sh;_fullscreen=0;}" # Toggles full screen. Will show mouse cursor in full screen.
+bind "F11" "toggle_fullscreen"
 bind "Up" "pan_up"
 bind "Down" "pan_down"
 bind "Right" "pan_right"
