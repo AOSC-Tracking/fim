@@ -413,10 +413,30 @@ static void sync_toggle_menu(const std::string cmd)
 	return;		
 }
 
-void sync_toggle_menus()
+static void sync_toggle_menus()
 {
 	for ( const auto & cmi : check_menu_items_ )
 		sync_toggle_menu(cmi.first);
+}
+
+static void sync_radio_menu(const std::string cmd)
+{
+	const auto var = xtrcttkn(cmd.c_str(),'=');
+	const auto opt = cmd.c_str() + var.size()+1;
+
+	if ( radio_menu_items_.find(cmd) != radio_menu_items_.end() )
+		for ( const auto & cmi : radio_menu_items_[cmd] )
+		{
+			const auto val = cc.getStringVariable(var);
+			if (val == opt)
+				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi),TRUE);
+		}
+}
+
+static void sync_radio_menus()
+{
+	for ( const auto & cmi : radio_menu_items_ )
+		sync_radio_menu(cmi.first);
 }
 
 static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
@@ -1061,6 +1081,7 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 
 	gtk_main_iteration();
 	sync_toggle_menus();
+	sync_radio_menus();
 
 	if ( last_pressed_key_ )
 	{
