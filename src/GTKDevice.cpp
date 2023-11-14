@@ -26,6 +26,7 @@
 // - update and sync widgets with vars' value
 // - clean up FIM's finalization with GTK's finalization
 // - toggle__ needs error-tolerance
+// - radio buttons group update
 // - ...
 
 #include <map>
@@ -82,6 +83,7 @@ namespace fim
 	GtkWidget *menubar_{};
 	std::map<std::string,GtkMenuItem*> menu_items_; // TODO: broken in GTK4: https://docs.gtk.org/gtk4/class.PopoverMenu.html
 	std::map<std::string,std::set<GtkWidget*>> check_menu_items_; // TODO: may bring problems when actualizing
+	std::map<std::string,std::set<GtkWidget*>> radio_menu_items_; // TODO: may bring problems when actualizing
 	std::map<GSList*,std::set<GtkWidget*>> group_widgets_; // TODO: may bring problems when actualizing
 	std::map<std::string,GtkMenu*> menus_;
 
@@ -299,10 +301,10 @@ const char * const menu_specs_ [] = {
 "_View/Automirror  toggle___automirror__1__0  ",
 "_View/_Flip  toggle__i:flipped__1__0  f",
 "_View/Autoflip  toggle___autoflip__1__0  ",
-"_View/scale: _auto  scale_set_auto  a  scale: by _hand (manual)  scale_set_manual  m  scale: by _width  scale_set_auto_width  w",
+"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h",
 "_View/_Verbose  toggle_verbose  v",
 "_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11",
-"_Custom actions/scaling: _auto  scale_set_auto  a  scaling: manual  scale_set_manual  m  scaling: by _width  scale_set_auto_width  w",
+"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w",
 "_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f",
 "_Custom actions/Verbose keys  toggle___verbose_keys__1__0  ",
 "_Custom actions/Desaturate  toggle___autodesaturate__1__0  ",
@@ -362,10 +364,10 @@ std::string do_get_item_help(const char* item)
 	return ih;
 }
 
-static std::string xtrcttkn(const char* cmd)
+static std::string xtrcttkn(const char* cmd, const char sep=' ')
 {
 	// extract token from longer C string into string
-	const auto sc = strchr(cmd, ' ');
+	const auto sc = strchr(cmd, sep);
 	std::string cmds;
 	cmds = std::string(cmd, sc ? sc : cmd+strlen(cmd));
 	return cmds;
@@ -437,7 +439,23 @@ static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 			cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
 		}
 		else
-			cc.execute(xtrcttkn(cmd).c_str(), {});
+		{
+			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "=") )
+			{
+				const auto actn = xtrcttkn(cmd);
+				if( regexp_match(actn.c_str(), "=") )
+				{
+					const auto var = xtrcttkn(cmd,'=');
+					const auto val = actn.c_str() + var.size()+1;
+					cc.execute("set", {var, val}, true);
+				}
+				else
+					; // TODO
+				cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
+			}
+			else
+				cc.execute(xtrcttkn(cmd).c_str(), {});
+		}
 	}
 }
 
@@ -779,6 +797,7 @@ repeat:
 	if ( ( e = strstr(b, st) ) || ( e = b + strlen(b) ) )
 	{
 		const auto cmd = std::string(b,0,e-b);
+		const void* cp = b;
 		std::string tooltip;
 
 		if ( menu_items_.find(add) == menu_items_.end() )
@@ -794,9 +813,10 @@ repeat:
 			{
 				if (tc > 2)
 				{
-					if(verbose_) std:: cout << "RADIO " << add << "\n";
+					// group is lbl
+					if(verbose_) std:: cout << "RADIO " << add << " -> " << cmd << "\n";
 					menu_items_[add] = (GtkMenuItem*) gtk_radio_menu_item_new_with_mnemonic(menuGr, lbl.c_str()),
-					// check_menu_items_[vid].insert((GtkWidget*) menu_items_[add]), // TODO: need a different container, e.g. radio_menu_items_
+					radio_menu_items_[cmd].insert((GtkWidget*) menu_items_[add]), // TODO: need a different container, e.g. 
 					menuGr = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menu_items_[add])),
 					radioset.insert((GtkWidget*) menu_items_[add]);
 				}
@@ -819,7 +839,7 @@ repeat:
 #endif
 			if ( true )
 			{
-				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), (void*)b );
+				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), (void*)cp ); // cp centered on command, b is more
 				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], (tooltip.size() ? tooltip.c_str() : cmd.c_str()) );
 			}
 			else
@@ -914,15 +934,8 @@ static void do_init_cmd_funcs(void)
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
 	cmd_funcs_["rebuild_limit_menu"] = [](){ };
 	cmd_funcs_["toggle_flip"] = [](){ };
-	cmd_funcs_["toggle_verbose"] = [](){ };
-	cmd_funcs_["toggle_statusbar"] = [](){ };
-	cmd_funcs_["toggle_menubar"] = [](){ };
-	cmd_funcs_["toggle_fullscreen"] = [](){ };
-	cmd_funcs_["magnify"] = [](){ };
 	cmd_funcs_["man_fim"] = [](){ system("konsole -e man fim"); };
 	cmd_funcs_["man_fimrc"] = [](){ system("konsole -e man fimrc"); };
-	cmd_funcs_["scale_set_manual"] = [](){ };
-	cmd_funcs_["scale_set_auto_width"] = [](){ }; // __radio__autowidth__2
 	cmd_funcs_["unlimit_list"] = [](){ std::cout << "unlimit list\n"; };
 	// TODO: something to reinit autocompletion
 }
@@ -935,6 +948,7 @@ void do_rebuild_help_menus(void)
 
 	menu_items_ = {};
 	check_menu_items_ = {};
+	radio_menu_items_ = {};
 	group_widgets_ = {};
 	menus_ = {};
 
