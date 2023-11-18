@@ -533,7 +533,7 @@ list 'markall': mark all the current list files.
 .fi
 list 'unmarkall': unmark all the marked files.
 .fi
-list 'pushdir' \fR\fI{dirname}\fR: push all the files in \fR\fI{dirname}\fR, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression '\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$\:'.
+list 'pushdir' \fR\fI{dirname}\fR: push all the files in \fR\fI{dirname}\fR, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression '\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|QOI|AVIF|WEBP)$\:'.
 .fi
 list 'pushdirr' \fR\fI{dirname}\fR: like pushdir, but also push encountered directory entries recursively.
 .fi
@@ -1241,7 +1241,7 @@ _push_pushes_dirs
 .na
 .B
 _pushdir_re
-[in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$\:".
+[in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|QOI|AVIF|WEBP)$\:".
 .fi
 .na
 .B

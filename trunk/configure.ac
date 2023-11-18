@@ -512,6 +512,26 @@ AC_SUBST(LIBGIF)
 AM_CONDITIONAL(ENABLE_GIF, test x$have_gif = xyes)
 
 
+dnl ============= qoi file handling
+
+AC_ARG_ENABLE(qoi, AS_HELP_STRING([--disable-qoi],[Disable qoi support.]),
+[       if test x$enableval = xno ; then
+		fim_handle_qoi=no
+        fi
+])
+if test x$fim_handle_qoi != xno ; then
+  AC_CHECK_HEADERS([qoi.h], [fim_handle_qoi=yes;], [fim_handle_qoi=no;])
+  if test x$fim_handle_qoi != xno ; then
+    AC_MSG_NOTICE([Enabling support of QOI.]);
+    AC_DEFINE([FIM_HANDLE_QOI])
+    AC_DEFINE([FIM_WITH_QOI], 1, [QOI file support.])
+    FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffQoi.o"
+  fi
+fi
+AC_SUBST(LIBQOI)
+AM_CONDITIONAL(ENABLE_QOI, test x$have_qoi = xyes)
+
+
 dnl ============= tiff file handling
 
 AC_ARG_ENABLE(tiff, AS_HELP_STRING([--disable-tiff],[Disable tiff support.]),
@@ -592,6 +612,7 @@ dnl Please note that when the readline library is compiled with the curses libra
 dnl we cannot know in advance if it is so.
 AH_TEMPLATE([FIM_USE_READLINE])
 AH_TEMPLATE([FIM_HANDLE_GIF])
+AH_TEMPLATE([FIM_HANDLE_QOI])
 AH_TEMPLATE([FIM_HANDLE_TIFF])
 
 have_readline=no
@@ -2232,6 +2253,7 @@ dnl
 	JPEG     file support (libjpeg)     : ${fim_handle_jpeg:-no}
 	TIFF     file support (libtiff)     : ${fim_handle_tiff:-no}
 	GIF      file support (libgif)      : ${fim_handle_gif:-no}
+	QOI      file support (libqoi)      : ${fim_handle_qoi:-no}
 	DJVU     file support (libdjvu)     :*${fim_handle_djvu:-no}
 	PDF      file support (libpoppler)  :*${fim_handle_pdf:-no}
 	PS       file support (libspectre)  :*${fim_handle_ps:-no}

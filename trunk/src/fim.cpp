@@ -2063,7 +2063,22 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 #endif /* FIM_WANT_R_SWITCH */
 
+	
+#if 0
+		std::cerr << __LINE__ << " proviamo!\n"; 
+		if((retcode=FIM_ERR_TO_PERR(cc.init("fb")))!=FIM_PERR_NO_ERROR)
+		{
+			std::cerr << __LINE__ << " riproviamo!\n"; 
+			if((retcode=FIM_ERR_TO_PERR(cc.init("sdl")))!=FIM_PERR_NO_ERROR)
+			//if(1)
+			{
+				if((retcode=FIM_ERR_TO_PERR(cc.init("fb=.")))!=FIM_PERR_NO_ERROR)
+					goto ret;
+			}
+		}
+#else
 		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}
+#endif
 #ifdef FIM_READ_STDIN_IMAGE
 #if FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG
 		if( read_stdin_choice == ImageFile )

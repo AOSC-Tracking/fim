@@ -57,6 +57,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/special/0.xcf \
 	$(top_srcdir)/media/special/truncated_bad.png.bin \
 	$(top_srcdir)/media/special/truncated_bad.jpg.bin \
+	$(top_srcdir)/media/special/0_gray.qoi \
 	$(top_srcdir)/media/special/0_gray.png \
 	$(top_srcdir)/media/special/numbers_pcx.tar \
 	$(top_srcdir)/media/special/numbers_pcx.tar.bz2 \
@@ -434,6 +435,10 @@ if WITH_XCF2PNM
 endif
 if WITH_XCFTOPNM
 	if which xcftopnm ; then test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/special/0.xcf -c 'stdout i:_buffered_in_tmpfile;quit'` != '0'; fi
+endif
+if ENABLE_QOI
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb      $(top_srcdir)/media/special/0.qoi  -c 'stdout _last_file_loader;quit' $(SNTZ)` = libqoi
+	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb -i < $(top_srcdir)/media/special/0.qoi  -c 'stdout _last_file_loader;quit' $(SNTZ)` = libqoi
 endif
 if ENABLE_AVIF
 	test `$(FIM_EXE) $(FIMNORCOPTS) -X -o dumb $(top_srcdir)/media/special/0.avif -c 'stdout _last_file_loader;quit' $(SNTZ)` = libavif
