@@ -113,6 +113,7 @@ namespace fim
 	GtkAccelGroup *accel_group_{};
 	const std::string wtitle_ {"GTK-FIM -- no status yet"};
 	bool control_pressed_{false};
+	bool alt_pressed_{false};
 	fim_key_t last_pressed_key_{0};
 	GdkPixbuf * pixbuf{};
 	fim_coo_t rowstride_{};
@@ -183,9 +184,20 @@ static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 	if (event->keyval == GDK_KEY_Control_L)
 	{
 		if (event->type == GDK_KEY_RELEASE)
-			control_pressed_ = true;
-		if (event->type == GDK_KEY_PRESS)
 			control_pressed_ = false;
+		if (event->type == GDK_KEY_PRESS)
+			control_pressed_ = true;
+	}
+
+	if ( ! (event->state & GDK_MOD1_MASK ) )
+			alt_pressed_ = false; // e.g. when coming back from Alt-Tab
+
+	if (event->keyval == GDK_KEY_Alt_L || event->keyval == GDK_KEY_Alt_R)
+	{
+		if (event->type == GDK_KEY_RELEASE)
+			alt_pressed_ = false;
+		if (event->type == GDK_KEY_PRESS)
+			alt_pressed_ = true;
 	}
 
 	if ((event->type == GDK_KEY_PRESS) /*&& (event->state & GDK_CONTROL_MASK)*/)
@@ -219,9 +231,12 @@ static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 			last_pressed_key_ = 0;
 		if (last_pressed_key_ && handled == FALSE && last_pressed_key_ < 0x100)
 			handled = TRUE;
-		FIM_GTK_DBG_COUT << " handled=" << handled << "  last_pressed_key_=" << ((int)last_pressed_key_) << std::endl;
 		// lots of garbage codes can still go in
 	}
+	if (alt_pressed_ && !cc.inConsole()) // in console aka readline mode Alt is OK
+		handled = FALSE, // in interactive mode we pass Alt to the window system, to handle menus
+		last_pressed_key_ = 0;
+	FIM_GTK_DBG_COUT << " handled=" << handled << " last_pressed_key_=" << ((int)last_pressed_key_) << " alt_pressed_=" << alt_pressed_ << std::endl;
 	return handled;
 }
 
