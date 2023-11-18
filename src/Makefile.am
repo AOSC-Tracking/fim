@@ -105,6 +105,7 @@ EXTRA_fim_SOURCES += FbiStuffJasPer.cpp
 EXTRA_fim_SOURCES += FbiStuffJpeg.cpp
 EXTRA_fim_SOURCES += FbiStuffTiff.cpp
 EXTRA_fim_SOURCES += FbiStuffPng.cpp
+EXTRA_fim_SOURCES += FbiStuffQoi.cpp
 EXTRA_fim_SOURCES += FbiStuffDjvu.cpp
 EXTRA_fim_SOURCES += FbiStuffMagick.cpp
 EXTRA_fim_SOURCES += FbiStuffPdf.cpp

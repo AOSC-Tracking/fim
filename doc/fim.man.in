@@ -34,7 +34,7 @@ Further features are display of EXIF tags, JPEG comments, EXIF rotation/orientat
 As a default,
 .B
 fim
-displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, AVIF, WEBP are supported via third party libraries. 
+displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, QOI, AVIF, WEBP are supported via third party libraries. 
 Further formats are supported via external converters. 
 For XCF (Gimp's) images, 'xcftopnm' or 'xcf2pnm' is used.
 For FIG vectorial images, 'fig2dev' is used.
@@ -207,7 +207,7 @@ The \fBfb\fP option selects the Linux framebuffer. Presence of option \fB'S'\fP 
 The \fBca\fP option (coloured Ascii Art) can be specified as \fBca\fP\fB[={['w']}] \fP; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
 The \fBaa\fP (monochrome Ascii Art) option can be specified as \fBaa[={['w'|'W']}]\fP; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
 Please note that the readline (internal command line) functionality in \fBca\fP and \fBaa\fP modes is limited.
-If the graphical windowed mode is  \fBsdl\fP  or  \fBgtk\fP  it can be follwed by \fB \:={['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\fP, where \fBwidth\fP and \fBheight\fP are integer numbers specifying the desired resolution  (if \fBheight\fP not specified, it takes the value of \fBwidth\fP); the \fB'w'\fP character requests windowed mode (instead of \fB'W'\fP for fullscreen); the \fB'm'\fP character requests mouse pointer display; the \fB'h'\fP character requests help grid map draw (can be repeated for variants); the \fB'r'\fP character requests support for window resize; the \fB'%'\fP character requests to treat \fBwidth\fP and \fBheight\fP as percentage of possible window resolution. The same letters uppercase request explicit negation of the mentioned features.
+If the graphical windowed mode is  \fBsdl\fP  it can be follwed by \fB \:={['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\fP, where \fBwidth\fP and \fBheight\fP are integer numbers specifying the desired resolution  (if \fBheight\fP not specified, it takes the value of \fBwidth\fP); the \fB'w'\fP character requests windowed mode (instead of \fB'W'\fP for fullscreen); the \fB'm'\fP character requests mouse pointer display; the \fB'h'\fP character requests help grid map draw (can be repeated for variants); the \fB'r'\fP character requests support for window resize; the \fB'%'\fP character requests to treat \fBwidth\fP and \fBheight\fP as percentage of possible window resolution. The same letters uppercase request explicit negation of the mentioned features.
  In \fBgtk\fP mode there is a menu bar, which can be disabled with \fB'b'\fP. The \fBgtk\fP option is still in progress, and therefore incomplete. The \fBimlib2\fP option requests imlib2 and is unfinished -- do not use it.
  The \fBdumb\fP test mode is not interactive.
 
@@ -325,7 +325,7 @@ Quiet execution mode. Sets _display_status=0;_display_busy=0;.
 Set resolution specification in pixels. Supported by SDL only. Will be appended to the argument to --output-device. Shorthand value 'fullscreen' is be translated into 'W'. 
 .TP
 \fB-R[\fR\fI{exp}\fR]\fP, \fB--recursive[=\fR\fI{exp}\fR]\fP
-Push files/directories to the files list recursively. The expression in variable \fB_pushdir_re\fP (default: "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|AVIF|WEBP)$") lists extensions of filenames which are loaded in the list. You can overwrite its value by optionally passing an expression \fR\fI{exp}\fR here as argument. If starting with '+' or '|', the expression following is to be appended to it. 
+Push files/directories to the files list recursively. The expression in variable \fB_pushdir_re\fP (default: "\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|QOI|AVIF|WEBP)$") lists extensions of filenames which are loaded in the list. You can overwrite its value by optionally passing an expression \fR\fI{exp}\fR here as argument. If starting with '+' or '|', the expression following is to be appended to it. 
 .TP
 \fB-X\fP, \fB--no-pipe-load\fP
 Do not load via external converter programs: only use built-in file decoders.
@@ -402,7 +402,6 @@ FBFONT		(just like in fbi) a Linux consolefont font file.
 If using a gzipped font file, the zcat program is used to uncompress it (via \fBexecvp(3)\fP).
 If FBFONT is unset, the following files are probed and the first existing one is selected:
 
-/usr/share/consolefonts/Lat15-Terminus16.psf.gz
 /usr/share/kbd/consolefonts/cp866-8x16.psf.gz
 /usr/share/consolefonts/Uni3-TerminusBoldVGA14.psf.gz
 /usr/lib/kbd/consolefonts/lat9-16.psf.gz
@@ -556,7 +555,6 @@ from standard input before displaying files in the directory
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
 The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
-The GTK driver is still under construction.
 .SH BUGS
 \fBfim\fP has bugs. Please read the 
 .B BUGS
