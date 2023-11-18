@@ -1011,7 +1011,7 @@ dnl ============================================================================
 AC_CHECK_HEADERS([avif/avif.h], [fim_handle_avif=yes;], [fim_handle_avif=no;])
 AC_ARG_ENABLE(avif, AS_HELP_STRING([--disable-avif],[Disable AVIF file support.]),
 [       if test x$enableval = xno ; then
-		fim_handle_avif =no
+		fim_handle_avif=no
         fi
 ])
 if test x$fim_handle_avif = xyes; then

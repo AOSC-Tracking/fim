@@ -22,9 +22,9 @@
 # (r1988)
  * FIM requires a compiler supporting at least C++11
 # (r2002-r2003)
- * More tests.
+ * More tests
 # (r2003)
- * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts.
+ * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts
 
                 Version 0.6-rc2
 
