@@ -171,8 +171,8 @@ Requirements are:
 	* giflib		  ( http://sourceforge.net/projects/giflib/ )
 	* libtiff		  ( http://www.libtiff.org/ )
 	* libdjvulibre	  ( https://djvu.sourceforge.net/ )
-	* libwebp         (https://github.com/webmproject/libwebp/)
-	* libavif         (https://github.com/AOMediaCodec/libavif/)
+	* libwebp         ( https://github.com/webmproject/libwebp/ )
+	* libavif         ( https://github.com/AOMediaCodec/libavif/ )
 	* libqoi          ( https://qoiformat.org/ )
 	* ...
 
@@ -230,7 +230,7 @@ You can also run separately parts of `make tests`:
 	# experimental, not recommended:
 	sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
 	sudo apt-get install libarchive-dev
-	sudo apt-get install libqoi-dev
+	sudo apt-get install libqoi-dev libwebp-dev libavif-dev
 	svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
 	cd fim
 	autoreconf -i
