@@ -1150,7 +1150,9 @@ fim_key_t GTKDevice::catchInteractiveCommand(fim_ts_t seconds)const
 
 	if ( gtk_events_pending() )
 	{
+		c = last_pressed_key_;
 		gtk_main_iteration();
+		FIM_GTK_INPUT_DEBUG(&c,"");
 		goto done;
 	}
 	else
