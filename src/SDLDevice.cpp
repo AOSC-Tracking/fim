@@ -888,6 +888,7 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 	fim_sys_int ret=0;
 	SDL_Event event=*eventp;
 	static int alt_on=false;
+	static bool focus_lost_ = false;
 
 	*c = FIM_SYM_NULL_KEY;
 
@@ -905,7 +906,13 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 				alt_on = false;
 			}
 			if(!SDL_PollEvent(&event))
+			{
 				goto done;
+			}
+			else
+			{
+				FIM_SDL_INPUT_DEBUG(c," GOT NEXT EVENT");
+			}
 		}
 
 		switch (event.type)
@@ -923,9 +930,25 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 				sdl2_redraw();
 			break;
 			case SDL_DISPLAYEVENT:
+				FIM_SDL_INPUT_DEBUG(c," EVENT HERE OF TYPE SDL_DISPLAYEVENT " << event.type );
+			break;
 			case SDL_SYSWMEVENT:
+				FIM_SDL_INPUT_DEBUG(c," EVENT HERE OF TYPE SDL_SYSWMEVENT " << event.type );
+			break;
 			case SDL_WINDOWEVENT:
 			{
+				if (event.window.event==SDL_WINDOWEVENT_FOCUS_LOST)
+					focus_lost_ = true;
+				if (event.window.event==SDL_WINDOWEVENT_TAKE_FOCUS)
+					focus_lost_ = false;
+				FIM_SDL_INPUT_DEBUG(c," EVENT HERE OF TYPE SDL_WINDOWEVENT " << (int)event.window.event << " : " 
+						<< (event.window.event==SDL_WINDOWEVENT_ENTER?" SDL_WINDOWEVENT_ENTER ":"") 
+						<< (event.window.event==SDL_WINDOWEVENT_LEAVE?" SDL_WINDOWEVENT_LEAVE ":"") 
+						<< (event.window.event==SDL_WINDOWEVENT_FOCUS_GAINED?" SDL_WINDOWEVENT_FOCUS_GAINED ":"") 
+						<< (event.window.event==SDL_WINDOWEVENT_FOCUS_LOST?" SDL_WINDOWEVENT_FOCUS_LOST ":"") 
+						<< (event.window.event==SDL_WINDOWEVENT_CLOSE?" SDL_WINDOWEVENT_CLOSE ":"") 
+						<< (event.window.event==SDL_WINDOWEVENT_TAKE_FOCUS?" SDL_WINDOWEVENT_TAKE_FOCUS ":"") 
+					);
 #if FIM_SDL_WANT_RESIZE 
 				int nw, nh;
 				SDL_GetWindowSize(wi_, &nw, &nh);
@@ -985,6 +1008,9 @@ fim_sys_int SDLDevice::get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_
 				}
 				return 0;
 			}
+
+			if ( focus_lost_ ) /* otherwise SDL can intercept e.g. a Tab from the Alt-Tab when reactivating the window */
+				return 0;
 
 			if (event.key.keysym.sym > 0x80 || !isprint(event.key.keysym.sym))
 			if ( ! (event.key.keysym.mod & KMOD_RSHIFT || event.key.keysym.mod & KMOD_LSHIFT ) ) // shift not accepted
