@@ -1003,6 +1003,8 @@ err:
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	 	while(show_must_go_on_)
 		{
+	 		if ( show_must_go_on_ == 2 )
+	 			show_must_go_on_ = 1; /* value 2 indicates a temporary state */
 #if FIM_WANT_NEXT_ACCEL
 			extern fim_int same_keypress_repeats;
 			bool same_keypress_repeat=false;

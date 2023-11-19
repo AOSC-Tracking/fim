@@ -27,6 +27,8 @@
  * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts
 # (r2042)
  * -o sdl  with SDL2: reduce chance of intercepting Tab during window switch
+# (r2043)
+ * bugfix: avoid terminal clutter after interruption of "endless_slideshow"
 
                 Version 0.6-rc2
 
