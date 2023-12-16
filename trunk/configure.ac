@@ -1293,14 +1293,19 @@ dnl ============================================================================
 
 ## gtk driver
 
-AM_CONDITIONAL(ENABLE_GTK, [test x$fim_handle_gtk = xyes])
+AC_ARG_ENABLE(gtk, AS_HELP_STRING([--disable-gtk],[Disable libgtk support. Some configurations require prepending PKG_CONFIG=pkg-config before configure, for pkg-config to work.]), [fim_want_gtk="$enableval";])
+fim_handle_gtk=no;
+if test x$fim_want_gtk != xno; then
 PKG_CHECK_MODULES(GTK, gtk+-3.0) dnl sets GTK_CFLAGS GTK_LIBS
 # keep this line commented or next line empty or it may break configure. (PKG_CHECK_MODULES-related)
-AC_CHECK_LIB([m], [g_free],
-  [ have_gtk=yes; LIBS+=" $GTK_LIBS"; CXXFLAGS+=" $GTK_CFLAGS";
+AC_CHECK_LIB([glib-2.0], [g_free],
+  [ have_gtk=yes; fim_handle_gtk=yes; LIBS+=" $GTK_LIBS"; CXXFLAGS+=" $GTK_CFLAGS";
     AC_DEFINE([FIM_WITH_LIBGTK],[1],[We have GTK])],
   [ have_gtk=no; fim_handle_gtk=no; AC_MSG_WARN([*** GTK driver won't be added (GTK library not found) ***])]
   )
+fi
+AM_CONDITIONAL(ENABLE_GTK, [test x$fim_handle_gtk = xyes])
+
 dnl ================================================================================
 
 AH_TEMPLATE([FIM_WANT_EXIFTOOL])
@@ -1357,6 +1362,7 @@ else
 	have_hardcoded_font=no
 fi
 AM_CONDITIONAL(FIM_WANT_HARDCODED_CONSOLEFONT, test x$have_hardcoded_font = xyes )
+AM_CONDITIONAL(FIM_HAVE_ANY_CONSOLEFONT, test x$no = xyes ) dnl not yet active -- need check to detect if any consolefont present
 
 dnl ==================
 

@@ -207,9 +207,11 @@ sdltests: all
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=hhMR20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=0:-1 ; test $$? = 252
-if FIM_WANT_HARDCODED_CONSOLEFONT
-	$(NO_ASAN) FBFONT=       \
+if FIM_HAVE_ANY_CONSOLEFONT
+	$(NO_ASAN) FBFONT=''       \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
+endif
+if FIM_WANT_HARDCODED_CONSOLEFONT
 	$(NO_ASAN) FBFONT=fim:// \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
 endif
@@ -222,10 +224,14 @@ imlib2tests: all
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
 #	$(NO_ASAN) $(TIMEOUT_LARGE) \
 #		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=0:-1 ; test $$? = 252
-	$(NO_ASAN) FBFONT=       \
+if FIM_HAVE_ANY_CONSOLEFONT
+	$(NO_ASAN) FBFONT=''       \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2 -c quit # TODO: this is only a coverage test
+endif
+if FIM_WANT_HARDCODED_CONSOLEFONT
 	$(NO_ASAN) FBFONT=fim:// \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2 -c quit # TODO: this is only a coverage test
+endif
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 .PHONY: sanity-check
