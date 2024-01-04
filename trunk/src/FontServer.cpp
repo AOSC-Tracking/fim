@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -139,8 +139,13 @@ static const fim_char_t *default_font[] = {
 
 fim::string get_default_font_list(void)
 {
+	// only meant for dump to man
 	fim::string dfl;
+#ifdef FIM_DEFAULT_CONSOLEFONT
+	const fim_char_t ** const filename=default_font + 1;
+#else /* FIM_DEFAULT_CONSOLEFONT */
 	const fim_char_t ** const filename=default_font;
+#endif /* FIM_DEFAULT_CONSOLEFONT */
 	for(int i = 0; filename[i] != FIM_NULL; i++)
        	{
 		dfl+=filename[i];

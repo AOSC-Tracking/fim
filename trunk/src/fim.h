@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -459,7 +459,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
-#define FIM_CNS_LCY	 "2023" /* latest copyright year */
+#define FIM_CNS_LCY	 "2024" /* latest copyright year */
 //#define FIM_CNS_FIM_TXT	 "FIM.TXT"
 #define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"
@@ -996,7 +996,7 @@ namespace fim
 //#define FIM_DDN_VAR_DUMB	 "dummy"
 #define FIM_DDN_VAR_DUMB	 "dumb"
 
-#define FIM_DDN_VARS_NB	 FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_CACA "|" FIM_DDN_INN_AA  "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_DUMB
+#define FIM_DDN_VARS_NB	 FIM_DDN_INN_FB "|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_GTK "|" FIM_DDN_INN_CACA "|" FIM_DDN_INN_AA "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_DUMB
 #define FIM_DDN_VARS	 "[" FIM_DDN_VARS_NB "]" 
 #define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_CACA FIM_DDN_ICI_AA FIM_DDN_ICI_GTK FIM_DDN_ICI_IL2 FIM_DDN_INN_DUMB "]" 
 
@@ -1301,6 +1301,7 @@ namespace fim
 #define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)
 /* FIM_STRINGIFY evaluates to a string with the supplied preprocessor symbol identifier */
 #define FIM_STRINGIFY(X) #X
+#define FIM_MAN_Bh(X,Y) ".B " X "\n" Y "\n.br\n" /* bold X here, then normal Y, and break line */
 #define FIM_MAN_Bn(X) ".B " X "\n.fi \n" /* bold newline */
 #define FIM_MAN_fB(X) "\\fB" X "\\fP" /* bold inline */
 #define FIM_MAN_fR(X) "\\fR\\fI" X "\\fR" /* underline */

@@ -1,24 +1,31 @@
 .\"
 .\" $Id$
 .\"
-.TH FIM 1 "(c) 2007-2023 Michele Martone"
+.TH FIM 1 "(c) 2007-2024 Michele Martone"
 .SH NAME
 fim - \fBF\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBIM\fPproved, an universal image viewer
 .SH SYNOPSIS
-.B fim [\fR\fI{options}\fR] [--] \fR\fI{imagepath}\fR [\fR\fI{imagepaths}\fR]
-.fi 
-.B fim --output-device {fb|sdl|ca|aa|imlib2|dumb} ...
-.fi 
-.B ... | fim [\fR\fI{options}\fR] [--] [\fR\fI{imagepaths}\fR] -
-.fi 
-.B fim [\fR\fI{options}\fR] [--] [\fR\fI{files}\fR] - < \fR\fI{file_name_list_text_file}\fR
-.fi 
-.B fim --image-from-stdin [\fR\fI{options}\fR] < \fR\fI{imagefile}\fR
-.fi 
-.B fim --script-from-stdin [\fR\fI{options}\fR] < \fR\fI{scriptfile}\fR
-.fi 
-.B fim --help[=s|d|l|m] [\fR\fI{help-item}\fR ...] 
-.fi 
+.B fim
+[\fR\fI{options}\fR] [--] \fR\fI{imagepath}\fR [\fR\fI{imagepaths}\fR]
+.br
+.B fim
+--output-device {fb|sdl|gtk|ca|aa|imlib2|dumb} ...
+.br
+.B ... | fim
+[\fR\fI{options}\fR] [--] [\fR\fI{imagepaths}\fR] -
+.br
+.B fim
+[\fR\fI{options}\fR] [--] [\fR\fI{files}\fR] - < \fR\fI{file_name_list_text_file}\fR
+.br
+.B fim
+--image-from-stdin [\fR\fI{options}\fR] < \fR\fI{imagefile}\fR
+.br
+.B fim
+--script-from-stdin [\fR\fI{options}\fR] < \fR\fI{scriptfile}\fR
+.br
+.B fim
+--help[=s|d|l|m] [\fR\fI{help-item}\fR ...] 
+.br
 
 .SH DESCRIPTION
 .B
@@ -27,14 +34,14 @@ is a `swiss army knife' for displaying image files.
 It is capable of displaying image files using different graphical devices while offering a uniform look and feel.
 Key bindings are customizable and specified in an initialization file.
 Interaction with standard input and output is possible, especially in shell scripts.
-An internal scripting language specialized for image viewing allows image navigation, scaling, manipulation of internal variables, command aliases, and vim-like autocommands.
+An internal scripting language specialized for image viewing allows image navigation, scaling, manipulation of internal variables, command aliases, and Vim-like autocommands.
 The internal language can be interacted with via a command line mode capable of autocompletion and history (the readline mode).
 Further features are display of EXIF tags, JPEG comments, EXIF rotation/orientation, load of "description files", faster load via image caching, command recording, and much more.
 
 As a default,
 .B
 fim
-displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, QOI, AVIF, WEBP are supported via third party libraries. 
+displays the specified file(s) on the detected, most convenient graphical device. This can be with SDL if running under X, an ASCII-art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM, QOI, AVIF, WEBP are supported via third party libraries. 
 Further formats are supported via external converters. 
 For XCF (Gimp's) images, 'xcftopnm' or 'xcf2pnm' is used.
 For FIG vectorial images, 'fig2dev' is used.
@@ -199,15 +206,15 @@ Do not load or save execution history at startup.
 \fB-p\fP, \fB--script-from-stdin\fP
 Read commands from stdin before entering in interactive mode.
 .TP
-\fB-o [fb|sdl|ca|aa|imlib2|dumb]\fP, \fB--output-device [fb|sdl|ca|aa|imlib2|dumb]\fP
+\fB-o [fb|sdl|gtk|ca|aa|imlib2|dumb]\fP, \fB--output-device [fb|sdl|gtk|ca|aa|imlib2|dumb]\fP
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.
 The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim --version\fP.
 The \fBfb\fP option selects the Linux framebuffer. Presence of option \fB'S'\fP (e.g. '\fBfb=S\fP') makes framebuffer initialization more picky: it does not tolerate running in a screen session.
-The \fBca\fP option (coloured Ascii Art) can be specified as \fBca\fP\fB[={['w']}] \fP; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
-The \fBaa\fP (monochrome Ascii Art) option can be specified as \fBaa[={['w'|'W']}]\fP; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
+The \fBca\fP option (coloured ASCII-art) can be specified as \fBca\fP\fB[={['w']}] \fP; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
+The \fBaa\fP (monochrome ASCII-art) option can be specified as \fBaa[={['w'|'W']}]\fP; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
 Please note that the readline (internal command line) functionality in \fBca\fP and \fBaa\fP modes is limited.
-If the graphical windowed mode is  \fBsdl\fP  it can be follwed by \fB \:={['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\fP, where \fBwidth\fP and \fBheight\fP are integer numbers specifying the desired resolution  (if \fBheight\fP not specified, it takes the value of \fBwidth\fP); the \fB'w'\fP character requests windowed mode (instead of \fB'W'\fP for fullscreen); the \fB'm'\fP character requests mouse pointer display; the \fB'h'\fP character requests help grid map draw (can be repeated for variants); the \fB'r'\fP character requests support for window resize; the \fB'%'\fP character requests to treat \fBwidth\fP and \fBheight\fP as percentage of possible window resolution. The same letters uppercase request explicit negation of the mentioned features.
+If the graphical windowed mode is  \fBsdl\fP  or  \fBgtk\fP  it can be follwed by \fB \:={['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\fP, where \fBwidth\fP and \fBheight\fP are integer numbers specifying the desired resolution  (if \fBheight\fP not specified, it takes the value of \fBwidth\fP); the \fB'w'\fP character requests windowed mode (instead of \fB'W'\fP for fullscreen); the \fB'm'\fP character requests mouse pointer display; the \fB'h'\fP character requests help grid map draw (can be repeated for variants); the \fB'r'\fP character requests support for window resize; the \fB'%'\fP character requests to treat \fBwidth\fP and \fBheight\fP as percentage of possible window resolution. The same letters uppercase request explicit negation of the mentioned features.
  In \fBgtk\fP mode there is a menu bar, which can be disabled with \fB'b'\fP. The \fBgtk\fP option is still in progress, and therefore incomplete. The \fBimlib2\fP option requests imlib2 and is unfinished -- do not use it.
  The \fBdumb\fP test mode is not interactive.
 
@@ -402,6 +409,7 @@ FBFONT		(just like in fbi) a Linux consolefont font file.
 If using a gzipped font file, the zcat program is used to uncompress it (via \fBexecvp(3)\fP).
 If FBFONT is unset, the following files are probed and the first existing one is selected:
 
+@FIM_CUSTOM_DEFAULT_CONSOLEFONT@
 /usr/share/kbd/consolefonts/cp866-8x16.psf.gz
 /usr/share/consolefonts/Uni3-TerminusBoldVGA14.psf.gz
 /usr/lib/kbd/consolefonts/lat9-16.psf.gz
@@ -555,6 +563,7 @@ from standard input before displaying files in the directory
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
 The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
+The GTK driver is still under development.
 .SH BUGS
 \fBfim\fP has bugs. Please read the 
 .B BUGS
@@ -592,7 +601,7 @@ Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi
 .fi
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2023 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
+Copyright (C) 2007-2024 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
 .fi
 Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 .B fim

@@ -976,7 +976,7 @@ news: freshmeat mail-announce
 .PHONY: dox
 dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
-MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,-,\\-,g'
+MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,@FIM_CUSTOM_DEFAULT_CONSOLEFONT\@,$(FIM_CUSTOM_DEFAULT_CONSOLEFONT),g' -e 's,-,\\-,g'
 
 doc/fim.man.in doc/fimrc.man.in: $(FIM_EXE)
 if HAVE_RUNNABLE_TESTS

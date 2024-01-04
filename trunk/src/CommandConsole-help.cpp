@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help member functions
 
- (c) 2011-2023 Michele Martone
+ (c) 2011-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -90,14 +90,14 @@ manmode:
 		".SH SYNOPSIS\n"
 			".B " FIM_CNS_USR_RC_COMPLETE_FILEPATH "\n.fi\n"
 			".B " FIM_CNS_SYS_RC_FILEPATH "\n.fi\n"
-			".B fim --" FIM_OSW_SCRIPT_FROM_STDIN " [ " FIM_CNS_EX_OPTIONS " ] < " FIM_CNS_EX_SCRIPTFILE "\n.fi\n"
-			".B fim --" FIM_OSW_EXECUTE_SCRIPT " " FIM_CNS_EX_SCRIPTFILE " [ " FIM_CNS_EX_OPTIONS " ]\n.fi\n"
-			".B fim --" FIM_OSW_EXECUTE_COMMANDS " " FIM_CNS_EX_CMDS_STRING " [ " FIM_CNS_EX_OPTIONS " ]\n.fi\n"
-			".B fim --" FIM_OSW_FINAL_COMMANDS " " FIM_CNS_EX_CMDS_STRING " [ " FIM_CNS_EX_OPTIONS " ]\n.fi\n"
-			".B fim --" FIM_OSW_DUMP_SCRIPTOUT " " FIM_CNS_EX_SCRIPTFILE " [ " FIM_CNS_EX_OPTIONS " ]  \n.fi\n"
-			".B fim --" FIM_OSW_DUMP_SCRIPTOUT " " FIM_LINUX_STDOUT_FILE " [ " FIM_CNS_EX_OPTIONS " ]\n.fi\n"
-			".B fim --" FIM_OSW_CHARS_PRESS " " ":" FIM_CNS_EX_CMDS_STRING " [ " FIM_CNS_EX_OPTIONS " ]\n.fi\n"
-			".B fim --" FIM_OSW_CHARS_PRESS " " ":" FIM_CNS_EX_CMDS_STRING " --" FIM_OSW_CHARS_PRESS " '' [ " FIM_CNS_EX_OPTIONS " ]\n.fi\n"
+			FIM_MAN_Bh("fim", "--" FIM_OSW_SCRIPT_FROM_STDIN " [ " FIM_CNS_EX_OPTIONS " ] < " FIM_CNS_EX_SCRIPTFILE "")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_EXECUTE_SCRIPT " " FIM_CNS_EX_SCRIPTFILE " [ " FIM_CNS_EX_OPTIONS " ]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_EXECUTE_COMMANDS " " FIM_CNS_EX_CMDS_STRING " [ " FIM_CNS_EX_OPTIONS " ]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_FINAL_COMMANDS " " FIM_CNS_EX_CMDS_STRING " [ " FIM_CNS_EX_OPTIONS " ]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_DUMP_SCRIPTOUT " " FIM_CNS_EX_SCRIPTFILE " [ " FIM_CNS_EX_OPTIONS " ]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_DUMP_SCRIPTOUT " " FIM_LINUX_STDOUT_FILE " [ " FIM_CNS_EX_OPTIONS " ]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_CHARS_PRESS " " ":" FIM_CNS_EX_CMDS_STRING " [ " FIM_CNS_EX_OPTIONS " ]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_CHARS_PRESS " " ":" FIM_CNS_EX_CMDS_STRING " --" FIM_OSW_CHARS_PRESS " '' [ " FIM_CNS_EX_OPTIONS " ]")
 			"\n"
 		".SH DESCRIPTION\n"
 			"This page explains the \n.B fim\nscripting language, which is used for the \n.B fimrc\nconfiguration files, " FIM_CNS_EX_SCRIPTFILE "s, or " FIM_CNS_EX_CMDS_STRING " passed via command line " FIM_CNS_EX_OPTIONS ".\n"

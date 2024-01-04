@@ -5,13 +5,13 @@
 
  * Still work-in-progress. Please use stable branch 0.6 for now
 
-# (r2005-r2038,r2041,r2044-r2045)
+# (r2005-r2038,r2041,r2044-r2046)
  * New graphical windowed output mode via GTK, selected with -o gtk (in progress)
 # (r1997)
  * When loading via an external converter, keep track of it in i:_external_decoder_program
 # (r1995-r1996)
  * Load XCF (Gimp) files via the xcf2pnm utility
-# (r1991-r1994,r1998-r1999)
+# (r1991-r1994,r1998-r1999,r2046)
  * Documentation and self-documentation improvements
 # (r2039)
  * Experimental support for reading QOI files via libqoi
@@ -63,7 +63,7 @@ A summary of major improvements:
  * new verbosity and debug options
  * better error handling when encountering corrupt files
  * fast in-place switch to high-res file via --load-shadow-directory 
- * improvements in -o aa (Ascii Art output device with aalib)
+ * improvements in -o aa (ASCII-art output device with aalib)
  * more options for window size selection in -o sdl
  * Keys F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12 now usable with 'bind'
 
@@ -729,7 +729,7 @@ In detail, in no particular order:
 
                 Version 0.3-beta
 
- * full         support for AAlib (Ascii Art rendering) (-o aa)
+ * full         support for AAlib (ASCII-art rendering) (-o aa)
  * experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  * experimental PDF, PS, DJVU file support
  * history file support (~/.fim_history)
@@ -741,7 +741,7 @@ In detail, in no particular order:
 
                 Version 0.3-alpha
 
- * experimental support for AAlib (Ascii Art rendering) (-t)
+ * experimental support for AAlib (ASCII-art rendering) (-t)
  * reading image files (-i) and scripts (-p) from stdin
  * runs on the powerpc architecure
  * rewritten from scratch the debug console, now buffered and with scrolling
