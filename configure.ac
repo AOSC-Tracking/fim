@@ -1173,7 +1173,7 @@ AC_ARG_ENABLE(jasper, AS_HELP_STRING([--enable-jasper],[Turns on JPEG-2000 files
 dnl ================================================================================
 
 AC_CHECK_LIB(aa, aa_getfirst,fim_cv_libaa=yes,fim_cv_libaa=no)
-AC_ARG_ENABLE(aa, AS_HELP_STRING([--disable-aa],[Ascii Art (-o aa) support (via aalib)]), [if test x$enableval != xno; then fim_cv_libaa=yes; else fim_cv_libaa=no; fi],[fim_cv_libaa=yes;])
+AC_ARG_ENABLE(aa, AS_HELP_STRING([--disable-aa],[ASCII-art (-o aa) support (via aalib)]), [if test x$enableval != xno; then fim_cv_libaa=yes; else fim_cv_libaa=no; fi],[fim_cv_libaa=yes;])
 
 if test x$fim_cv_libaa != xno; then
 	if test x$ac_cv_lib_aa_aa_getfirst = xyes; then
@@ -1199,7 +1199,7 @@ if test x$fim_cv_libaa != xno; then
 	fi
 else
 	fim_cv_aalib=no
-	AC_MSG_WARN([Ascii Art (-o aa) support disabled.])
+	AC_MSG_WARN([ASCII-art (-o aa) support disabled.])
         dnl AC_MSG_ERROR([Sorry, it does not seem like aalib is installed or detectable.
 	dnl Please run --disable-aa or install aalib in a system-wide directory instead.
 	dnl ])
@@ -1777,7 +1777,9 @@ AC_ARG_ENABLE(dia, AS_HELP_STRING([--disable-dia],[Fim will try to use dia for o
 
 dnl ==================
 AH_TEMPLATE([FIM_DEFAULT_CONSOLEFONT])
-AC_ARG_WITH(default-consolefont, AS_HELP_STRING([--with-default-consolefont=FILE],[Specify a default consolefont (psf or psf.gz format) file.]), [ AC_DEFINE_UNQUOTED(FIM_DEFAULT_CONSOLEFONT, "$withval") ], [fim_cv_defaultconsolefont=""])
+AC_ARG_WITH(default-consolefont, AS_HELP_STRING([--with-default-consolefont=FILE],[Specify a default consolefont (psf or psf.gz format) file.]), [ AC_DEFINE_UNQUOTED(FIM_DEFAULT_CONSOLEFONT, "$withval")
+AC_SUBST(FIM_CUSTOM_DEFAULT_CONSOLEFONT, "$withval")
+], [fim_cv_defaultconsolefont=""])
 dnl ==================
 AC_ARG_WITH(custom-hardcoded-consolefont, AS_HELP_STRING([--with-custom-hardcoded-consolefont=FILE],[Specify a custom consolefont to be hardcoded (uncompressed psf format, absolute path) at build time (requires --enable-hardcoded-font).]), [
 fim_cv_want_custom_hardcoded_consolefont=true;

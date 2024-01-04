@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011-2023 Michele Martone"
+.TH fimrc 5 "(c) 2011-2024 Michele Martone"
 .SH NAME
 fimrc - \fB fim \fP configuration file and language reference
 
@@ -10,22 +10,30 @@ fimrc - \fB fim \fP configuration file and language reference
 .fi
 .B @sysconfdir@/fimrc
 .fi
-.B fim --script-from-stdin [ \fR\fI{options}\fR ] < \fR\fI{scriptfile}\fR
-.fi
-.B fim --execute-script \fR\fI{scriptfile}\fR [ \fR\fI{options}\fR ]
-.fi
-.B fim --execute-commands \fR\fI{commands}\fR [ \fR\fI{options}\fR ]
-.fi
-.B fim --final-commands \fR\fI{commands}\fR [ \fR\fI{options}\fR ]
-.fi
-.B fim --write-scriptout \fR\fI{scriptfile}\fR [ \fR\fI{options}\fR ]  
-.fi
-.B fim --write-scriptout /dev/stdout [ \fR\fI{options}\fR ]
-.fi
-.B fim --chars-press :\fR\fI{commands}\fR [ \fR\fI{options}\fR ]
-.fi
-.B fim --chars-press :\fR\fI{commands}\fR --chars-press '' [ \fR\fI{options}\fR ]
-.fi
+.B fim
+--script-from-stdin [ \fR\fI{options}\fR ] < \fR\fI{scriptfile}\fR
+.br
+.B fim
+--execute-script \fR\fI{scriptfile}\fR [ \fR\fI{options}\fR ]
+.br
+.B fim
+--execute-commands \fR\fI{commands}\fR [ \fR\fI{options}\fR ]
+.br
+.B fim
+--final-commands \fR\fI{commands}\fR [ \fR\fI{options}\fR ]
+.br
+.B fim
+--write-scriptout \fR\fI{scriptfile}\fR [ \fR\fI{options}\fR ]
+.br
+.B fim
+--write-scriptout /dev/stdout [ \fR\fI{options}\fR ]
+.br
+.B fim
+--chars-press :\fR\fI{commands}\fR [ \fR\fI{options}\fR ]
+.br
+.B fim
+--chars-press :\fR\fI{commands}\fR --chars-press '' [ \fR\fI{options}\fR ]
+.br
 
 .SH DESCRIPTION
 This page explains the 

@@ -220,17 +220,17 @@ You can also run separately parts of `make tests`:
 --------------------------------------------------------------------------------
 ## <a id="42example-on-debian"></a>[	4.2		Example on Debian](#42example-on-debian) ##
 
-	sudo apt-get install subversion
-	sudo apt-get install flex libfl-dev bison
-	sudo apt-get install automake autoconf libtool # to generate configure, etc
-	sudo apt-get install pkg-config                # to generate configure
-	sudo apt-get install libreadline-dev libexif-dev
-	sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
-	sudo apt-get install libsdl2-dev libaa1-dev libcaca-dev
+	sudo apt install subversion
+	sudo apt install flex libfl-dev bison
+	sudo apt install automake autoconf libtool # to generate configure, etc
+	sudo apt install pkg-config                # to generate configure
+	sudo apt install libreadline-dev libexif-dev
+	sudo apt install libjpeg-dev libpng-dev libtiff-dev libgif-dev
+	sudo apt install libsdl2-dev libaa1-dev libcaca-dev
 	# experimental, not recommended:
-	sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
-	sudo apt-get install libarchive-dev
-	sudo apt-get install libqoi-dev libwebp-dev libavif-dev
+	sudo apt install libpoppler-dev libdjvulibre-dev libspectre-dev
+	sudo apt install libarchive-dev
+	sudo apt install libqoi-dev libwebp-dev libavif-dev
 	svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
 	cd fim
 	autoreconf -i
@@ -360,7 +360,7 @@ patch.
  
  You should find fim in Debian and Ubuntu, and install it with:
 
-	sudo apt-get install fim
+	sudo apt install fim
 
  But beware: the deb packages may be outdated.
  
@@ -399,7 +399,7 @@ Dimitar Toshkov Zhekov.
 ## <a id="10contacts-mailing-lists-urls"></a>[	10		Contacts, mailing lists, URLs](#10contacts-mailing-lists-urls) ##
 --------------------------------------------------------------------------------
 
-FIM is (C) 2007-2023 Michele Martone.
+FIM is (C) 2007-2024 Michele Martone.
 
  Email: "dezperado_FOobAr_autistici_Baz_org", just care replacing
          _FOobAr_ with a '@' and _Baz_ with a '.'.

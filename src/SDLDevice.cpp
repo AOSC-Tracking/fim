@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2023 Michele Martone
+ (c) 2008-2024 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -20,11 +20,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/*
- * NOTES : The SDL support is INCOMPLETE:
- *
- *  - input problems when coupled with readline
- */
 #include "fim.h"
 
 #ifdef FIM_WITH_LIBSDL

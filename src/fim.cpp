@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -274,10 +274,10 @@ struct fim_options_t fim_options[] = {
 "The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("'S'") " (e.g. '" FIM_MAN_fB("fb=S") "') makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
 // #endif /* FIM_WITH_NO_FRAMEBUFFER */
 //#ifdef FIM_WITH_LIBCACA
-"The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option (coloured Ascii Art) can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option (coloured ASCII-art) can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
 //#endif /* FIM_WITH_LIBCACA */
 //#ifdef FIM_WITH_AALIB
-"The " FIM_MAN_fB(FIM_DDN_INN_AA) " (monochrome Ascii Art) option can be specified as " FIM_MAN_fB(FIM_DDN_INN_AA "[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_AA) " (monochrome ASCII-art) option can be specified as " FIM_MAN_fB(FIM_DDN_INN_AA "[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
 //#endif /* FIM_WITH_AALIB */
 "Please note that the readline (internal command line) functionality in " FIM_MAN_fB(FIM_DDN_INN_CACA) " and " FIM_MAN_fB(FIM_DDN_INN_AA) " modes is limited.\n"
 #if defined(FIM_WANT_SDL_OPTIONS_STRING) || defined(FIM_WITH_LIBGTK)
@@ -787,20 +787,20 @@ int fim_dump_man_page(void)
 			".SH NAME\n"
 			"fim - \\fBF\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBIM\\fPproved, an universal image viewer\n"
 			".SH SYNOPSIS\n"
-			FIM_MAN_Bn("fim [" FIM_CNS_EX_OPTIONS "] [--] " FIM_CNS_EX_IMPA_STRING " [" FIM_CNS_EX_IMPS_STRING "]")
-			FIM_MAN_Bn("fim --" FIM_OSW_OUTPUT_DEVICE " {"  FIM_DDN_VARS_NB "} ...")
-			FIM_MAN_Bn("... | fim [" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_IMPS_STRING "] -"))+
+			FIM_MAN_Bh("fim", "[" FIM_CNS_EX_OPTIONS "] [--] " FIM_CNS_EX_IMPA_STRING " [" FIM_CNS_EX_IMPS_STRING "]")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_OUTPUT_DEVICE " {"  FIM_DDN_VARS_NB "} ...")
+			FIM_MAN_Bh("... | fim", "[" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_IMPS_STRING "] -"))+
 #ifdef FIM_READ_STDIN
-			string(FIM_MAN_Bn("fim [" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_FILES_STRING "] - < " FIM_CNS_EX_FNLTF_STRING ))+
+			string(FIM_MAN_Bh("fim", "[" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_FILES_STRING "] - < " FIM_CNS_EX_FNLTF_STRING ))+
 #endif /* FIM_READ_STDIN */
 #ifdef FIM_READ_STDIN_IMAGE
-			string(FIM_MAN_Bn("fim --" FIM_OSW_IMAGE_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_IMFL_STRING ))+
+			string(FIM_MAN_Bh("fim", "--" FIM_OSW_IMAGE_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_IMFL_STRING ))+
 #endif /* FIM_READ_STDIN_IMAGE */
 #ifdef FIM_READ_STDIN
-			string(FIM_MAN_Bn("fim --" FIM_OSW_SCRIPT_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_SCRIPTFILE ))+
+			string(FIM_MAN_Bh("fim", "--" FIM_OSW_SCRIPT_FROM_STDIN " [" FIM_CNS_EX_OPTIONS "] < " FIM_CNS_EX_SCRIPTFILE ))+
 #endif /* FIM_READ_STDIN */
 #if FIM_WANT_HELP_ARGS
-			string(FIM_MAN_Bn("fim --help[=" FIM_HELP_EXTRA_OPTS "] [" FIM_CNS_EX_HELP_ITEM " ...] "))+
+			string(FIM_MAN_Bh("fim", "--help[=" FIM_HELP_EXTRA_OPTS "] [" FIM_CNS_EX_HELP_ITEM " ...] "))+
 #endif /* FIM_WANT_HELP_ARGS */
 			string("\n"
 			".SH DESCRIPTION\n"
@@ -808,11 +808,11 @@ int fim_dump_man_page(void)
 			"It is capable of displaying image files using different graphical devices while offering a uniform look and feel.\n"
 			"Key bindings are customizable and specified in an initialization file.\n"
 			"Interaction with standard input and output is possible, especially in shell scripts.\n"
-			"An internal scripting language specialized for image viewing allows image navigation, scaling, manipulation of internal variables, command aliases, and vim-like autocommands.\n"
+			"An internal scripting language specialized for image viewing allows image navigation, scaling, manipulation of internal variables, command aliases, and Vim-like autocommands.\n"
 			"The internal language can be interacted with via a command line mode capable of autocompletion and history (the readline mode).\n"
 			"Further features are display of EXIF tags, JPEG comments, EXIF rotation/orientation, load of \"description files\", faster load via image caching, command recording, and much more.\n\n"
 			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected, most convenient graphical device. "
-			"This can be with SDL if running under X, an Ascii Art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. "
+			"This can be with SDL if running under X, an ASCII-art driver (aalib or libcaca) if running behind ssh without X forwarding, or the linux framebuffer device. "
 			"Graphical file formats " FIM_CNS_DSFF_SN " are supported natively, while " FIM_CNS_DSFF_SL " are supported via third party libraries. \n"
 			"Further formats are supported via external converters. \n"
 			"For XCF (Gimp's) images, '" FIM_EPR_XCFTOPNM "' or '" FIM_EPR_XCF2PNM "' is used.\n"
@@ -949,6 +949,9 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 "" FIM_ENV_FBFONT "		(just like in fbi) a Linux consolefont font file.\n"
 "If using a gzipped font file, the " FIM_EPR_ZCAT " program is used to uncompress it (via " FIM_MAN_fB("execvp(3)") ").\n"
 "If " FIM_ENV_FBFONT " is unset, the following files are probed and the first existing one is selected:\n\n");
+#ifdef FIM_DEFAULT_CONSOLEFONT
+mp+="@FIM_CUSTOM_DEFAULT_CONSOLEFONT@\n";
+#endif /* FIM_DEFAULT_CONSOLEFONT */
 mp+=get_default_font_list();
 #if FIM_WANT_HARDCODED_FONT
 mp+="\nIf the special " FIM_DEFAULT_HARDCODEDFONT_STRING " string is specified, a hardcoded font is used.";
@@ -1079,7 +1082,7 @@ mp+=string(
 "The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
 #endif /* FIM_WITH_LIBSDL */
 #ifdef FIM_WITH_LIBGTK
-"The GTK driver is still under construction.\n"
+"The GTK driver is still under development.\n"
 #endif /* FIM_WITH_LIBGTK */
 );
 mp+=string(
