@@ -2,7 +2,7 @@
 /*
  Arg.cpp : argument lists
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,6 +48,22 @@ bool fim_args_opt_have(const args_t& args, fim::string optname)
 		if ( args[i] == optname )
 			return true;
 	return false;
+}
+
+args_t fim_shell_args_escape(const args_t & args, bool quoted)
+{
+	args_t res {args};
+	for (auto & arg : res)
+		arg = fim_shell_arg_escape(arg, quoted);
+	return res;
+}
+
+fim::string fim_args_as_cmd(const args_t & args)
+{
+	fim::string cmdln;
+	for (const auto & arg : fim_shell_args_escape(args))
+		cmdln += " " + arg;
+	return cmdln;
 }
 
 	std::ostream& operator<<(std::ostream& os, const args_t& v)

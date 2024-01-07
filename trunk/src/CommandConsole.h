@@ -183,7 +183,7 @@ class CommandConsole FIM_FINAL :
 	public:
 	fim_sys_int get_displaydevice_input(fim_key_t * c, bool want_poll=false);
 
-	fim::string execute(fim_cmd_id cmd, args_t args, bool as_interactive=false);
+	fim::string execute(fim_cmd_id cmd, args_t args, bool as_interactive=false, bool save_as_last=false);
 
 	//const fim_char_t*get_prompt(void)const{return prompt_;}
 
