@@ -541,6 +541,11 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.___ -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
 endif
+if ENABLE_HISTORY
+if ENABLE_PCX
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -K /pcx -K q -F 'stdout _fileindex'`" -eq "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -K /pcx -K .q -F 'stdout _fileindex'`" # 2 eq 2 (. after / doesn't repeat action)
+endif
+endif
 if ENABLE_JPEG
 if WANT_READ_STDIN_IMAGE
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'stdout i:width.i:height; eval "quit"' -i < $(top_srcdir)/media/image.jpg $(SNTZ) | tail -1` != "00" # mostly coverage
