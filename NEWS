@@ -14,6 +14,7 @@
  * Experimental support for reading WebP images via libwebp
  * FIM requires a compiler supporting at least C++11
  * More tests
+ * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"
  * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts
  * -o sdl  with SDL2: reduce chance of intercepting Tab during window switch
  * bugfix: avoid terminal clutter after interruption of "endless_slideshow"

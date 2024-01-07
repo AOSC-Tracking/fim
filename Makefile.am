@@ -543,7 +543,7 @@ endif
 endif
 if ENABLE_HISTORY
 if ENABLE_PCX
-	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -K /pcx -K q -F 'stdout _fileindex'`" -eq "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -K /pcx -K .q -F 'stdout _fileindex'`" # 2 eq 2 (. after / doesn't repeat action)
+	test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -K /pcx -K q -F 'stdout _fileindex'`" -lt "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ -K /pcx -K .q -F 'stdout _fileindex'`" # 2 -lt 3 (. after / does repeat action)
 endif
 endif
 if ENABLE_JPEG

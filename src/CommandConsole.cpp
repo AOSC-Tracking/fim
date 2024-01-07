@@ -782,7 +782,7 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
-        fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args, bool as_interactive)
+        fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args, bool as_interactive, bool save_as_last)
 	{
 		/*
 		 * Single tokenized commands with arguments.
@@ -792,10 +792,10 @@ ret:
 		const fim::string ocmd=aliasRecall(cmd);
 		const int int0 = (args.size()>0) ? atoi(args[0].c_str()) : 1;
 
-		if (as_interactive)
+		if (as_interactive) /* note: may better introduce FIM_X_AS_INTERACTIVE */
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
-			execute(cmd, args, false);
+			execute(cmd, args, false, false);
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 			return FIM_CNS_EMPTY_RESULT;
 		}
@@ -910,6 +910,16 @@ ret:
 		}
 		return "If you see this string, please report it to the program maintainer.\n";
 ok:
+
+		if (save_as_last) /* note: may better introduce FIM_X_SAVELAST */
+		{
+			const fim::string cmdln = cmd + fim_args_as_cmd(args);
+#ifdef FIM_RECORDING
+			if(recordMode_==Recording)
+			       	record_action(cmdln);
+			memorize_last(cmdln);
+#endif /* FIM_RECORDING */
+		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1153,7 +1163,7 @@ skip_ac:
 								rls << "-";
 							rls << "/" << rl << "/";
 							args.push_back(rls.str());
-							execute(FIM_FLT_GOTO,args);
+							execute(FIM_FLT_GOTO,args,false,true);
 						}
 						free(rl);
 					}

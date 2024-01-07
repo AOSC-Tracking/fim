@@ -21,9 +21,11 @@
  * Experimental support for reading WebP images via libwebp
 # (r1988)
  * FIM requires a compiler supporting at least C++11
-# (r2002-r2003)
+# (r2002-r2003,r2047-r2048)
  * More tests
-# (r2003,r2047)
+# (r2048)
+ * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"
+# (r2003)
  * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts
 # (r2042)
  * -o sdl  with SDL2: reduce chance of intercepting Tab during window switch

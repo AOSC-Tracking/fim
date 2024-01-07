@@ -2,7 +2,7 @@
 /*
  Arg.h : argument lists
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,5 +28,7 @@ typedef std::vector<fim::string> args_t;
 int fim_args_opt_count(const args_t& args, const char oc);
 bool fim_args_opt_have(const args_t& args, fim::string optname);
 std::ostream& operator<<(std::ostream& os, const args_t& v);
+args_t fim_shell_args_escape(const args_t & args, bool quoted=true);
+fim::string fim_args_as_cmd(const args_t & args);
 }
 #endif /* FIM_ARG_H */
