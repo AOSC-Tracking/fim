@@ -306,7 +306,7 @@ static void keys_setup(fim::sym_keys_t&sym_keys)
 
 #if FIM_GTK_WITH_MENUBAR
 const char * const menu_specs_ [] = {
-	"_File/", // dummy entry (FIXME); default menu now in etc/fimrc
+	//"_File/", // dummy entry (FIXME); default menu now in etc/fimrc
 };
 
 int verbose_ = 0; /* FIXME */
@@ -815,7 +815,7 @@ repeat:
 		const void* cp = b;
 		std::string tooltip;
 
-		if( cmd.size() && !regexp_match(cmd.c_str(), "^[a-zA-Z_][a-zA-Z_]*$") )
+		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-zA-Z_]*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
 			if(verbose_) std:: cout << "BAD COMMAND SPEC:" << cmd << "|\n";
 			goto oops;
