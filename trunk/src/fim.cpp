@@ -2025,15 +2025,15 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			/* check to see if we are under X */
 			if( fim_getenv(FIM_ENV_DISPLAY) && *fim_getenv(FIM_ENV_DISPLAY) )
 			{
-	#ifdef FIM_WITH_LIBGTK
-				g_fim_output_device=FIM_DDN_INN_GTK;
-	#endif /* FIM_WITH_LIBGTK */
 	#ifdef FIM_WITH_LIBIMLIB2
 				g_fim_output_device=FIM_DDN_INN_IL2;
 	#endif /* FIM_WITH_LIBIMLIB2 */
 	#ifdef FIM_WITH_LIBSDL
 				g_fim_output_device=FIM_DDN_INN_SDL;
 	#endif /* FIM_WITH_LIBSDL */
+	#ifdef FIM_WITH_LIBGTK
+				g_fim_output_device=FIM_DDN_INN_GTK;
+	#endif /* FIM_WITH_LIBGTK */
 			}
 			else
 			#endif

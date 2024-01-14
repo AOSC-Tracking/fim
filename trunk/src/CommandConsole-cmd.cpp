@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2023 Michele Martone
+ (c) 2009-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -325,7 +325,7 @@ err:
 		 * a command to echo to stdout arguments, for debug and learning purposes
 		 */
 		if(args.size()==0)
-			std::cout<<"echo command\n";
+			std::cout<<"stdout command\n";
 		for(size_t i=0;i<args.size();++i)
 			std::cout << (args[i].c_str()) << "\n";
 		return FIM_CNS_EMPTY_RESULT;

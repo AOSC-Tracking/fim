@@ -1,7 +1,7 @@
 /*
  SDLDevice.h : GTK device Fim driver implementation file
 
- (c) 2023-2023 Michele Martone
+ (c) 2023-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -306,44 +306,10 @@ static void keys_setup(fim::sym_keys_t&sym_keys)
 
 #if FIM_GTK_WITH_MENUBAR
 const char * const menu_specs_ [] = {
-"_File/_Open  open  C-o",
-"_File/_Quit  quit  q",
-"_File/_Next  next  n",
-"_File/_Prev  prev  p",
-//"_List/_Limit list  FimMenuLimit/", // FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated.
-"_List/_Unlimit list  unlimit_list  u",
-"_View/_Mirror  toggle__i:mirrored__1__0  m",
-"_View/Automirror  toggle___automirror__1__0  ",
-"_View/_Flip  toggle__i:flipped__1__0  f",
-"_View/Autoflip  toggle___autoflip__1__0  ",
-"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h",
-"_View/_Verbose  toggle_verbose  v",
-"_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11",
-"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w",
-"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f",
-"_Custom actions/Verbose keys  toggle___verbose_keys__1__0  ",
-"_Custom actions/Desaturate  toggle___autodesaturate__1__0  ",
-"_Custom actions/Autonegate  toggle___autonegate__1__0  ",
-"_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /",
-"_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u",
-"_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *",
-"_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *",
-"_Custom actions/_Submenu/_Next  next *",
-"_Custom actions/_Add menu...  menu_dialog",
-"_Custom actions/_Toggle full screen view  toggle___gtk_fullscreen__1__0",
-"_All actions/_Commands  FimMenuCommands/",
-"_All actions/_Aliases  FimMenuAliases/",
-"_All actions/_Key Bindings  FimMenuKeyBindings/",
-"_All actions/_Variables  FimMenuVariables/",
-"_Help/_Commands  FimMenuCommandsHelp/",
-"_Help/_Aliases  FimMenuAliasesHelp/",
-"_Help/_Key Bindings  FimMenuKeyBindingsHelp/",
-"_Help/_Variables  FimMenuVariablesHelp/",
-"_Help/_Man FIM  man_fim",
-"_Help/_Man fimrc  man_fimrc",
+	"_File/", // dummy entry (FIXME); default menu now in etc/fimrc
 };
 
-#define verbose_ 0 /* FIXME */
+int verbose_ = 0; /* FIXME */
 
 typedef std::pair<fim_key_t,GdkModifierType> km_t;
 
@@ -382,10 +348,20 @@ std::string do_get_item_help(const char* item)
 static std::string xtrcttkn(const char* cmd, const char sep=' ')
 {
 	// extract token from longer C string into string
-	const auto sc = strchr(cmd, sep);
-	std::string cmds;
-	cmds = std::string(cmd, sc ? sc : cmd+strlen(cmd));
-	return cmds;
+	if (sep)
+	{
+		const auto sc = strchr(cmd, sep);
+		std::string cmds;
+		cmds = std::string(cmd, sc ? sc : cmd+strlen(cmd));
+		return cmds;
+	}
+	else
+	{
+		const auto sc = strstr(cmd, "  ");
+		std::string cmds;
+		cmds = std::string(cmd, sc ? sc : cmd + strlen(cmd));
+		return cmds;
+	}
 }
 
 void do_print_item_help(GtkWidget *, const char* item)
@@ -489,7 +465,11 @@ static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 				cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
 			}
 			else
-				cc.execute(xtrcttkn(cmd).c_str(), {});
+			{
+				const std::string cmds = xtrcttkn(cmd, '\0');
+				cc.execute((cmds).c_str(), {});
+				if(verbose_) std::cout << "EXECUTE: |" << cmds << "|" << std::endl;
+			}
 		}
 	}
 }
@@ -835,9 +815,15 @@ repeat:
 		const void* cp = b;
 		std::string tooltip;
 
+		if( cmd.size() && !regexp_match(cmd.c_str(), "^[a-zA-Z_][a-zA-Z_]*$") )
+		{
+			if(verbose_) std:: cout << "BAD COMMAND SPEC:" << cmd << "|\n";
+			goto oops;
+		}
+
 		if ( menu_items_.find(add) == menu_items_.end() )
 		{
-			if(verbose_) std:: cout << "COMMAND " << e-b << ":" << cmd << "\n";
+			if(verbose_) std:: cout << "COMMAND@" << e-b << ":" << cmd << "\n";
 			if ( b == strstr(b, "toggle__") ) // TODO: FIXME: this will need documentation
 			{
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
@@ -863,7 +849,7 @@ repeat:
 		if (! gtk_widget_get_parent((GtkWidget*)menu_items_[add]))
 			gtk_menu_shell_append(GTK_MENU_SHELL(menus_[top]), (GtkWidget*)menu_items_[add]);
 
-		if(verbose_) std::cout << "CMD: " << top << " + " << cmd << "\n";
+		if(verbose_) std::cout << "CMD: " << top << " + " << lbl << " -> " << cmd << "\n";
 		if (cmd.size())
 		{
 #if 0
@@ -910,6 +896,8 @@ repeat:
 	if (menuGr)
 		group_widgets_[menuGr] = radioset;
 	return true;
+oops:
+	return false;
 } /* add_to_menubar */
 
 static gboolean cb_menu_dialog(GtkMenuItem*)
@@ -1173,6 +1161,44 @@ fim_key_t GTKDevice::set_wm_caption(const fim_char_t *msg)
 {
 	const fim_err_t rc = FIM_ERR_NO_ERROR;
 	gtk_window_set_title(window_, msg);
+	return rc;
+}
+
+fim_err_t GTKDevice::menu_ctl(const char action, const fim_char_t *menuspec)
+{
+	static std::vector<std::string> menuspecs;
+	fim_err_t rc = FIM_ERR_NO_ERROR;
+
+	switch (action)
+	{
+		case 'A':
+		case 'a':
+		{
+			menuspecs.push_back(std::string(menuspec));
+			const auto & menuspecstr = menuspecs[menuspecs.size()-1];
+			if ( add_to_menubar(menuspecstr.c_str()) )
+			{
+				gtk_widget_show_all(menubar_);
+				rc = FIM_ERR_NO_ERROR;
+			}
+			else
+				rc = FIM_ERR_BAD_PARAMS;
+		}
+		break;
+		case 'D':
+		case 'd':
+			// FIXME: TODO: continue here
+			rc = FIM_ERR_UNSUPPORTED;
+		break;
+		case 'V':
+			verbose_ = 0;
+		break;
+		case 'v':
+			verbose_ = 1;
+		break;
+		default:
+		rc = FIM_ERR_GENERIC;
+	}
 	return rc;
 }
 

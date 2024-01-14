@@ -333,6 +333,47 @@ bind '"' "scale 'shadow';i:fresh=1;redisplay;";
 bind '(' "goto '^p'";
 bind ')' "goto '$p'";
 bind 'Z' "sleep 1";
+if( _device_string=='gtk' ) {
+	display "menuadd" 
+		"_File/"
+		"_File/_Open  open  C-o"
+		"_File/_Next in list  next  n"
+		"_File/_Next in other directory  next_file_dir_other"
+		"_File/_Next in this directory  next_file_dir_same"
+		"_File/_Previous in list  prev  p"
+		"_File/_Quit FIM  quit  q"
+		"_List/_Limit list  FimMenuLimit/"  # FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated.
+		"_List/_Unlimit list  unlimit_list  u"
+		"_View/_Mirror  toggle__i:mirrored__1__0  m"
+		"_View/Automirror  toggle___automirror__1__0  "
+		"_View/_Flip  toggle__i:flipped__1__0  f"
+		"_View/Autoflip  toggle___autoflip__1__0  "
+		"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h"
+		"_View/_Verbose  toggle_verbose  v"
+		"_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11"
+		"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w"
+		"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
+		"_Custom actions/Verbose keys  toggle___verbose_keys__1__0  "
+		"_Custom actions/Desaturate  toggle___autodesaturate__1__0  "
+		"_Custom actions/Autonegate  toggle___autonegate__1__0  "
+		"_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /"
+		"_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u"
+		"_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *"
+		"_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *"
+		"_Custom actions/_Submenu/_Next  next *"
+		"_Custom actions/_Add menu...  menu_dialog"
+		"_Custom actions/_Toggle full screen view  toggle___gtk_fullscreen__1__0"
+		"_All actions/_Commands  FimMenuCommands/"
+		"_All actions/_Aliases  FimMenuAliases/"
+		"_All actions/_Key Bindings  FimMenuKeyBindings/"
+		"_All actions/_Variables  FimMenuVariables/"
+		"_Help/_Commands  FimMenuCommandsHelp/"
+		"_Help/_Aliases  FimMenuAliasesHelp/"
+		"_Help/_Key Bindings  FimMenuKeyBindingsHelp/"
+		"_Help/_Variables  FimMenuVariablesHelp/"
+		"_Help/_Man FIM  man_fim"
+		"_Help/_Man fimrc  man_fimrc";
+}
 _display_status=1; # lower status line
 _want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
 _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
