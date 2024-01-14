@@ -2,7 +2,7 @@
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 
- (c) 2008-2022 Michele Martone
+ (c) 2008-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -283,6 +283,7 @@ void DisplayDevice::quickbench(fim_int qbi)
 	fim_err_t DisplayDevice::resize(fim_coo_t w, fim_coo_t h){return FIM_ERR_NO_ERROR;}
 	fim_err_t DisplayDevice::reinit(const fim_char_t *rs){return FIM_ERR_NO_ERROR;}
 	fim_err_t DisplayDevice::set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
+	fim_err_t DisplayDevice::menu_ctl(char action, const fim_char_t *menuspec){return FIM_ERR_UNSUPPORTED;}
 
 	fim_coo_t DisplayDevice::suggested_font_magnification(const fim_coo_t wf, const fim_coo_t hf)const
 	{

@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -2410,6 +2410,9 @@ ret:
 
 	fim_cxr CommandConsole::fcmd_display(const args_t& args)
 	{
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+		fim_err_t rc = FIM_ERR_NO_ERROR;
+
 		if( browser_.c_getImage() )
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREDISPLAY,current());
@@ -2430,6 +2433,27 @@ ret:
 					wsl = false;
 				this->display_resize(nww,nwh,wsl);
 			}
+			if( args.size()>=2 && args[0] == "menuadd" )
+			{
+				for (size_t i = 1; i < args.size(); ++i)
+					rc |= displaydevice_->menu_ctl('a', args[i]);
+				if ( rc == FIM_ERR_UNSUPPORTED )
+					result = "'menuadd' (menu addition) not available with this video driver";
+				else
+				 	if ( rc != FIM_ERR_NO_ERROR )
+				 		result = "menu editing error";
+			}
+			if( args.size()>=2 && args[0] == "menudel" )
+			{
+				for (size_t i = 1; i < args.size(); ++i)
+					rc |= displaydevice_->menu_ctl('d', args[i]);
+				assert ( rc == FIM_ERR_UNSUPPORTED );
+				result = "'menudel' (menu deletion) not yet supported";
+			}
+			if( args.size()==1 && tolower(args[0][0]) == 'v' )
+			{
+				rc = displaydevice_->menu_ctl(args[0][0], args[0]);
+			}
 			if(browser_.c_getImage() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
 			{
 				if( this->redisplay() )
@@ -2442,7 +2466,7 @@ ret:
 		       	cout << "no image to display, sorry!";
 			this->set_status_bar("no image loaded.", "*");
 		}
-		return FIM_CNS_EMPTY_RESULT;
+		return result;
 	}
 
 	fim_cxr CommandConsole::fcmd_redisplay(const args_t& args)

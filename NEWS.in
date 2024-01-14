@@ -5,7 +5,7 @@
 
  * Still work-in-progress. Please use stable branch 0.6 for now
 
-# (r2005-r2038,r2041,r2044-r2046)
+# (r2005-r2038,r2041,r2044-r2046,2049)
  * New graphical windowed output mode via GTK, selected with -o gtk (in progress)
 # (r1997)
  * When loading via an external converter, keep track of it in i:_external_decoder_program
@@ -23,7 +23,7 @@
  * FIM requires a compiler supporting at least C++11
 # (r2002-r2003,r2047-r2048)
  * More tests
-# (r2048)
+# (r2048-2049)
  * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"
 # (r2003)
  * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts

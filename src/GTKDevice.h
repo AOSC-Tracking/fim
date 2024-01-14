@@ -1,7 +1,7 @@
 /*
  SDLDevice.h : GTK device Fim driver header file
 
- (c) 2023-2023 Michele Martone
+ (c) 2023-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ class GTKDevice : public DisplayDevice {
 	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT;
 	fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
+	fim_err_t menu_ctl(const char action, const fim_char_t *menuspec);
 	static const fim_coo_t border_height_=1;
 	static const int Bpp_{3};
 	fim::string opts_;

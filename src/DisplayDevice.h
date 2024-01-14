@@ -2,7 +2,7 @@
 /*
  DisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2023 Michele Martone
+ (c) 2008-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,6 +106,7 @@ class DisplayDevice
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
+	virtual fim_err_t menu_ctl(char action, const fim_char_t *menuspec);
 	virtual fim_coo_t suggested_font_magnification(const fim_coo_t wf, const fim_coo_t hf)const;
 	void fs_multiline_puts(const char *str, fim_int doclear, int vw, int wh);
 };
