@@ -336,7 +336,8 @@ bind 'Z' "sleep 1";
 if( _device_string=='gtk' ) {
 	display "menuadd" 
 		"_File/"
-		"_File/_Open  open  C-o"
+		"_File/_Open file  open  C-o"
+		"_File/_Open directory  open_dir  "
 		"_File/_Next in list  next  n"
 		"_File/_Next in other directory  next_file_dir_other"
 		"_File/_Next in this directory  next_file_dir_same"

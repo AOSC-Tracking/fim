@@ -369,7 +369,7 @@ void do_print_item_help(GtkWidget *, const char* item)
 	cc.execute("echo", { do_get_item_help(xtrcttkn(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
-static gboolean cb_open_file( GtkMenuItem*);
+static gboolean cb_open_file( GtkMenuItem*, GtkFileChooserAction);
 
 
 using toggle_choices_t = std::tuple<std::string,std::string,std::string>;
@@ -402,6 +402,16 @@ static void sync_toggle_menu(const std::string cmd)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), (val == val1 ? TRUE : FALSE));
 		}
 	return;		
+}
+
+static std::string get_tooltip_from_toggle_spec(const std::string cmd)
+{
+	const toggle_choices_t tct = get_toggle_choices(cmd);
+	const std::string & vid = std::get<0>(tct);
+	const std::string & val1 = std::get<1>(tct);
+	const std::string & val2 = std::get<2>(tct);
+
+	return vid + "=" + val1 + "\n" + vid + "=" + val2;
 }
 
 static bool is_valid_toggle_spec(const std::string cmd)
@@ -444,7 +454,12 @@ static void sync_radio_menus()
 static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
 {
 	if( 0 == strncmp(cmd, "open", 4) )
-		cb_open_file(NULL);
+	{
+		if( 0 == strncmp(cmd+4, "_dir", 4) )
+			cb_open_file(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+		else
+			cb_open_file(NULL, GTK_FILE_CHOOSER_ACTION_OPEN);
+	}
 	else
 	{
 		if( 0 == strncmp(cmd, "toggle__", 5) ) // TODO: FIXME: this will need documentation
@@ -692,11 +707,12 @@ void rebuild_limit_menu(GtkWidget*lmitMi)
 
 void cb_on_open_response (GtkDialog *dialog, int response)
 {
-	if (response == GTK_RESPONSE_ACCEPT) {
+	if (response == GTK_RESPONSE_ACCEPT || response == -GTK_RESPONSE_ACCEPT) {
 		std::string msg ("opening ");
 		char * const fn = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); // FIXME: need gtk_file_chooser_add_filter ...
 		msg += fn;
-		cc.push(fn); // FIXME: preliminary
+		// std::cout << msg << "\n";
+		cc.push(fn,(response == -GTK_RESPONSE_ACCEPT)?FIM_FLAG_PUSH_REC:0); // FIXME: preliminary
 		g_free (fn);
 	}
 	gtk_widget_destroy (GTK_WIDGET(dialog));
@@ -704,9 +720,14 @@ void cb_on_open_response (GtkDialog *dialog, int response)
 	//GTK_WIDGET_DESTROY(GTK_WIDGET(dialog));
 }
 
-static gboolean cb_open_file( GtkMenuItem*)
+static gboolean cb_open_file( GtkMenuItem*, GtkFileChooserAction action)
 {
-	GtkWidget *dialog = gtk_file_chooser_dialog_new("Open..", GTK_WINDOW(window_), GTK_FILE_CHOOSER_ACTION_OPEN, "apri", GTK_RESPONSE_ACCEPT, "no", GTK_RESPONSE_CANCEL, NULL);
+	GtkWidget *dialog = 
+		(action==GTK_FILE_CHOOSER_ACTION_OPEN) ?
+			gtk_file_chooser_dialog_new("Open file", GTK_WINDOW(window_), GTK_FILE_CHOOSER_ACTION_OPEN, "cancel", GTK_RESPONSE_CANCEL, "select file", GTK_RESPONSE_ACCEPT, NULL)
+		:
+			gtk_file_chooser_dialog_new("Open dir", GTK_WINDOW(window_), GTK_FILE_CHOOSER_ACTION_OPEN, "cancel", GTK_RESPONSE_CANCEL, "select directory", GTK_RESPONSE_ACCEPT, "select directory recursively", -GTK_RESPONSE_ACCEPT, NULL);
+	gtk_file_chooser_set_action ((GtkFileChooser*)dialog, action);
 	gtk_widget_show(dialog);
 	g_signal_connect (dialog, "response", G_CALLBACK (cb_on_open_response), NULL);
 	return FALSE;
@@ -852,6 +873,7 @@ repeat:
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
 				check_menu_items_[xtrcttkn(cmd.c_str())].insert((GtkWidget*) menu_items_[add]), // or vid?
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_items_[add]), FALSE);
+				tooltip = get_tooltip_from_toggle_spec(cmd);
 			}
 			else
 			{
