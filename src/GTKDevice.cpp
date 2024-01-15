@@ -391,9 +391,9 @@ static toggle_choices_t get_toggle_choices(const std::string & cmd)
 static void sync_toggle_menu(const std::string cmd)
 {
 	const toggle_choices_t tct = get_toggle_choices(cmd);
-	const std::string vid = std::get<0>(tct);
-	const std::string val1 = std::get<1>(tct);
-	const std::string val2 = std::get<2>(tct);
+	const std::string & vid = std::get<0>(tct);
+	const std::string & val1 = std::get<1>(tct);
+	const std::string & val2 = std::get<2>(tct);
 
 	if ( check_menu_items_.find(cmd) != check_menu_items_.end() )
 		for ( const auto & cmi : check_menu_items_[cmd] )
@@ -402,6 +402,15 @@ static void sync_toggle_menu(const std::string cmd)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), (val == val1 ? TRUE : FALSE));
 		}
 	return;		
+}
+
+static bool is_valid_toggle_spec(const std::string cmd)
+{
+	const toggle_choices_t tct = get_toggle_choices(cmd);
+	const std::string & val1 = std::get<1>(tct);
+	const std::string & val2 = std::get<2>(tct);
+
+	return val1 != val2;		
 }
 
 static void sync_toggle_menus()
@@ -416,12 +425,14 @@ static void sync_radio_menu(const std::string cmd)
 	const auto opt = cmd.c_str() + var.size()+1;
 
 	if ( radio_menu_items_.find(cmd) != radio_menu_items_.end() )
+	{
 		for ( const auto & cmi : radio_menu_items_[cmd] )
 		{
 			const auto val = cc.getStringVariable(var);
 			if (val == opt)
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi),TRUE);
 		}
+	}
 }
 
 static void sync_radio_menus()
@@ -711,6 +722,7 @@ static bool add_to_menubar(const char *s)
 	std::string add;
 	std::string top;
 	std::string lbl;
+	std::set<std::string> rcmds {}; // repeated radio commands
 
 	if(verbose_) std::cout << s << std::endl;
 
@@ -815,9 +827,15 @@ repeat:
 		const void* cp = b;
 		std::string tooltip;
 
+		if ( rcmds.find(cmd) != rcmds.end() )
+		{
+			if(verbose_) std:: cout << "ERROR: REPEATED RADIO CMD SPEC:" << cmd << "\n";
+			goto oops;
+		}
+
 		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-zA-Z_]*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
-			if(verbose_) std:: cout << "BAD COMMAND SPEC:" << cmd << "|\n";
+			if(verbose_) std:: cout << "ERROR: BAD COMMAND SPEC:" << cmd << "\n";
 			goto oops;
 		}
 
@@ -826,6 +844,11 @@ repeat:
 			if(verbose_) std:: cout << "COMMAND@" << e-b << ":" << cmd << "\n";
 			if ( b == strstr(b, "toggle__") ) // TODO: FIXME: this will need documentation
 			{
+				if ( ! is_valid_toggle_spec(cmd) )
+				{
+					if(verbose_) std:: cout << "ERROR: INVALID TOGGLE SPEC:" << cmd << "\n";
+					goto oops;
+				}
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
 				check_menu_items_[xtrcttkn(cmd.c_str())].insert((GtkWidget*) menu_items_[add]), // or vid?
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_items_[add]), FALSE);
@@ -840,6 +863,7 @@ repeat:
 					radio_menu_items_[cmd].insert((GtkWidget*) menu_items_[add]), // TODO: need a different container, e.g. 
 					menuGr = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menu_items_[add])),
 					radioset.insert((GtkWidget*) menu_items_[add]);
+					rcmds.insert(cmd);
 				}
 				else
 					menu_items_[add] = (GtkMenuItem*) gtk_menu_item_new_with_mnemonic(lbl.c_str());
