@@ -233,9 +233,11 @@ err:
 			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
 				oss << "\"" << item << "\" key is bound to command: " << getBoundAction(kstr_to_key(item))<<"\n";
 			if(isVariable(item) || fim_var_help_db_query(item).size())
-				oss << "\"" << item << "\" is a variable, with value:\n" 
-					<< getStringVariable(item) << "\nand description:\n" 
-					<< fim_var_help_db_query(item) << "\n";
+				oss << "\"" << item << "\" is a variable, with"
+					<< " description:\n" << fim_var_help_db_query(item) << "\n"
+					<< " and "
+					<< " value:\n" << getStringVariable(item) << "\n"
+				;
 			if( oss.str() != FIM_CNS_EMPTY_STRING )
 				return fim_man_to_text(oss.str(),true);
 			else

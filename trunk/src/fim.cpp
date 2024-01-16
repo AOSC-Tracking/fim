@@ -270,8 +270,9 @@ struct fim_options_t fim_options[] = {
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks.\n"
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
+"The possible values to " FIM_CNS_EX_GOPTS_STRING " that we describe here can also be passed as \"display 'reinit' " FIM_CNS_EX_GOPTS_STRING "\" -- see man " FIM_MAN_fR("fimrc") " for this.\n"
 // #ifndef FIM_WITH_NO_FRAMEBUFFER
-"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of option " FIM_MAN_fB("'S'") " (e.g. '" FIM_MAN_fB("fb=S") "') makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
+"The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of " FIM_CNS_EX_GOPTS_STRING " with value " FIM_MAN_fB("'S'") " (e.g. '" FIM_MAN_fB("fb=S") "') makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
 // #endif /* FIM_WITH_NO_FRAMEBUFFER */
 //#ifdef FIM_WITH_LIBCACA
 "The " FIM_MAN_fB(FIM_DDN_INN_CACA) " option (coloured ASCII-art) can be specified as " FIM_MAN_fB(FIM_DDN_INN_CACA) FIM_MAN_fB("[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}] ") "; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
@@ -291,7 +292,7 @@ struct fim_options_t fim_options[] = {
 #if FIM_WITH_LIBGTK
 " \\fBgtk\\fP "
 #endif
-" it can be follwed by \\fB " FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
+" it can be followed by \\fB " FIM_MAN_iB FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['h']['W']['M']['R']['H'][width[:height]]['%']}\\fP,"
 " where " FIM_MAN_fB("width") " and " FIM_MAN_fB("height") " are integer numbers specifying the desired resolution "
 " (if " FIM_MAN_fB("height") " not specified, it takes the value of " FIM_MAN_fB("width") ");"
 " the " FIM_MAN_fB("'w'") " character requests windowed mode (instead of " FIM_MAN_fB("'W'") " for fullscreen);"
@@ -302,6 +303,7 @@ struct fim_options_t fim_options[] = {
 " as percentage of possible window resolution."
 " The same letters uppercase request explicit negation of the mentioned features.\n"
 " In \\fB" "gtk" "\\fP mode there is a menu bar, which can be disabled with " FIM_MAN_fB("'b'") "."
+" In \\fB" "gtk" "\\fP mode, " FIM_MAN_fB("'" FIM_CNS_GTK_MNRBCHR_STR "'") " rebuilds the menus."
 " The \\fB" "gtk" "\\fP option is still in progress, and therefore incomplete."
 #endif /* FIM_WANT_SDL_OPTIONS_STRING FIM_WITH_LIBGTK */
 //#ifdef FIM_WITH_LIBIMLIB2

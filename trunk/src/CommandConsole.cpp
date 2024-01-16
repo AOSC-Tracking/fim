@@ -211,6 +211,7 @@ ret:		return key;
 
 	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls cmd)const
 	{
+		// find first key bound to this command
 		const fim_key_t key = find_keycode_for_bound_cmd(cmd);
 
 		if( key != FIM_SYM_NULL_KEY )

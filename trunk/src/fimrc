@@ -333,11 +333,17 @@ bind '"' "scale 'shadow';i:fresh=1;redisplay;";
 bind '(' "goto '^p'";
 bind ')' "goto '$p'";
 bind 'Z' "sleep 1";
+_display_status=1; # lower status line
+_want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
+_info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
+#_display_status_fmt="%N:%k"; #
+_display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k"; # lower left line part
+#_fbfont_as_screen_fraction=-1; # disable auto font scaling
 if( _device_string=='gtk' ) {
 	display "menuadd" 
 		"_File/"
 		"_File/_Open file  open  C-o"
-		"_File/_Open directory  open_dir  "
+		"_File/Open _directory  open_dir  "
 		"_File/_Next in list  next  n"
 		"_File/_Next in other directory  next_file_dir_other"
 		"_File/_Next in this directory  next_file_dir_same"
@@ -375,13 +381,8 @@ if( _device_string=='gtk' ) {
 		"_Help/_Man FIM  man_fim"
 		"_Help/_Man fimrc  man_fimrc";
 		if (_last_cmd_output!="") quit -1;
+		display "reinit" "f"; # FIXME: make this unnecessary
 }
-_display_status=1; # lower status line
-_want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
-_info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
-#_display_status_fmt="%N:%k"; #
-_display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k"; # lower left line part
-#_fbfont_as_screen_fraction=-1; # disable auto font scaling
 echo "WELCOME: to switch to the command line interface press ':'";
 # More examples:
 #alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
