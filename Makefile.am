@@ -213,6 +213,7 @@ gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "m/v  toggle___v__1__1  "; quit (_last_cmd_output=="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "m/choice: 1a  v=1  a  choice: 2b  v=2  b  choice: 3c  _scale_style=3  c"; quit (_last_cmd_output!="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "m/choice: 1a  v=1  a  choice: 1b  v=1  b  choice: 3c  _scale_style=3  c"; quit (_last_cmd_output=="")'
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "reinit" "f"; quit'
 
 .PHONY: sdltests
 sdltests: all

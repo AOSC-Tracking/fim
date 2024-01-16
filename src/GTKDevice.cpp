@@ -67,6 +67,8 @@ std::cout.unsetf ( std::ios::hex ); \
 
 #define FIM_GTK_KEYSYM_TO_RL(X) ((X) | (1<<31)) // after FIM_SDL_KEYSYM_TO_RL
 #define FIM_GTK_KEYSYM_TO_RL_CTRL(X) 1+((X)-'a') // after FIM_SDL_KEYSYM_TO_RL_CTRL
+#define FIM_GTK_RESPONSE_ACCEPT_REC_FG (-GTK_RESPONSE_ACCEPT+0)
+#define FIM_GTK_RESPONSE_ACCEPT_REC_BG (-GTK_RESPONSE_ACCEPT+1) /* yet unused */
 
 namespace fim
 {
@@ -305,9 +307,7 @@ static void keys_setup(fim::sym_keys_t&sym_keys)
 }
 
 #if FIM_GTK_WITH_MENUBAR
-const char * const menu_specs_ [] = {
-	//"_File/", // dummy entry (FIXME); default menu now in etc/fimrc
-};
+static std::vector<std::string> menuspecs;
 
 int verbose_ = 0; /* FIXME */
 
@@ -550,10 +550,10 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd)
 		GtkWidget * const varMi = gtk_menu_item_new_with_label(var.c_str());
 		// perhaps still need check if variable proper..
 		if (help_or_cmd)
-			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) + " ... and click to see help...").c_str() ),
+			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see help..."*/).c_str() ),
 			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_item_help ), (void*) vp );
 		else
-			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) + " ... and click to see value ...").c_str() ),
+			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see value ..."*/).c_str() ),
 			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_var_val ), (void*) vp );
 		gtk_menu_shell_append(GTK_MENU_SHELL(varsMenu_), varMi);
 		gtk_widget_show(varMi);
@@ -707,12 +707,12 @@ void rebuild_limit_menu(GtkWidget*lmitMi)
 
 void cb_on_open_response (GtkDialog *dialog, int response)
 {
-	if (response == GTK_RESPONSE_ACCEPT || response == -GTK_RESPONSE_ACCEPT) {
+	if (response == GTK_RESPONSE_ACCEPT || response == FIM_GTK_RESPONSE_ACCEPT_REC_FG /* || response == FIM_GTK_RESPONSE_ACCEPT_REC_BG */) {
 		std::string msg ("opening ");
 		char * const fn = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); // FIXME: need gtk_file_chooser_add_filter ...
 		msg += fn;
 		// std::cout << msg << "\n";
-		cc.push(fn,(response == -GTK_RESPONSE_ACCEPT)?FIM_FLAG_PUSH_REC:0); // FIXME: preliminary
+		cc.push(fn,(response == GTK_RESPONSE_ACCEPT)?0:FIM_FLAG_PUSH_REC/*|((response == FIM_GTK_RESPONSE_ACCEPT_REC_FG )?0:FIM_FLAG_PUSH_BACKGROUND)*/); // FIXME: preliminary
 		g_free (fn);
 	}
 	gtk_widget_destroy (GTK_WIDGET(dialog));
@@ -726,7 +726,7 @@ static gboolean cb_open_file( GtkMenuItem*, GtkFileChooserAction action)
 		(action==GTK_FILE_CHOOSER_ACTION_OPEN) ?
 			gtk_file_chooser_dialog_new("Open file", GTK_WINDOW(window_), GTK_FILE_CHOOSER_ACTION_OPEN, "cancel", GTK_RESPONSE_CANCEL, "select file", GTK_RESPONSE_ACCEPT, NULL)
 		:
-			gtk_file_chooser_dialog_new("Open dir", GTK_WINDOW(window_), GTK_FILE_CHOOSER_ACTION_OPEN, "cancel", GTK_RESPONSE_CANCEL, "select directory", GTK_RESPONSE_ACCEPT, "select directory recursively", -GTK_RESPONSE_ACCEPT, NULL);
+			gtk_file_chooser_dialog_new("Open dir", GTK_WINDOW(window_), GTK_FILE_CHOOSER_ACTION_OPEN, "cancel", GTK_RESPONSE_CANCEL, "select directory", GTK_RESPONSE_ACCEPT, "select directory recursively (slow)", FIM_GTK_RESPONSE_ACCEPT_REC_FG/*, "select directory recursively background", FIM_GTK_RESPONSE_ACCEPT_REC_BG*/, NULL);
 	gtk_file_chooser_set_action ((GtkFileChooser*)dialog, action);
 	gtk_widget_show(dialog);
 	g_signal_connect (dialog, "response", G_CALLBACK (cb_on_open_response), NULL);
@@ -888,7 +888,9 @@ repeat:
 					rcmds.insert(cmd);
 				}
 				else
+				{
 					menu_items_[add] = (GtkMenuItem*) gtk_menu_item_new_with_mnemonic(lbl.c_str());
+				}
 			}
 		}
 
@@ -919,11 +921,17 @@ repeat:
 			;
 		else
 		{
-			const char * ss = strstr(b = e + 2, st);
-			const std::string sym = ss ? std::string(b, 0, ss - b) : std::string(b);
-			const km_t km = str_to_km(sym.c_str());
-			if( km.first )
-				gtk_widget_add_accelerator( (GtkWidget*)menu_items_[add], "activate", accel_group_, km.first, km.second, GTK_ACCEL_VISIBLE);
+			const char * ss = strstr(b = e + 2, st); // FIXME
+			//const std::string sym = ss ? std::string(b, 0, ss - b) : std::string(b); // FIXME
+			auto key = cc.find_key_for_bound_cmd(cmd);
+
+			if (key.size())
+			{
+				km_t km = str_to_km(key.c_str());
+				km.first = key[0]; // FIXME, need to separate key (or ignore it, or change format)
+				if( km.first )
+					gtk_widget_add_accelerator( (GtkWidget*)menu_items_[add], "activate", accel_group_, km.first, km.second, GTK_ACCEL_VISIBLE);
+			}
 			e = strstr(b, st); // e points after symbol
 		}
 	}
@@ -966,10 +974,10 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 	gtk_entry_set_has_frame(GTK_ENTRY(entry), FALSE);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 80);
 	store = gtk_list_store_new (1, G_TYPE_STRING);
-	for (size_t i = 0; i < sizeof(menu_specs_)/sizeof(menu_specs_[0]) ; i++)
+	for (size_t i = 0; i < menuspecs.size() ; i++)
 	{
 		gtk_list_store_append (store, &iter_);
-		gtk_list_store_set (store, &iter_, 0, menu_specs_[i], -1);
+		gtk_list_store_set (store, &iter_, 0, menuspecs[i], -1);
 	}
 	gtk_entry_set_completion (GTK_ENTRY (entry), completion);
 	gtk_entry_completion_set_model (completion, GTK_TREE_MODEL (store));
@@ -977,7 +985,7 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 	gtk_entry_completion_set_minimum_key_length(completion, 0);
 	gtk_dialog_add_action_widget (GTK_DIALOG(dialog), entry, 0);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-	gtk_entry_set_text(GTK_ENTRY(entry), menu_specs_[0]);
+	gtk_entry_set_text(GTK_ENTRY(entry), menuspecs.size()?menuspecs[0].c_str():"...");
 	gtk_widget_show_all(entry);
 	gtk_widget_show_all(dialog);
 	const auto result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1034,10 +1042,10 @@ void do_rebuild_help_menus(void)
 	variables_ = cc.get_variables_list(); // note: this invalidates widgets
 
 	// new stuff
-	for (const auto menu_spec: menu_specs_)
-		add_to_menubar(menu_spec);
-	//for (size_t i = 0; i < sizeof(menu_specs_)/sizeof(menu_specs_[0]) ; i++)
-		//add_to_menubar(menu_specs_[i]);
+	for (const auto menu_spec: menuspecs)
+		add_to_menubar(menu_spec.c_str());
+	//for (size_t i = 0; i < menuspecs.size() ; i++)
+		//add_to_menubar(menuspecs[i]);
 //	gtk_widget_show_all (GTK_WIDGET(menubar_));
 //	gtk_widget_show_all (GTK_WIDGET(window_));
 //	gtk_widget_hide (cmdline_entry_);
@@ -1212,7 +1220,6 @@ fim_key_t GTKDevice::set_wm_caption(const fim_char_t *msg)
 
 fim_err_t GTKDevice::menu_ctl(const char action, const fim_char_t *menuspec)
 {
-	static std::vector<std::string> menuspecs;
 	fim_err_t rc = FIM_ERR_NO_ERROR;
 
 	switch (action)
@@ -1581,7 +1588,7 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 		if (strchr(rs, 'w') || strchr(rs, 'W'))
 			toggle_fullscreen(full_screen_);
 
-		if (strchr(rs, 'f')) // TODO: FIXME: undocumented
+		if (strchr(rs, *FIM_CNS_GTK_MNRBCHR_STR))
 			do_rebuild_help_menus();
 
 		if (strchr(rs, 'b')) // TODO: FIXME: barely documented
@@ -1589,7 +1596,7 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 		else
 			show_menubar_=1;
 
-		if (strchr(rs, 'b') || strchr(rs, 'B') || strchr(rs, 'f'))
+		if (strchr(rs, 'b') || strchr(rs, 'B') || strchr(rs, *FIM_CNS_GTK_MNRBCHR_STR))
 		{
 			if ( show_menubar_ )
 				gtk_widget_show_all (menubar_);
