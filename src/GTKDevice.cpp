@@ -42,7 +42,7 @@
 #include <gdk/gdkcairo.h>
 
 #define FIM_GTK_DEBUG 1
-#undef FIM_GTK_DEBUG
+#undef FIM_GTK_DEBUG /* uncomment this to activate debug output */
 
 #define FIM_GTK_WITH_RENDERED_STATUSBAR 1 /* 1 to render, 0 to use statusbar_ */
 #define FIM_GTK_WITH_MENUBAR 1
@@ -69,6 +69,12 @@ std::cout.unsetf ( std::ios::hex ); \
 #define FIM_GTK_KEYSYM_TO_RL_CTRL(X) 1+((X)-'a') // after FIM_SDL_KEYSYM_TO_RL_CTRL
 #define FIM_GTK_RESPONSE_ACCEPT_REC_FG (-GTK_RESPONSE_ACCEPT+0)
 #define FIM_GTK_RESPONSE_ACCEPT_REC_BG (-GTK_RESPONSE_ACCEPT+1) /* yet unused */
+
+#define FIM_GTK_TP char
+#define FIM_GTK_LCI (((FIM_GTK_TP*)czptr_)+(asv_.size()-1))
+#define FIM_GTK_P2I(P) ((FIM_GTK_TP*)(P)-((FIM_GTK_TP*)czptr_))
+#define FIM_GTK_P2S(IDXP) asv_[FIM_GTK_P2I(IDXP)].c_str()
+#define FIM_GTK_ASVA(CMD) asv_.push_back(CMD)
 
 namespace fim
 {
@@ -307,7 +313,9 @@ static void keys_setup(fim::sym_keys_t&sym_keys)
 }
 
 #if FIM_GTK_WITH_MENUBAR
-static std::vector<std::string> menuspecs;
+static std::vector<std::string> menuspecs_;
+static std::vector<std::string> asv_; // actionable signals' vector with indices persistent after e.g. resize's following menu adds, where location of strings not guaranteed to be stable, e.g. because of SSO
+static const void * czptr_ {nullptr};
 
 int verbose_ = 0; /* FIXME */
 
@@ -364,8 +372,9 @@ static std::string xtrcttkn(const char* cmd, const char sep=' ')
 	}
 }
 
-void do_print_item_help(GtkWidget *, const char* item)
+void do_print_item_help(GtkWidget *, const int * idxp)
 {
+	const auto item = FIM_GTK_P2S(idxp);
 	cc.execute("echo", { do_get_item_help(xtrcttkn(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
@@ -451,8 +460,10 @@ static void sync_radio_menus()
 		sync_radio_menu(cmi.first);
 }
 
-static void cb_cc_exec(GtkWidget *wdgt, const char* cmd)
+static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 {
+	const auto cmd = FIM_GTK_P2S(idxp);
+
 	if( 0 == strncmp(cmd, "open", 4) )
 	{
 		if( 0 == strncmp(cmd+4, "_dir", 4) )
@@ -518,14 +529,14 @@ void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
 	for (auto a0 = 0UL, a1 = aliases_.find(' '); a0 < a1 && a1!=std::string::npos ; a0 = a1+1, a1 = aliases_.find(' ',a1+1) )
 	{
 		const auto alias = aliases_.substr(a0,a1-a0);
-		void * ap = (void*) (aliases_.c_str()+a0);
 		GtkWidget * const aliMi = gtk_menu_item_new_with_label(alias.c_str());
 		gtk_widget_set_tooltip_text(aliMi, alias.c_str() );
 		{
+			FIM_GTK_ASVA(alias);
 			if ( help_or_cmd )
-				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( do_print_item_help ), ap ); // TODO; need specific help mechanism..
+				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI ); // TODO; need specific help mechanism..
 			else
-				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( cb_cc_exec ), ap );
+				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI );
 		}
 		gtk_menu_shell_append(GTK_MENU_SHELL(aliaMenu_), aliMi);
 		gtk_widget_show(aliMi);
@@ -599,10 +610,11 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
 		if ( true )
 		//if ( cmd_funcs_.find(cmd) != cmd_funcs_.end() )
 		{
+			FIM_GTK_ASVA(cmd);
 			if ( help_or_press )
-				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( do_print_item_help ), cp );
+				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI );
 			else
-				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( cb_cc_exec ), cp);
+				g_signal_connect(G_OBJECT(cmdMi), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI );
 		}
 		else
 			if(verbose_) std::cout << "Warning: no command found for " << cmd << std::endl;
@@ -642,10 +654,11 @@ void do_rebuild_help_bindings_menu(GtkWidget *keysMi, const bool help_or_press)
 		if ( true )
 		//if ( cmd_funcs_.find(bc.second) != cmd_funcs_.end() )
 		{
+			FIM_GTK_ASVA(bc.second);
 			if ( help_or_press )
-				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( do_print_item_help ), (void*) bc.second.c_str() );
+				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI );
 			else
-				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( cb_cc_exec ), (void*) bc.second.c_str() );
+				g_signal_connect(G_OBJECT(keyMi), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI );
 		}
 
 		gtk_menu_shell_append(GTK_MENU_SHELL(keysMenu_), keyMi);
@@ -900,6 +913,7 @@ repeat:
 		if(verbose_) std::cout << "CMD: " << top << " + " << lbl << " -> " << cmd << "\n";
 		if (cmd.size())
 		{
+			FIM_GTK_ASVA(cmd);
 #if 0
 			if ( b == strstr(b, "toggle") )
 				g_signal_connect(G_OBJECT(menu_items_[add]), "toggled", G_CALLBACK(cmd_funcs_[cmd]), NULL);
@@ -908,7 +922,7 @@ repeat:
 #endif
 			if ( true )
 			{
-				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), (void*)cp ); // cp centered on command, b is more
+				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI ); // cp centered on command, b is more
 				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], (tooltip.size() ? tooltip.c_str() : cmd.c_str()) );
 			}
 			else
@@ -974,10 +988,10 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 	gtk_entry_set_has_frame(GTK_ENTRY(entry), FALSE);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 80);
 	store = gtk_list_store_new (1, G_TYPE_STRING);
-	for (size_t i = 0; i < menuspecs.size() ; i++)
+	for (size_t i = 0; i < menuspecs_.size() ; i++)
 	{
 		gtk_list_store_append (store, &iter_);
-		gtk_list_store_set (store, &iter_, 0, menuspecs[i], -1);
+		gtk_list_store_set (store, &iter_, 0, menuspecs_[i], -1);
 	}
 	gtk_entry_set_completion (GTK_ENTRY (entry), completion);
 	gtk_entry_completion_set_model (completion, GTK_TREE_MODEL (store));
@@ -985,7 +999,7 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 	gtk_entry_completion_set_minimum_key_length(completion, 0);
 	gtk_dialog_add_action_widget (GTK_DIALOG(dialog), entry, 0);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-	gtk_entry_set_text(GTK_ENTRY(entry), menuspecs.size()?menuspecs[0].c_str():"...");
+	gtk_entry_set_text(GTK_ENTRY(entry), menuspecs_.size()?menuspecs_[0].c_str():"...");
 	gtk_widget_show_all(entry);
 	gtk_widget_show_all(dialog);
 	const auto result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1023,6 +1037,8 @@ void do_rebuild_help_menus(void)
 	if (menubar_)
 		gtk_container_remove (GTK_CONTAINER(grid_), menubar_);
 
+	asv_ = {};
+	// menuspecs_ = {}; // this must be reset elsewhere
 	menu_items_ = {};
 	check_menu_items_ = {};
 	radio_menu_items_ = {};
@@ -1041,11 +1057,8 @@ void do_rebuild_help_menus(void)
 	commands_ = cc.get_commands_list(); // note: this invalidates widgets
 	variables_ = cc.get_variables_list(); // note: this invalidates widgets
 
-	// new stuff
-	for (const auto menu_spec: menuspecs)
+	for (const auto & menu_spec: menuspecs_)
 		add_to_menubar(menu_spec.c_str());
-	//for (size_t i = 0; i < menuspecs.size() ; i++)
-		//add_to_menubar(menuspecs[i]);
 //	gtk_widget_show_all (GTK_WIDGET(menubar_));
 //	gtk_widget_show_all (GTK_WIDGET(window_));
 //	gtk_widget_hide (cmdline_entry_);
@@ -1227,10 +1240,10 @@ fim_err_t GTKDevice::menu_ctl(const char action, const fim_char_t *menuspec)
 		case 'A':
 		case 'a':
 		{
-			menuspecs.push_back(std::string(menuspec));
-			const auto & menuspecstr = menuspecs[menuspecs.size()-1];
+			std::string menuspecstr(menuspec);
 			if ( add_to_menubar(menuspecstr.c_str()) )
 			{
+				menuspecs_.emplace_back(std::move(menuspecstr));
 				gtk_widget_show_all(menubar_);
 				rc = FIM_ERR_NO_ERROR;
 			}
