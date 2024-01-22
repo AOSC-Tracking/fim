@@ -462,7 +462,9 @@ static void sync_radio_menus()
 
 static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 {
-	const auto cmd = FIM_GTK_P2S(idxp);
+	auto cmd = FIM_GTK_P2S(idxp);
+
+	FIM_GTK_DBG_COUT << "cmd:" << cmd << "\n";
 
 	if( 0 == strncmp(cmd, "open", 4) )
 	{
@@ -504,8 +506,16 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 			else
 			{
 				const std::string cmds = xtrcttkn(cmd, '\0');
-				cc.execute((cmds).c_str(), {});
-				if(verbose_) std::cout << "EXECUTE: |" << cmds << "|" << std::endl;
+				if( cmds.find(" ") != cmds.npos )
+				{
+					cc.execute("eval", {cmds}); // ok, dirty trick
+					if(verbose_) std::cout << "EXECUTE: eval " << cmds << std::endl;
+				}
+				else
+				{
+					cc.execute(cmds, {});
+					if(verbose_) std::cout << "EXECUTE: " << cmds << std::endl;
+				}
 			}
 		}
 	}
@@ -673,6 +683,15 @@ void cb_do_limit(GtkWidget * ,GtkWidget * w)
 	if(verbose_) std::cout << "limit using index " << idx + 1 << "\n";
 }
 
+static void get_limit_menu_strings(void)
+{
+	std::istringstream mfs (cc.browser_.limit_to_variables(2, true).c_str(),std::ios::app);
+	std::string ln;
+
+	while( std::getline(mfs,ln) )
+		menuspecs_.emplace_back(std::move(ln));
+}
+
 void rebuild_limit_menu(GtkWidget*lmitMi)
 {
 	// FIXME: TODO: replace this stub
@@ -682,7 +701,7 @@ void rebuild_limit_menu(GtkWidget*lmitMi)
 	// Reason is warnings and leak persists.
 	// The current solution seem to leak very modestly.
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lmitMi), NULL);
-
+#if 0
 	lmitMenu_ = gtk_menu_new();
 	g_object_ref_sink(lmitMenu_);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lmitMi), lmitMenu_);
@@ -716,6 +735,7 @@ void rebuild_limit_menu(GtkWidget*lmitMi)
 		gtk_widget_add_accelerator(lms3Miv[i], "activate", accel_group_, GDK_KEY_1 + i, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	}
 	gtk_widget_show(lmitMenu_);
+#endif
 }
 
 void cb_on_open_response (GtkDialog *dialog, int response)
@@ -867,9 +887,9 @@ repeat:
 			goto oops;
 		}
 
-		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-zA-Z_]*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
+		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
-			if(verbose_) std:: cout << "ERROR: BAD COMMAND SPEC:" << cmd << "\n";
+			if(verbose_) std:: cout << "ERROR: BAD COMMAND SPEC: [" << cmd << "]\n";
 			goto oops;
 		}
 
@@ -1057,6 +1077,8 @@ void do_rebuild_help_menus(void)
 	commands_ = cc.get_commands_list(); // note: this invalidates widgets
 	variables_ = cc.get_variables_list(); // note: this invalidates widgets
 
+	if ( menuspecs_.size() )
+		get_limit_menu_strings(); // only add when menu already exists and this does not end up being first one (which is likely when images are loaded actually)
 	for (const auto & menu_spec: menuspecs_)
 		add_to_menubar(menu_spec.c_str());
 //	gtk_widget_show_all (GTK_WIDGET(menubar_));

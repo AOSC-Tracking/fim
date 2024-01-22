@@ -204,7 +204,7 @@ gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd" "?menu/label";              quit (_last_cmd_output!="")' # FIXME: ban this
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd" "?menu/label?";             quit (_last_cmd_output=="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu/label  cmd  ?";      quit (_last_cmd_output!="")'
-	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu/label  cmd arg  ?";  quit (_last_cmd_output=="")'
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu/label  cmd arg  ?";  quit (_last_cmd_output!="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menudel" "?";                        quit (_last_cmd_output=="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menudel"  "menu/label";              quit (_last_cmd_output=="")' # not ready yet
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menudel"  "menu/*";                  quit (_last_cmd_output=="")' # not ready yet
