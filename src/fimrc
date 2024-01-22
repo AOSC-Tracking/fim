@@ -50,7 +50,7 @@ alias "togglemirror" "i:mirrored=1-i:mirrored" "toggles mirrored property on the
 alias "mirror" "togglemirror;redisplay"         "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror"        "mirror, but just for one display";
 alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
-alias "unlimit" "limit" "calling limit with no arguments restores the original list";
+alias "unlimit" "limit;i:fresh=1;reload;redisplay" "calling limit with no arguments restores the original list";
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
 # codes are get caught by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
@@ -349,8 +349,8 @@ if( _device_string=='gtk' ) {
 		"_File/_Next in this directory  next_file_dir_same"
 		"_File/_Previous in list  prev  p"
 		"_File/_Quit FIM  quit  q"
-		"_List/_Limit list  FimMenuLimit/"  # FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated.
-		"_List/_Unlimit list  unlimit_list  u"
+#		"_List/_Limit list  FimMenuLimit/"  # FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated.
+		"_List/_Unlimit list  unlimit  u"
 		"_View/_Mirror  toggle__i:mirrored__1__0  m"
 		"_View/Automirror  toggle___automirror__1__0  "
 		"_View/_Flip  toggle__i:flipped__1__0  f"

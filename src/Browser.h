@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -193,6 +193,7 @@ class Browser FIM_FINAL
 #endif /* FIM_WANT_CROP */
 
 #if FIM_WANT_PIC_LBFL
+	fim_cxr limit_to_variables(size_t min_vals, bool expanded)const;
 	fim_cxr fcmd_limit(const args_t& args);
 #endif /* FIM_WANT_PIC_LBFL */
 	fim_cxr fcmd_reload(const args_t& args);

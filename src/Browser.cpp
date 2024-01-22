@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -93,6 +93,66 @@ namespace fim
 	{
 	       	return flist_.cf();
 	}
+
+#if FIM_WANT_PIC_LBFL
+	fim_cxr Browser::limit_to_variables(size_t min_vals, bool expanded) const
+	{
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+		fim_var_id_set ids;
+
+		for(const auto & ns : cc.id_.vd_)
+		for(const auto & ip : ns.second)
+			if(ip.first.c_str()[0]!='_')
+				ids.insert(ip.first); // list unique vars
+		std::map<fim_var_id,std::pair<size_t,size_t>> vp; // id -> (vals count, files count)
+		std::map<fim_var_id,std::set<std::string>> vv; // id -> {values}
+
+		for(const auto & id : ids)
+		{
+			vp[id].second=0;
+			for(const auto & ns : cc.id_.vd_)
+			if(ns.second.isSetVar(id))
+			{
+				vp[id].second++;
+				Var val = ns.second.getVariable(id);
+				vv[id].insert(val.getString());
+			}
+			vp[id].first=vv[id].size();
+			if(vp[id].first>=min_vals)
+			{
+				if (expanded)
+				{
+					for(const auto & val : vv[id])
+						if (val.find("  ") == val.npos) // would break GTKDevice menu spec otherwise
+							result += "_List/_Limit list/",
+							result += id,
+							result += "/",
+							result += val,
+							result += "  ",
+							result += "limit ",
+							result += fim_shell_arg_escape(id,true),
+							result += " ",
+							result += fim_shell_arg_escape(val,true),
+							result += "\n";
+				}
+				else
+				{
+					result += id;
+					result += ": ";
+			       		result += std::to_string(vp[id].first);
+					result += " vals / ";
+			       		result += std::to_string(vp[id].second);
+					result += " files\n";
+					for(const auto & val : vv[id])
+						result += " ",
+						result += val,
+						result += "\n";
+				}
+			}
+		}
+		return result;
+	}
+#endif /* FIM_WANT_PIC_LBFL */
 
 	fim_cxr Browser::fcmd_list(const args_t& args)
 	{
@@ -242,41 +302,7 @@ namespace fim
 #endif /* FIM_READ_DIRS */
 #if FIM_DIFFERENT_VARS
 			else if(args[0]=="variables" || args[0]=="vars")
-			{
-				const auto min_vals = args.size()>1 ? FIM_MAX(std::atoi(args[1]),1) : 2;
-				fim_var_id_set ids;
-				for(const auto & ns : cc.id_.vd_)
-				for(const auto & ip : ns.second)
-					if(ip.first.c_str()[0]!='_')
-						ids.insert(ip.first); // list unique vars
-				std::map<fim_var_id,std::pair<int,int>> vp; // id -> (vals count, files count)
-				std::map<fim_var_id,std::set<std::string>> vv; // id -> {values}
-				for(const auto & id : ids)
-				{
-					vp[id].second=0;
-					for(const auto & ns : cc.id_.vd_)
-					if(ns.second.isSetVar(id))
-					{
-						vp[id].second++;
-						Var val = ns.second.getVariable(id);
-						vv[id].insert(val.getString());
-					}
-					vp[id].first=vv[id].size();
-					if(vp[id].first>=min_vals)
-					{
-						result += id;
-						result += ": ";
-					       	result += std::to_string(vp[id].first);
-						result += " vals / ";
-					       	result += std::to_string(vp[id].second);
-						result += " files\n";
-						for(const auto & val : vv[id])
-							result += " ",
-							result += val,
-							result += "\n";
-					}
-				}
-			}
+				result = limit_to_variables(args.size()>1 ? FIM_MAX(std::atoi(args[1]),1) : 2, false);
 #endif /* FIM_DIFFERENT_VARS */
 			else
 				result = FIM_CMD_HELP_LIST;
