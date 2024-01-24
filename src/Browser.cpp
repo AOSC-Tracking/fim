@@ -124,7 +124,7 @@ namespace fim
 				{
 					for(const auto & val : vv[id])
 						if (val.find("  ") == val.npos) // would break GTKDevice menu spec otherwise
-							result += "_List/_Limit list/",
+							// menu location is relative ; e.g. "_List/_Limit list/"
 							result += id,
 							result += "/",
 							result += val,

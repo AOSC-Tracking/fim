@@ -349,7 +349,7 @@ if( _device_string=='gtk' ) {
 		"_File/_Next in this directory  next_file_dir_same"
 		"_File/_Previous in list  prev  p"
 		"_File/_Quit FIM  quit  q"
-#		"_List/_Limit list  FimMenuLimit/"  # FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated.
+		"_List/_Limit list  FimMenuLimit/"
 		"_List/_Unlimit list  unlimit  u"
 		"_View/_Mirror  toggle__i:mirrored__1__0  m"
 		"_View/Automirror  toggle___automirror__1__0  "
@@ -365,6 +365,7 @@ if( _device_string=='gtk' ) {
 		"_Custom actions/Autonegate  toggle___autonegate__1__0  "
 		"_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /"
 		"_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u"
+		"_Custom actions/_Submenu/FimMenuLimit  FimMenuLimit/"
 		#"_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *" # bad specification
 		#"_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *" # bad specification
 		#"_Custom actions/_Submenu/_Next  next *" # bad specification

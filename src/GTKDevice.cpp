@@ -46,6 +46,7 @@
 
 #define FIM_GTK_WITH_RENDERED_STATUSBAR 1 /* 1 to render, 0 to use statusbar_ */
 #define FIM_GTK_WITH_MENUBAR 1
+#define FIM_GTK_WITH_RELATIVE_LIMIT_MENUS 1
 
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
@@ -683,6 +684,7 @@ void cb_do_limit(GtkWidget * ,GtkWidget * w)
 	if(verbose_) std::cout << "limit using index " << idx + 1 << "\n";
 }
 
+#if !FIM_GTK_WITH_RELATIVE_LIMIT_MENUS 
 static void get_limit_menu_strings(void)
 {
 	std::istringstream mfs (cc.browser_.limit_to_variables(2, true).c_str(),std::ios::app);
@@ -691,6 +693,7 @@ static void get_limit_menu_strings(void)
 	while( std::getline(mfs,ln) )
 		menuspecs_.emplace_back(std::move(ln));
 }
+#endif /* FIM_GTK_WITH_RELATIVE_LIMIT_MENUS */
 
 void rebuild_limit_menu(GtkWidget*lmitMi)
 {
@@ -701,7 +704,7 @@ void rebuild_limit_menu(GtkWidget*lmitMi)
 	// Reason is warnings and leak persists.
 	// The current solution seem to leak very modestly.
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lmitMi), NULL);
-#if 0
+#if 0   /* FIXME: broken: causes lots of warnings when pressing 'a', therefore it's temporarily deactivated. */
 	lmitMenu_ = gtk_menu_new();
 	g_object_ref_sink(lmitMenu_);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lmitMi), lmitMenu_);
@@ -836,7 +839,22 @@ static bool add_to_menubar(const char *s)
 			if ( l == strstr( l, "FimMenuVariablesHelp" ) )
 				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],true);
 			if ( l == strstr( l, "FimMenuLimit" ) )
+			{
+#if FIM_GTK_WITH_RELATIVE_LIMIT_MENUS
+				std::istringstream mfs (cc.browser_.limit_to_variables(2, true).c_str(),std::ios::app);
+				std::string ln;
+
+				while( std::getline(mfs,ln) )
+				{
+					const std::string nme = (std::string(s,0,l-2-s)+"/"+ln);
+					add_to_menubar(nme.c_str());
+					if(verbose_) std::cout << "menu: " << nme << "\n";
+				}
+				goto ok;
+#else /* FIM_GTK_WITH_RELATIVE_LIMIT_MENUS */
 				rebuild_limit_menu((GtkWidget*)menu_items_[add]);
+#endif /* FIM_GTK_WITH_RELATIVE_LIMIT_MENUS */
+			}
 		}
 		if ( new_submenu != 'n' )
 			menus_[add] = (GtkMenu*) gtk_menu_new();
@@ -983,6 +1001,7 @@ repeat:
 
 	if (menuGr)
 		group_widgets_[menuGr] = radioset;
+ok:
 	return true;
 oops:
 	return false;
@@ -1077,8 +1096,10 @@ void do_rebuild_help_menus(void)
 	commands_ = cc.get_commands_list(); // note: this invalidates widgets
 	variables_ = cc.get_variables_list(); // note: this invalidates widgets
 
+#if !FIM_GTK_WITH_RELATIVE_LIMIT_MENUS 
 	if ( menuspecs_.size() )
 		get_limit_menu_strings(); // only add when menu already exists and this does not end up being first one (which is likely when images are loaded actually)
+#endif /* FIM_GTK_WITH_RELATIVE_LIMIT_MENUS */
 	for (const auto & menu_spec: menuspecs_)
 		add_to_menubar(menu_spec.c_str());
 //	gtk_widget_show_all (GTK_WIDGET(menubar_));
