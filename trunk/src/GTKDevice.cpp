@@ -522,8 +522,9 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 	}
 }
 
-void do_print_var_val(GtkWidget *, const char* var)
+void do_print_var_val(GtkWidget *, const void* idxp)
 {
+	const auto var = FIM_GTK_P2S(idxp);
 	const auto vv = cc.getStringVariable(var) + "\n";
 	cc.execute("echo", { std::string(var) + " is: " + std::string(vv)} ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
@@ -545,8 +546,10 @@ void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
 		{
 			FIM_GTK_ASVA(alias);
 			if ( help_or_cmd )
+				gtk_widget_set_tooltip_text(aliMi, (do_get_item_help(alias.c_str()) /*+ " ... and click to see help..."*/).c_str() ),
 				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI ); // TODO; need specific help mechanism..
 			else
+				gtk_widget_set_tooltip_text(aliMi, (do_get_item_help(alias.c_str()) /*+ " ... and click to see definition..."*/).c_str() ),
 				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI );
 		}
 		gtk_menu_shell_append(GTK_MENU_SHELL(aliaMenu_), aliMi);
@@ -568,15 +571,16 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd)
 	{
 		const auto var = variables_.substr(v0,v1-v0);
 		void * vp = (void*) (variables_.c_str()+v0);
+		FIM_GTK_ASVA(var);
 		if(verbose_) std::cout << "VAR: " << var << std::endl;
 		GtkWidget * const varMi = gtk_menu_item_new_with_label(var.c_str());
 		// perhaps still need check if variable proper..
 		if (help_or_cmd)
 			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see help..."*/).c_str() ),
-			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_item_help ), (void*) vp );
+			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI );
 		else
 			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see value ..."*/).c_str() ),
-			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_var_val ), (void*) vp );
+			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_var_val ), FIM_GTK_LCI );
 		gtk_menu_shell_append(GTK_MENU_SHELL(varsMenu_), varMi);
 		gtk_widget_show(varMi);
 	}
@@ -885,7 +889,7 @@ repeat:
 		if ( ! *e )
 		{
 			// TODO: eliminate this branch
-			std:: cout << "TERMINAL" << b << "\n";
+			std::cout << "TERMINAL" << b << "\n";
 			if ( menu_items_.find(add) == menu_items_.end() )
 				menu_items_[add] = (GtkMenuItem*) gtk_menu_item_new_with_mnemonic(lbl.c_str());
 			gtk_menu_shell_append(GTK_MENU_SHELL(menus_[top]), (GtkWidget*)menu_items_[add]);
@@ -901,24 +905,24 @@ repeat:
 
 		if ( rcmds.find(cmd) != rcmds.end() )
 		{
-			if(verbose_) std:: cout << "ERROR: REPEATED RADIO CMD SPEC:" << cmd << "\n";
+			if(verbose_) std::cout << "ERROR: REPEATED RADIO CMD SPEC:" << cmd << "\n";
 			goto oops;
 		}
 
 		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
-			if(verbose_) std:: cout << "ERROR: BAD COMMAND SPEC: [" << cmd << "]\n";
+			if(verbose_) std::cout << "ERROR: BAD COMMAND SPEC: [" << cmd << "]\n";
 			goto oops;
 		}
 
 		if ( menu_items_.find(add) == menu_items_.end() )
 		{
-			if(verbose_) std:: cout << "COMMAND@" << e-b << ":" << cmd << "\n";
+			if(verbose_) std::cout << "COMMAND@" << e-b << ":" << cmd << "\n";
 			if ( b == strstr(b, "toggle__") ) // TODO: FIXME: this will need documentation
 			{
 				if ( ! is_valid_toggle_spec(cmd) )
 				{
-					if(verbose_) std:: cout << "ERROR: INVALID TOGGLE SPEC:" << cmd << "\n";
+					if(verbose_) std::cout << "ERROR: INVALID TOGGLE SPEC:" << cmd << "\n";
 					goto oops;
 				}
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
@@ -931,7 +935,7 @@ repeat:
 				if (tc > 2)
 				{
 					// group is lbl
-					if(verbose_) std:: cout << "RADIO " << add << " -> " << cmd << "\n";
+					if(verbose_) std::cout << "RADIO " << add << " -> " << cmd << "\n";
 					menu_items_[add] = (GtkMenuItem*) gtk_radio_menu_item_new_with_mnemonic(menuGr, lbl.c_str()),
 					radio_menu_items_[cmd].insert((GtkWidget*) menu_items_[add]), // TODO: need a different container, e.g. 
 					menuGr = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menu_items_[add])),
