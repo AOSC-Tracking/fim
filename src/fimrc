@@ -340,6 +340,8 @@ _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
 _display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k"; # lower left line part
 #_fbfont_as_screen_fraction=-1; # disable auto font scaling
 if( _device_string=='gtk' ) {
+	alias "man_fim"   "system 'man' 'fim';  _display_console=0;toggleVerbosity;";
+	alias "man_fimrc" "system 'man' 'fimrc';_display_console=0;toggleVerbosity;";
 	display "menuadd" 
 		"_File/"
 		"_File/_Open file  open  C-o"

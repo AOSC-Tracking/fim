@@ -47,6 +47,8 @@
 #define FIM_GTK_WITH_RENDERED_STATUSBAR 1 /* 1 to render, 0 to use statusbar_ */
 #define FIM_GTK_WITH_MENUBAR 1
 #define FIM_GTK_WITH_RELATIVE_LIMIT_MENUS 1
+#define FIM_GTK_WITH_SYSTEM_INVOCATION 0
+#define FIM_GTK_WITH_MENU_EDITING_DIALOG 0
 
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
@@ -469,12 +471,22 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 
 	if( 0 == strncmp(cmd, "open", 4) )
 	{
-		if( 0 == strncmp(cmd+4, "_dir", 4) )
+		if( 0 == strncmp(cmd+4, "_dir", 4) ) // open_dir
 			cb_open_file(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 		else
 			cb_open_file(NULL, GTK_FILE_CHOOSER_ACTION_OPEN);
+		return;
 	}
-	else
+
+#if FIM_GTK_WITH_SYSTEM_INVOCATION
+	if( 0 == strncmp(cmd, "man_fim", 7) )
+	{
+		if( 0 == strncmp(cmd+7, "rc", 2) || !cmd[7] ) // man_fimrc || man_fim
+			cmd_funcs_[cmd]();
+		return;
+	}
+#endif /* FIM_GTK_WITH_SYSTEM_INVOCATION */
+
 	{
 		if( 0 == strncmp(cmd, "toggle__", 5) ) // TODO: FIXME: this will need documentation
 		{
@@ -965,6 +977,8 @@ repeat:
 			if ( true )
 			{
 				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI ); // cp centered on command, b is more
+				if (!tooltip.size() && cc.aliasRecall(cmd).size())
+					tooltip = cmd + " -> " + cc.aliasRecall(cmd);
 				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], (tooltip.size() ? tooltip.c_str() : cmd.c_str()) );
 			}
 			else
@@ -1011,6 +1025,7 @@ oops:
 	return false;
 } /* add_to_menubar */
 
+#if FIM_GTK_WITH_MENU_EDITING_DIALOG
 static gboolean cb_menu_dialog(GtkMenuItem*)
 {
 	GtkWidget *entry;
@@ -1061,16 +1076,28 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 	//GTK_WIDGET_DESTROY(GTK_WIDGET(dialog));
 	return TRUE;
 }
+#endif /* FIM_GTK_WITH_MENU_EDITING_DIALOG */
 
 static void do_init_cmd_funcs(void)
 {
 	// bind actual functionality to commands
+#if FIM_GTK_WITH_MENU_EDITING_DIALOG
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
-	cmd_funcs_["rebuild_limit_menu"] = [](){ };
-	cmd_funcs_["toggle_flip"] = [](){ };
-	cmd_funcs_["man_fim"] = [](){ system("konsole -e man fim"); };
-	cmd_funcs_["man_fimrc"] = [](){ system("konsole -e man fimrc"); };
-	cmd_funcs_["unlimit_list"] = [](){ std::cout << "unlimit list\n"; };
+#endif /* FIM_GTK_WITH_MENU_EDITING_DIALOG */
+	// cmd_funcs_["rebuild_limit_menu"] = [](){ };
+
+#if FIM_GTK_WITH_SYSTEM_INVOCATION
+	if ( system("which xterm") )
+	{
+		cmd_funcs_["man_fim"] = [](){ system("xterm -e man fim"); };
+		cmd_funcs_["man_fimrc"] = [](){ system("xterm -e man fimrc"); };
+	}
+	if ( system("which konsole") )
+	{
+		cmd_funcs_["man_fim"] = [](){ system("konsole -e man fim"); };
+		cmd_funcs_["man_fimrc"] = [](){ system("konsole -e man fimrc"); };
+	}
+#endif /* FIM_GTK_WITH_SYSTEM_INVOCATION */
 	// TODO: something to reinit autocompletion
 }
 

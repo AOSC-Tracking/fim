@@ -249,7 +249,9 @@ class CommandConsole FIM_FINAL :
 	int findCommandIdx(fim_cmd_id cmd)const;
 	fim_cxr fcmd_alias(const args_t& args);
 	fim::string alias(const fim_cmd_id& a, const fim_cmd_id& c, const fim_cmd_id& d="");
+	public:// 20240125
 	fim::string aliasRecall(fim_cmd_id cmd)const;
+	private:
 	fim_cxr fcmd_system(const args_t& args);
 	fim_cxr fcmd_cd(const args_t& args);
 	fim_cxr fcmd_pwd(const args_t& args);
