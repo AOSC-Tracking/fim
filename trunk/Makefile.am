@@ -216,6 +216,8 @@ gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "reinit" "f"; quit'
 	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/numbers_pcx/*.pcx -o gtk -C 'display "v";' -c 'stdout _last_cmd_output;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep menu: | wc -l` = 8
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "menuadd" "_Help/_Variables  FimMenuVariablesHelp/" "Help_/_Variables  FimMenuVariablesHelp/";quit 0;' # notice Help_ is a different menu than _Help
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fimrc;cl2=_console_lines; quit!(cl1<cl2);'
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fim  ;cl2=_console_lines; quit!(cl1<cl2);'
 
 .PHONY: sdltests
 sdltests: all
