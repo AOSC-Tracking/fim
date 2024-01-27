@@ -219,6 +219,8 @@ gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fimrc;cl2=_console_lines; quit!(cl1<cl2);'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fim  ;cl2=_console_lines; quit!(cl1<cl2);'
 	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -K ':q' -K '' | wc -c ` -lt 2 # with pre readline-8 I observe a 0x0a spilled
+	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c quit --verbose-interpreter --no-internal-config| grep verbose.menu.tooltip | wc -l ` -lt 1
+	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c quit --verbose-interpreter                     | grep verbose.menu.tooltip | wc -l ` -gt 30
 
 .PHONY: sdltests
 sdltests: all

@@ -280,7 +280,7 @@ Load files verbosely (repeat option to increase verbosity).
 Load font verbosely (sets \fB_fbfont_verbosity\fP).
 .TP
 \fB--verbose-interpreter\fP
-Execute interpreter verbosely (Sets immediately \fB_debug_commands\fP="ackC" if specified once, \fB_debug_commands\fP="ackCi" if specified  twice).
+Execute interpreter verbosely (Sets immediately \fB_debug_commands\fP="ackCm" if specified once, \fB_debug_commands\fP="ackCmi" if specified  twice).
 .TP
 \fB-V\fP, \fB--version\fP
 Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit.
