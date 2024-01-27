@@ -27,6 +27,7 @@
 // - clean up FIM's finalization with GTK's finalization
 // - toggle__ needs error-tolerance
 // - radio buttons group update
+// - shall menu commands be allowed while in the console mode, or not? (FIM_GTK_ALLOW_MENU_IN_CONSOLE)
 // - ...
 
 #include <map>
@@ -49,6 +50,7 @@
 #define FIM_GTK_WITH_RELATIVE_LIMIT_MENUS 1
 #define FIM_GTK_WITH_SYSTEM_INVOCATION 0
 #define FIM_GTK_WITH_MENU_EDITING_DIALOG 0
+#define FIM_GTK_ALLOW_MENU_IN_CONSOLE 1
 
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
@@ -240,14 +242,14 @@ static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 			 || last_pressed_key_ == GDK_KEY_Control_R
 			)
 			last_pressed_key_ = 0;
-		if (last_pressed_key_ && handled == FALSE && last_pressed_key_ < 0x100)
+		if (handled == FALSE && ((last_pressed_key_ && last_pressed_key_ < 0x100) || cc.inConsole()))
 			handled = TRUE;
 		// lots of garbage codes can still go in
 	}
 	if (alt_pressed_ && !cc.inConsole()) // in console aka readline mode Alt is OK
 		handled = FALSE, // in interactive mode we pass Alt to the window system, to handle menus
 		last_pressed_key_ = 0;
-	FIM_GTK_DBG_COUT << " handled=" << handled << " last_pressed_key_=" << ((int)last_pressed_key_) << " alt_pressed_=" << alt_pressed_ << std::endl;
+	FIM_GTK_DBG_COUT << " handled=" << handled << " last_pressed_key_=" << ((int)last_pressed_key_) << " alt_pressed_=" << alt_pressed_ << " inConsole()=" << cc.inConsole() << std::endl;
 	return handled;
 }
 
@@ -465,6 +467,14 @@ static void sync_radio_menus()
 
 static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 {
+#if !FIM_GTK_ALLOW_MENU_IN_CONSOLE
+	if ( cc.inConsole() )
+	{
+		FIM_GTK_DBG_COUT << "Warning! inConsole()=" << cc.inConsole() << std::endl;
+		return;
+	}
+	assert ( ! cc.inConsole() );
+#endif /* FIM_GTK_ALLOW_MENU_IN_CONSOLE */
 	auto cmd = FIM_GTK_P2S(idxp);
 
 	FIM_GTK_DBG_COUT << "cmd:" << cmd << "\n";
@@ -1264,6 +1274,7 @@ fim_sys_int GTKDevice::get_input(fim_key_t * c, bool want_poll)
 	int keypress_ = 0;
 	GdkEventKey event_;
 	const fim_sys_int iv = get_input_inner(c,&event_,&keypress_,want_poll);
+	FIM_GTK_DBG_COUT << " iv=" << iv << " *c=" << *c << " want_poll=" << want_poll << "\n";
 	return iv;
 }
 

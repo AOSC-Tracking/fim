@@ -302,13 +302,13 @@ struct fim_options_t fim_options[] = {
 " the " FIM_MAN_fB("'%'") " character requests to treat " FIM_MAN_fB("width") " and " FIM_MAN_fB("height")
 " as percentage of possible window resolution."
 " The same letters uppercase request explicit negation of the mentioned features.\n"
-" In \\fB" "gtk" "\\fP mode there is a menu bar, which can be disabled with " FIM_MAN_fB("'b'") "."
-" In \\fB" "gtk" "\\fP mode, " FIM_MAN_fB("'" FIM_CNS_GTK_MNRBCHR_STR "'") " rebuilds the menus."
-" The \\fB" "gtk" "\\fP option is still in progress, and therefore incomplete."
+" Additionally, in \\fB" "gtk" "\\fP mode: " FIM_MAN_fB("'b'") " hides the menu bar,"
+" and " FIM_MAN_fB("'" FIM_CNS_GTK_MNRBCHR_STR "'") " rebuilds the menus."
+" Warning: the \\fB" "gtk" "\\fP mode is still work in progress."
 #endif /* FIM_WANT_SDL_OPTIONS_STRING FIM_WITH_LIBGTK */
 //#ifdef FIM_WITH_LIBIMLIB2
 " The \\fB" "imlib2" "\\fP option requests imlib2 and is unfinished -- do not use it.\n"
-" The " FIM_MAN_fB(FIM_DDN_INN_DUMB) " test mode is not interactive.\n"
+" The " FIM_MAN_fB(FIM_DDN_INN_DUMB) " test mode is not interactive (it's there for test purposes).\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
