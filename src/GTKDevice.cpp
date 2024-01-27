@@ -902,8 +902,10 @@ static bool add_to_menubar(const char * const s)
 	}
 
 	if (add.empty())
-	       	/* TODO: need message that / is requisite in the menu spec */
+	{
+		std::cerr << "ERROR: / is a missing requisite in menu specification:\n" << s << "\n";
 		goto oops;
+	}
 	top = add;
 repeat:
 	if ( ( e = strstr(b, st) ) )
@@ -939,13 +941,13 @@ repeat:
 
 		if ( rcmds.find(cmd) != rcmds.end() )
 		{
-			if(verbose_) std::cout << "ERROR: REPEATED RADIO CMD SPEC:" << cmd << "\n";
+			std::cerr << "ERROR: repeated radio command : [" << cmd << "] in menu specification:\n" << s << "\n";
 			goto oops;
 		}
 
 		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
-			if(verbose_) std::cout << "ERROR: BAD COMMAND SPEC: [" << cmd << "]\n";
+			std::cerr << "ERROR: bad command : [" << cmd << "] in menu specification:\n" << s << "\n";
 			goto oops;
 		}
 
