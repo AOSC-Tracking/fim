@@ -218,6 +218,7 @@ gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "menuadd" "_Help/_Variables  FimMenuVariablesHelp/" "Help_/_Variables  FimMenuVariablesHelp/";quit 0;' # notice Help_ is a different menu than _Help
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fimrc;cl2=_console_lines; quit!(cl1<cl2);'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fim  ;cl2=_console_lines; quit!(cl1<cl2);'
+	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -K ':q' -K '' | wc -c ` -lt 2 # with pre readline-8 I observe a 0x0a spilled
 
 .PHONY: sdltests
 sdltests: all
@@ -237,6 +238,7 @@ if FIM_WANT_HARDCODED_CONSOLEFONT
 	$(NO_ASAN) FBFONT=fim:// \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -c quit # TODO: this is only a coverage test
 endif
+	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl -K ':q' -K '' | wc -c ` -lt 1 # no char is spilled, differently than with gtk
 
 .PHONY: imlib2tests
 imlib2tests: all
