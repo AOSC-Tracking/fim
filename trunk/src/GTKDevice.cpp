@@ -896,6 +896,9 @@ static bool add_to_menubar(const char *s)
 		b = e + 1;
 	}
 
+	if (add.empty())
+	       	/* TODO: need message that / is requisite in the menu spec */
+		goto oops;
 	top = add;
 repeat:
 	if ( ( e = strstr(b, st) ) )
