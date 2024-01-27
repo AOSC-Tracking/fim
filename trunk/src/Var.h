@@ -2,7 +2,7 @@
 /*
  Var.h : Var class header file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -261,6 +261,7 @@ class Var FIM_FINAL
 	       	this->s_.shrink_to_fit();
        	}
 	int find(const fim_char_t c)const{const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s_.c_str()) && (r=strchr(s_.c_str(),c)))return r-p; return -1; }
+	int find(const char * const s)const{const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s_.c_str()) && (r=strstr(s_.c_str(),s)))return r-p; return -1; }
 };
 	fim::string fim_var_help_db_query(const fim::string& id);
 	void fim_var_help_db_init(void);
