@@ -197,7 +197,7 @@ endif
 gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -K q
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd" "?";                        quit (_last_cmd_output=="")'
-	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu";                    quit (_last_cmd_output!="")' # FIXME: ban this
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu";                    quit (_last_cmd_output=="")' # menu spec without '/' is not allowed
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu/";                   quit (_last_cmd_output!="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu/label";              quit (_last_cmd_output!="")'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd" "_menu/label";              quit (_last_cmd_output!="")'
