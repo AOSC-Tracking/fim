@@ -323,6 +323,7 @@ static std::vector<std::string> asv_; // actionable signals' vector with indices
 static const void * czptr_ {nullptr};
 
 int verbose_ = 0; /* FIXME */
+int verbose_specs_ = 0;
 
 typedef std::pair<fim_key_t,GdkModifierType> km_t;
 
@@ -551,14 +552,15 @@ void do_print_var_val(GtkWidget *, const void* idxp)
 	cc.execute("echo", { std::string(var) + " is: " + std::string(vv)} ); // TODO: FIXME: this goes better to status, as long as in interactive mode
 }
 
-void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
+void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd, const char * const s)
 {
 	if(aliaMi) // workaround around warnings in gtk_menu_item_set_submenu
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(aliaMi), NULL);
 	aliaMenu_ = gtk_menu_new();
 	g_object_ref_sink(aliaMenu_);
 	if(aliaMi && aliaMenu_) // workaround around warnings in gtk_menu_item_set_submenu
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(aliaMi), aliaMenu_);
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(aliaMi), aliaMenu_),
+		gtk_widget_set_tooltip_text(aliaMi, verbose_specs_?s:"" );
 
 	for (auto a0 = 0UL, a1 = aliases_.find(' '); a0 < a1 && a1!=std::string::npos ; a0 = a1+1, a1 = aliases_.find(' ',a1+1) )
 	{
@@ -580,14 +582,15 @@ void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd)
 	gtk_widget_show(aliaMenu_);
 }
 
-void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd)
+void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd, const char * const s)
 {
 	if(varsMi)
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(varsMi), NULL);
 	varsMenu_ = gtk_menu_new();
 	g_object_ref_sink(varsMenu_);
 	if(varsMi)
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(varsMi), varsMenu_);
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(varsMi), varsMenu_),
+		gtk_widget_set_tooltip_text(varsMi, verbose_specs_?s:"" );
 
 	for (auto v0 = 0UL, v1 = variables_.find(' '); v0 < v1 && v1!=std::string::npos ; v0 = v1+1, v1 = variables_.find(' ',v1+1) )
 	{
@@ -609,7 +612,7 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd)
 	gtk_widget_show(varsMenu_);
 }
 
-void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
+void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press, const char * const s)
 {
 	if(cmdsMi) // workaround around warnings in gtk_menu_item_set_submenu
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(cmdsMi), NULL);
@@ -617,7 +620,8 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
 	cmdsMenu = gtk_menu_new();
 	g_object_ref_sink(cmdsMenu);
 	if(cmdsMi && cmdsMenu) // workaround around warnings in gtk_menu_item_set_submenu
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(cmdsMi), cmdsMenu);
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(cmdsMi), cmdsMenu),
+		gtk_widget_set_tooltip_text(cmdsMi, verbose_specs_?s:"" );
 
 
 	for (auto c0 = 0UL, c1 = commands_.find(' '); c0 < c1 && c1!=std::string::npos ; c0 = c1+1, c1 = commands_.find(' ',c1+1) )
@@ -662,14 +666,15 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press)
 	gtk_widget_show(cmdsMenu);
 }
 
-void do_rebuild_help_bindings_menu(GtkWidget *keysMi, const bool help_or_press)
+void do_rebuild_help_bindings_menu(GtkWidget *keysMi, const bool help_or_press, const char * const s)
 {
 	if(keysMi) // workaround around warnings in gtk_menu_item_set_submenu
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(keysMi), NULL);
 	keysMenu_ = gtk_menu_new();
 	g_object_ref_sink(keysMenu_);
 	if(keysMi && keysMenu_) // workaround around warnings in gtk_menu_item_set_submenu
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(keysMi), keysMenu_);
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(keysMi), keysMenu_),
+		gtk_widget_set_tooltip_text(keysMi, verbose_specs_?s:"" );
 
 	for (const auto & bc : bindings_)
 	{
@@ -795,7 +800,7 @@ static gboolean cb_open_file( GtkMenuItem*, GtkFileChooserAction action)
 	return FALSE;
 }
 
-static bool add_to_menubar(const char *s)
+static bool add_to_menubar(const char * const s)
 {
 	// add one menu item to the menu
 	// FIXME: return false on error and react consequently
@@ -849,21 +854,21 @@ static bool add_to_menubar(const char *s)
 		{
 			// TODO: versions of these with extras or without
 			if ( l == sym_strstr( l, "FimMenuAliases" ) )
-				do_rebuild_help_aliases_menu((GtkWidget*)menu_items_[add],false);
+				do_rebuild_help_aliases_menu((GtkWidget*)menu_items_[add],false,s);
 			if ( l == strstr( l, "FimMenuAliasesHelp" ) )
-				do_rebuild_help_aliases_menu((GtkWidget*)menu_items_[add],true);
+				do_rebuild_help_aliases_menu((GtkWidget*)menu_items_[add],true,s);
 			if ( l == sym_strstr( l, "FimMenuKeyBindings" ) )
-				do_rebuild_help_bindings_menu((GtkWidget*)menu_items_[add],false);
+				do_rebuild_help_bindings_menu((GtkWidget*)menu_items_[add],false,s);
 			if ( l == strstr( l, "FimMenuKeyBindingsHelp" ) )
-				do_rebuild_help_bindings_menu((GtkWidget*)menu_items_[add],true);
+				do_rebuild_help_bindings_menu((GtkWidget*)menu_items_[add],true,s);
 			if ( l == sym_strstr( l, "FimMenuCommands" ) )
-				do_rebuild_help_commands_menu((GtkWidget*)menu_items_[add],false);
+				do_rebuild_help_commands_menu((GtkWidget*)menu_items_[add],false,s);
 			if ( l == strstr( l, "FimMenuCommandsHelp" ) )
-				do_rebuild_help_commands_menu((GtkWidget*)menu_items_[add],true);
+				do_rebuild_help_commands_menu((GtkWidget*)menu_items_[add],true,s);
 			if ( l == sym_strstr( l, "FimMenuVariables" ) )
-				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],false);
+				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],false,s);
 			if ( l == strstr( l, "FimMenuVariablesHelp" ) )
-				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],true);
+				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],true,s);
 			if ( l == strstr( l, "FimMenuLimit" ) )
 			{
 #if FIM_GTK_WITH_RELATIVE_LIMIT_MENUS
@@ -928,6 +933,10 @@ repeat:
 		const void* cp = b;
 		std::string tooltip;
 
+		if ( verbose_specs_ )
+			tooltip += s,
+			tooltip += "\n";
+
 		if ( rcmds.find(cmd) != rcmds.end() )
 		{
 			if(verbose_) std::cout << "ERROR: REPEATED RADIO CMD SPEC:" << cmd << "\n";
@@ -953,7 +962,7 @@ repeat:
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
 				check_menu_items_[xtrcttkn(cmd.c_str())].insert((GtkWidget*) menu_items_[add]), // or vid?
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_items_[add]), FALSE);
-				tooltip = get_tooltip_from_toggle_spec(cmd);
+				tooltip += get_tooltip_from_toggle_spec(cmd);
 			}
 			else
 			{
@@ -1323,6 +1332,12 @@ fim_err_t GTKDevice::menu_ctl(const char action, const fim_char_t *menuspec)
 {
 	fim_err_t rc = FIM_ERR_NO_ERROR;
 
+	if(cc.getVariable(FIM_VID_DBG_COMMANDS).find('m') >= 0)
+	{
+		verbose_specs_ = 1;
+		std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu tooltip\n";
+	}
+
 	switch (action)
 	{
 		case 'A':
@@ -1352,7 +1367,7 @@ fim_err_t GTKDevice::menu_ctl(const char action, const fim_char_t *menuspec)
 		break;
 		default:
 		rc = FIM_ERR_GENERIC;
-	}
+	} 
 	return rc;
 }
 
