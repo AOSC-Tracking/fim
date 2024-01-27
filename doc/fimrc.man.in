@@ -338,7 +338,7 @@ If 'resize' and no argument, ask the window manager to resize the window like th
 .fi
 If 'resize' and two arguments, these are used to reset width and height of the current window.
 .fi
-In the 'menuadd' case, use \fR\fI{menuspec}\fR as GTK window menu specification. This specification string argument can be repeated. Each argument has form M/S. M is a slash-separated submenu location, with optional '_' (underscore) before a GTK accelerator character (e.g. "File", "_File", "View/Scale", "_View/Scale"). Notice that M cannot be empty and must be followed by a '/'. S can specify a simple entry, a toggle entry, or radio buttons. If a simple entry, it consists of one to three sections separated by "  " (two spaces). The first section is the name of the menu entry (a label), the second is a command specification, the third is a shortcut character. The following labels are special and if followed by '/', they create custom menus: FimMenuLimit (pre-categorized "limit"-based commands based on actual "desc" command data), FimMenuCommands (with commands), FimMenuAliases (with aliases), FimMenuKeyBindings (with bindings), FimMenuVariables (with variables' values), FimMenuCommandsHelp (commands help), FimMenuAliasesHelp (aliases help), FimMenuKeyBindingsHelp (bindings help), FimMenuVariablesHelp (variables' help). A toggle button specification takes the form 'toggle__'\fR\fI{identifier}\fR'__'\fR\fI{value}\fR'__'\fR\fI{value}\fR and starts the toggle button with the second \fR\fI{value}\fR (which has to be different). E.g. "menu/label  toggle___v__1__2  " is ok,  "menu/label  toggle___v__1__1  " is not. A radio buttons specification has as many sections as radio buttons, separated by double spaces, and consisting each by a string, two spaces, an assignment \fR\fI{identifier}\fR=\fR\fI{value}\fR (notice no quotes are necessary around \fR\fI{value}\fR, and repetitions are illegal), two spaces, and an optional accelerator character (e.g. "m/first:  v=1  a  second:  v=2  b  third:  v=3  c" is ok, but "m/first:  v=1  a  second:  v=2  b  third:  v=2  c" is not).
+In the 'menuadd' case, use \fR\fI{menuspec}\fR as GTK window menu specification. This specification string argument can be repeated. Each argument has form M/S. M is a slash-separated submenu location, with optional '_' (underscore) before a GTK accelerator character (e.g. "File", "_File", "View/Scale", "_View/Scale"). Notice that M cannot be empty and must be followed by a '/'. S can specify a simple entry, a toggle entry, or radio buttons. If a simple entry, it consists of one to three sections separated by "  " (two spaces). The first section is the name of the menu entry (a label), the second is a command specification, the third is a shortcut character. The following labels are special and if followed by '/', they create custom menus: FimMenuLimit (pre-categorized "limit"-based commands based on actual "desc" command data), FimMenuCommands (with commands), FimMenuAliases (with aliases), FimMenuKeyBindings (with bindings), FimMenuVariables (with variables' values), FimMenuCommandsHelp (commands help), FimMenuAliasesHelp (aliases help), FimMenuKeyBindingsHelp (bindings help), FimMenuVariablesHelp (variables' help). A toggle button specification can take the form 'toggle__'\fR\fI{identifier}\fR'__'\fR\fI{value}\fR'__'\fR\fI{value}\fR and starts the toggle button with the second \fR\fI{value}\fR (which has to be different). Actually, instead of '__' you can use any two same punctuation signs or Tab characters consistently. E.g. "menu/label  toggle___v__1__2  " or "menu/label  toggle::_v::1::2  " are ok, but  "menu/label  toggle___v__1__1  " or "menu/label  toggle___v::1::2  " are not. A radio buttons specification has as many sections as radio buttons, separated by double spaces, and consisting each by a string, two spaces, an assignment \fR\fI{identifier}\fR=\fR\fI{value}\fR (notice no quotes are necessary around \fR\fI{value}\fR, and repetitions are illegal), two spaces, and an optional accelerator character (e.g. "m/first:  v=1  a  second:  v=2  b  third:  v=3  c" is ok, but "m/first:  v=1  a  second:  v=2  b  third:  v=2  c" is not).
 .fi
 Option 'menudel' is not implemented yet.
 .fi
@@ -1871,14 +1871,14 @@ if( _device_string=='gtk' ) {
 		"_List/_Limit list  FimMenuLimit/"
 		"_List/_Unlimit list  unlimit  u"
 		"_View/_Mirror  toggle__i:mirrored__1__0  m"
-		"_View/Automirror  toggle___automirror__1__0  "
-		"_View/_Flip  toggle__i:flipped__1__0  f"
-		"_View/Autoflip  toggle___autoflip__1__0  "
+		"_View/Automirror  toggle||_automirror||1||0  "
+		"_View/_Flip  toggle&&i:flipped&&1&&0  f"
+		"_View/Autoflip  toggle.._autoflip..1..0  "
 		"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h"
 		"_View/_Verbose  toggle_verbose  v"
 		"_View/Rebuild menus with tooltips  _rebuild_verboser_menus"
 		"_View/Rebuild menus very verbosely  _rebuild_verbosest_menus"
-		"_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11"
+		"_Window/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
 		"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w"
 		"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
 		"_Custom actions/Verbose keys  toggle___verbose_keys__1__0  "
@@ -1891,7 +1891,7 @@ if( _device_string=='gtk' ) {
 		#"_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *" # bad specification
 		#"_Custom actions/_Submenu/_Next  next *" # bad specification
 		"_Custom actions/_Add menu...  menu_dialog"
-		"_Custom actions/_Toggle full screen view  toggle___gtk_fullscreen__1__0"
+		"_Custom actions/_Toggle full screen view  toggle		_gtk_fullscreen		1		0"
 		"_All actions/_Commands  FimMenuCommands/"
 		"_All actions/_Aliases  FimMenuAliases/"
 		"_All actions/_Key Bindings  FimMenuKeyBindings/"
