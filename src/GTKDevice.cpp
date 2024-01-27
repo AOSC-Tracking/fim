@@ -322,7 +322,7 @@ static std::vector<std::string> menuspecs_;
 static std::vector<std::string> asv_; // actionable signals' vector with indices persistent after e.g. resize's following menu adds, where location of strings not guaranteed to be stable, e.g. because of SSO
 static const void * czptr_ {nullptr};
 
-int verbose_ = 0; /* FIXME */
+int verbose_ = 0;
 int verbose_specs_ = 0;
 
 typedef std::pair<fim_key_t,GdkModifierType> km_t;
@@ -1332,12 +1332,6 @@ fim_err_t GTKDevice::menu_ctl(const char action, const fim_char_t *menuspec)
 {
 	fim_err_t rc = FIM_ERR_NO_ERROR;
 
-	if(cc.getVariable(FIM_VID_DBG_COMMANDS).find('m') >= 0)
-	{
-		verbose_specs_ = 1;
-		std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu tooltip\n";
-	}
-
 	switch (action)
 	{
 		case 'A':
@@ -1669,6 +1663,17 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 	fim_err_t GTKDevice::reinit(const fim_char_t *rs)
 	{
 		FIM_GTK_DBG_COUT << ":" << rs << "\n";
+
+		if((!verbose_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find("mm") >= 0)
+		{
+			verbose_ = 1;
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menus build\n";
+		}
+		if((!verbose_specs_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find('m') >= 0)
+		{
+			verbose_specs_ = 1;
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu tooltip\n";
+		}
 
 		if( rs && *rs )
 		{

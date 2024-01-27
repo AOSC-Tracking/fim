@@ -967,7 +967,7 @@ _console_offset
 .na
 .B
 _debug_commands
-[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity; if containing 'm', gtk mode menus tooltips will contain also specification strings.
+[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity; if containing 'm', gtk mode menus tooltips will contain also specification strings; if containing 'mm', gtk mode menu building will also be very verbose.
 .fi
 .na
 .B
@@ -1857,6 +1857,8 @@ _display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF
 if( _device_string=='gtk' ) {
 	alias "man_fim"   "system 'man' 'fim';  _display_console=0;toggleVerbosity;";
 	alias "man_fimrc" "system 'man' 'fimrc';_display_console=0;toggleVerbosity;";
+	alias '_rebuild_verboser_menus' '_debug_commands=_debug_commands."m";display "reinit" "f";';
+	alias '_rebuild_verbosest_menus' '_debug_commands=_debug_commands."mm";display "reinit" "f";';
 	display "menuadd" 
 		"_File/"
 		"_File/_Open file  open  C-o"
@@ -1874,6 +1876,8 @@ if( _device_string=='gtk' ) {
 		"_View/Autoflip  toggle___autoflip__1__0  "
 		"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h"
 		"_View/_Verbose  toggle_verbose  v"
+		"_View/Rebuild menus with tooltips  _rebuild_verboser_menus"
+		"_View/Rebuild menus very verbosely  _rebuild_verbosest_menus"
 		"_Window/_Fullscreen  toggle___gtk_fullscreen__1__0  F11"
 		"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w"
 		"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
