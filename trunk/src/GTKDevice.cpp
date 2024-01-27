@@ -25,7 +25,6 @@
 // - full screen mode to hide scrolldown menu
 // - update and sync widgets with vars' value
 // - clean up FIM's finalization with GTK's finalization
-// - toggle__ needs error-tolerance
 // - radio buttons group update
 // - shall menu commands be allowed while in the console mode, or not? (FIM_GTK_ALLOW_MENU_IN_CONSOLE)
 // - ...
@@ -391,13 +390,14 @@ using toggle_choices_t = std::tuple<std::string,std::string,std::string>;
 
 static toggle_choices_t get_toggle_choices(const std::string & cmd)
 {
-	const auto s1p = cmd.find("__");
+	const auto sep = cmd.substr(6,2); // XX in toggleXX
+	const auto s1p = cmd.find(sep);
 	const auto wid = std::string(cmd,0, s1p);
-	const auto s2p = cmd.find("__", s1p+2);
+	const auto s2p = cmd.find(sep, s1p+2);
 	const auto vid = std::string(cmd, s1p+2, s2p-s1p-2);
-	const auto s3p = cmd.find("__", s2p+2);
+	const auto s3p = cmd.find(sep, s2p+2);
 	const auto vv1 = std::string(cmd, s2p+2, s3p-s2p-2);
-	const auto s4p = cmd.find("__", s3p+2);
+	const auto s4p = cmd.find(sep, s3p+2);
 	const auto vv2 = std::string(cmd, s3p+2, s4p-s3p-2);
 
 	return {vid,vv1,vv2};
@@ -499,7 +499,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 #endif /* FIM_GTK_WITH_SYSTEM_INVOCATION */
 
 	{
-		if( 0 == strncmp(cmd, "toggle__", 5) ) // TODO: FIXME: this will need documentation
+		if( 0 == strncmp(cmd, "toggle", 6) )
 		{
 			const toggle_choices_t tct = get_toggle_choices(xtrcttkn(cmd));
 			const std::string vid = std::get<0>(tct);
@@ -945,7 +945,7 @@ repeat:
 			goto oops;
 		}
 
-		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle__.*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
+		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle...*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
 			std::cerr << "ERROR: bad command : [" << cmd << "] in menu specification:\n" << s << "\n";
 			goto oops;
@@ -954,11 +954,11 @@ repeat:
 		if ( menu_items_.find(add) == menu_items_.end() )
 		{
 			if(verbose_) std::cout << "COMMAND@" << e-b << ":" << cmd << "\n";
-			if ( b == strstr(b, "toggle__") ) // TODO: FIXME: this will need documentation
+			if ( strstr(b, "toggle") && b[6] && !isalnum(b[6]) && (b[6]!=' ') && b[6]==b[7] ) // toggle__ toggle:: ...
 			{
 				if ( ! is_valid_toggle_spec(cmd) )
 				{
-					if(verbose_) std::cout << "ERROR: INVALID TOGGLE SPEC:" << cmd << "\n";
+					std::cerr << "ERROR: invalid toggle spec : [" << cmd << "] in menu specification:\n" << s << "\n";
 					goto oops;
 				}
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
