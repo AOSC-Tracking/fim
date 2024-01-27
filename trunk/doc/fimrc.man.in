@@ -342,7 +342,7 @@ In the 'menuadd' case, use \fR\fI{menuspec}\fR as GTK window menu specification.
 .fi
 Option 'menudel' is not implemented yet.
 .fi
-Note: 'menuadd' and 'menudel' are only valid for the \fBgtk\fP mode and are experimental (e.g. invalid menu specifications may lead to a crash). See also the '_debug_commands' variable. 
+Note: 'menuadd' and 'menudel' are only valid for the \fBgtk\fP mode and are experimental (e.g. invalid menu specifications may lead to a crash with no warnings). See also the '_debug_commands' variable. 
 .fi
 
 .fi
