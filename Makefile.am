@@ -807,7 +807,7 @@ if WANT_READLINE
 endif
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set; stdout _last_cmd_output; quit' | wc -w` -ge 50 # test set
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM"; stdout _last_cmd_output; quit' | wc -w` -eq 1 # test set
-	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n' $(SNTZ)` = WhatWhatSetSetSet
+	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'set "_TERM" "WhatWhat"; stdout _TERM _last_cmd_output; set 1 2 3 ; stdout _last_cmd_output; quit' | sed "s/set.*$$/Set/g" | tr -d '\n' $(SNTZ)` = WhatWhatSetSetSet
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'unbind; unbind "?"; bind "~"; bind "n"; bind "n" ""' -c quit
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'color "desaturate";color "negate";color "identity";color "colorblind" "daltonize";color "deuteranopia" "daltonize";color "protanopia" "daltonize";color "tritanopia" "daltonize";color "colorblind"' -c quit # only cover test
 	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi

@@ -27,6 +27,7 @@
 // - clean up FIM's finalization with GTK's finalization
 // - radio buttons group update
 // - shall menu commands be allowed while in the console mode, or not? (FIM_GTK_ALLOW_MENU_IN_CONSOLE)
+// - auto sync of menus: variables, commands, aliases... (see FIM_GTK_WITH_VARS_SYNC)
 // - ...
 
 #include <map>
@@ -51,6 +52,7 @@
 #define FIM_GTK_WITH_MENU_EDITING_DIALOG 0
 #define FIM_GTK_ALLOW_MENU_IN_CONSOLE 1
 #define FIM_GTK_WITH_SHORT_MENUSPEC 1
+#define FIM_GTK_WITH_VARS_SYNC 0
 
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
@@ -95,6 +97,9 @@ namespace fim
 #if FIM_GTK_WITH_MENUBAR
 	GtkWidget *menubar_{};
 	std::map<std::string,GtkMenuItem*> menu_items_; // TODO: broken in GTK4: https://docs.gtk.org/gtk4/class.PopoverMenu.html
+#if FIM_GTK_WITH_VARS_SYNC
+	std::map<std::string,GtkWidget*> var_menu_items_;
+#endif /* FIM_GTK_WITH_VARS_SYNC */
 	std::map<std::string,std::set<GtkWidget*>> check_menu_items_; // TODO: may bring problems when actualizing
 	std::map<std::string,std::set<GtkWidget*>> radio_menu_items_; // TODO: may bring problems when actualizing
 	std::map<GSList*,std::set<GtkWidget*>> group_widgets_; // TODO: may bring problems when actualizing
@@ -353,9 +358,14 @@ static const char *sym_strstr(const char *haystack, const char *needle)
 		return NULL;
 }
 
-std::string do_get_item_help(const char* item)
+static std::string do_get_item_help(const char* item)
 {
-	const auto ih = cc.get_help(item, 'l');
+#if FIM_GTK_WITH_VARS_SYNC
+	const auto ghc = 'l';
+#else /* FIM_GTK_WITH_VARS_SYNC */
+	const auto ghc = 'L';
+#endif /* FIM_GTK_WITH_VARS_SYNC */
+	const auto ih = cc.get_help(item, ghc);
 	return ih;
 }
 
@@ -378,10 +388,17 @@ static std::string xtrcttkn(const char* cmd, const char sep=' ')
 	}
 }
 
-void do_print_item_help(GtkWidget *, const int * idxp)
+static void do_force_console()
+{
+	cc.execute("set", {"_display_console", "0" }, true);
+	cc.execute("toggleVerbosity", {}, true);
+}
+
+static void do_print_item_help(GtkWidget *, const int * idxp)
 {
 	const auto item = FIM_GTK_P2S(idxp);
 	cc.execute("echo", { do_get_item_help(xtrcttkn(item).c_str()) } ); // TODO: FIXME: this goes better to status, as long as in interactive mode
+	do_force_console();	
 }
 
 static gboolean cb_open_file( GtkMenuItem*, GtkFileChooserAction);
@@ -443,6 +460,18 @@ static void sync_toggle_menus()
 {
 	for ( const auto & cmi : check_menu_items_ )
 		sync_toggle_menu(cmi.first);
+}
+
+static void sync_vars_menus()
+{
+#if FIM_GTK_WITH_VARS_SYNC
+	for ( const auto & cmi : var_menu_items_)
+	{
+		const auto tooltip = do_get_item_help(1+(const char*)strrchr(cmi.first.c_str(),'/'));
+		gtk_widget_set_tooltip_text(cmi.second, tooltip.c_str() );
+		gtk_widget_show(cmi.second);
+	}
+#endif /* FIM_GTK_WITH_VARS_SYNC */
 }
 
 static void sync_radio_menu(const std::string cmd)
@@ -552,7 +581,8 @@ void do_print_var_val(GtkWidget *, const void* idxp)
 {
 	const auto var = FIM_GTK_P2S(idxp);
 	const auto vv = cc.getStringVariable(var) + "\n";
-	cc.execute("echo", { std::string(var) + " is: " + std::string(vv)} ); // TODO: FIXME: this goes better to status, as long as in interactive mode
+	cc.execute("echo", { std::string(var) + " is: " + std::string(vv) + "\n"} ); // TODO: FIXME: this goes better to status, as long as in interactive mode
+	do_force_console();	
 }
 
 void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd, const char * const s)
@@ -602,6 +632,9 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd, c
 		FIM_GTK_ASVA(var);
 		if(verbose_) std::cout << "VAR: " << var << std::endl;
 		GtkWidget * const varMi = gtk_menu_item_new_with_label(var.c_str());
+#if FIM_GTK_WITH_VARS_SYNC
+		var_menu_items_[s+var] = varMi;
+#endif /* FIM_GTK_WITH_VARS_SYNC */
 		// perhaps still need check if variable proper..
 		if (help_or_cmd)
 			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see help..."*/).c_str() ),
@@ -1199,6 +1232,9 @@ void do_rebuild_help_menus(void)
 	asv_ = {};
 	// menuspecs_ = {}; // this must be reset elsewhere
 	menu_items_ = {};
+#if FIM_GTK_WITH_VARS_SYNC
+	var_menu_items_ = {};
+#endif /* FIM_GTK_WITH_VARS_SYNC */
 	check_menu_items_ = {};
 	radio_menu_items_ = {};
 	group_widgets_ = {};
@@ -1314,6 +1350,7 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 
 	gtk_main_iteration();
 	sync_toggle_menus();
+	sync_vars_menus();
 	sync_radio_menus();
 
 	if ( last_pressed_key_ )
