@@ -366,6 +366,8 @@ if( _device_string=='gtk' ) {
 		"_View/Rebuild menus very verbosely  _rebuild_verbosest_menus"
 		"_Window/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
 		"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w"
+		"_Custom actions/orientation: normal  i:_orientation=0    orientation: 90'right  i:_orientation=1    orientation: upside down  i:_orientation=2    orientation: 90' left  i:_orientation=3  "
+		"_Custom actions/auto orientation: normal  _orientation=0    auto orientation: 90'right  _orientation=1    auto orientation: upside down  _orientation=2    auto orientation: 90' left  _orientation=3  "
 		"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
 		"_Custom actions/Verbose keys  toggle___verbose_keys__1__0  "
 		"_Custom actions/Desaturate  toggle___autodesaturate__1__0  "
