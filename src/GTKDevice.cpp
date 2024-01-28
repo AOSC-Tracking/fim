@@ -990,7 +990,7 @@ repeat:
 			goto oops;
 		}
 
-		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle...*" "|[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
+		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle...*" "|(i:)?[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
 			std::cerr << "ERROR: bad command : [" << cmd << "] in menu specification:\n" << s << "\n";
 			goto oops;
