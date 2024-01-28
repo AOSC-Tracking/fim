@@ -222,7 +222,7 @@ err:
 
 		{
 			std::ostringstream oss;
-			const fim::string sws = fim_help_opt(item.c_str(), dl);
+			const fim::string sws = fim_help_opt(item.c_str(), tolower(dl));
 			// consider using fim_shell_arg_escape or a modification of it here.
 			if( sws != FIM_CNS_EMPTY_STRING )
 				oss << sws << "\n";
@@ -233,11 +233,12 @@ err:
 			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
 				oss << "\"" << item << "\" key is bound to command: " << getBoundAction(kstr_to_key(item))<<"\n";
 			if(isVariable(item) || fim_var_help_db_query(item).size())
+			{
 				oss << "\"" << item << "\" is a variable, with"
-					<< " description:\n" << fim_var_help_db_query(item) << "\n"
-					<< " and "
-					<< " value:\n" << getStringVariable(item) << "\n"
-				;
+					<< " description:\n" << fim_var_help_db_query(item) << "\n";
+				if (islower(dl))
+					oss << " and " << " value:\n" << getStringVariable(item) << "\n";
+			}
 			if( oss.str() != FIM_CNS_EMPTY_STRING )
 				return fim_man_to_text(oss.str(),true);
 			else
@@ -802,17 +803,18 @@ err:
 		/*
 		 * with no arguments, prints out the variable names.
 		 * with one identifier as argument, prints out its value.
-		 * with two arguments, sets the first argument's value.
+		 * with two arguments, sets the first argument's value and prints nothing.
+		 * otherwise, print help
 		 * */
 		if( ! args.size())
 			return get_variables_list();
 		if(1==args.size())
 			return getStringVariable(args[0]);
-		/*
-		 * warning!
-		 * */
 		if(2==args.size())
-			return setVariable(args[0],args [1]);
+		{
+			setVariable(args[0],args [1]);
+			return FIM_CNS_EMPTY_RESULT;
+		}
 		else
 			return FIM_CMD_HELP_SET;
 	}

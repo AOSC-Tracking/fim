@@ -1187,7 +1187,7 @@ namespace fim
 #define FIM_CMD_HELP_SCROLL FIM_FLT_SCROLL ": scroll down the image, going next when hitting the bottom." FIM_CNS_CMDSEP FIM_FLT_SCROLL " 'forward': scroll the image as we were reading left to right (see '" FIM_VID_SKIP_SCROLL "' variable)." FIM_CMD_ACM_INFO(FIM_ACM_PREPAN,FIM_ACM_POSTPAN)
 #define FIM_CMD_HELP_SET_CONSOLE_MODE FIM_FLT_SET_CONSOLE_MODE ": set console mode."
 #define FIM_CMD_HELP_SET_INTERACTIVE_MODE FIM_FLT_SET_INTERACTIVE_MODE ": set interactive mode."
-#define FIM_CMD_HELP_SLEEP FIM_FLT_SLEEP " [" FIM_CNS_EX_NUM_STRING "=1]: sleep for the specified (default 1) number of seconds."
+#define FIM_CMD_HELP_SLEEP FIM_FLT_SLEEP " [" FIM_CNS_EX_NUM_STRING "]: sleep for the specified number of seconds (or 1, if unspecified)."
 #define FIM_CMD_HELP_STATUS FIM_FLT_STATUS ": set the status line to the collation of the given arguments."
 #define FIM_CMD_HELP_STDERR FIM_FLT_STDERR " " FIM_CNS_EX_ARGS_STRING ": writes to stderr its arguments " FIM_CNS_EX_ARGS_STRING "."
 #define FIM_CMD_HELP_STDOUT FIM_FLT_STDOUT " " FIM_CNS_EX_ARGS_STRING ": writes to stdout its arguments " FIM_CNS_EX_ARGS_STRING "."

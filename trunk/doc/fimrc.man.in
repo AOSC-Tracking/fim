@@ -746,7 +746,7 @@ set_interactive_mode: set interactive mode.
 .B
 sleep
 .fi
-sleep [\fR\fI{number}\fR=1]: sleep for the specified (default 1) number of seconds.
+sleep [\fR\fI{number}\fR]: sleep for the specified number of seconds (or 1 if unspecified).
 .fi
 
 .na
@@ -1579,7 +1579,7 @@ Part of the default configuration comes from the \fB_fim_default_config_file_con
 One can skip its loading by using the \fB_no_default_configuration\fP variable.
 
 .nf
-# $LastChangedDate: 2024-01-28 00:22:55 +0100 (Sun, 28 Jan 2024) $
+# $LastChangedDate: 2024-01-28 17:59:59 +0100 (Sun, 28 Jan 2024) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
