@@ -356,10 +356,11 @@ if( _device_string=='gtk' ) {
 		"_List/_Limit list  FimMenuLimit/"
 		"_List/_Unlimit list  unlimit  u"
 		"_View/_Mirror  toggle__i:mirrored__1__0  m"
-		"_View/Automirror  toggle||_automirror||1||0  "
-		"_View/_Flip  toggle&&i:flipped&&1&&0  f"
-		"_View/Autoflip  toggle.._autoflip..1..0  "
-		"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h"
+		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
+		"_View/_Flip  toggle&&i:flipped&&1&&0  f" # && as internal separator
+		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
+#		"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h"
+		"_View/**scale: _auto**_scale_style=a**a**scale: by _hand (manual)**_scale_style=m**m**scale: by _width**_scale_style=w**w**scale: by _height**_scale_style=h**h"
 		"_View/_Verbose  toggle_verbose  v"
 		"_View/Rebuild menus with tooltips  _rebuild_verboser_menus"
 		"_View/Rebuild menus very verbosely  _rebuild_verbosest_menus"
