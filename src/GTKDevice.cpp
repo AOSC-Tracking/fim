@@ -42,7 +42,7 @@
 #include <gdk/gdkcairo.h>
 
 #define FIM_GTK_DEBUG 1
-#undef FIM_GTK_DEBUG /* uncomment this to activate debug output */
+#undef FIM_GTK_DEBUG /* comment this to activate debug output */
 
 #define FIM_GTK_WITH_RENDERED_STATUSBAR 1 /* 1 to render, 0 to use statusbar_ */
 #define FIM_GTK_WITH_MENUBAR 1
@@ -50,6 +50,7 @@
 #define FIM_GTK_WITH_SYSTEM_INVOCATION 0
 #define FIM_GTK_WITH_MENU_EDITING_DIALOG 0
 #define FIM_GTK_ALLOW_MENU_IN_CONSOLE 1
+#define FIM_GTK_WITH_SHORT_MENUSPEC 1
 
 #ifdef FIM_GTK_DEBUG
 #define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
@@ -524,7 +525,9 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 					cc.execute("set", {var, val}, true);
 				}
 				else
-					; // TODO
+				{
+					std::cerr << "ERROR: wrong assignment spec : [" << actn << "] in radio specification:\n" << cmd << "\n";
+				}
 				cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
 			}
 			else
@@ -811,6 +814,9 @@ static bool add_to_menubar(const char * const s)
 	std::string top;
 	std::string lbl;
 	std::set<std::string> rcmds {}; // repeated radio commands
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+	char lst [3] = {st[0], st[1], '\0'}; // local separator token // TODO: single char is enough
+#endif
 
 	if(verbose_) std::cout << s << std::endl;
 
@@ -819,8 +825,10 @@ static bool add_to_menubar(const char * const s)
 	GSList *menuGr {};
 	std::set<GtkWidget*> radioset {};
 
+#if !FIM_GTK_WITH_SHORT_MENUSPEC
 	while ( ( p = strstr(p + 2, st) ) )
 		++tc;
+#endif
 
 	while ( ( e = strchr(b, '/') ) && e[-1] != ' ' )
 	{
@@ -855,20 +863,28 @@ static bool add_to_menubar(const char * const s)
 			// TODO: versions of these with extras or without
 			if ( l == sym_strstr( l, "FimMenuAliases" ) )
 				do_rebuild_help_aliases_menu((GtkWidget*)menu_items_[add],false,s);
+			else
 			if ( l == strstr( l, "FimMenuAliasesHelp" ) )
 				do_rebuild_help_aliases_menu((GtkWidget*)menu_items_[add],true,s);
+			else
 			if ( l == sym_strstr( l, "FimMenuKeyBindings" ) )
 				do_rebuild_help_bindings_menu((GtkWidget*)menu_items_[add],false,s);
+			else
 			if ( l == strstr( l, "FimMenuKeyBindingsHelp" ) )
 				do_rebuild_help_bindings_menu((GtkWidget*)menu_items_[add],true,s);
+			else
 			if ( l == sym_strstr( l, "FimMenuCommands" ) )
 				do_rebuild_help_commands_menu((GtkWidget*)menu_items_[add],false,s);
+			else
 			if ( l == strstr( l, "FimMenuCommandsHelp" ) )
 				do_rebuild_help_commands_menu((GtkWidget*)menu_items_[add],true,s);
+			else
 			if ( l == sym_strstr( l, "FimMenuVariables" ) )
 				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],false,s);
+			else
 			if ( l == strstr( l, "FimMenuVariablesHelp" ) )
 				do_rebuild_help_variables_menu((GtkWidget*)menu_items_[add],true,s);
+			else
 			if ( l == strstr( l, "FimMenuLimit" ) )
 			{
 #if FIM_GTK_WITH_RELATIVE_LIMIT_MENUS
@@ -886,6 +902,12 @@ static bool add_to_menubar(const char * const s)
 				rebuild_limit_menu((GtkWidget*)menu_items_[add]);
 #endif /* FIM_GTK_WITH_RELATIVE_LIMIT_MENUS */
 			}
+			else
+			{
+				std::cerr << "ERROR: bogus special menu spec " << l << " in:\n" << s << "\n";
+				goto oops;
+			}
+			if(verbose_) std::cout << "SPECIAL\n";
 		}
 		if ( new_submenu != 'n' )
 			menus_[add] = (GtkMenu*) gtk_menu_new();
@@ -907,11 +929,30 @@ static bool add_to_menubar(const char * const s)
 		goto oops;
 	}
 	top = add;
+
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+	if ( b[0] && b[1] && b[2] && b[0] == b[1] && !isalnum(b[0]) )
+	{
+		lst[0] = lst[1] = b[0];
+		if(verbose_) std::cout << "SEP: [" << lst[0] << lst[1] << "]\n";
+		e += 2, b += 2;
+	}
+
+	p=b;
+	if (*p)
+	while ( ( p = strstr(p + 2, lst) ))
+		++tc;
+#endif
 repeat:
+
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+	if ( ( e = strstr(b, lst) ) )
+#else
 	if ( ( e = strstr(b, st) ) )
+#endif
 	{
 		// b = e + 2;
-		if(verbose_) std::cout << "e: " << e << "  " << "\n";
+		if(verbose_) std::cout << "tc=" << tc << " e-b=" << e-b << " b: " << b << "  " << "\n";
 		lbl = std::string(b,0,e-b);
 		add = top;
 		add += '/';
@@ -929,7 +970,11 @@ repeat:
 		b = e + 2;
 	}
 
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+	if ( ( e = strstr(b, lst) ) || ( e = b + strlen(b) ) )
+#else
 	if ( ( e = strstr(b, st) ) || ( e = b + strlen(b) ) )
+#endif
 	{
 		const auto cmd = std::string(b,0,e-b);
 		const void* cp = b;
@@ -953,8 +998,12 @@ repeat:
 
 		if ( menu_items_.find(add) == menu_items_.end() )
 		{
-			if(verbose_) std::cout << "COMMAND@" << e-b << ":" << cmd << "\n";
+			if(verbose_) std::cout << "COMMAND@" << e-b << ":tc=" << tc << ":[" << cmd << "]\n";
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+			if ( strstr(b, "toggle") && (tc < 4) )
+#else
 			if ( strstr(b, "toggle") && b[6] && !isalnum(b[6]) && (b[6]!=' ') && b[6]==b[7] ) // toggle__ toggle:: ...
+#endif
 			{
 				if ( ! is_valid_toggle_spec(cmd) )
 				{
@@ -1015,7 +1064,11 @@ repeat:
 			;
 		else
 		{
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+			const char * ss = strstr(b = e + 2, lst); // FIXME
+#else
 			const char * ss = strstr(b = e + 2, st); // FIXME
+#endif
 			//const std::string sym = ss ? std::string(b, 0, ss - b) : std::string(b); // FIXME
 			auto key = cc.find_key_for_bound_cmd(cmd);
 
@@ -1026,16 +1079,28 @@ repeat:
 				if( km.first )
 					gtk_widget_add_accelerator( (GtkWidget*)menu_items_[add], "activate", accel_group_, km.first, km.second, GTK_ACCEL_VISIBLE);
 			}
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+			e = strstr(b, lst); // e points after symbol
+#else
 			e = strstr(b, st); // e points after symbol
+#endif
 		}
 	}
 
 	if ( e && /* (tc + 2) / 3 > 1 && */ *e ) // && ! menuGr )
 	{
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+		assert ( strstr(b, lst) );
+#else
 		assert ( strstr(b, st) );
+#endif
 		b = e + 2;
 		if(verbose_) std::cout << "AGAIN: " << b << " " << "\n";
+#if FIM_GTK_WITH_SHORT_MENUSPEC
+		e = strstr(b, lst);
+#else
 		e = strstr(b, st);
+#endif
 		if(verbose_) std::cout << "GROUPING: " << s << "\n";
 		if (e)
 			goto repeat;
