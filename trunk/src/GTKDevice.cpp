@@ -28,6 +28,7 @@
 // - radio buttons group update
 // - shall menu commands be allowed while in the console mode, or not? (FIM_GTK_ALLOW_MENU_IN_CONSOLE)
 // - auto sync of menus: variables, commands, aliases... (see FIM_GTK_WITH_VARS_SYNC)
+// - needs menu with i:variables
 // - ...
 
 #include <map>
@@ -82,6 +83,8 @@ std::cout.unsetf ( std::ios::hex ); \
 #define FIM_GTK_P2I(P) ((FIM_GTK_TP*)(P)-((FIM_GTK_TP*)czptr_))
 #define FIM_GTK_P2S(IDXP) asv_[FIM_GTK_P2I(IDXP)].c_str()
 #define FIM_GTK_ASVA(CMD) asv_.push_back(CMD)
+
+#define FIM_GTK_IS_TOGGLE(X) (X==strstr(X, "toggle")) && X[6] && !isalnum(X[6]) && (X[6]!=' ') && X[6]==X[7] // toggle__ toggle:: ...
 
 namespace fim
 {
@@ -529,7 +532,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 #endif /* FIM_GTK_WITH_SYSTEM_INVOCATION */
 
 	{
-		if( 0 == strncmp(cmd, "toggle", 6) )
+		if ( FIM_GTK_IS_TOGGLE(cmd) )
 		{
 			const toggle_choices_t tct = get_toggle_choices(xtrcttkn(cmd));
 			const std::string vid = std::get<0>(tct);
@@ -545,6 +548,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 		else
 		{
 			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "=") )
+			//if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^[a-zA-Z][a-zA-Z0-9_]*=.*$") )
 			{
 				const auto actn = xtrcttkn(cmd);
 				if( regexp_match(actn.c_str(), "=") )
@@ -564,12 +568,12 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 				const std::string cmds = xtrcttkn(cmd, '\0');
 				if( cmds.find(" ") != cmds.npos )
 				{
-					cc.execute("eval", {cmds}); // ok, dirty trick
+					cc.execute("eval", {cmds}, true); // ok, dirty trick
 					if(verbose_) std::cout << "EXECUTE: eval " << cmds << std::endl;
 				}
 				else
 				{
-					cc.execute(cmds, {});
+					cc.execute(cmds, {}, true);
 					if(verbose_) std::cout << "EXECUTE: " << cmds << std::endl;
 				}
 			}
@@ -1023,7 +1027,7 @@ repeat:
 			goto oops;
 		}
 
-		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ ']*" "|toggle...*" "|(i:)?[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
+		if( cmd.size() && !regexp_match(cmd.c_str(), "^([a-zA-Z_][a-z0-9A-Z_ '=~]*" "|toggle...*" "|(i:)?[a-zA-Z_][a-zA-Z_]*=.*" ")$") )
 		{
 			std::cerr << "ERROR: bad command : [" << cmd << "] in menu specification:\n" << s << "\n";
 			goto oops;
@@ -1033,9 +1037,9 @@ repeat:
 		{
 			if(verbose_) std::cout << "COMMAND@" << e-b << ":tc=" << tc << ":[" << cmd << "]\n";
 #if FIM_GTK_WITH_SHORT_MENUSPEC
-			if ( strstr(b, "toggle") && (tc < 4) )
+			if ( FIM_GTK_IS_TOGGLE(b) && (tc < 4) )
 #else
-			if ( strstr(b, "toggle") && b[6] && !isalnum(b[6]) && (b[6]!=' ') && b[6]==b[7] ) // toggle__ toggle:: ...
+			if ( FIM_GTK_IS_TOGGLE(b) )
 #endif
 			{
 				if ( ! is_valid_toggle_spec(cmd) )

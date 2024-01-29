@@ -746,7 +746,7 @@ set_interactive_mode: set interactive mode.
 .B
 sleep
 .fi
-sleep [\fR\fI{number}\fR]: sleep for the specified number of seconds (or 1 if unspecified).
+sleep [\fR\fI{number}\fR]: sleep for the specified number of seconds (or 1, if unspecified).
 .fi
 
 .na
@@ -1788,7 +1788,7 @@ alias "sort" "list 'sort'"  "sorts the files list ordered";
 bind 'o' "sort";
 bind 'b' "prev";
 bind 'B' "toggleDisplayBusy";
-alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
+alias "random_slideshow" "while(1){display;sleep 1; eval 'r=random';goto r;}" "performs a shuffled slideshow, endlessly";
 alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisplay" "rotate 90 degrees counter clockwise";
 alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay" "rotate 90 degrees clockwise";
 alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;i:fresh=1;redisplay" "rotate 180 degrees";
@@ -1867,34 +1867,40 @@ if( _device_string=='gtk' ) {
 		"_File/_Next in other directory  next_file_dir_other"
 		"_File/_Next in this directory  next_file_dir_same"
 		"_File/_Previous in list  prev  p"
-		"_File/_Quit FIM  quit  q"
+		"_File/Remove from list  list 'pop'"
+#		"_File/Remove from list  list 'remove'"
+		"_File/Mark  list 'mark'"
+		"_File/Unmark  list 'unmark'"
+		"_File/_Quit  quit  q"
+		"_List/Show  list"
 		"_List/_Limit list  FimMenuLimit/"
-		"_List/_Unlimit list  unlimit  u"
-		"_View/_Mirror  toggle__i:mirrored__1__0  m"
+		"_List/Limit to.../files sized as current one  limit '~z'"
+		"_List/Limit to.../files dated as current one  limit '~d'"
+#		"_List/Limit to.../files with duplicate basename  limit '~='"
+		"_List/_Unlimit list (reset)  unlimit  u"
+		"_List/Reverse  list 'reverse'  "
+		"_List/Sort by name  list 'sort'  "
+		"_List/Sort by size  list 'sort_fsize'  "
+		"_List/Sort by time  list 'sort_mtime'  "
+		"_List/Mark all  list 'markall'  "
+		"_List/Random slideshow  random_slideshow  "
+		"_List/Endless slideshow  endless_slideshow  "
 		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
-		"_View/_Flip  toggle&&i:flipped&&1&&0  f" # && as internal separator
 		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
-#		"_View/scale: _auto  _scale_style=a  a  scale: by _hand (manual)  _scale_style=m  m  scale: by _width  _scale_style=w  w  scale: by _height  _scale_style=h  h"
-		"_View/**scale: _auto**_scale_style=a**a**scale: by _hand (manual)**_scale_style=m**m**scale: by _width**_scale_style=w**w**scale: by _height**_scale_style=h**h"
-		"_View/_Verbose  toggle_verbose  v"
-		"_View/Rebuild menus with tooltips  _rebuild_verboser_menus"
-		"_View/Rebuild menus very verbosely  _rebuild_verbosest_menus"
-		"_Window/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
-		"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w"
-		"_Custom actions/orientation: normal  i:_orientation=0    orientation: 90'right  i:_orientation=1    orientation: upside down  i:_orientation=2    orientation: 90' left  i:_orientation=3  "
-		"_Custom actions/auto orientation: normal  _orientation=0    auto orientation: 90'right  _orientation=1    auto orientation: upside down  _orientation=2    auto orientation: 90' left  _orientation=3  "
-		"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
-		"_Custom actions/Verbose keys  toggle___verbose_keys__1__0  "
-		"_Custom actions/Desaturate  toggle___autodesaturate__1__0  "
-		"_Custom actions/Autonegate  toggle___autonegate__1__0  "
-		"_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /"
-		"_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u"
-		"_Custom actions/_Submenu/FimMenuLimit  FimMenuLimit/"
-		#"_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *" # bad specification
-		#"_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *" # bad specification
-		#"_Custom actions/_Submenu/_Next  next *" # bad specification
-		"_Custom actions/_Add menu...  menu_dialog"
-		"_Custom actions/_Toggle full screen view  toggle		_gtk_fullscreen		1		0"
+#		"_View/Scale: _auto  _scale_style=a  a  Scale: by _hand (manual)  _scale_style=m  m  Scale: by _width  _scale_style=w  w  Scale: by _height  _scale_style=h  h"
+		"_View/**Scale: _auto**_scale_style=a**a**Scale: by _hand (manual)**_scale_style=m**m**Scale: by _width**_scale_style=w**w**Scale: by _height**_scale_style=h**h"
+		"_View/Orientation: normal  _orientation=0    Orientation: 90'right  _orientation=1    Orientation: upside down  _orientation=2    Orientation: 90' left  _orientation=3  "
+		"_View/Desaturate  toggle___autodesaturate__1__0  "
+		"_View/Autonegate  toggle___autonegate__1__0  "
+		"_View/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
+		"_Image/_Mirror  toggle__i:mirrored__1__0  m"
+		"_Image/_Flip  toggle&&i:flipped&&1&&0  f" # && as internal separator
+		"_Image/Orientation: normal  i:_orientation=0    Orientation: 90'right  i:_orientation=1    Orientation: upside down  i:_orientation=2    Orientation: 90' left  i:_orientation=3  "
+		"_Advanced/Verbose keys  toggle___verbose_keys__1__0  "
+		"_Advanced/Toggle verbosity  toggleVerbosity  v"
+		"_Advanced/Low execution verbosity  _debug_commands=0    Intermediate execution verbosity  _debug_commands=ackCm    High execution verbosity  _debug_commands=ackCmmi  "
+		"_Advanced/Rebuild menus with tooltips  _rebuild_verboser_menus"
+		"_Advanced/Rebuild menus very verbosely  _rebuild_verbosest_menus"
 		"_All actions/_Commands  FimMenuCommands/"
 		"_All actions/_Aliases  FimMenuAliases/"
 		"_All actions/_Key Bindings  FimMenuKeyBindings/"
@@ -1903,8 +1909,18 @@ if( _device_string=='gtk' ) {
 		"_Help/_Aliases  FimMenuAliasesHelp/"
 		"_Help/_Key Bindings  FimMenuKeyBindingsHelp/"
 		"_Help/_Variables  FimMenuVariablesHelp/"
-		"_Help/_Man FIM  man_fim"
-		"_Help/_Man fimrc  man_fimrc";
+		"_Help/_man FIM  man_fim"
+		"_Help/_man fimrc  man_fimrc";
+		#"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w" # copy for demo purposes
+		#"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
+		#"_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /"
+		#"_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u"
+		#"_Custom actions/_Submenu/FimMenuLimit  FimMenuLimit/"
+		#"_Custom actions/_Submenu/_Do-frobnicate  unmapped_cmd *" # bad specification
+		#"_Custom actions/_Submenu/_Fribnikate  frobnicate  unmapped_cmd *" # bad specification
+		#"_Custom actions/_Submenu/_Next  next *" # bad specification
+		#"_Custom actions/_Add menu...  menu_dialog"
+		#"_Custom actions/_Toggle full screen view  toggle		_gtk_fullscreen		1		0"
 		if (_last_cmd_output!="") quit -1;
 		display "reinit" "f"; # FIXME: make this unnecessary
 }
