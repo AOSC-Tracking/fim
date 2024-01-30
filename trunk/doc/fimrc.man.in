@@ -967,7 +967,7 @@ _console_offset
 .na
 .B
 _debug_commands
-[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity; if containing 'm', gtk mode menus tooltips will contain also specification strings; if containing 'mm', gtk mode menu building will also be very verbose.
+[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'i', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity; if containing 'm', gtk mode menus tooltips will contain also specification strings; if containing 'mm', gtk mode menu building will also be very verbose.
 .fi
 .na
 .B
@@ -1579,7 +1579,7 @@ Part of the default configuration comes from the \fB_fim_default_config_file_con
 One can skip its loading by using the \fB_no_default_configuration\fP variable.
 
 .nf
-# $LastChangedDate: 2024-01-28 17:59:59 +0100 (Sun, 28 Jan 2024) $
+# $LastChangedDate: 2024-01-29 01:47:39 +0100 (Mon, 29 Jan 2024) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.

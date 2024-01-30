@@ -627,6 +627,11 @@ done:
 
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)
 		{
+			const auto ba = getBoundAction(c);
+
+			if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "execute binding: " << c << " -> " << ba << "\n";
+
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
@@ -641,10 +646,10 @@ done:
 				}
 				nc=it_buf;
 				if(it_buf>1)
-					nc+="{"+getBoundAction(c)+"}";
+					nc+="{"+ba+"}";
 					/* adding ; before } can cause problems as long as ;; is not supported by the parser*/
 				else
-					nc = getBoundAction(c);
+					nc = ba;
 					
 				cout << "About to execute " << nc << " .\n";
 				status=execute_internal(nc.c_str(),FIM_X_HISTORY);
@@ -653,8 +658,8 @@ done:
 			else
 				it_buf = -1,
 #endif /* FIM_ITERATED_COMMANDS */
-				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
-				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
+				status=execute_internal(ba.c_str(),FIM_X_NULL);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 		}
 
 		if(status)
@@ -803,6 +808,8 @@ ret:
 
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
+			if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "expanding alias: " << cmd << " -> " << ocmd << "\n";
 #if HAVE_PIPE
 			//an alias should be expanded. arguments are appended.
 			std::ostringstream oss;

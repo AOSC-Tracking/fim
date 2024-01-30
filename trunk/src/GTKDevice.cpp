@@ -29,6 +29,7 @@
 // - shall menu commands be allowed while in the console mode, or not? (FIM_GTK_ALLOW_MENU_IN_CONSOLE)
 // - auto sync of menus: variables, commands, aliases... (see FIM_GTK_WITH_VARS_SYNC)
 // - needs menu with i:variables
+// - commands should not be executed in cb_cc_exec, but only queued, actually (resetting last_pressed_key_ only a dirty fixup)
 // - ...
 
 #include <map>
@@ -512,6 +513,8 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 	auto cmd = FIM_GTK_P2S(idxp);
 
 	FIM_GTK_DBG_COUT << "cmd:" << cmd << "\n";
+
+	last_pressed_key_ = 0; // dirty overkill fixup for the case it was keypress-triggered case
 
 	if( 0 == strncmp(cmd, "open", 4) )
 	{
@@ -1207,6 +1210,7 @@ static gboolean cb_menu_dialog(GtkMenuItem*)
 static void do_init_cmd_funcs(void)
 {
 	// bind actual functionality to commands
+	FIM_GTK_DBG_COUT << "\n";
 #if FIM_GTK_WITH_MENU_EDITING_DIALOG
 	cmd_funcs_["menu_dialog"] = [](){ cb_menu_dialog(NULL); };
 #endif /* FIM_GTK_WITH_MENU_EDITING_DIALOG */
@@ -1270,6 +1274,7 @@ void do_rebuild_help_menus(void)
 
 fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 {
+	FIM_GTK_DBG_COUT << "\n";
 	do_init_cmd_funcs();
 	gtk_init(NULL, NULL);
 	window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -1413,7 +1418,9 @@ fim_key_t GTKDevice::catchInteractiveCommand(fim_ts_t seconds)const
 		c = last_pressed_key_;
 		gtk_main_iteration();
 		FIM_GTK_INPUT_DEBUG(&c,"");
-		goto done;
+		if (c) // if any input there
+			goto done;
+
 	}
 	else
 	do
