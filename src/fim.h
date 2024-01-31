@@ -805,6 +805,7 @@ namespace fim
 #define FIM_VID_FBFMF                           "_fbfont_magnify_factor"       /* "[in,g:] For the rendered text use a font magnified by this (integer) factor. Maximal value is \"" FIM_XSTRINGIFY(FIM_FONT_MAGNIFY_FACTOR_MAX) "\". (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." */
 #define FIM_VID_FBAFS                           "_fbfont_as_screen_fraction"       /* "[in,g:] Scale the rendered text to at least this (integer) fraction of the screen. Disable font autoscaling with -1. (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." */
 #define FIM_VID_FB_VERBOSITY			"_fbfont_verbosity"       /* "[in,g:] if > 0, verbose font loading" */
+#define FIM_VID_HIDE_GTK_MENUS			"_hide_gtk_menus"       /* "[out,g:] internal" */
 #define FIM_VID_HSTEPS 				"_hsteps"				/* "[in,g:] the default steps, in pixels, when panning images horizontally (overrides steps)." */
 #define FIM_VID_VSTEPS 				"_vsteps"				/* "[in,g:] the default steps, in pixels, when panning images vertically (overrides steps)." */
 #define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[in,g:] if >0, set the number of text lines in the console to be displayed ." */
