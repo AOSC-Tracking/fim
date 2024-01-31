@@ -165,6 +165,7 @@ alias "refresh" "desc 'reload';redisplay;" "reloads and displays image descripti
 bind "F5" "refresh";
 alias "toggle_fullscreen" "if( (_device_string=='sdl' || _device_string=='gtk' ) && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'mW0:0';_fullscreen=1;}else if( (_device_string=='sdl' || _device_string=='gtk' ) && _old_sw*_old_sh*_fullscreen){display 'reinit' 'rwm'._old_sw.':'._old_sh;_fullscreen=0;}_gtk_fullscreen=_fullscreen;" "Toggles full screen. Will show mouse cursor in full screen.";
 alias "_gtk_check_for_toggle_fullscreen" "if( _device_string=='gtk' && _gtk_fullscreen != _fullscreen){toggle_fullscreen;}";
+alias "_gtk_check_for_toggle_gtk_menus" "if(_hide_gtk_menus){display 'reinit' 'b';}else{display 'reinit' 'B';}";
 bind "F11" "toggle_fullscreen";
 
 autocmd "PostReload"  "" "i:fresh=1" ;
@@ -176,7 +177,7 @@ autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "if(_want_prefetch>0){prefetch;}";
 autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "idempotent_cmd"; # Bug workaround: without it console scroll is broken.
-autocmd "PostInteractiveCommand"   "" "_gtk_check_for_toggle_fullscreen";
+autocmd "PostInteractiveCommand"   "" "_gtk_check_for_toggle_gtk_menus;_gtk_check_for_toggle_fullscreen";
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';}" "goes forward 10 images";
 alias "prev10" "i=0;while(i<10){i=i+1;prev;display;sleep '1';}" "goes backward 10 images";
@@ -338,12 +339,16 @@ _want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
 _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
 #_display_status_fmt="%N:%k"; #
 _display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k"; # lower left line part
+# funny aliases:
+alias "webcam" "pread 'vgrabbj -d /dev/video0';$" "say cheese";
+alias 'espeak' 'system \'espeak\' i:_filename." ".i:_comment' 'say something';
 #_fbfont_as_screen_fraction=-1; # disable auto font scaling
 if( _device_string=='gtk' ) {
 	alias "man_fim"   "system 'man' 'fim';  _display_console=0;toggleVerbosity;";
 	alias "man_fimrc" "system 'man' 'fimrc';_display_console=0;toggleVerbosity;";
 	alias '_rebuild_verboser_menus' '_debug_commands=_debug_commands."m";display "reinit" "f";';
 	alias '_rebuild_verbosest_menus' '_debug_commands=_debug_commands."mm";display "reinit" "f";';
+	alias 'toggle_gtk_menus' 'if(!_hide_gtk_menus){_hide_gtk_menus=1;}else{_hide_gtk_menus=0;}';
 	display "menuadd" 
 		"_File/"
 		"_File/_Open file  open  C-o"
@@ -367,6 +372,7 @@ if( _device_string=='gtk' ) {
 		"_List/Sort by name  list 'sort'  "
 		"_List/Sort by size  list 'sort_fsize'  "
 		"_List/Sort by time  list 'sort_mtime'  "
+		"_List/Shuffle randomly  list 'random_shuffle'  "
 		"_List/Mark all  list 'markall'  "
 		"_List/Random slideshow  random_slideshow  "
 		"_List/Endless slideshow  endless_slideshow  "
@@ -377,15 +383,29 @@ if( _device_string=='gtk' ) {
 		"_View/Orientation: normal  _orientation=0    Orientation: 90'right  _orientation=1    Orientation: upside down  _orientation=2    Orientation: 90' left  _orientation=3  "
 		"_View/Desaturate  toggle___autodesaturate__1__0  "
 		"_View/Autonegate  toggle___autonegate__1__0  "
-		"_View/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
 		"_Image/_Mirror  toggle__i:mirrored__1__0  m"
 		"_Image/_Flip  toggle&&i:flipped&&1&&0  f" # && as internal separator
 		"_Image/Orientation: normal  i:_orientation=0    Orientation: 90'right  i:_orientation=1    Orientation: upside down  i:_orientation=2    Orientation: 90' left  i:_orientation=3  "
+		"_Window/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
+		"_Window/Hide the menu bar (press mouse button to restore)  toggle_gtk_menus"
+#		"_Window/Hide menu bar (press mouse button to restore)  toggle||_hide_gtk_menus||0||1" # not yet ready to replace toggle_gtk_menus
+		"_Window/Resize window to image size  display 'resize'"
+		"_Window/Text size reduce  font_reduce"
+		"_Window/Text size magnify  font_magnify"
+		"_Window/Text font: next  font 'next'"
+		"_Window/Text font: prev  font 'prev'"
+		"_Window/Show status line  toggle||_display_status||1||0  "
+		"_Advanced/Show output console (hide with Tab)  toggleVerbosity  v"
 		"_Advanced/Verbose keys  toggle___verbose_keys__1__0  "
-		"_Advanced/Toggle verbosity  toggleVerbosity  v"
 		"_Advanced/Low execution verbosity  _debug_commands=0    Intermediate execution verbosity  _debug_commands=ackCm    High execution verbosity  _debug_commands=ackCmmi  "
 		"_Advanced/Rebuild menus with tooltips  _rebuild_verboser_menus"
 		"_Advanced/Rebuild menus very verbosely  _rebuild_verbosest_menus"
+		"_Advanced/Verbose keys  toggle||_display_busy||1||0"
+		"_Advanced/Downscale huge on load  toggle||_downscale_huge_at_load||1||0"
+		"_Advanced/Prefetch  toggle||_want_prefetch||1||0"
+		"_Custom actions/Webcam shot (needs vgrabbj)  webcam"
+		"_Custom actions/Say something (need espeak)  espeak"
+		"_Custom actions/Max cached memory: 256MiB  _max_cached_memory=262144    unlimited  _max_cached_memory=0    very little  _max_cached_memory=1    80MiB  _max_cached_memory=81920  "
 		"_All actions/_Commands  FimMenuCommands/"
 		"_All actions/_Aliases  FimMenuAliases/"
 		"_All actions/_Key Bindings  FimMenuKeyBindings/"
@@ -418,7 +438,6 @@ echo "WELCOME: to switch to the command line interface press ':'";
 #alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){list 'push' 'blob.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
-#alias "webcam" "pread 'vgrabbj -d /dev/video0'";
 #alias "webcam_cycle" "while(1){webcam;reload;sleep 1;}";
 # This is a FIM initialization file. 
 # Without it FIM cannot work like it should.

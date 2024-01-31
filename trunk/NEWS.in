@@ -5,13 +5,13 @@
 
  * Still work-in-progress. Please use stable branch 0.6 for now
 
-# (r2005-r2038,r2041,r2044-r2046,r2049-r2069)
+# (r2005-r2038,r2041,r2044-r2046,r2049-r2070)
  * New graphical windowed output mode via GTK, selected with -o gtk (in progress)
 # (r1997)
  * When loading via an external converter, keep track of it in i:_external_decoder_program
 # (r1995-r1996)
  * Load XCF (Gimp) files via the xcf2pnm utility
-# (r1991-r1994,r1998-r1999,r2046,r2053-r2069)
+# (r1991-r1994,r1998-r1999,r2046,r2053-r2070)
  * Documentation and self-documentation improvements
 # (r2039)
  * Experimental support for reading QOI files via libqoi
@@ -21,7 +21,7 @@
  * Experimental support for reading WebP images via libwebp
 # (r1988)
  * FIM requires a compiler supporting at least C++11
-# (r2002-r2003,r2047-r2053,r2056-r2069)
+# (r2002-r2003,r2047-r2053,r2056-r2070)
  * More tests
 # (r2048)
  * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"

@@ -225,7 +225,7 @@ gtktests: all
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "m/choice: 1a  v=1  a  choice: 1b  v=1  b  choice: 3c  _scale_style=3  c"; quit (_last_cmd_output=="")' 2>&1 | grep -q 'ERROR..repeated.*menu.specification'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu"; quit (_last_cmd_output=="")' 2>&1 | grep -q 'ERROR../.*specification'
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "menuadd"  "menu/bad  var+=0"; quit (_last_cmd_output=="")' 2>&1 | grep -q 'ERROR..bad.command.*menu.specification'
-	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "reinit" "f"; quit'
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "V";display "reinit" "f"; quit' # menu rebuild
 	test `$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/numbers_pcx/*.pcx -o gtk -C 'display "v";' -c 'stdout _last_cmd_output;quit' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc | grep menu: | wc -l` = 4
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'display "menuadd" "_Help/_Variables  FimMenuVariablesHelp/" "Help_/_Variables  FimMenuVariablesHelp/";quit 0;' # notice Help_ is a different menu than _Help
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o gtk -c 'cl1=_console_lines;man_fimrc;cl2=_console_lines; quit!(cl1<cl2);'

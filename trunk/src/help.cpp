@@ -69,6 +69,7 @@ fim_var_help_db[FIM_VID_FBFONT]= "[out,g:] The current console font file string.
 fim_var_help_db[FIM_VID_FBFMF]= "[in,g:] For the rendered text use a font magnified by this (integer) factor. Maximal value is \"" FIM_XSTRINGIFY(FIM_FONT_MAGNIFY_FACTOR_MAX) "\". (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." ;
 fim_var_help_db[FIM_VID_FBAFS]= "[in,g:] Scale the rendered text to at least this (integer) fraction of the screen. Disable font autoscaling with -1. (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." ;
 fim_var_help_db[FIM_VID_FB_VERBOSITY]= "[in,g:] if > 0, verbose font loading" ;
+fim_var_help_db[FIM_VID_HIDE_GTK_MENUS]= "[out,g:] internal" ;
 fim_var_help_db[FIM_VID_HSTEPS]= "[in,g:] the default steps, in pixels, when panning images horizontally (overrides steps)." ;
 fim_var_help_db[FIM_VID_VSTEPS]= "[in,g:] the default steps, in pixels, when panning images vertically (overrides steps)." ;
 fim_var_help_db[FIM_VID_CONSOLE_ROWS]= "[in,g:] if >0, set the number of text lines in the console to be displayed ." ;

@@ -198,6 +198,13 @@ static gboolean cb_window_event(GtkWidget *window__unused, GdkEventKey* event)
 	return FALSE;
 }
 
+static void cb_mouse_pressed(GtkWidget *, GdkEventKey*)
+{
+	// quite dirty: press anything to reinit..
+	if ( !show_menubar_ )
+		cc.display_reinit("B");
+}
+
 static gboolean cb_key_pressed(GtkWidget *window__unused, GdkEventKey* event)
 {
 	gboolean handled = FALSE;
@@ -1329,6 +1336,7 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 		), NULL);
 	gtk_container_add(GTK_CONTAINER(window_), grid_);
 
+	g_signal_connect(G_OBJECT(window_), "button-press-event", G_CALLBACK(cb_mouse_pressed), NULL);
 	g_signal_connect(G_OBJECT(window_), "key-press-event", G_CALLBACK(cb_key_pressed), NULL);
 	g_signal_connect(G_OBJECT(window_), "key-release-event", G_CALLBACK(cb_key_pressed), NULL);
 	g_signal_connect(G_OBJECT(window_), "window-state-event", G_CALLBACK(cb_window_state_event), NULL);
@@ -1828,8 +1836,11 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 			do_rebuild_help_menus();
 
 		if (strchr(rs, 'b')) // TODO: FIXME: barely documented
+		{
 			show_menubar_=0;
-		else
+		}
+		else // "B"
+			cc.setVariable(FIM_VID_HIDE_GTK_MENUS,0),
 			show_menubar_=1;
 
 		if (strchr(rs, 'b') || strchr(rs, 'B') || strchr(rs, *FIM_CNS_GTK_MNRBCHR_STR))
