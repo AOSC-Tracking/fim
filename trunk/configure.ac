@@ -1280,7 +1280,7 @@ if test x$fim_handle_sdl != xno; then
                 LIBS="$LIBS `$LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS`"
 		# finish this !
                 #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
-		if test x`$LIBSDL_CONFIG --version | head -c 1` == x2; then
+		if test x`$LIBSDL_CONFIG --version | head -c 1` = x2; then
 			AC_DEFINE(FIM_WITH_LIBSDL, 2, [Defined if libsdl support is enabled, and set to 1 or 2.])
 		else
 			AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined if libsdl support is enabled, and set to 1 or 2.])
