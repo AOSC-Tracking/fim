@@ -19,6 +19,8 @@
  * -o sdl  with SDL2: reduce chance of intercepting Tab during window switch
  * bugfix: avoid terminal clutter after interruption of "endless_slideshow"
  * Configure fixes (remove bashisms by SDL version recognition)
+ * Scaling fix when starting with -o ca
+ * Introduce expansion-only variable description syntax "#!fim:@var=val"
 
                 Version 0.6-rc2
 
