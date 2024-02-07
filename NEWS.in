@@ -37,6 +37,8 @@
  * Scaling fix when starting with -o ca
 # (r2074)
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
+# (r2077)
+ * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
 # (r2075)
 # * Misc fixes
 # (r2076)
