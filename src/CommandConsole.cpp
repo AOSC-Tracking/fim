@@ -1149,8 +1149,8 @@ skip_ac:
 						if(c == FIM_SYM_BW_SEARCH_KEY)
 							rlp=FIM_CNS_QU_MA_STRING,
 							*prompt_='?';
-						rl=fim_readline(rlp); // !!
 						ic_=1;
+						rl=fim_readline(rlp); // !!
 						rl_inhibit_completion=1;
 						rl_startup_hook=osh;
 						// no readline ? no interactive searches !
@@ -2427,7 +2427,7 @@ ret:
 			if( args.size()>0 && args[0] == "reinit" )
 			{
 				string arg = args.size()>1?args[1]:"";
-				this->display_reinit(arg.c_str());
+				rc = this->display_reinit(arg.c_str());
 			}
 			if( args.size()>0 && args[0] == "resize" )
 			{
@@ -2467,6 +2467,8 @@ ret:
 				if( this->redisplay() )
 					browser_.display_status(current().c_str());
 			}
+			if ( rc == FIM_NOERR_SKIP_AUTOCMD )
+				return result;
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTDISPLAY);
 		}
 		else

@@ -1407,7 +1407,7 @@ fim_sys_int GTKDevice::get_input(fim_key_t * c, bool want_poll)
 	int keypress_ = 0;
 	GdkEventKey event_;
 	const fim_sys_int iv = get_input_inner(c,&event_,&keypress_,want_poll);
-	FIM_GTK_DBG_COUT << " iv=" << iv << " *c=" << *c << " want_poll=" << want_poll << "\n";
+	FIM_GTK_DBG_COUT << " iv=" << iv << " *c=" << *c << " *(char*)c=" << *(char*)c << " want_poll=" << want_poll << "\n";
 	return iv;
 }
 
@@ -1849,6 +1849,8 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 				gtk_widget_show_all (menubar_);
 			else
 				gtk_widget_hide (menubar_);
+			if (! rs[1]) // if this is the only spec char
+				return FIM_NOERR_SKIP_AUTOCMD;
 		}
 
 		if ( cc.display_resize(nw_,nh_) == FIM_ERR_NO_ERROR ) // notice nw_ and nh_ still at old value
