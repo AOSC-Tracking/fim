@@ -114,7 +114,7 @@ namespace fim
 			if(ns.second.isSetVar(id))
 			{
 				vp[id].second++;
-				Var val = ns.second.getVariable(id);
+				const Var val = ns.second.getVariable(id);
 				vv[id].insert(val.getString());
 			}
 			vp[id].first=vv[id].size();
@@ -123,17 +123,27 @@ namespace fim
 				if (expanded)
 				{
 					for(const auto & val : vv[id])
+					{
+						size_t cnt=0;
+
+						for(const auto & ns : cc.id_.vd_)
+							if( ns.second.getStringVariable(id) == val )
+								cnt++;
+						
+						const auto eid = id + " (" + fim::string(vp[id].first) + ")";
 						if (val.find("  ") == val.npos) // would break GTKDevice menu spec otherwise
 							// menu location is relative ; e.g. "_List/_Limit list/"
-							result += id,
+							result += eid,
 							result += "/",
 							result += val,
+							result += " (" + fim::string(cnt) + ")",
 							result += "  ",
 							result += "limit ",
 							result += fim_shell_arg_escape(id,true),
 							result += " ",
 							result += fim_shell_arg_escape(val,true),
 							result += "\n";
+					}
 				}
 				else
 				{

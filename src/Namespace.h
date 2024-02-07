@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -91,6 +91,7 @@ namespace fim
 		std::ostream& print(std::ostream& os)const;
 		variables_t::const_iterator begin(void)const{return variables_.begin();}
 		variables_t::const_iterator end(void)const{return variables_.end();}
+		bool empty(void)const{return begin()==end();}
 		void get_id_list(fim_var_id_set& set)const
 		{
 			for(variables_t::const_iterator fit=variables_.begin();fit!=variables_.end();++fit)

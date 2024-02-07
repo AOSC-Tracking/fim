@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -251,7 +251,7 @@ public:
 	{
 		reset();
 	}
-	std::string expand(const VNamespace & ns, const fim_fn_t ds)const
+	std::string expand(const VNamespace & gns, const VNamespace & ens, const fim_fn_t ds)const
 	{
 #if FIM_WANT_DESC_VEXP
 							fim_fn_t ss; // substituted string
@@ -272,11 +272,16 @@ public:
 								}
 								while(eci < ds.size() && fim_is_id_char(ds[++eci]))
 									;
-								if(ns.isSetVar(ds.substr(bci,eci-bci)))
-									ss+=ns.getStringVariable(ds.substr(bci,eci-bci));
+								if(gns.isSetVar(ds.substr(bci,eci-bci)))
+									ss+=gns.getStringVariable(ds.substr(bci,eci-bci));
 								else
-									ss+='@',
-									ss+=ds.substr(bci,eci-bci); // might issue warning instead
+								{
+									if(ens.isSetVar(ds.substr(bci,eci-bci)))
+										ss+=ens.getStringVariable(ds.substr(bci,eci-bci));
+									else
+										ss+='@',
+										ss+=ds.substr(bci,eci-bci); // might issue warning instead
+								}
 							}
 							ss+=ds.substr(eci);
 							return std::move(ss);
@@ -298,6 +303,7 @@ public:
 #endif /* FIM_WANT_PIC_RCMT */
 #if FIM_WANT_PIC_LVDN
 		VNamespace ns;
+		VNamespace xs; // expansion-only namespace
 #endif /* FIM_WANT_PIC_LVDN */
 		bool imgdscs_want_basename = true; /* FIXME: shall be more clear/flexible with this */
 		// fim_fms_t dt;
@@ -315,22 +321,25 @@ public:
 			{
 				if( std::getline(ls,fn,nl) )
 				{
-					size_t vn = fn.find("!fim:",1); /* vn will point to first variable id char */
+					const size_t sn = fn.find("!fim:",1); /* sn points to signature */
 
-					if( vn != std::string::npos && fn[vn+=5] )
+					if( /*vn != std::string::npos*/ sn == 1 && fn[sn] ) /* if not within comment  */
 					{
-						size_t es = fn.find_first_of("=",vn); /* point to the first equal sign char */
+						const size_t sl = 5; // signature length
+						const size_t es = fn.find_first_of("=",sn+sl); /* index of first equal sign character */
 
 						if( es != std::string::npos )
 						{
+							const bool pa = (es > 0 && fn[sn+sl] == '@'); /* prefix at, as in e.g. @var */
+							const size_t vn = sn + sl + (pa?1:0); /* vn points to first variable id char */
 							const std::string pvarname = fn.substr(vn,es-vn); // prefixed variable name
-							++es;
+							const size_t nt = es + 1; // next token index
 #if FIM_WANT_PIC_CCMT
 							/* FIXME: rationalize this code */
 							if( pvarname == "^" )
 							{
-								const std::string varval = fn.substr(es);
-								if( fn[es] )
+								const std::string varval = fn.substr(nt);
+								if( fn[nt] )
 									cps = varval;
 								else
 									cps = "";
@@ -338,8 +347,8 @@ public:
 							else
 							if( pvarname == "+" )
 							{
-								const std::string varval = fn.substr(es);
-								if( fn[es] )
+								const std::string varval = fn.substr(nt);
+								if( fn[nt] )
 									cas = varval;
 								else
 									cas = "";
@@ -352,8 +361,8 @@ public:
 							else
 							if( pvarname == "/" )
 							{
-								const std::string varval = fn.substr(es);
-								if( fn[es] )
+								const std::string varval = fn.substr(nt);
+								if( fn[nt] )
 									din = varval;
 								else
 									din = "";
@@ -362,8 +371,8 @@ public:
 							else
 							if( pvarname == "\\" )
 							{
-								const std::string varval = fn.substr(es);
-								if( fn[es] )
+								const std::string varval = fn.substr(nt);
+								if( fn[nt] )
 									din = varval;
 								else
 									din = "";
@@ -371,20 +380,26 @@ public:
 							}
 							else
 #endif /* FIM_WANT_PIC_CCMT */
-							if( fn[es] )
+							if( fn[nt] ) /* variable assignment */
 							{
 								if ( fim_is_id(pvarname.c_str()) )
 								{
-									const std::string varval = fn.substr(es);
-									ns.setVariable(pvarname,Var(varval));
+									const std::string varval = fn.substr(nt);
+									if (pa)
+										xs.setVariable(pvarname,Var(varval));
+									else
+										ns.setVariable(pvarname,Var(varval));
 								}
 								else
 									; // not an id; TODO: may warn the user
 							}
 							else
 							{
-								const std::string varname = fn.substr(vn,es-1-vn);
-								ns.unsetVariable(varname);
+								const std::string varname = fn.substr(vn,nt-1-vn);
+								if (pa)
+									xs.unsetVariable(varname);
+								else
+									ns.unsetVariable(varname);
 							}
 						}
 					}
@@ -401,12 +416,13 @@ public:
 #if FIM_WANT_PIC_RCMT
 					{
 						const size_t csi = ds.find("#!fim:",0);
-						size_t csil = 6;
+						const size_t csil = 6;
 
 						if( csi != 0 )
 							ld = ds; // cache new description
 						else
 						{
+							/* special description syntax  */
 							// use last (cached) description
 							const char oc = ds[csil];
 
@@ -423,12 +439,13 @@ public:
 								break;
 								case('s'): // #!fim:s/from/to '/' not allowed in from or to
 								{
-									fim::string es = ds.substr(csil);
-									size_t m = ((es).re_match("s/[^/]+/[^/]+"));
+									const fim::string es = ds.substr(csil);
+									const size_t m = ((es).re_match("s/[^/]+/[^/]+"));
+
 									if(m)
 									{
-										size_t n = es.find("/",2);
-										std::string fs = es.substr(2,n-2), ts = es.substr(n+1);
+										const size_t n = es.find("/",2);
+										const std::string fs = es.substr(2,n-2), ts = es.substr(n+1);
 										fim::string fds = ld;
 										fds.substitute(fs.c_str(),ts.c_str());
 										ds = fds.c_str();
@@ -448,7 +465,7 @@ public:
 #if FIM_WANT_PIC_CCMT
 						ds = cps + ds + cas;
 #endif /* FIM_WANT_PIC_CCMT */
-						ds = expand(ns,ds);
+						ds = expand(ns,xs,ds);
 						if(! imgdscs_want_basename )
 						{
 							(*this)[din+fn]=ds;
@@ -468,7 +485,7 @@ public:
 					{
 						// TODO: FIXME: this branch waits to be activated.
 						// ... remove pic
-						ds = expand(ns,ds);
+						ds = expand(ns,xs,ds);
 						if(! (imgdscs_want_basename || true) )
 						{
 							(*this)[din+fn]=ds;

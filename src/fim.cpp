@@ -183,10 +183,12 @@ struct fim_options_t fim_options[] = {
 	"Load image descriptions from file " FIM_CNS_EX_FN_STRING ". Each line begins with the basename of an image file, followed by a Tab character (or a different character if specified via " FIM_MAN_fB("--" FIM_OSW_IMG_DSC_FILE_SEPC) "), then the description text. "
 	"The description text is copied into the " FIM_MAN_fB("i:" FIM_VID_COMMENT) " variable of the image at load time, overriding the comment possibly loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_DESC_VEXP
-	" If a '@' followed by and identifier " FIM_CNS_EX_VAR_STRING " is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value is substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
+	" If a '@' followed by an identifier " FIM_CNS_EX_VAR_STRING " is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value is substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
 #endif /* FIM_WANT_DESC_VEXP */
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:" FIM_CNS_EX_VAR_STRING "=" FIM_CNS_EX_VAL_STRING "\" lead i:" FIM_CNS_EX_VAR_STRING " to be assigned value " FIM_CNS_EX_VAL_STRING " (unquoted) at image loading time (cached variable), unless " FIM_CNS_EX_VAR_STRING " starts with an underscore ('_')."
+      " Special comment lines like \"#!fim:@" FIM_CNS_EX_VAR_STRING "=" FIM_CNS_EX_VAL_STRING "\" create a variable" FIM_CNS_EX_VAR_STRING " that are only valid in expanding @" FIM_CNS_EX_VAR_STRING " in comments."
+      " If " FIM_CNS_EX_VAR_STRING " starts with \"@\", that ."
       " Special comment lines like \"#!fim:+=" FIM_CNS_EX_VAL_STRING "\" add " FIM_CNS_EX_VAL_STRING " to current description." 
       " Special comment lines like \"#!fim:^=" FIM_CNS_EX_VAL_STRING "\" set " FIM_CNS_EX_VAL_STRING " to be the base of each description." 
       " Special comment lines like \"#!fim:!=\" reset all cached variables." 
