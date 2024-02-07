@@ -126,7 +126,7 @@ ret:
 		memcpy(&tattr,&sattr,sizeof(struct termios));
 		tattr.c_lflag &= ~(ICANON|ECHO);
 		tattr.c_cc[VMIN]  = 0;
-		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
+		tattr.c_cc[VTIME] = 1 * (seconds==0?1:fmodf(seconds*10,256));
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		//r=read(fim_stdin_,&c,4);
 		// FIXME : read(.,.,3) is NOT portable. DANGER

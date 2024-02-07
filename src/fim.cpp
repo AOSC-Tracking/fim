@@ -335,7 +335,7 @@ struct fim_options_t fim_options[] = {
     {"slideshow",     required_argument, FIM_NULL, 0x7373,
 	"interruptible slideshow mode", FIM_CNS_EX_NUM_STRING,
 	"Interruptible slideshow mode. "
-	"Wait for " FIM_CNS_EX_NUM_STRING " of seconds (assigned to the " FIM_VID_WANT_SLEEPS " variable) after each image. "
+	"Wait for " FIM_CNS_EX_NUM_STRING " of seconds (can have a decimal part, and is assigned to the " FIM_VID_WANT_SLEEPS " variable) after each image. "
 	"Implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command. "
 	"Can be interrupted by " FIM_KBD_COLON " or " FIM_KBD_ESC ". "
 	"The other keys execute accordingly to their function but do not interrupt the slideshow. "
