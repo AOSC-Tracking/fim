@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2023 Michele Martone
+ (c) 2011-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@
 	typedef int fim_sys_int;	/* always int */
 	typedef unsigned int fim_color_t;	/* >= 4 bytes */
 
-	typedef int fim_ts_t;		/* a type for time, in seconds */
+	typedef float fim_ts_t;		/* a type for time, in seconds */
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
 	typedef double fim_fms_t;		/* a type for time, in milliseconds, floating point */
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */

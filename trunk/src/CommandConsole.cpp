@@ -797,6 +797,7 @@ ret:
 		/* first determine whether cmd is an alias */
 		const fim::string ocmd=aliasRecall(cmd);
 		const int int0 = (args.size()>0) ? atoi(args[0].c_str()) : 1;
+		const float float0= (args.size()>0) ? atof(args[0].c_str()) : 1;
 
 		if (as_interactive) /* note: may better introduce FIM_X_AS_INTERACTIVE */
 		{
@@ -861,7 +862,7 @@ ret:
 		else
 		if(cmd==FIM_FLT_SLEEP)
 		{
-			const fim_ts_t seconds=int0;
+			const fim_ts_t seconds=float0;
 #if 0
 			sleep(seconds);
 #else
