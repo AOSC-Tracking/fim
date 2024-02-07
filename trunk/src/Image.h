@@ -331,8 +331,9 @@ public:
 						if( es != std::string::npos )
 						{
 							const bool pa = (es > 0 && fn[sn+sl] == '@'); /* prefix at, as in e.g. @var */
+							const bool ap = (es > 0 && fn[es-1] == '@'); /* at postfix, as in e.g. var@ */
 							const size_t vn = sn + sl + (pa?1:0); /* vn points to first variable id char */
-							const std::string pvarname = fn.substr(vn,es-vn); // prefixed variable name
+							const std::string pvarname = fn.substr(vn,es-vn-(ap?1:0)); // prefixed variable name
 							const size_t nt = es + 1; // next token index
 #if FIM_WANT_PIC_CCMT
 							/* FIXME: rationalize this code */
@@ -380,15 +381,17 @@ public:
 							}
 							else
 #endif /* FIM_WANT_PIC_CCMT */
-							if( fn[nt] ) /* variable assignment */
+							if( fn[nt+(ap?1:0)] ) /* variable assignment */
 							{
 								if ( fim_is_id(pvarname.c_str()) )
 								{
 									const std::string varval = fn.substr(nt);
+									const std::string expval = ap ? expand(ns,xs,varval) : varval;
+
 									if (pa)
-										xs.setVariable(pvarname,Var(varval));
+										xs.setVariable(pvarname,Var(expval));
 									else
-										ns.setVariable(pvarname,Var(varval));
+										ns.setVariable(pvarname,Var(expval));
 								}
 								else
 									; // not an id; TODO: may warn the user
