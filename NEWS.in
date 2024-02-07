@@ -21,7 +21,7 @@
  * Experimental support for reading WebP images via libwebp
 # (r1988)
  * FIM requires a compiler supporting at least C++11
-# (r2002-r2003,r2047-r2053,r2056-r2071)
+# (r2002-r2003,r2047-r2053,r2056-r2071,r2073)
  * More tests
 # (r2048)
  * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"
@@ -33,6 +33,8 @@
  * bugfix: avoid terminal clutter after interruption of "endless_slideshow"
 # (r2071)
  * Configure fixes (remove bashisms by SDL version recognition)
+# (r2073)
+ * Scaling fix when starting with -o ca
 
                 Version 0.6-rc2
 
