@@ -2230,13 +2230,14 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded PSF font (FBFONT=fim://)  : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
-	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
+dnl	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
+	<regex> header                      : ${ac_cv_header_regex}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
 	man page with user configured paths : ${fim_cv_paths_in_man}
         framebuffer console load switchable :*${fim_cv_fb_console_switch_while_loading:-no}
         hardcoded font magnifying factor    : ${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
-dnl	use C++ standard (98/11/14/17)      : ${fim_cxx_standard} dnl may revive this with *detected* language level one day
+dnl	use C++ standard (98/11/14/17/20/23): ${fim_cxx_standard} dnl may revive this with *detected* language level one day
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
 	use 'xcftopnm' for XCF files        :*${fim_cv_xcftopnm}
@@ -2248,7 +2249,7 @@ dnl
 dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
-	X          (GTK3) support (-o gtk)  : ${fim_handle_gtk}
+	X          (GTK3) support (-o gtk)  :*${fim_handle_gtk}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
 	Colour ASCII art (libcaca) support  : ${fim_cv_libcaca}
 	X        (Imlib2) support(-o imlib2):*${fim_handle_imlib2:-no}

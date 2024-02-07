@@ -5,7 +5,7 @@
 
 # Sun Feb 24 14:49:17 CET 2002
 
-# slightly modified by dez for using with fim, 20070501, 20160825
+# slightly modified by dez for using with fim, 20070501, 20160825, 20240207
 
 use strict;
 use vars qw/%url $date/;
@@ -89,7 +89,7 @@ sub vim2html
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>VIM: $outfile</title>
+<title>FIM: $outfile</title>
 <link rel="stylesheet" href="fim-stylesheet.css" type="text/css">
 </head>
 <body>
