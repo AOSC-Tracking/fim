@@ -917,7 +917,7 @@ _cached_images
 .na
 .B
 _caption_over_image
-[in,g:] if set to a value different than 0, display a custom comment string specified according to the value of _caption_over_image_fmt; if larger than 1, with black background; if 3, draw above the image. Occupies at most half of the screen.
+[in,g:] if set to a value different than 0, display a custom comment string specified according to the value of _caption_over_image_fmt; if larger than 1, with black background; if 3, draw above the image, with no overlap. Occupies at most half of the screen.
 .fi
 .na
 .B
@@ -1584,7 +1584,7 @@ Part of the default configuration comes from the \fB_fim_default_config_file_con
 One can skip its loading by using the \fB_no_default_configuration\fP variable.
 
 .nf
-# $LastChangedDate: 2024-01-29 01:47:39 +0100 (Mon, 29 Jan 2024) $
+# $LastChangedDate: 2024-02-07 02:02:29 +0100 (Wed, 07 Feb 2024) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
@@ -1719,7 +1719,7 @@ autocmd "PostRedisplay" ""   "i:_will_display=0";
 alias "aalib_fix_do" "{if(aascale==''){ascale='2.0';}else{ascale=aascale;} i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "See aalib_fix.";
 alias "aalib_fix" "if(_device_string=='aa'){aalib_fix_do;scale 'a';}" "When using the aalib (ASCII art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'aascale' variable for an accurate scaling.";
 alias "cacalib_fix_do" "{if(cacascale==''){ascale='1.18';}else{scale=cacascale;} i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+cacalib?expect binding problems!'}}" "See cacalib_fix.";
-alias "cacalib_fix" "getenv 'DISPLAY';if(_device_string=='caca' && ENV_DISPLAY==''){cacalib_fix_do;scale 'a';}" "When using the libcaca (Coloured ASCII art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'cacascale' variable for an accurate scaling.";
+alias "cacalib_fix" "getenv 'DISPLAY';if(_device_string=='ca' && ENV_DISPLAY==''){cacalib_fix_do;scale 'a';}" "When using the libcaca (Coloured ASCII art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'cacascale' variable for an accurate scaling.";
 autocmd "PostReload"  "" "aalib_fix";
 autocmd "PostLoad"    "" "aalib_fix";
 autocmd "PostReload"  "" "cacalib_fix";
@@ -1795,9 +1795,9 @@ bind 'o' "sort";
 bind 'b' "prev";
 bind 'B' "toggleDisplayBusy";
 alias "random_slideshow" "while(1){display;sleep 1; eval 'r=random';goto r;}" "performs a shuffled slideshow, endlessly";
-alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisplay" "rotate 90 degrees counter clockwise";
-alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay" "rotate 90 degrees clockwise";
-alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;i:fresh=1;redisplay" "rotate 180 degrees";
+alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;redisplay" "rotate 90 degrees counter clockwise";
+alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;redisplay" "rotate 90 degrees clockwise";
+alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;redisplay" "rotate 180 degrees";
 alias "rotate90" "rotate90_cw;display" "rotate 90 degrees clockwise";
 alias "rotate270" "rotate90_ccw;display" "rotate 90 degrees counter clockwise";
 alias "rotate10"     "rotate  '10';display" "rotate 10 degrees counter clockwise";
@@ -1828,6 +1828,7 @@ alias "font_magnify_manual"      "_fbfont_magnify_factor=_fbfont_magnify_factor+
 alias "font_reduce_auto"  "if(_fbfont_as_screen_fraction>1){_fbfont_as_screen_fraction=_fbfont_as_screen_fraction+1;}" "";
 alias "font_reduce_manual"       "_fbfont_magnify_factor=_fbfont_magnify_factor-1" "";
 alias "toggle_font_auto_scale" "if(_fbfont_as_screen_fraction<0){_fbfont_as_screen_fraction=0;echo 'Auto font scaling on.';}else{_fbfont_as_screen_fraction=-1;echo 'Auto font scaling off.';}" "toggles between manual and auto font scaling control";
+alias 'next_file_same_search'      "goto '+//';" "go to next file with same search criteria";
 alias 'next_file_dir_same'      "goto '+/s';" "go to next file in same dir";
 alias 'next_file_dir_other'     "goto '+/S';" "go to next file in other dir";
 alias 'next_file_dir_up'        "goto '+/u';" "go to next file up the dir hierarchy";
@@ -1876,6 +1877,9 @@ if( _device_string=='gtk' ) {
 		"_File/_Next in list  next  n"
 		"_File/_Next in other directory  next_file_dir_other"
 		"_File/_Next in this directory  next_file_dir_same"
+#		"_File/_Next as last search  goto +\/\/  " # Note that slashes are not supported currently.
+		"_File/_Next as last search  next_file_same_search  "
+		"_File/_Go to last file  goto _lastfileindex  "
 		"_File/_Previous in list  prev  p"
 		"_File/Remove from list  list 'pop'"
 #		"_File/Remove from list  list 'remove'"
@@ -1883,7 +1887,7 @@ if( _device_string=='gtk' ) {
 		"_File/Unmark  list 'unmark'"
 		"_File/_Quit  quit  q"
 		"_List/Show  list"
-		"_List/_Limit list  FimMenuLimit/"
+		"_List/_Limit  FimMenuLimit/"
 		"_List/Limit to.../files sized as current one  limit '~z'"
 		"_List/Limit to.../files dated as current one  limit '~d'"
 #		"_List/Limit to.../files with duplicate basename  limit '~='"
@@ -1899,12 +1903,13 @@ if( _device_string=='gtk' ) {
 		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
 		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
 #		"_View/Scale: _auto  _scale_style=a  a  Scale: by _hand (manual)  _scale_style=m  m  Scale: by _width  _scale_style=w  w  Scale: by _height  _scale_style=h  h"
-		"_View/**Scale: _auto**_scale_style=a**a**Scale: by _hand (manual)**_scale_style=m**m**Scale: by _width**_scale_style=w**w**Scale: by _height**_scale_style=h**h"
+		"_View/**Scale: _auto**_scale_style=a**a**Scale: _auto (till 100%)**_scale_style=b**b**Scale: by _hand (manual)**_scale_style=m**m**Scale: by _width**_scale_style=w**w**Scale: by _height**_scale_style=h**h"
 		"_View/Orientation: normal  _orientation=0    Orientation: 90'right  _orientation=1    Orientation: upside down  _orientation=2    Orientation: 90' left  _orientation=3  "
 		"_View/Desaturate  toggle___autodesaturate__1__0  "
 		"_View/Autonegate  toggle___autonegate__1__0  "
 		"_Image/_Mirror  toggle__i:mirrored__1__0  m"
 		"_Image/_Flip  toggle&&i:flipped&&1&&0  f" # && as internal separator
+#		"_Image Extras/_Let's Flip again  toggle&&i:flipped&&1&&0  f" # && as internal separator TODO togli
 		"_Image/Orientation: normal  i:_orientation=0    Orientation: 90'right  i:_orientation=1    Orientation: upside down  i:_orientation=2    Orientation: 90' left  i:_orientation=3  "
 		"_Window/_Fullscreen  toggle**_gtk_fullscreen**1**0  F11"
 		"_Window/Hide the menu bar (press mouse button to restore)  toggle_gtk_menus"
@@ -1915,14 +1920,15 @@ if( _device_string=='gtk' ) {
 		"_Window/Text font: next  font 'next'"
 		"_Window/Text font: prev  font 'prev'"
 		"_Window/Show status line  toggle||_display_status||1||0  "
-		"_Advanced/Show output console (hide with Tab)  toggleVerbosity  v"
+		"_Window/Caption over image: None  _caption_over_image=0    Caption over image: No background  _caption_over_image=1    Caption over image: Black background  _caption_over_image=2    Caption over image: Above image, no overlap  _caption_over_image=3  "
+		"_Advanced/Show output console (then hide with Tab)  toggleVerbosity  v"
 		"_Advanced/Verbose keys  toggle___verbose_keys__1__0  "
 		"_Advanced/Low execution verbosity  _debug_commands=0    Intermediate execution verbosity  _debug_commands=ackCm    High execution verbosity  _debug_commands=ackCmmi  "
 		"_Advanced/Rebuild menus with tooltips  _rebuild_verboser_menus"
 		"_Advanced/Rebuild menus very verbosely  _rebuild_verbosest_menus"
 		"_Advanced/Verbose keys  toggle||_display_busy||1||0"
 		"_Advanced/Downscale huge on load  toggle||_downscale_huge_at_load||1||0"
-		"_Advanced/Prefetch  toggle||_want_prefetch||1||0"
+		"_Advanced/Background prefetch  _want_prefetch=2    Foreground prefetch  _want_prefetch=1    No prefetch  _want_prefetch=0    "
 		"_Custom actions/Webcam shot (needs vgrabbj)  webcam"
 		"_Custom actions/Say something (need espeak)  espeak"
 		"_Custom actions/Max cached memory: 256MiB  _max_cached_memory=262144    unlimited  _max_cached_memory=0    very little  _max_cached_memory=1    80MiB  _max_cached_memory=81920  "
@@ -1936,7 +1942,7 @@ if( _device_string=='gtk' ) {
 		"_Help/_Variables  FimMenuVariablesHelp/"
 		"_Help/_man FIM  man_fim"
 		"_Help/_man fimrc  man_fimrc";
-		#"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w" # copy for demo purposes
+		#"_Custom actions/scaling: _auto  _scale_style=a  a  scaling: _auto to original  _scale_style=b  b  scaling: manual  _scale_style=m  m  scaling: by _width  _scale_style=w  w" # copy for demo purposes
 		#"_Custom actions/_Toggle flipped flag  toggle__i:flipped__1__0  f"
 		#"_Custom actions/_Submenu/_Frobnicate  unmapped_cmd  /"
 		#"_Custom actions/_Submenu/_Defrobnicate  unmapped_cmd  u"
