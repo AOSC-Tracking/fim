@@ -630,7 +630,7 @@ done:
 			const auto ba = getBoundAction(c);
 
 			if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "execute binding: " << c << " -> " << ba << "\n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "execute binding: " << c << " -> " << fim_shell_arg_escape(ba) << "\n";
 
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
 #ifdef FIM_ITERATED_COMMANDS
@@ -810,7 +810,7 @@ ret:
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
 			if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "expanding alias: " << cmd << " -> " << ocmd << "\n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "expanding alias: '" << cmd << "' -> " << fim_shell_arg_escape(ocmd) << "\n";
 #if HAVE_PIPE
 			//an alias should be expanded. arguments are appended.
 			std::ostringstream oss;
@@ -1124,7 +1124,7 @@ skip_ac:
 					}
 					if(getVariable(FIM_VID_DBG_COMMANDS).find('k') >= 0)
 					{
-						std::cout << FIM_CNS_DBG_CMDS_PFX << "keysym: '"<<c<<"' "
+						std::cout << FIM_CNS_DBG_CMDS_PFX << "keysym: '" << c << "' "
 							<< fim_key_escape(key_syms_[c]) << "\n";
 					}
 #ifndef FIM_USE_READLINE
@@ -1622,7 +1622,7 @@ ok:
 				const fim_fn_t acmd = autocmds.find(pat)->second[i].c_str();
 				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),acmd);
 				if(getVariable(FIM_VID_DBG_COMMANDS).find('a') >= 0)
-					std::cout << FIM_CNS_DBG_CMDS_PFX << "autocmd: '"<<event<<"'->'"<<fim_shell_arg_escape(acmd)<<"'\n";
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "autocmd: '" << event << "'->" << fim_shell_arg_escape(acmd) << "\n";
 				autocmds_stack.push_back(frame);
 				execute_internal(acmd.c_str(),FIM_X_QUIET);
 				autocmds_stack.pop_back();
