@@ -68,7 +68,8 @@ bind 'C-h' "help";
 #bind '/' "help"; # assigned to forward-search
 bind '=' "scale '100%'";
 #bind 'p' "prev_file";
-bind 'Del' "list 'remove';reload";
+#bind 'Del' "list 'remove';reload"; # no quit on last file
+bind 'Del' "if(_filelistlen<2)quit;list 'remove';reload;"; # quit if no files left
 #bind 's' "list 'sort'";
 bind ' ' "scroll 'forward'";
 ###bind 'C-s' "swap;redisplay";
@@ -337,6 +338,7 @@ bind ')' "goto '$p'";
 bind 'Z' "sleep 1";
 _display_status=1; # lower status line
 _want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
+_caption_over_image_fmt="%?_comment?%:_comment:?";
 _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
 #_display_status_fmt="%N:%k"; #
 _display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k"; # lower left line part
@@ -387,6 +389,7 @@ if( _device_string=='gtk' ) {
 		"_View/Orientation: normal  _orientation=0    Orientation: 90'right  _orientation=1    Orientation: upside down  _orientation=2    Orientation: 90' left  _orientation=3  "
 		"_View/Desaturate  toggle___autodesaturate__1__0  "
 		"_View/Autonegate  toggle___autonegate__1__0  "
+		"_View/Refresh description & co  refresh  "
 		"_Image/_Mirror  toggle__i:mirrored__1__0  m"
 		"_Image/_Flip  toggle&&i:flipped&&1&&0  f" # && as internal separator
 #		"_Image Extras/_Let's Flip again  toggle&&i:flipped&&1&&0  f" # && as internal separator TODO togli
