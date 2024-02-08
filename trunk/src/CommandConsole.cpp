@@ -400,7 +400,7 @@ ret:		return key;
 		FIM_CNS_CMDSEP " If '-further' is present, will start with the current list; if not, with the full list."
 		FIM_CNS_CMDSEP " If '-merge' is present, new matches will be merged in the existing list and sorted."
 		FIM_CNS_CMDSEP " If '-subtract' is present, sort and filter out matches."
-		FIM_CNS_CMDSEP " If {" FIM_CNS_EX_VARIABLE_STRING "} and {values} are provided, limit to files having property {" FIM_CNS_EX_VARIABLE_STRING "} set to " FIM_CNS_EX_VALUE "."
+		FIM_CNS_CMDSEP " If {" FIM_CNS_EX_VARIABLE_STRING "} and {value} are provided, limit to files having property {" FIM_CNS_EX_VARIABLE_STRING "} set to " FIM_CNS_EX_VALUE "."
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		FIM_CNS_CMDSEP " If {" FIM_CNS_EX_NBEXP_STRING "} is one exclamation point ('!'), will limit to the currently marked files only."
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
