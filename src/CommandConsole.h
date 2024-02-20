@@ -183,7 +183,7 @@ class CommandConsole FIM_FINAL :
 	public:
 	fim_sys_int get_displaydevice_input(fim_key_t * c, bool want_poll=false);
 
-	fim::string execute(fim_cmd_id cmd, args_t args, bool as_interactive=false, bool save_as_last=false);
+	fim::string execute(fim_cmd_id cmd, args_t args, bool as_interactive=false, bool save_as_last=false, bool only_queue=false);
 
 	//const fim_char_t*get_prompt(void)const{return prompt_;}
 
@@ -284,6 +284,9 @@ class CommandConsole FIM_FINAL :
 	fim_key_t kstr_to_key(const fim_char_t * kstr)const;
 	public:
 	int pop_key_press(fim_key_t *cp);
+#if FIM_WANT_CMD_QUEUE
+	std::vector<std::pair<fim_cmd_id,args_t>> cmdq_; /* command queue */
+#endif /* FIM_WANT_CMD_QUEUE */
 #if FIM_WANT_CMDLINE_KEYPRESS
 	std::vector<fim::string > clkcv_; /* command line key-bound commands vector*/
 	void push_key_press(const char *cp);
