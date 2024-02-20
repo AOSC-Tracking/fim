@@ -1002,6 +1002,21 @@ err:
 	}
 #endif	/* FIM_USE_GPM */
 
+#if FIM_WANT_CMD_QUEUE
+	bool CommandConsole::execute_queued(void)
+	{
+		if (cmdq_.size())
+		{
+			const auto cmdq = cmdq_;
+			cmdq_.erase(cmdq_.begin(),cmdq_.end()); // enforce execution order and no duplication
+			for (const auto cmd: cmdq)
+				execute(cmd.first, cmd.second, true);
+			return true;
+		}
+		return false;
+	}
+#endif /* FIM_WANT_CMD_QUEUE */
+
 	fim_perr_t CommandConsole::executionCycle(void)
 	{
 		/*
@@ -1211,13 +1226,7 @@ skip_ac:
 				}
 				else
 #if FIM_WANT_CMD_QUEUE
-				if (cmdq_.size())
-				{
-					for (const auto & cmd: cmdq_)
-        					execute(cmd.first, cmd.second, true);
-					cmdq_.erase(cmdq_.begin(),cmdq_.end());
-				}
-				else
+				if (!execute_queued())
 #endif /* FIM_WANT_CMD_QUEUE */
 				{
 					// framebuffer console switching is handled here

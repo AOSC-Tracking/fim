@@ -229,7 +229,12 @@ Var ex(NodeType p)
 				++sd;
 				fim::cc.catchLoopBreakingCommand(0);
 				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
+				{
+#if FIM_WANT_CMD_QUEUE
+					cc.execute_queued();
+#endif /* FIM_WANT_CMD_QUEUE */
 					ex(FIM_OPRND(p,1));
+				}
 				--sd;
 				DBG("End While\n")
 				goto ret;

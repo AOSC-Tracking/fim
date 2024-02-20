@@ -1444,24 +1444,24 @@ fim_key_t GTKDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	 * */
 	fim_key_t c=0;
 	fim_sys_int lkeypress=0;
-	fim_tms_t sms=10,ms=seconds*1000;// sms: sleep ms
-	FIM_GTK_INPUT_DEBUG(&c,"");
+	const fim_tms_t sms=10;// sms: sleep ms
+	fim_tms_t ms=seconds*1000;
 
-	if ( gtk_events_pending() )
-	{
-		c = last_pressed_key_;
-		gtk_main_iteration();
-		FIM_GTK_INPUT_DEBUG(&c,"");
-		if (c) // if any input there
-			goto done;
-
-	}
-	else
+	FIM_GTK_INPUT_DEBUG(&c," ms=" << ms << " seconds=" << seconds << "  c ");
 	do
 	{
 		if(ms>0)
 			usleep((useconds_t)(sms*1000)),ms-=sms;
 		// we read input twice: it seems we have a number of "spurious" inputs. 
+		if ( gtk_events_pending() )
+		{
+			c = last_pressed_key_;
+			gtk_main_iteration(); // allow intermediate actions
+			FIM_GTK_INPUT_DEBUG(&c," ms=" << ms << " seconds=" << seconds << "  c ");
+			if (c) // if any input there
+				goto done;
+	
+		}
 	}
 	while(ms>0);
 	return -1;
