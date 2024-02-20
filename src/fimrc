@@ -196,7 +196,7 @@ alias "bookview"          "while(1){display;sleep '2';scroll 'down';}" "";
 alias "comicview"         "while(1){display;sleep '2';scroll 'down';}" "";
 alias "read"              "while(1){display;sleep '2';scroll 'forward';}" "";
 alias "slowread"          "while(1){display;sleep '2';scroll 'forward';}" "";
-alias "fastread"          "while(1){display;scroll 'forward';}" "proceeds like in a book bug very fast";
+alias "fastread"          "while(1){display;scroll 'forward';}" "proceeds like in a book but very fast";
 alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow" "enters an endless slideshow";
 ####bind  "C-p" "pornview";
 ####bind  "C-b" "bookview";
@@ -381,14 +381,15 @@ if( _device_string=='gtk' ) {
 		"_List/Sort by time  list 'sort_mtime'  "
 		"_List/Shuffle randomly  list 'random_shuffle'  "
 		"_List/Mark all  list 'markall'  "
-		"_List/Random slideshow  random_slideshow  "
-		"_List/Endless slideshow  endless_slideshow  "
-		"_List/Slideshow time/0 s  _slideshow_sleep_time=0    0.5 s  _slideshow_sleep_time=0.5    1 s  _slideshow_sleep_time=1    2 s  _slideshow_sleep_time=2    3 s  _slideshow_sleep_time=3    "
-		"_List/Stop any ongoing slideshow  _stop_slideshow=1  "
+		"_List/Slideshow/Random  random_slideshow  "
+		"_List/Slideshow/Endless  endless_slideshow  "
+		"_List/Slideshow/Slideshow time: 0 s  _slideshow_sleep_time=0    0.5 s  _slideshow_sleep_time=0.5    1 s  _slideshow_sleep_time=1    2 s  _slideshow_sleep_time=2    3 s  _slideshow_sleep_time=3    "
+		"_List/Slideshow/Stop  _stop_slideshow=1  "
+		"_List/Slideshow/Fast read  fastread  "
 		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
 		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
 #		"_View/Scale: _auto  _scale_style=a  a  Scale: by _hand (manual)  _scale_style=m  m  Scale: by _width  _scale_style=w  w  Scale: by _height  _scale_style=h  h"
-		"_View/**Scale: _auto**_scale_style=a**a**Scale: _auto (till 100%)**_scale_style=b**b**Scale: by _hand (manual)**_scale_style=m**m**Scale: by _width**_scale_style=w**w**Scale: by _height**_scale_style=h**h"
+		"_View/**Scale: 1x**_scale_style= ** **Scale: _auto**_scale_style=a**a**Scale: _auto (till 100%)**_scale_style=b**b**Scale: by _hand (manual)**_scale_style=m**m**Scale: by _width**_scale_style=w**w**Scale: by _height**_scale_style=h**h"
 		"_View/Orientation: normal  _orientation=0    Orientation: 90'right  _orientation=1    Orientation: upside down  _orientation=2    Orientation: 90' left  _orientation=3  "
 		"_View/Desaturate  toggle___autodesaturate__1__0  "
 		"_View/Autonegate  toggle___autonegate__1__0  "

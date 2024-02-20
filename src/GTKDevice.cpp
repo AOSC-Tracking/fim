@@ -157,6 +157,7 @@ namespace fim
 #else /* FIM_WANT_CMD_QUEUE */
 	const bool do_queue_ = false;
 #endif /* FIM_WANT_CMD_QUEUE */
+	const bool no_queue_ = false;
 	const bool do_as_interactive_ = false;
 
 #pragma GCC push_options
@@ -459,7 +460,11 @@ static void sync_toggle_menu(const std::string cmd)
 		for ( const auto & cmi : check_menu_items_[cmd] )
 		{
 			const auto val = cc.getStringVariable(vid);
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), (val == val1 ? TRUE : FALSE));
+			const auto match = (val == val1 ? TRUE : FALSE);
+			if ( match != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(cmi)))
+			{
+				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), match);
+			}
 		}
 	return;		
 }
@@ -512,7 +517,10 @@ static void sync_radio_menu(const std::string cmd)
 		{
 			const auto val = cc.getStringVariable(var);
 			if (val == opt)
-				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi),TRUE);
+			{
+				if (!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(cmi)))
+					gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(cmi), TRUE);
+			}
 		}
 	}
 }
@@ -560,33 +568,33 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 	{
 		if ( FIM_GTK_IS_TOGGLE(cmd) )
 		{
-			const toggle_choices_t tct = get_toggle_choices(xtrcttkn(cmd));
+			const toggle_choices_t tct = get_toggle_choices(xtrcttkn(cmd)); // Note: this is still old use of xtrcttkn (group-level)
 			const std::string vid = std::get<0>(tct);
 			const std::string val1 = std::get<1>(tct);
 			const std::string val2 = std::get<2>(tct);
 
 			if ( gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(wdgt) ) )
-				cc.execute("set", {vid, val1}, true, do_as_interactive_, do_queue_);
+				cc.execute("set", {vid, val1}, true, do_as_interactive_, no_queue_);
 			else
-				cc.execute("set", {vid, val2}, true, do_as_interactive_, do_queue_);
-			cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, do_queue_); // TODO: find better solution
+				cc.execute("set", {vid, val2}, true, do_as_interactive_, no_queue_);
+			cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, no_queue_);
 		}
 		else
 		{
 			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*=.*$") ) // TODO: find better solution
 			{
-				const auto actn = xtrcttkn(cmd);
+				const auto actn = xtrcttkn(cmd, FIM_SYM_CHAR_NUL);
 				if( regexp_match(actn.c_str(), "=") )
 				{
 					const auto var = xtrcttkn(cmd,'=');
 					const auto val = actn.c_str() + var.size()+1;
-					cc.execute("set", {var, val}, true, do_as_interactive_, do_queue_);
+					cc.execute("set", {var, val}, true, do_as_interactive_, no_queue_);
 				}
 				else
 				{
 					std::cerr << "ERROR: wrong assignment spec : [" << actn << "] in radio specification:\n" << cmd << "\n";
 				}
-				cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, do_queue_); // TODO: find better solution
+				cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, do_queue_);
 			}
 			else
 			{
@@ -845,6 +853,7 @@ void cb_on_open_response (GtkDialog *dialog, int response)
 		msg += fn;
 		// std::cout << msg << "\n";
 		cc.push(fn,(response == GTK_RESPONSE_ACCEPT)?0:FIM_FLAG_PUSH_REC/*|((response == FIM_GTK_RESPONSE_ACCEPT_REC_FG )?0:FIM_FLAG_PUSH_BACKGROUND)*/); // FIXME: preliminary
+		cc.browser_.goto_image_internal((std::string("?")+fn).c_str(), FIM_X_NULL);
 		g_free (fn);
 	}
 	gtk_widget_destroy (GTK_WIDGET(dialog));
