@@ -158,7 +158,7 @@ namespace fim
 	const bool do_queue_ = false;
 #endif /* FIM_WANT_CMD_QUEUE */
 	const bool no_queue_ = false;
-	const bool do_as_interactive_ = false;
+	bool do_as_interactive_ = false;
 
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -418,8 +418,8 @@ static std::string xtrcttkn(const char* cmd, const char sep=' ')
 
 static void do_force_console()
 {
-	cc.execute("set", {"_display_console", "0" }, true);
-	cc.execute("toggleVerbosity", {}, true);
+	cc.execute("set", {"_display_console", "0" }, do_as_interactive_);
+	cc.execute("toggleVerbosity", {}, do_as_interactive_);
 }
 
 static void do_print_item_help(GtkWidget *, const int * idxp)
@@ -490,8 +490,10 @@ static bool is_valid_toggle_spec(const std::string cmd)
 
 static void sync_toggle_menus()
 {
+	do_as_interactive_ = false;
 	for ( const auto & cmi : check_menu_items_ )
 		sync_toggle_menu(cmi.first);
+	do_as_interactive_ = true;
 }
 
 static void sync_vars_menus()
@@ -511,6 +513,7 @@ static void sync_radio_menu(const std::string cmd)
 	const auto var = xtrcttkn(cmd.c_str(),'=');
 	const auto opt = cmd.c_str() + var.size()+1;
 
+	do_as_interactive_ = false;
 	if ( radio_menu_items_.find(cmd) != radio_menu_items_.end() )
 	{
 		for ( const auto & cmi : radio_menu_items_[cmd] )
@@ -523,6 +526,7 @@ static void sync_radio_menu(const std::string cmd)
 			}
 		}
 	}
+	do_as_interactive_ = true;
 }
 
 static void sync_radio_menus()
@@ -574,39 +578,37 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 			const std::string val2 = std::get<2>(tct);
 
 			if ( gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(wdgt) ) )
-				cc.execute("set", {vid, val1}, true, do_as_interactive_, no_queue_);
+				cc.execute("set", {vid, val1}, do_as_interactive_, false, no_queue_);
 			else
-				cc.execute("set", {vid, val2}, true, do_as_interactive_, no_queue_);
-			cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, no_queue_);
+				cc.execute("set", {vid, val2}, do_as_interactive_, false, no_queue_);
 		}
 		else
 		{
 			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*=.*$") ) // TODO: find better solution
 			{
 				const auto actn = xtrcttkn(cmd, FIM_SYM_CHAR_NUL);
-				if( regexp_match(actn.c_str(), "=") )
+				if( regexp_match(actn.c_str(), "=") ) // radio button
 				{
 					const auto var = xtrcttkn(cmd,'=');
 					const auto val = actn.c_str() + var.size()+1;
-					cc.execute("set", {var, val}, true, do_as_interactive_, no_queue_);
+					cc.execute("set", {var, val}, do_as_interactive_, false, no_queue_);
 				}
 				else
 				{
 					std::cerr << "ERROR: wrong assignment spec : [" << actn << "] in radio specification:\n" << cmd << "\n";
 				}
-				cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, do_queue_);
 			}
 			else
 			{
 				const std::string cmds = xtrcttkn(cmd, '\0');
 				if( regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*;*$") ) // simple commands
 				{
-					cc.execute(cmds, {}, true, do_as_interactive_, do_queue_);
+					cc.execute(cmds, {}, do_as_interactive_, false, do_queue_);
 					if(verbose_) std::cout << "EXECUTE: " << cmds << std::endl;
 				}
 				else
 				{
-					cc.execute("eval", {cmds}, true, do_as_interactive_, do_queue_); // ok, dirty trick
+					cc.execute("eval", {cmds}, do_as_interactive_, false, do_queue_);
 					if(verbose_) std::cout << "EXECUTE: eval " << cmds << std::endl;
 				}
 			}
