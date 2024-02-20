@@ -152,6 +152,13 @@ namespace fim
 	int full_screen_{};
 	int show_menubar_{1};
 
+#if FIM_WANT_CMD_QUEUE
+	const bool do_queue_ = true;
+#else /* FIM_WANT_CMD_QUEUE */
+	const bool do_queue_ = false;
+#endif /* FIM_WANT_CMD_QUEUE */
+	const bool do_as_interactive_ = false;
+
 #pragma GCC push_options
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #pragma GCC diagnostic ignored "-Wunused-variable"
@@ -559,10 +566,10 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 			const std::string val2 = std::get<2>(tct);
 
 			if ( gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(wdgt) ) )
-				cc.execute("set", {vid, val1}, true);
+				cc.execute("set", {vid, val1}, true, do_as_interactive_, do_queue_);
 			else
-				cc.execute("set", {vid, val2}, true);
-			cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
+				cc.execute("set", {vid, val2}, true, do_as_interactive_, do_queue_);
+			cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, do_queue_); // TODO: find better solution
 		}
 		else
 		{
@@ -573,25 +580,25 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 				{
 					const auto var = xtrcttkn(cmd,'=');
 					const auto val = actn.c_str() + var.size()+1;
-					cc.execute("set", {var, val}, true);
+					cc.execute("set", {var, val}, true, do_as_interactive_, do_queue_);
 				}
 				else
 				{
 					std::cerr << "ERROR: wrong assignment spec : [" << actn << "] in radio specification:\n" << cmd << "\n";
 				}
-				cc.execute("set", {"i:fresh", "1" }, true); // TODO: find better solution
+				cc.execute("set", {"i:fresh", "1" }, true, do_as_interactive_, do_queue_); // TODO: find better solution
 			}
 			else
 			{
 				const std::string cmds = xtrcttkn(cmd, '\0');
 				if( regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*;*$") ) // simple commands
 				{
-					cc.execute(cmds, {}, true);
+					cc.execute(cmds, {}, true, do_as_interactive_, do_queue_);
 					if(verbose_) std::cout << "EXECUTE: " << cmds << std::endl;
 				}
 				else
 				{
-					cc.execute("eval", {cmds}, true); // ok, dirty trick
+					cc.execute("eval", {cmds}, true, do_as_interactive_, do_queue_); // ok, dirty trick
 					if(verbose_) std::cout << "EXECUTE: eval " << cmds << std::endl;
 				}
 			}

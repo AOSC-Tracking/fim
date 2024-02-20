@@ -788,7 +788,7 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
-        fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args, bool as_interactive, bool save_as_last)
+        fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args, bool as_interactive, bool save_as_last, bool only_queue)
 	{
 		/*
 		 * Single tokenized commands with arguments.
@@ -798,6 +798,19 @@ ret:
 		const fim::string ocmd=aliasRecall(cmd);
 		const int int0 = (args.size()>0) ? atoi(args[0].c_str()) : 1;
 		const float float0= (args.size()>0) ? atof(args[0].c_str()) : 1;
+
+		if ( only_queue )
+		{
+#if FIM_WANT_CMD_QUEUE
+			if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "queuing: " << cmd << " " << args << "\n";
+			cmdq_.push_back({cmd,args});
+			// note that we ignore as_interactive and save_as_last; perhaps need flags for that
+			return FIM_CNS_EMPTY_RESULT;
+#else
+			/* continues as normal otherwise */
+#endif /* FIM_WANT_CMD_QUEUE */
+		}
 
 		if (as_interactive) /* note: may better introduce FIM_X_AS_INTERACTIVE */
 		{
@@ -1197,6 +1210,15 @@ skip_ac:
 					}
 				}
 				else
+#if FIM_WANT_CMD_QUEUE
+				if (cmdq_.size())
+				{
+					for (const auto & cmd: cmdq_)
+        					execute(cmd.first, cmd.second, true);
+					cmdq_.erase(cmdq_.begin(),cmdq_.end());
+				}
+				else
+#endif /* FIM_WANT_CMD_QUEUE */
 				{
 					// framebuffer console switching is handled here
 					if(r==-1)
