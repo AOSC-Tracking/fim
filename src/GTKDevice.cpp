@@ -584,7 +584,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 		}
 		else
 		{
-			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*=.*$") ) // TODO: find better solution
+			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^(i:)?[a-zA-Z_][a-zA-Z0-9_]*=.*$") ) // Note: need a better solution
 			{
 				const auto actn = xtrcttkn(cmd, FIM_SYM_CHAR_NUL);
 				if( regexp_match(actn.c_str(), "=") ) // radio button
@@ -1477,7 +1477,7 @@ fim_key_t GTKDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	while(ms>0);
 	return -1;
 done:
-	usleep((useconds_t)(sms*1000)),ms-=sms;
+	usleep((useconds_t)(sms*1000)),ms-=sms; // TODO: this needs an adjustment (e.g. to seconds), but in a way to avoid duplications across Devices
 	return c;
 }
 

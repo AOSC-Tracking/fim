@@ -778,6 +778,7 @@ namespace fim
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[out,g:] the current image numeric index." */
 #define FIM_VID_LOOP_ONCE			"_loop_only_once"	/* "[internal,g:] if 1 and doing a --slideshow, do it once." */
 #define FIM_VID_IN_SLIDESHOW			"_stop_slideshow"	/* "[internal,g:] if it becomes 1 during a slideshow, stop it; gets unset before each '" FIM_FLT_WHILE "'." */
+#define FIM_INTERNAL_STATE_CHANGED 		"__internal_state_changed" /* "[internal,i:] changed on alias or bindings update" */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
 #define FIM_VID_LASTGOTODIRECTION			"_lastgotodirection"	/* "[out,g:] the last file goto direction (either string '+1' or string '-1')." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out,g:] current image list length (number of visible images)." */

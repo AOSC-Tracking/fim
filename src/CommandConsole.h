@@ -418,6 +418,9 @@ class CommandConsole FIM_FINAL :
 	std::vector<const char *> fnpv_; /* file names pointers vector */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 	fim_err_t update_font_size(void);
+#ifdef FIM_WITH_LIBGTK
+	void internal_status_changed();
+#endif /* FIM_WITH_LIBGTK */
 	public:
 	void switch_if_needed(void);
 	fim::string getInfoCustom(const fim_char_t * ifsp)const;
