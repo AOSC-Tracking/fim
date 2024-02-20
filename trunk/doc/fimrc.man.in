@@ -1752,12 +1752,12 @@ bind 'C-b' "goto '-//'"; # Warning: many configurations cannot detect C-b.
 bind 'W' "display 'resize'" "if supported, resizes the window to match the current image pixels size";
 #bind 'C-w' "scale '100%';display 'resize'" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
 bind 'C-w' "if(_scale_style!='w'){_scale_style='w';scale 'w';}else{_scale_style='';scale '100%';}" "scale to width";
-alias "endless_slideshow" "while(1){display;sleep '1';next;}" "performs an automated slideshow, endlessly";
-alias "bookview"          "while(1){display;sleep '2';scroll 'down';}" "";
-alias "comicview"         "while(1){display;sleep '1';scroll 'down';}" "";
-alias "read"              "while(1){display;sleep '1';scroll 'forward';}" "";
-alias "slowread"          "while(1){display;sleep '2';scroll 'forward';}" "";
-alias "fastread"          "while(1){display;scroll 'forward';}" "proceeds like in a book bug very fast";
+alias "endless_slideshow" "_loop_only_once=0;while(!_loop_only_once){display;sleep '1';next;}" "performs an automated slideshow, endlessly";
+alias "bookview"          "_loop_only_once=0;while(!_loop_only_once){display;sleep '2';scroll 'down';}" "";
+alias "comicview"         "_loop_only_once=0;while(!_loop_only_once){display;sleep '1';scroll 'down';}" "";
+alias "read"              "_loop_only_once=0;while(!_loop_only_once){display;sleep '1';scroll 'forward';}" "";
+alias "slowread"          "_loop_only_once=0;while(!_loop_only_once){display;sleep '2';scroll 'forward';}" "";
+alias "fastread"          "_loop_only_once=0;while(!_loop_only_once){display;scroll 'forward';}" "proceeds like in a book bug very fast";
 alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow" "enters an endless slideshow";
 autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0" ;
 autocmd "PreExecutionCycle" "" "i:fresh=1;reload";
@@ -1795,7 +1795,7 @@ alias "sort" "list 'sort'"  "sorts the files list ordered";
 bind 'o' "sort";
 bind 'b' "prev";
 bind 'B' "toggleDisplayBusy";
-alias "random_slideshow" "while(1){display;sleep 1; eval 'r=random';goto r;}" "performs a shuffled slideshow, endlessly";
+alias "random_slideshow" "_loop_only_once=0;while(!_loop_only_once){display;sleep 1; eval 'r=random';goto r;}" "performs a shuffled slideshow, endlessly";
 alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;redisplay" "rotate 90 degrees counter clockwise";
 alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;redisplay" "rotate 90 degrees clockwise";
 alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;redisplay" "rotate 180 degrees";
@@ -1902,6 +1902,7 @@ if( _device_string=='gtk' ) {
 		"_List/Mark all  list 'markall'  "
 		"_List/Random slideshow  random_slideshow  "
 		"_List/Endless slideshow  endless_slideshow  "
+		"_List/Stop any ongoing slideshow  _loop_only_once=1  "
 		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
 		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
 #		"_View/Scale: _auto  _scale_style=a  a  Scale: by _hand (manual)  _scale_style=m  m  Scale: by _width  _scale_style=w  w  Scale: by _height  _scale_style=h  h"
@@ -1961,13 +1962,13 @@ if( _device_string=='gtk' ) {
 echo "WELCOME: to switch to the command line interface press ':'";
 # More examples:
 #alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
-#alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
+#alias "wlisten" "_loop_only_once=0;while(!_loop_only_once){sleep;plisten;}" "listen to a pipe, endlessly";
 #alias "musicplay"  "system 'mpc' 'play'" "";
 #alias "musicpause" "system 'mpc' 'pause'" "";
 #alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){list 'push' 'blob.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
-#alias "webcam_cycle" "while(1){webcam;reload;sleep 1;}";
+#alias "webcam_cycle" "_loop_only_once=0;while(!_loop_only_once){webcam;reload;sleep 1;}";
 # This is a FIM initialization file. 
 # Without it FIM cannot work like it should.
 # Feel free to modify it, but with caution!
