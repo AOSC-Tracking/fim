@@ -768,7 +768,7 @@ namespace fim
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[in,g:] if 1, prefetch further files just after displaying the first file; if 2 (and configured with --enable-cxx11) load in the background." */
 #define FIM_VID_LOADING_IN_BACKGROUND		"_loading_in_background"	/* "[out,g:] 1 if program has been invoked with --" FIM_OSW_BGREC " and still loading in background. " */
 #define FIM_VID_RESIZE_HUGE_ON_LOAD		"_downscale_huge_at_load"	/* "[in,g:] if 1, downscale at load time huge images (that is, ones exceeding by " FIM_CNS_HUGE_IMG_TO_VIEWPORT_PROPORTION_S " times the screen size)." */
-#define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[in,g:] number of seconds of sleep during slideshow mode." */
+#define FIM_VID_WANT_SLEEPS 			"_slideshow_sleep_time"	/* "[in,g:] number of seconds of sleep during slideshow mode." */
 #define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[in,g:] if 1, reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
 #define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[out,i:] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the orientation EXIF tags (i:EXIF_Orientation)." */
 #define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[out,i:] mirroring information, read from the EXIF tags of a given image." */

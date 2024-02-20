@@ -1331,6 +1331,11 @@ _seek_magic
 .fi
 .na
 .B
+_slideshow_sleep_time
+[in,g:] number of seconds of sleep during slideshow mode.
+.fi
+.na
+.B
 _status_line
 [in,g:] if 1, display the status bar.
 .fi
@@ -1393,11 +1398,6 @@ _want_exif_orientation
 .B
 _want_prefetch
 [in,g:] if 1, prefetch further files just after displaying the first file; if 2 (and configured with --enable-cxx11) load in the background.
-.fi
-.na
-.B
-_want_sleep_seconds
-[in,g:] number of seconds of sleep during slideshow mode.
 .fi
 .na
 .B
@@ -1626,6 +1626,7 @@ if(_use_mipmaps==''){_use_mipmaps=1;}
 if(_downscale_huge_at_load==''){_downscale_huge_at_load=1;}
 if(_scroll_skip_page_fraction==''){_scroll_skip_page_fraction=0;}
 if(_want_wm_mouse_ctrl==''){_want_wm_mouse_ctrl="'pP+a-=nN";}
+if(_slideshow_sleep_time==''){_slideshow_sleep_time=1;}
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
@@ -1757,10 +1758,10 @@ bind 'C-b' "goto '-//'"; # Warning: many configurations cannot detect C-b.
 bind 'W' "display 'resize'" "if supported, resizes the window to match the current image pixels size";
 #bind 'C-w' "scale '100%';display 'resize'" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
 bind 'C-w' "if(_scale_style!='w'){_scale_style='w';scale 'w';}else{_scale_style='';scale '100%';}" "scale to width";
-alias "endless_slideshow" "while(1){display;sleep '1';next;}" "performs an automated slideshow, endlessly";
+alias "endless_slideshow" "while(1){display;sleep _slideshow_sleep_time;next;}" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scroll 'down';}" "";
-alias "comicview"         "while(1){display;sleep '1';scroll 'down';}" "";
-alias "read"              "while(1){display;sleep '1';scroll 'forward';}" "";
+alias "comicview"         "while(1){display;sleep '2';scroll 'down';}" "";
+alias "read"              "while(1){display;sleep '2';scroll 'forward';}" "";
 alias "slowread"          "while(1){display;sleep '2';scroll 'forward';}" "";
 alias "fastread"          "while(1){display;scroll 'forward';}" "proceeds like in a book bug very fast";
 alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow" "enters an endless slideshow";
@@ -1800,7 +1801,7 @@ alias "sort" "list 'sort'"  "sorts the files list ordered";
 bind 'o' "sort";
 bind 'b' "prev";
 bind 'B' "toggleDisplayBusy";
-alias "random_slideshow" "while(1){display;sleep 1; eval 'r=random';goto r;}" "performs a shuffled slideshow, endlessly";
+alias "random_slideshow" "while(1){display;sleep _slideshow_sleep_time; eval 'r=random';goto r;}" "performs a shuffled slideshow, endlessly";
 alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;redisplay" "rotate 90 degrees counter clockwise";
 alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;redisplay" "rotate 90 degrees clockwise";
 alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;redisplay" "rotate 180 degrees";
@@ -1907,6 +1908,7 @@ if( _device_string=='gtk' ) {
 		"_List/Mark all  list 'markall'  "
 		"_List/Random slideshow  random_slideshow  "
 		"_List/Endless slideshow  endless_slideshow  "
+		"_List/Slideshow time/0 s  _slideshow_sleep_time=0    0.5 s  _slideshow_sleep_time=0.5    1 s  _slideshow_sleep_time=1    2 s  _slideshow_sleep_time=2    3 s  _slideshow_sleep_time=3    "
 		"_List/Stop any ongoing slideshow  _stop_slideshow=1  "
 		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
 		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
