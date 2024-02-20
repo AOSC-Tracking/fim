@@ -1762,9 +1762,9 @@ alias "endless_slideshow" "while(1){display;sleep _slideshow_sleep_time;next;}" 
 alias "bookview"          "while(1){display;sleep '2';scroll 'down';}" "";
 alias "comicview"         "while(1){display;sleep '2';scroll 'down';}" "";
 alias "read"              "while(1){display;sleep '2';scroll 'forward';}" "";
-alias "slowread"          "while(1){display;sleep '2';scroll 'forward';}" "";
-alias "fastread"          "while(1){display;scroll 'forward';}" "proceeds like in a book but very fast";
-alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow" "enters an endless slideshow";
+alias "slowread"          "while(_fileindex<=_filelistlen-1){display;sleep '2';scroll 'forward';}" "loop once slowly";
+alias "fastread"          "while(_fileindex<=_filelistlen-1){display;sleep '0.1';scroll 'forward';}" "proceeds like in a book but very fast, once";
+alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow" "enters an endless slideshow (alias name from an actual image viewer)";
 autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0" ;
 autocmd "PreExecutionCycle" "" "i:fresh=1;reload";
 autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay";
@@ -1875,9 +1875,12 @@ alias 'espeak' 'system \'espeak\' i:_filename." ".i:_comment' 'say something';
 if( _device_string=='gtk' ) {
 	alias "man_fim"   "system 'man' 'fim';  _display_console=0;toggleVerbosity;";
 	alias "man_fimrc" "system 'man' 'fimrc';_display_console=0;toggleVerbosity;";
-	alias '_rebuild_verboser_menus' '_debug_commands=_debug_commands."m";display "reinit" "f";';
-	alias '_rebuild_verbosest_menus' '_debug_commands=_debug_commands."mm";display "reinit" "f";';
+	alias '_rebuild_menus' 'display "reinit" "f";';
+	alias '_rebuild_verboser_menus' '_debug_commands=_debug_commands."m";_rebuild_menus;';
+	alias '_rebuild_verbosest_menus' '_debug_commands=_debug_commands."mm";_rebuild_menus;';
 	alias 'toggle_gtk_menus' 'if(!_hide_gtk_menus){_hide_gtk_menus=1;}else{_hide_gtk_menus=0;}';
+	autocmd "PreInteractiveCommand" "" "if(__internal_state_changed){_rebuild_menus;__internal_state_changed=0;}";
+	autocmd "PreExecutionCycle"     "" "if(__internal_state_changed){_rebuild_menus;__internal_state_changed=0;}";
 	display "menuadd" 
 		"_File/"
 		"_File/_Open file  open  C-o"
@@ -1910,6 +1913,7 @@ if( _device_string=='gtk' ) {
 		"_List/Slideshow/Endless  endless_slideshow  "
 		"_List/Slideshow/Slideshow time: 0 s  _slideshow_sleep_time=0    0.5 s  _slideshow_sleep_time=0.5    1 s  _slideshow_sleep_time=1    2 s  _slideshow_sleep_time=2    3 s  _slideshow_sleep_time=3    "
 		"_List/Slideshow/Stop  _stop_slideshow=1  "
+		"_List/Slideshow/Slow read  slowread  "
 		"_List/Slideshow/Fast read  fastread  "
 		"_View/  Automirror  toggle||_automirror||1||0  " # '  ' as external separator, || as internal separator
 		"_View/||Autoflip||toggle.._autoflip..1..0||" # || as external separator, .. as internal separator
@@ -1965,7 +1969,6 @@ if( _device_string=='gtk' ) {
 		#"_Custom actions/_Add menu...  menu_dialog"
 		#"_Custom actions/_Toggle full screen view  toggle		_gtk_fullscreen		1		0"
 		if (_last_cmd_output!="") quit -1;
-		display "reinit" "f"; # FIXME: make this unnecessary
 }
 echo "WELCOME: to switch to the command line interface press ':'";
 # More examples:

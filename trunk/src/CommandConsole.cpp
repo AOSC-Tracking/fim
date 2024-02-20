@@ -127,6 +127,7 @@ namespace fim
 		rs+="\"\n";
 		if(hstr!="")
 			bindings_help_[c]=hstr;
+		internal_status_changed();
 		return rs;
 	}
 
@@ -177,6 +178,7 @@ namespace fim
 			if(kbi!=sym_keys_.end())
 				key=sym_keys_[kfstr];
 		}
+		internal_status_changed();
 		return unbind(key);
 	}
 
@@ -316,6 +318,7 @@ ret:		return key;
 			aliases_[args[0]].second=desc;
 			r << FIM_FLT_ALIAS " " << args[0]<< " successfully added.\n";
 		}
+		internal_status_changed();
 		return r.str();
 	}
 
@@ -2103,6 +2106,14 @@ ok:
 		return FIM_ERR_NO_ERROR;
 	}
 
+	void CommandConsole::internal_status_changed(void)
+	{
+		// take note a binding or alias changed
+#ifdef FIM_WITH_LIBGTK
+		setVariable(FIM_INTERNAL_STATE_CHANGED,1);
+#endif /* FIM_WITH_LIBGTK */
+	}
+
 	void CommandConsole::set_status_bar(const fim_char_t *desc, const fim_char_t *info)
 	{
 		/*
@@ -2482,6 +2493,7 @@ ret:
 				else
 				 	if ( rc != FIM_ERR_NO_ERROR )
 				 		result = "menu editing error";
+				internal_status_changed();
 			}
 			if( args.size()>=2 && args[0] == "menudel" )
 			{
@@ -2489,6 +2501,7 @@ ret:
 					rc |= displaydevice_->menu_ctl('d', args[i]);
 				assert ( rc == FIM_ERR_UNSUPPORTED );
 				result = "'menudel' (menu deletion) not yet supported";
+				internal_status_changed();
 			}
 			if( args.size()==1 && tolower(args[0][0]) == 'v' )
 			{
