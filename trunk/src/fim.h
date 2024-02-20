@@ -203,7 +203,7 @@
 #define FIM_WANT_FBI_FBDEV_DIAGNOSTICS false
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* from C++11 onwards, use smart pointers over Image* */
 #define FIM_WANT_OBSOLETE 0 /* for functionality to be removed or overhauled  */
-#define FIM_WANT_CMD_QUEUE 0 /* queue for decoded commands */
+#define FIM_WANT_CMD_QUEUE 1 /* queue for decoded commands */
 
 /* shadow list of high-res images to jump on demand */
 #ifndef FIM_EXPERIMENTAL_SHADOW_DIRS

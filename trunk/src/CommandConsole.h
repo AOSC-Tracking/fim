@@ -286,6 +286,7 @@ class CommandConsole FIM_FINAL :
 	int pop_key_press(fim_key_t *cp);
 #if FIM_WANT_CMD_QUEUE
 	std::vector<std::pair<fim_cmd_id,args_t>> cmdq_; /* command queue */
+	bool execute_queued(void);
 #endif /* FIM_WANT_CMD_QUEUE */
 #if FIM_WANT_CMDLINE_KEYPRESS
 	std::vector<fim::string > clkcv_; /* command line key-bound commands vector*/
