@@ -56,20 +56,29 @@
 #define FIM_GTK_WITH_SHORT_MENUSPEC 1
 #define FIM_GTK_WITH_VARS_SYNC 0
 
+#define FIM_GTK_COUT_HEX(C)  \
+{ \
+std::cout.setf ( std::ios::hex, std::ios::basefield ); \
+std::cout.setf ( std::ios::showbase ); \
+std::cout << (C); \
+std::cout.unsetf ( std::ios::showbase ); \
+std::cout.unsetf ( std::ios::hex ); \
+}
 #ifdef FIM_GTK_DEBUG
-#define FIM_GTK_DBG_COUT std::cout << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
+#define FIM_GTK_DBG_COUT_STR std::cout // TODO: abandon this: I don't like it
+#define FIM_GTK_DBG_COUT FIM_GTK_DBG_COUT_STR << "GTK:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "() "
+
 #define FIM_GTK_INPUT_DEBUG(C,MSG)  \
 { \
 /* i miss sooo much printf() :'( */ \
 FIM_GTK_DBG_COUT << (size_t)getmilliseconds() << " : "<<MSG<<" : "; \
 std::cout.setf ( std::ios::hex, std::ios::basefield ); \
 std::cout.setf ( std::ios::showbase ); \
-std::cout << *(fim_key_t*)(C) <<"\n"; \
-std::cout.unsetf ( std::ios::showbase ); \
-std::cout.unsetf ( std::ios::hex ); \
+FIM_GTK_COUT_HEX(*(fim_key_t*)(C)); std::cout <<"\n"; \
 }
 #else /* FIM_GTK_DEBUG */
-#define FIM_GTK_DBG_COUT if(0) std::cout 
+#define FIM_GTK_DBG_COUT_STR if(0) std::cout
+#define FIM_GTK_DBG_COUT FIM_GTK_DBG_COUT_STR
 #define FIM_GTK_INPUT_DEBUG(C,MSG) {}
 #endif /* FIM_GTK_DEBUG */
 #define FIM_WANT_POSITION_DISPLAYED FIM_WANT_MOUSE_PAN && 0
@@ -517,7 +526,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 	}
 	assert ( ! cc.inConsole() );
 #endif /* FIM_GTK_ALLOW_MENU_IN_CONSOLE */
-	auto cmd = FIM_GTK_P2S(idxp);
+	const auto cmd = FIM_GTK_P2S(idxp);
 
 	FIM_GTK_DBG_COUT << "cmd:" << cmd << "\n";
 
@@ -557,8 +566,7 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 		}
 		else
 		{
-			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "=") )
-			//if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^[a-zA-Z][a-zA-Z0-9_]*=.*$") )
+			if( regexp_match(cmd, "  .*  ") || regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*=.*$") ) // TODO: find better solution
 			{
 				const auto actn = xtrcttkn(cmd);
 				if( regexp_match(actn.c_str(), "=") )
@@ -576,15 +584,15 @@ static void cb_cc_exec(GtkWidget *wdgt, const void * idxp)
 			else
 			{
 				const std::string cmds = xtrcttkn(cmd, '\0');
-				if( cmds.find(" ") != cmds.npos )
-				{
-					cc.execute("eval", {cmds}, true); // ok, dirty trick
-					if(verbose_) std::cout << "EXECUTE: eval " << cmds << std::endl;
-				}
-				else
+				if( regexp_match(cmd, "^[a-zA-Z_][a-zA-Z0-9_]*;*$") ) // simple commands
 				{
 					cc.execute(cmds, {}, true);
 					if(verbose_) std::cout << "EXECUTE: " << cmds << std::endl;
+				}
+				else
+				{
+					cc.execute("eval", {cmds}, true); // ok, dirty trick
+					if(verbose_) std::cout << "EXECUTE: eval " << cmds << std::endl;
 				}
 			}
 		}
@@ -1407,7 +1415,18 @@ fim_sys_int GTKDevice::get_input(fim_key_t * c, bool want_poll)
 	int keypress_ = 0;
 	GdkEventKey event_;
 	const fim_sys_int iv = get_input_inner(c,&event_,&keypress_,want_poll);
-	FIM_GTK_DBG_COUT << " iv=" << iv << " *c=" << *c << " *(char*)c=" << *(char*)c << " want_poll=" << want_poll << "\n";
+	if ( 
+#if FIM_GTK_DEBUG
+		( FIM_GTK_DEBUG > 1 ) ||
+#endif
+				iv )
+	{
+#ifdef FIM_GTK_DEBUG
+		FIM_GTK_DBG_COUT << " iv=" << iv << " *c=" << ((*c<128 && *c>0)?*c:' ') << " = ";
+		FIM_GTK_COUT_HEX(*c);
+		FIM_GTK_DBG_COUT_STR << "  *(char*)c=" << ((*c<128 && *c>0)?(*(char*)c):' ') << " want_poll=" << want_poll << "\n";
+#endif
+	}
 	return iv;
 }
 
