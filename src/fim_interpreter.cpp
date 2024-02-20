@@ -67,7 +67,7 @@ fim::string static indent(const int sd)
 #define FIM_EC(CMD,ARGS) /* fim::cc.execute(CMD,ARGS) */ "result" /*Var((fim_int)1)*/ /* FIXME: shall return Arg or Var or Val */
 typedef nodeType * NodeType;
 #else /* FIM_INDEPENDENT_NAMESPACE */
-#define FIM_NO_BREAK ( abs(fim::cc.show_must_go_on()) == 1 && ( fim::cc.catchLoopBreakingCommand(0)==0) )
+#define FIM_NO_BREAK ( abs(fim::cc.show_must_go_on()) == 1 && ( fim::cc.catchLoopBreakingCommand(0)==0) && (cc.getIntVariable(FIM_VID_IN_SLIDESHOW)!=1) )
 #define FIM_OPRND(P,N) ((P)->opr.op[(N)])
 #define FIM_FACC(O)  (O)->fid.f
 #define FIM_SACC(O)  (O)->scon.s
@@ -227,8 +227,9 @@ Var ex(NodeType p)
 			case WHILE:
 				DBG("Begin While\n")
 				++sd;
+		    		cc.unsetVariable(FIM_VID_IN_SLIDESHOW);
 				fim::cc.catchLoopBreakingCommand(0);
-				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
+				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK)
 				{
 #if FIM_WANT_CMD_QUEUE
 					cc.execute_queued();
