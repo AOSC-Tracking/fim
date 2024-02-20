@@ -39,6 +39,7 @@ fim_var_help_db[FIM_VID_AUTOTOP]= "[in,g:] if 1, align to the top freshly loaded
 fim_var_help_db[FIM_VID_SCALE_STYLE]= "[in,g:] if non empty, pass it to the " FIM_VID_SCALE " command; see its documentation for possible values." ;
 fim_var_help_db[FIM_VID_FILEINDEX]= "[out,g:] the current image numeric index." ;
 fim_var_help_db[FIM_VID_LOOP_ONCE]= "[internal,g:] if 1 and doing a --slideshow, do it once." ;
+fim_var_help_db[FIM_VID_IN_SLIDESHOW]= "[internal,g:] if it becomes 1 during a slideshow, stop it; gets unset before each '" FIM_FLT_WHILE "'." ;
 fim_var_help_db[FIM_VID_LASTFILEINDEX]= "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." ;
 fim_var_help_db[FIM_VID_LASTGOTODIRECTION]= "[out,g:] the last file goto direction (either string '+1' or string '-1')." ;
 fim_var_help_db[FIM_VID_FILELISTLEN]= "[out,g:] current image list length (number of visible images)." ;
