@@ -234,7 +234,7 @@ Enable textreading mode.  This has the effect that fim displays images scaled to
 Set scroll steps for internal variable \fB_steps\fP (default is "20%").
 .TP
 \fB--slideshow \fR\fI{number}\fR\fP
-Interruptible slideshow mode. Wait for \fR\fI{number}\fR of seconds (can have a decimal part, and is assigned to the _want_sleep_seconds variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex <= _filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys execute accordingly to their function but do not interrupt the slideshow. Like in fbi, this cycles forever, unless \fB--once\fP is specified.
+Interruptible slideshow mode. Wait for \fR\fI{number}\fR of seconds (can have a decimal part, and is assigned to the _want_sleep_seconds variable) after each image. Implemented by executing _loop_only_once=0; reload; i:fresh=1; while(_fileindex <= _filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys execute accordingly to their function but do not interrupt the slideshow. Like in fbi, this cycles forever, unless \fB--once\fP is specified.
 .TP
 \fB--sanity-check\fP
 Perform a quick sanity check, just after the initialization, and terminate.
