@@ -1409,8 +1409,9 @@ ret:
 		return result;
 	}
 
-	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
+	fim_goto_spec_t Browser::goto_image_compute(const fim_char_t *s,fim_xflags_t xflags)const
 	{
+		fim_goto_spec_t gss;
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
 		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages());
 		const fim_int fc = n_files();
@@ -1435,7 +1436,7 @@ ret:
 			bool pcnt = false;
 			bool isre = false;
 			bool ispg = false;
-			bool isfg = false;
+			bool isfg = false; // is file goto
 			bool isrj = false;
 			bool isdj = false;
 			bool isac = false; // accelerated
@@ -1683,44 +1684,70 @@ ret:
 				<<FIM_CNS_NEWLINE;
 			if(isre)
 			{
-				args_t argsc;
-				fim_int src_dir = 1;
+				gss.isre = isre;
+				gss.src_dir = ((c=='-')?-1:1);
 
-				if( c == '-' )
-					src_dir = ((c=='-')?-1:1);
 				if( (c == '+' || c == '-' ) && sl == 3 && s[1] == '/' && s[2] == '/' )
-					argsc.push_back(last_regexp_);
+					gss.s_str = last_regexp_;
 				else
                                 {
 				        const int sks = (c == '+' || c == '-' ) ? 1 : 0;
-					argsc.push_back(string(s).substr(1+sks,sl-2-sks));
+					gss.s_str = (string(s).substr(1+sks,sl-2-sks));
                                 }
 				FIM_PR('.');
-				return regexp_goto(argsc,src_dir);
+				goto ret;
 			}
 go_jump:
 			if( ( nf != cf ) || ( np != cp ) )
 			{	
-				const fim::string ncf = current();
-				if(!(xflags&FIM_X_NOAUTOCMD))
-				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,ncf); }
-				if( ispg )
-				{
-					if(viewport())
-						viewport()->img_goto_page(np);
-				}
-				else
-					goto_image(nf,isfg?true:false);
-
-				if(!(xflags&FIM_X_NOAUTOCMD))
-				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,ncf); }
+				gss.nf = nf;
+				gss.np = np;
+				gss.isfg = isfg;
+				gss.ispg = ispg;
+				goto ret;
 			}
 		}
 ret:
 		errmsg = FIM_CNS_EMPTY_RESULT;
 err:
+		gss.errmsg = errmsg;
 		FIM_PR('.');
-		return errmsg;
+		return gss;
+	} /* goto_image_compute */
+
+	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
+	{
+		// Note: further cleanup and simplifications needed.
+		const fim_goto_spec_t gss = goto_image_compute (s,xflags);
+
+		if (gss.errval)
+			return FIM_CNS_EMPTY_RESULT;
+		if (gss.s_str.size())
+			return regexp_goto({gss.s_str},gss.src_dir);
+		else
+		if (gss.nf!=FIM_CNS_BAD_FILE_INDEX)
+		{
+			const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE);
+
+			if( ( gss.nf != cf ) || ( gss.np != cp ) )
+			{	
+				const fim::string ncf = current();
+				if(!(xflags&FIM_X_NOAUTOCMD))
+				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,ncf); }
+				if( gss.ispg )
+				{
+					if(viewport())
+						viewport()->img_goto_page(gss.np);
+				}
+				else
+					goto_image(gss.nf,gss.isfg?true:false);
+
+				if(!(xflags&FIM_X_NOAUTOCMD))
+				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,ncf); }
+			}
+			return FIM_CNS_EMPTY_RESULT;
+		}
+		return FIM_CNS_EMPTY_RESULT;
 	} /* goto_image_internal */
 
 	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp);
