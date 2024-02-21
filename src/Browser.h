@@ -99,6 +99,18 @@ class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 	void adj_cf(void){cf_ = size() ? size()-1:0; }
 };
 
+struct fim_goto_spec_t
+{
+	fim_err_t errval{}; // need to simplify this: too much state
+	fim::string errmsg{FIM_CNS_EMPTY_STRING};
+	fim::string s_str{};
+	fim_int src_dir{0};
+	fim_int nf{FIM_CNS_BAD_FILE_INDEX}, np{0};
+	bool isfg{false};
+	bool ispg{false};
+	bool isre{false};
+};
+
 class Browser FIM_FINAL 
 #ifdef FIM_NAMESPACES
 :public Namespace
@@ -174,6 +186,7 @@ class Browser FIM_FINAL
 	fim::string regexp_goto(const args_t& args, fim_int src_dir=1);
 	fim_cxr fcmd_prefetch(const args_t& args);
 	fim_cxr fcmd_goto(const args_t& args);
+	fim_goto_spec_t goto_image_compute(const fim_char_t *s, fim_xflags_t xflags)const;
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(fim_int n, bool isfg=false);
 	fim_cxr fcmd_align(const args_t& args);
