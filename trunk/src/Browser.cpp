@@ -37,6 +37,9 @@
 
 #define FIM_DIFFERENT_VARS FIM_WANT_PIC_LVDN && FIM_USE_CXX11 /* experimental */
 
+#define FIM_GOTO_ONE_JUMP_REGEX "[-+]?[0-9]+[%]?[fp]?"
+#define FIM_GOTO_MULTI_JUMP_REGEX "^(" FIM_GOTO_ONE_JUMP_REGEX ")+$"
+
 #include <utility>	/* std::swap */
 #include <random>	/* std::random_device */
 #include <algorithm>	/* std::shuffle */
@@ -1718,34 +1721,66 @@ err:
 	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
 	{
 		// Note: further cleanup and simplifications needed.
-		const fim_goto_spec_t gss = goto_image_compute (s,xflags);
+		const int cf = flist_.cf(), cp =getGlobalIntVariable(FIM_VID_PAGE);
+		fim_int nf = cf, np = cp;
 
-		if (gss.errval)
-			return FIM_CNS_EMPTY_RESULT;
-		if (gss.s_str.size())
-			return regexp_goto({gss.s_str},gss.src_dir);
-		else
-		if (gss.nf!=FIM_CNS_BAD_FILE_INDEX)
+		if (s && *s && regexp_match(s,FIM_GOTO_MULTI_JUMP_REGEX,1))
 		{
-			const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE);
+			const char * o = s;
+			const char * n;
 
-			if( ( gss.nf != cf ) || ( gss.np != cp ) )
+			do
+			{
+				n = o;
+				while (*n && !isdigit(*n)) // +-
+					++n;
+				while (*n &&  isdigit(*n)) // number
+					++n;
+				while (*n && (*n=='%' || tolower(*n)=='f' || tolower(*n)=='p')) // % [fp]
+					++n;
+
+				const auto ss = string(o).substr(0,n-o);
+				const fim_goto_spec_t gss = goto_image_compute (ss.c_str(),xflags);
+
+				if (cf != gss.nf)
+					nf = gss.nf;
+				if (cp != gss.np)
+					np = gss.np;
+				o = n;
+			}
+			while (*o);
+		}
+		else
+		{
+			const fim_goto_spec_t gss = goto_image_compute (s,xflags);
+
+			if (gss.errval)
+				return FIM_CNS_EMPTY_RESULT;
+
+			if (gss.s_str.size())
+				return regexp_goto({gss.s_str},gss.src_dir);
+			nf = gss.nf;
+			np = gss.np;
+		}
+
+		if (nf!=FIM_CNS_BAD_FILE_INDEX)
+		{
+			if( ( nf != cf ) || ( np != cp ) )
 			{	
 				const fim::string ncf = current();
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,ncf); }
-				if( gss.ispg )
-				{
+
+				if( nf != cf )
+					goto_image(nf,true);
+
+				if( np != cp )
 					if(viewport())
-						viewport()->img_goto_page(gss.np);
-				}
-				else
-					goto_image(gss.nf,gss.isfg?true:false);
+						viewport()->img_goto_page(np);
 
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,ncf); }
 			}
-			return FIM_CNS_EMPTY_RESULT;
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	} /* goto_image_internal */
