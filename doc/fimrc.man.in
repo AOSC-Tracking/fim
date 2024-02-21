@@ -406,7 +406,7 @@ getenv \fR\fI{identifier}\fR: create a variable with the same value as the '\fR\
 .B
 goto
 .fi
-goto {['+'|'-']\fR\fI{number}\fR['%']['f'|'p'|'F'|'P']} | {/\fR\fI{regexp}\fR/} | {?\fR\fI{filename}\fR} | {'+//'} | {'+/'|'-/'}[\fR\fIC\fR] | {{'+'|'-'}\fR\fI{identifier}\fR['+']}: jump to an image.
+goto {['+'|'-']\fR\fI{number}\fR['%']['f'|'p'|'F'|'P']}+ | {/\fR\fI{regexp}\fR/} | {?\fR\fI{filename}\fR} | {'+//'} | {'+/'|'-/'}[\fR\fIC\fR] | {{'+'|'-'}\fR\fI{identifier}\fR['+']}: jump to an image.
 .fi
 If \fR\fI{number}\fR is given, and not surrounded by any specifier, go to image at index \fR\fI{number}\fR.
 .fi
@@ -416,7 +416,7 @@ If prepended by '-' or '+', the jump is relative to the current index.
 .fi
 The 'f' specifier asks for the jump to occur within the files (same for 'F', but accelerates if keep pressing).
 .fi
-The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing).
+The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing). The above form can be concatenated several times, but only the last occurrence of either file or page goto will be effective.
 .fi
 If /\fR\fI{regexp}\fR/ is given, jump to the first image matching the given /\fR\fI{regexp}\fR/ regular expression pattern.
 .fi

@@ -387,6 +387,15 @@ if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/s";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/d";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.3.12
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/u";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.0.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12 # goto: only last subspec effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+2f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.3.12 # goto: only last subspec effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12 # goto: only last subspec effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2p+1p";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.0.12 # goto: page jump idempotent on one-pager
+if ENABLE_PS
+	if $(MAKE) -C $(top_srcdir)/media/multipage ; then \
+		$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1p+1p";c=page; goto "+1p+1p";d=page; goto "+1p+1p";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.1.2.0; \
+	fi # goto: page jump idempotent on one-pager
+endif
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+50%";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "sort"; a=_fileindex; goto "+prime"; b=_fileindex;goto "+prime"; c=_fileindex; goto "+prime"; d=_fileindex; goto "+prime"; e=_fileindex; stdout a.".".b.".".c.".".d.".".e; quit' | grep 0.2.5.6.1
