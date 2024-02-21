@@ -734,7 +734,8 @@ nop:
 #if FIM_WANT_GOTOLAST
 				/* on failed load, try jumping to last meaningful file */
 				{
-					const fim_int fi = getGlobalIntVariable(FIM_VID_FILEINDEX), li = getGlobalIntVariable(FIM_VID_LASTFILEINDEX);
+					const fim_int fi = getGlobalIntVariable(FIM_VID_FILEINDEX);
+					const fim_int li = getGlobalIntVariable(FIM_VID_LASTFILEINDEX);
 					if ( fi > li && li > 0 )
 						setGlobalVariable(FIM_VID_FILEINDEX, li),
 						flist_.set_cf(li-1);
@@ -786,7 +787,9 @@ ret:
 #else /* FIM_WANT_BACKGROUND_LOAD */
 					 cache_.
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-					useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState,getGlobalIntVariable(FIM_VID_PAGE)) );// FIXME
+					useCachedImage(
+						cache_key_t{current(),
+						  {getGlobalIntVariable(FIM_VID_PAGE), ((current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)}}, &viewportState));// FIXME
 				viewport()->ViewportState::operator=(viewportState);
 		}
 		}
@@ -828,13 +831,13 @@ ret:
 			goto apf;
 		}
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
+		if(cache_.prefetch(get_next_filename( 1).c_str()))// we prefetch 1 file forward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
 #else /* FIM_AUTOSKIP_FAILED */
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif /* FIM_AUTOSKIP_FAILED */
-		if(cache_.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE)))// we prefetch 1 file backward
+		if(cache_.prefetch(get_next_filename(-1)))// we prefetch 1 file backward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename(-1));/* if the filename doesn't match a loadable image, we remove it */
 #else /* FIM_AUTOSKIP_FAILED */
@@ -1341,6 +1344,7 @@ nop:
 			goto ret;
 		}
 #if FIM_WANT_GOTOLAST
+		// TODO: need page level memory/jump, too (see FIM_VID_LASTPAGEINDEX)
 		if(getGlobalIntVariable(FIM_VID_LASTFILEINDEX) != current_image())
 			setGlobalVariable(FIM_VID_LASTFILEINDEX, current_image());
 		flist_.set_cf(n);
@@ -1352,7 +1356,7 @@ nop:
 #endif /* FIM_WANT_LASTGOTODIRECTION */
 #endif /* FIM_WANT_GOTOLAST */
 		FIM_PR(' ');
-		setGlobalVariable(FIM_VID_PAGE,0);
+		setGlobalVariable(FIM_VID_PAGE,FIM_CNS_FIRST_PAGE);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		//setGlobalVariable(FIM_VID_FILEINDEX,cf_);
 		setGlobalVariable(FIM_VID_FILENAME, current());
