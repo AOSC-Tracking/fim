@@ -309,7 +309,7 @@ namespace rl
 namespace fim{
 enum fim_image_source_t FIM_ENUM_BASE { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */
 enum fim_xflags_t /*FIM_ENUM_BASE*/ { FIM_X_NULL=0,FIM_X_HISTORY=1,FIM_X_QUIET=2,FIM_X_NOAUTOCMD=4};	/* TODO: may introduce 'sandbox' like flags, here (for instance, for no-system/pipe-interacting executions) */
-typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the current cache key
+typedef std::pair<fim::string,std::pair<fim_page_t,fim_image_source_t> > cache_key_t;	//the current cache key
 enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 }
 
@@ -497,6 +497,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_STEPS_DEFAULT	 	"20%"
 #define FIM_CNS_STEPS_DEFAULT_P		true	/* FIXME */
 #define FIM_CNS_STEPS_MIN	 1
+#define FIM_CNS_FIRST_PAGE	0
 #define FIM_CNS_WGROW_STEPS_DEFAULT	 1
 #define FIM_CNS_WENLARGE_STEPS_DEFAULT	 10
 #define FIM_CNS_SCALEDELTA	 0.01f
@@ -780,6 +781,7 @@ namespace fim
 #define FIM_VID_IN_SLIDESHOW			"_stop_slideshow"	/* "[internal,g:] if it becomes 1 during a slideshow, stop it; gets unset before each '" FIM_FLT_WHILE "'." */
 #define FIM_INTERNAL_STATE_CHANGED 		"__internal_state_changed" /* "[internal,i:] changed on alias or bindings update" */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
+//#define FIM_VID_LASTPAGEINDEX			"_lastpageindex"	/* "[out,g:] the last visited file page index." */
 #define FIM_VID_LASTGOTODIRECTION			"_lastgotodirection"	/* "[out,g:] the last file goto direction (either string '+1' or string '-1')." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out,g:] current image list length (number of visible images)." */
 #define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %k for the value of i:_comment (comment description) variable in square brackets; %l for current image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP is copied verbatim except for contained sequences of the form %:VAR:, which expand to the value of variable i:VAR; this is meant to be used like in e.g. '%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where the EXIF-set variable EXIF_DateTimeOriginal (make sure you have libexif for this) are used only if present." */

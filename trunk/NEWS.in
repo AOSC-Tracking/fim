@@ -43,6 +43,8 @@
 # * Misc fixes
 # (r2076,r2079)
  * --slideshow option now accepts decimal values
+# (r2089)
+# * limited cache support for multipage files
 
                 Version 0.6-rc2
 

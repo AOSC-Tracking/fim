@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -224,7 +224,7 @@ rt:
 			goto ret;
 		}
 
-		if(!loadNewImage(key,0,true))
+		if(!loadNewImage(key,true))
 		{
 			retval = -1;
 			if(FIM_ALLOW_CACHE_DEBUG)
@@ -242,8 +242,14 @@ ret:
 		return retval;
 	}
 
-	ImagePtr Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
+	int Cache::prefetch(fid_t fid)
 	{
+		return prefetch(cache_key_t{fid,{FIM_CNS_FIRST_PAGE,FIM_E_FILE}});
+	}
+
+	ImagePtr Cache::loadNewImage(cache_key_t key, fim_bool_t delnc)
+	{
+		const fim_page_t page {key.second.first};
 		ImagePtr ni = FIM_NULL;
 		FIM_PR('*');
 
@@ -400,7 +406,7 @@ ret:
 #endif /* FIM_WANT_MIPMAPS */
 			if(
 				( (usageCounter_[image->getKey()])==0 && 
-				image->getKey().second!=FIM_E_STDIN  )
+				image->getKey().second.second!=FIM_E_STDIN  )
 				 || force)
 			{
 				fim_int minci = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
@@ -430,7 +436,7 @@ ret:
 						cache_key_t key = lrui->getKey();
 						if( ( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ ) || force )
 							viewportInfo_.erase(key);
-						if(( key.second != FIM_E_STDIN ))
+						if(( key.second.second != FIM_E_STDIN ))
 						{	
 							this->erase( lrui );
 						}
@@ -450,7 +456,7 @@ ret:
 		return true;
 	}
 
-	ImagePtr Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
+	ImagePtr Cache::useCachedImage(cache_key_t key, ViewportState *vsp)
 	{
 		/*
 		 * Shall rename to get().
@@ -473,12 +479,12 @@ ret:
 		FIM_PR('*');
 
 		if(FIM_ALLOW_CACHE_DEBUG)
-			std::cout << FIM_CNS_DBG_CMDS_PFX << "cache check for"<< ( key.second == FIM_E_FILE ? " file  ": " stdin ")<<key.first<<"\n";
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "cache check for"<< ( key.second.second == FIM_E_FILE ? " file  ": " stdin ")<<key.first<<"\n";
 		if(!is_in_cache(key)) 
 		{
 			if(FIM_ALLOW_CACHE_DEBUG)
 				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache does not have   "<< key.first << " \n";
-			image = loadNewImage(key,page,false);
+			image = loadNewImage(key,false);
 			if(!image)
 				goto ret; // bad luck!
 			if(!image->cacheable())
@@ -541,7 +547,8 @@ ret:
 	{
 		/* Cache an image coming from stdin (that is, not reloadable).
 		 * */
-		const cache_key_t key(FIM_STDIN_IMAGE_NAME,FIM_E_STDIN);
+		const fim_page_t page = FIM_CNS_FIRST_PAGE;
+		const cache_key_t key{FIM_STDIN_IMAGE_NAME,{page,FIM_E_STDIN}};
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
 
@@ -609,7 +616,7 @@ ret:
 #else
 		for(ccachels_t::const_iterator ci=usageCounter_.begin();ci!=usageCounter_.end();++ci)
 		{	
-			cache_report<<((*ci).first.first) <<":" <<((*ci).first.second) <<" ,usage:" <<((*ci).second) <<"\n";
+			cache_report<<((*ci).first.first) <<":" <<((*ci).first.second.first) <<":" <<((*ci).first.second.second) <<" ,usage:" <<((*ci).second) <<"\n";
 		}
 		cache_report << "clone pool contents : \n";
 		for(std::set< fim::ImagePtr >::const_iterator  cpi=clone_pool_.begin();cpi!=clone_pool_.end();++cpi)

@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ class Cache FIM_FINAL
 	bool is_in_clone_cache(fim::ImagePtr oi)const;
 	fim_time_t last_used(cache_key_t key)const;
 	bool cacheNewImage( fim::ImagePtr ni );
-	ImagePtr loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc);
+	ImagePtr loadNewImage(cache_key_t key, fim_bool_t delnc);
 	ImagePtr getCachedImage(cache_key_t key);
 	int erase(fim::ImagePtr oi);
 	int erase_clone(fim::ImagePtr oi);
@@ -84,8 +84,9 @@ class Cache FIM_FINAL
 	Cache& operator= (const Cache&rhs) = delete;
 	public:
 	bool freeCachedImage(ImagePtr image, const ViewportState *vsp, bool force);
-	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
+	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp);
 	ImagePtr setAndCacheStdinCachedImage(ImagePtr image);
+	int prefetch(fim::string key);
 	int prefetch(cache_key_t key);
 	void touch(cache_key_t key);
 	fim::string getReport(int type = FIM_CR_CD )const;
@@ -116,16 +117,16 @@ class PACA FIM_FINAL	/* Parallel Cache */
 	Cache& cache_;
 	static FIM_CONSTEXPR int dpc = 0; /* debug parallel cache */
 
-	void operator () (const fid_t& rid)
+	void operator () (const cache_key_t & key)
 	{
-		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ...\n";
+		if(dpc) std::cout << __FUNCTION__ << ": "<< key.first << " ...\n";
 		if(dpc) std::cout << (&cache_) << " : " << cache_.getReport() << "\n";
 
-		if(dpc) if( ! cache_.is_in_cache(cache_key_t(rid,FIM_E_FILE)))
-			std::cout << __FUNCTION__ << ": "<< rid << " ... sleeping\n",
+		if(dpc) if( ! cache_.is_in_cache(key))
+			std::cout << __FUNCTION__ << ": "<< key.first << " ... sleeping\n",
 			std::this_thread::sleep_for(std::chrono::milliseconds(4000));
-		cache_.prefetch(cache_key_t(rid,FIM_E_FILE));
-		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ... done\n";
+		cache_.prefetch(key);
+		if(dpc) std::cout << __FUNCTION__ << ": "<< key.first << " ... done\n";
 	}
 
 	PACA(const PACA & paca) : cache_(paca.cache_)
@@ -134,7 +135,7 @@ class PACA FIM_FINAL	/* Parallel Cache */
 	}
 	explicit PACA(Cache& cache):cache_(cache) { }
 
-	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
+	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp)
 	{
 		ImagePtr image = FIM_NULL;
 		if(dpc) std::cout << __FUNCTION__ << ": " << key.first << "\n";
@@ -144,7 +145,7 @@ class PACA FIM_FINAL	/* Parallel Cache */
 	       		t.join();
 			if(dpc) std::cout << __FUNCTION__ << ": " << key.first << " joined()\n";
 		}
-		image = cache_.useCachedImage(key, vsp, page);
+		image = cache_.useCachedImage(key, vsp);
 		if(dpc) std::cout << __FUNCTION__ << ": " << key.first << " done\n";
 		if(dpc) std::cout << (&cache_) << " : " << cache_.getReport() << "\n";
 		return image;
@@ -152,6 +153,7 @@ class PACA FIM_FINAL	/* Parallel Cache */
 
 	void asyncPrefetch(const fid_t& rid)
 	{
+		const cache_key_t key {rid,{FIM_CNS_FIRST_PAGE,FIM_E_FILE}};
 		if(dpc) std::cout << __FUNCTION__ << ": " << rid << "\n";
 		if( t.joinable() )
 		{
@@ -159,7 +161,7 @@ class PACA FIM_FINAL	/* Parallel Cache */
 			if(dpc) std::cout << __FUNCTION__ << ": " << rid << " join()\n";
 	       		t.join();
 		}
-		t = std::thread(*this,rid); // operator ()
+		t = std::thread(*this,key); // operator ()
 	}
 	~PACA(void)
 	{

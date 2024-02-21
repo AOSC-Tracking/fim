@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1025,7 +1025,7 @@ labeldone:
 
 	bool Image::goto_page(fim_page_t j)
 	{
-		fim_fn_t s(fname_);
+		const fim_fn_t s(fname_);
 		bool retval = false;
 
 		FIM_PR('*');
@@ -1036,7 +1036,8 @@ labeldone:
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
 			//std::cout<<"about to goto page "<<j<<"\n";
-			setGlobalVariable(FIM_VID_PAGE ,j);
+			//setGlobalVariable(FIM_VID_LASTPAGEINDEX, getGlobalIntVariable(FIM_VID_PAGE));
+			setGlobalVariable(FIM_VID_PAGE, j);
 			retval = load(s.c_str(),FIM_NULL,j);
 			//return true;
 		}
@@ -1049,7 +1050,7 @@ ret:
 
 	cache_key_t Image::getKey(void)const
 	{
-		return cache_key_t(fname_.c_str(),fis_);
+		return cache_key_t{fname_.c_str(),{FIM_CNS_FIRST_PAGE,fis_}};
 	}
 
 	bool Image::is_multipage(void)const
@@ -1223,7 +1224,10 @@ ret:
 		return this->mm_.byte_size();
 	}
 #endif /* FIM_WANT_MIPMAPS */
-	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
+	bool Image::cacheable(void)const {
+		//return this->n_pages() == 1 ;
+		return true;
+	}
 	void Image::set_auto_props(fim_int autocenter, fim_int autotop)
 	{
 		setVariable(FIM_VID_WANT_AUTOCENTER,autocenter);
