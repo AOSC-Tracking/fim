@@ -24,6 +24,7 @@
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
  * --slideshow option now accepts decimal values
+ * bugfix: avoid memory leak while decoding PDF
 
                 Version 0.6-rc2
 
