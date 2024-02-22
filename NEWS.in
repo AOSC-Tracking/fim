@@ -41,7 +41,7 @@
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
 # (r2077)
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
-# (r2075,r2077,r2090)
+# (r2075,r2077,r2090-r2091)
 # * Misc fixes
 # (r2076,r2079)
  * --slideshow option now accepts decimal values

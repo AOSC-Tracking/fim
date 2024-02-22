@@ -2,15 +2,17 @@
 ../..//media/image.jpg ../..//media/fim.png ../..//media/image.png 
 *
 * before  reloads
-#cache check for file  ../..//media/image.jpg
-#cache does not have   ../..//media/image.jpg 
-#cache loaded          ../..//media/image.jpg
+#cache check for  file  ../..//media/image.jpg at page 0
+#cache does not have    file image.jpg at page 0
+#cache loaded           file image.jpg at page 0
+#going to cache: file image.jpg at page 0
 * between reloads
-#cache forced to free  ../..//media/image.jpg
-#cache erases          ../..//media/image.jpg
-#cache check for file  ../..//media/image.jpg
-#cache does not have   ../..//media/image.jpg 
-#cache loaded          ../..//media/image.jpg
+#cache to free          file image.jpg at page 0
+#cache erases           file image.jpg at page 0
+#cache check for  file  ../..//media/image.jpg at page 0
+#cache does not have    file image.jpg at page 0
+#cache loaded           file image.jpg at page 0
+#going to cache: file image.jpg at page 0
 * after  reloads
-#cache check for file  ../..//media/image.jpg
-#cache frees           ../..//media/image.jpg
+#cache check for  file  ../..//media/image.jpg at page 0
+#cache erases also      file image.jpg at page 0

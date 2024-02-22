@@ -484,7 +484,7 @@ namespace fim
         void Viewport::setImage(fim::ImagePtr ni)
 	{
 #ifdef FIM_CACHE_DEBUG
-		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
+		std::cout << "setting image \""<< ni->getKey() << " in viewport: "<< ni << "\n\n";
 #endif /* FIM_CACHE_DEBUG */
 
 		if(ni)

@@ -1050,7 +1050,7 @@ ret:
 
 	cache_key_t Image::getKey(void)const
 	{
-		return cache_key_t{fname_.c_str(),{FIM_CNS_FIRST_PAGE,fis_}};
+		return cache_key_t{fname_.c_str(),{page_,fis_}};
 	}
 
 	bool Image::is_multipage(void)const
