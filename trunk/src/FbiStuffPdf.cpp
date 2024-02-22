@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2023 Michele Martone
+ (c) 2008-2024 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -269,6 +269,7 @@ pdf_done(void *data)
     	struct pdf_state_t *ds = (struct pdf_state_t*)data;
 	if(!ds) return;
 
+	if(ds->bmp)		delete ds->bmp;
 	if(ds->pd)		delete ds->pd ;
 	if(ds->od)	delete ds->od ;
 	if (globalParams)	delete globalParams;

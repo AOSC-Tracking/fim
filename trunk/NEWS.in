@@ -47,6 +47,8 @@
  * --slideshow option now accepts decimal values
 # (r2089)
 # * limited cache support for multipage files
+# (r2092)
+ * bugfix: avoid memory leak while decoding PDF
 
                 Version 0.6-rc2
 
