@@ -404,8 +404,10 @@ ret:
 			viewportInfo_[image->getKey()] = *vsp;
 		if( is_in_clone_cache(image) )
 		{
-			usageCounter_[image->getKey()]--;
 			FIM_PR('c');
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "decrement clones count " << image->getKey() << "\n";
+			usageCounter_[image->getKey()]--;
 			erase_clone(image);	// we _always_ immediately delete clones
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport());
 			goto ret;
@@ -415,12 +417,18 @@ ret:
 		{
 			FIM_PR('n');
 			if(FIM_ALLOW_CACHE_DEBUG)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "this is not in cache   " << image->getKey() << "\n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "can't unuse uncached!! " << image->getKey() << "\n";
 		}
 		else
 		if( is_in_cache(image->getKey()) )
 		{
 			FIM_PR('-');
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX
+					<< "unuse  " << image->getKey()
+					<< "  force:" << force
+					<< "  usageCounter_():" << (usageCounter_[image->getKey()])
+					<< "  cached_elements():" << cached_elements() << "\n";
 			lru_touch( image->getKey() ); // we have been using it until now
 			usageCounter_[image->getKey()]--;
 #if FIM_WANT_MIPMAPS
@@ -432,10 +440,8 @@ ret:
 				image->getKey().second.second!=FIM_E_STDIN  )
 				 || force)
 			{
-				fim_int minci = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
-
-				if ( minci < 1 )
-					minci = 4;
+				const fim_int minciv = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
+				const fim_int minci = ( minciv < 1 ) ? 4 : minciv;
 #if 0
 				if( need_free() && image->getKey().second!=FIM_E_STDIN )
 				{
@@ -447,6 +453,8 @@ ret:
 				if( ( need_free() && cached_elements() > minci ) || force )
 				{
 					ImagePtr lrui;
+					if(FIM_ALLOW_CACHE_DEBUG)
+						std::cout << FIM_CNS_DBG_CMDS_PFX << "cache suggested free  " << image->getKey() << (force?"  forced=1":"  forced=0") << "\n";
 					if(force)
 						lrui = image;
 					else
@@ -458,7 +466,7 @@ ret:
 					{
 						const cache_key_t key = lrui->getKey();
 						if(FIM_ALLOW_CACHE_DEBUG)
-							std::cout << FIM_CNS_DBG_CMDS_PFX << "cache to free          " << key << "\n";
+							std::cout << FIM_CNS_DBG_CMDS_PFX << "cache to free          " << key << (force?"  forced=1":"  forced=0") << "\n";
 						if( ( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ ) || force )
 							viewportInfo_.erase(key);
 						if(( key.second.second != FIM_E_STDIN ))
@@ -466,6 +474,9 @@ ret:
 							this->erase( lrui );
 						}
 					}
+					else
+						if(FIM_ALLOW_CACHE_DEBUG)
+							std::cout << FIM_CNS_DBG_CMDS_PFX << "nothing to free: (" << cached_elements() << " cached elements)\n";
 					// missing usageCounter_.erase()..
 				}
 #endif
@@ -533,7 +544,7 @@ ret:
 					//ImagePtr oi=image;
 					image = ImagePtr ( new Image(*image) ); // cloning
 					if(FIM_ALLOW_CACHE_DEBUG)
-						std::cout << FIM_CNS_DBG_CMDS_PFX << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << "\n";
+						std::cout << FIM_CNS_DBG_CMDS_PFX << "  cloned image: \"" << key << "\" "<< image << "\n";
 						//std::cout << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << " from \""<<fim_basename_of(oi->getName()) <<"\" " << oi << "\n";
 				}
 				catch(FimException e)

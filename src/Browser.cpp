@@ -1416,7 +1416,7 @@ ret:
 	{
 		fim_goto_spec_t gss;
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
-		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages());
+		const int cf = flist_.cf(), cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages());
 		const fim_int fc = n_files();
 		fim_int gv = 0,nf = cf,mv = 0,np = cp;
 		FIM_PR('*');
@@ -1721,7 +1721,7 @@ err:
 	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
 	{
 		// Note: further cleanup and simplifications needed.
-		const int cf = flist_.cf(), cp =getGlobalIntVariable(FIM_VID_PAGE);
+		const int cf = flist_.cf(), cp = getGlobalIntVariable(FIM_VID_PAGE);
 		fim_int nf = cf, np = cp;
 
 		if (s && *s && regexp_match(s,FIM_GOTO_MULTI_JUMP_REGEX,1))
@@ -1776,7 +1776,8 @@ err:
 
 				if( np != cp )
 					if(viewport())
-						viewport()->img_goto_page(np);
+						// viewport()->img_goto_page(np); // modifying the current() image_ breaks a subsequent freeCachedImage originating from a reload()
+						setGlobalVariable(FIM_VID_PAGE,np); // this instead, is only symbolic and it's enough for now
 
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,ncf); }

@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -979,7 +979,9 @@ nop:
 	bool Viewport::img_goto_page(fim_page_t j)
 	{
 		if(getImage())
+		{
 			return getImage()->goto_page(j);
+		}
 		return false;
 	}
 
