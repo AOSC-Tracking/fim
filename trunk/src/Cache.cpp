@@ -28,10 +28,13 @@
 
 #define FIM_CACHE_MIPMAP 1
 #define FIM_CACHE_INSPECT 0
+#define FIM_PRINT_REPORT(X)   printf("CACHE:%c:%20s:%s",X,__func__,getReport(FIM_CR_CD).c_str());
 #if FIM_CACHE_INSPECT
-#define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(FIM_CR_CD).c_str());
+#define FIM_PR(X)   FIM_PRINT_REPORT(X)
+//#define FIM_PS(X,S) FIM_PR(X); std::cout << " " << __func__ << "(" << S << ")\n";
 #else /* FIM_CACHE_INSPECT */
 #define FIM_PR(X) 
+//#define FIM_Ps(X) 
 #endif /* FIM_CACHE_INSPECT */
 
 #define FIM_VERBOSE_CACHE 1
@@ -52,6 +55,14 @@
 	extern CommandConsole cc;
 namespace fim
 {
+	std::ostream& operator<<(std::ostream& os, const cache_key_t & key)
+	{
+		os << ( key.second.second == FIM_E_FILE ? "file " : "stdin " );
+		os << fim_basename_of(key.first) << " at page ";
+		os << key.second.first << "";
+		return os;
+	}
+
 	static fim_time_t fim_time(void) FIM_NOEXCEPT /* stand-alone function */
 	{
 #ifdef HAVE_SYS_TIME_H
@@ -160,8 +171,10 @@ ret:
 		if(mci > 0 && cached_elements() > mci)
 			goto rt;
 rf:
+		FIM_PR('n');
 		return false;
 rt:
+		FIM_PR('y');
 		return true;
 	}
 
@@ -184,15 +197,17 @@ rt:
 	bool Cache::is_in_cache(cache_key_t key)const
 	{
 		FIM_LOUD_CACHE_STUFF;
-		return ( imageCache_.find(key)!=imageCache_.end() )
+		const bool iic = ( imageCache_.find(key) != imageCache_.end() )
 			&&
 			((*(imageCache_.find(key))).second!=FIM_NULL) ;
+		return iic;
 	}
 
 	int Cache::prefetch(cache_key_t key)
 	{
 		int retval = 0;
 		FIM_PR('*');
+		//FIM_PS('*',key);
 
 		FIM_LOUD_CACHE_STUFF;
 		if(is_in_cache(key))
@@ -215,7 +230,7 @@ rt:
 			goto ret;// just a fix in the case the browser is still lame
 		}
 		if(FIM_ALLOW_CACHE_DEBUG)
-			std::cout << FIM_CNS_DBG_CMDS_PFX << "cache prefetch req    "<< key.first << "\n";
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "cache prefetch req     " << key << "\n";
 
     		if( regexp_match(key.first.c_str(),FIM_CNS_ARCHIVE_RE,1) )
 		{
@@ -260,7 +275,7 @@ ret:
 		if( ( ni = ImagePtr( new Image(key.first.c_str(), FIM_NULL, page) ) ) )
 		{
 			if(FIM_ALLOW_CACHE_DEBUG)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache loaded          "<<key.first.c_str()<<"\n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache loaded           " << key << "\n";
 			if( ni->cacheable() )
 				cacheNewImage( ni );
 			else
@@ -281,7 +296,7 @@ ret:
 			ni = FIM_NULL; /* not a big problem */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
-		FIM_PR(' ');
+		FIM_PR('.');
 		return ni;
 	}
 	
@@ -299,13 +314,16 @@ ret:
 
 	bool Cache::cacheNewImage( fim::ImagePtr ni )
 	{
+		const cache_key_t key = ni->getKey();
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 		//if(FIM_ALLOW_CACHE_DEBUG)
 		//	std::cout << FIM_CNS_DBG_CMDS_PFX << "going to cache: "<< *ni /*<< " [" << ni << "]" */<< "\n";
-		this->imageCache_[ni->getKey()]=ni;
-		lru_touch( ni->getKey() );
-		usageCounter_[ ni->getKey()]=0; // we don't assume any usage yet
+		if(FIM_ALLOW_CACHE_DEBUG)
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "going to cache: "<< key << "\n";
+		this->imageCache_[key]=ni;
+		lru_touch( key );
+		usageCounter_[key]=0; // we don't assume any usage yet
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 		return true;
 	}
@@ -326,9 +344,7 @@ ret:
 			usageCounter_[key]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
 			if(FIM_ALLOW_CACHE_DEBUG)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache erases          "/*<< oi << " "*/ <<  oi->getName() /*<< " with timestamp " << lru_[oi->getKey()] */ << "\n";
-			//if(FIM_ALLOW_CACHE_DEBUG)
-			//	std::cout << FIM_CNS_DBG_CMDS_PFX << "erasing original " << fim_basename_of(oi->getName()) << "\n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache erases           " << (oi->getKey()) << "\n"; /*<< " with timestamp " << lru_[oi->getKey()] */
 			lru_.erase(key);
 			imageCache_.erase(key);
 			usageCounter_.erase(key);
@@ -395,6 +411,13 @@ ret:
 			goto ret;
 		}
 		else
+		if(!is_in_cache(image->getKey()) )
+		{
+			FIM_PR('n');
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "this is not in cache   " << image->getKey() << "\n";
+		}
+		else
 		if( is_in_cache(image->getKey()) )
 		{
 			FIM_PR('-');
@@ -421,8 +444,6 @@ ret:
 					usageCounter_.erase(key);
 				}
 #else
-				if(FIM_ALLOW_CACHE_DEBUG && force)
-					std::cout << FIM_CNS_DBG_CMDS_PFX << "cache forced to free  "<<image->getName()<<"\n";
 				if( ( need_free() && cached_elements() > minci ) || force )
 				{
 					ImagePtr lrui;
@@ -430,10 +451,14 @@ ret:
 						lrui = image;
 					else
 						lrui = get_lru(true);
+//					if(FIM_ALLOW_CACHE_DEBUG && force)
+//						std::cout << FIM_CNS_DBG_CMDS_PFX << "cache forced to free  " << lrui->getName() << "\n";
 					FIM_PR('o');
 					if( lrui ) 
 					{
-						cache_key_t key = lrui->getKey();
+						const cache_key_t key = lrui->getKey();
+						if(FIM_ALLOW_CACHE_DEBUG)
+							std::cout << FIM_CNS_DBG_CMDS_PFX << "cache to free          " << key << "\n";
 						if( ( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ ) || force )
 							viewportInfo_.erase(key);
 						if(( key.second.second != FIM_E_STDIN ))
@@ -479,11 +504,11 @@ ret:
 		FIM_PR('*');
 
 		if(FIM_ALLOW_CACHE_DEBUG)
-			std::cout << FIM_CNS_DBG_CMDS_PFX << "cache check for"<< ( key.second.second == FIM_E_FILE ? " file  ": " stdin ")<<key.first<<"\n";
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "cache check for " << ( key.second.second == FIM_E_FILE ? " file  ": " stdin ")<<key.first<<" at page " << key.second.first << "\n";
 		if(!is_in_cache(key)) 
 		{
 			if(FIM_ALLOW_CACHE_DEBUG)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache does not have   "<< key.first << " \n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache does not have    " << key << "\n";
 			image = loadNewImage(key,false);
 			if(!image)
 				goto ret; // bad luck!
@@ -597,8 +622,9 @@ ret:
 			  ( type == FIM_CR_CN && ( imageCache_.find(ci->first) != imageCache_.end()  && ci->second) )
 			  )
 			{
-				cache_report << fim_basename_of((*ci).first.first) << ":";
-				cache_report << (*ci).second << ":";
+				cache_report << "f=" << fim_basename_of((*ci).first.first) << ":";
+				cache_report << "p=" << (*ci).first.second.first << ":";
+				cache_report << "t=" << (*ci).second << ":";
 				fim_snprintf_XB(buf, sizeof(buf), imageCache_.find(ci->first)->second->byte_size());
 				cache_report << buf << "@" << last_used(ci->first) << " ";
 			}
@@ -643,7 +669,7 @@ ret:
 			if(ci->second)
 			{
 				if(FIM_ALLOW_CACHE_DEBUG)
-					std::cout << FIM_CNS_DBG_CMDS_PFX << "cache frees           " << (ci->first.first) << "\n";
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "cache erases also      " << (ci->first) << "\n";
 #if FIM_IMG_NAKED_PTRS
 				delete ci->second;
 #else /* FIM_IMG_NAKED_PTRS */

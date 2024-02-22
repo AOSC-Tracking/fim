@@ -35,6 +35,8 @@ typedef time_t fim_time_t;
 
 namespace fim
 {
+	std::ostream& operator<<(std::ostream& os, const cache_key_t & key);
+
 class Cache FIM_FINAL
 #ifdef FIM_NAMESPACES
 	:private Namespace
