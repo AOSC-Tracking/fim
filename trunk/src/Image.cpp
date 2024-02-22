@@ -259,7 +259,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 
 	{
 		reset();
-		if( !load(fname,fd,/*getGlobalIntVariable(FIM_VID_PAGE)*/page) || !check_valid() || (!fimg_) ) 
+		if( !load(fname,fd,page) || !check_valid() || (!fimg_) ) 
 		{
 			FIM_PR('e');
 			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
@@ -491,12 +491,16 @@ uhmpf:
 			goto ret;
 		}
 		else
+		{
 		       	page_=want_page;
+		}
 
 #ifdef FIM_NAMESPACES
 #if FIM_WANT_IMAGE_LOAD_TIME
 		setVariable(FIM_VID_IMAGE_LOAD_TIME,(fim_float_t)((getmilliseconds()-dt)/1000.0));
 #endif /* FIM_WANT_IMAGE_LOAD_TIME */
+		setVariable(FIM_VID_PAGE, page_);
+		//setVariable(FIM_VID_LASTPAGEINDEX, getIntVariable(FIM_VID_PAGE));
 		setVariable(FIM_VID_PAGES  ,fimg_->i.npages);
 		setVariable(FIM_VID_HEIGHT ,fimg_->i.height);
 		setVariable(FIM_VID_WIDTH ,fimg_->i.width );
@@ -1036,8 +1040,6 @@ labeldone:
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
 			//std::cout<<"about to goto page "<<j<<"\n";
-			//setGlobalVariable(FIM_VID_LASTPAGEINDEX, getGlobalIntVariable(FIM_VID_PAGE));
-			setGlobalVariable(FIM_VID_PAGE, j);
 			retval = load(s.c_str(),FIM_NULL,j);
 			//return true;
 		}
