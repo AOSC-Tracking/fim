@@ -22,6 +22,7 @@
  * Configure fixes (remove bashisms by SDL version recognition)
  * Scaling fix when starting with -o ca
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
+ * Introduce variable _lastpageindex to allow jump to last page
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
  * --slideshow option now accepts decimal values
  * bugfix: avoid memory leak while decoding PDF
