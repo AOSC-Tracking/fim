@@ -599,6 +599,20 @@ done:
 		       	return FIM_CNS_EMPTY_RESULT;
 	}
 
+#ifdef FIM_ITERATED_COMMANDS
+	fim_int CommandConsole::cap_iterations_counter(fim_int it_buf)const
+	{
+		const fim_int mit = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
+
+		if(mit>0 && it_buf > mit)
+		{
+			cout << "Command repeat parameter of " << it_buf << " exceeds the maximum allowed value of " << mit << ". You can adjust " FIM_VID_MAX_ITERATED_COMMANDS " to raise this limit.\n";
+			it_buf = FIM_MIN(mit,it_buf);
+		}
+		return it_buf;
+	}
+#endif /* FIM_ITERATED_COMMANDS */
+
 	bool CommandConsole::executeBinding(const fim_key_t c)
 	{
 		/*
@@ -608,20 +622,18 @@ done:
 		const bindings_t::const_iterator bi=bindings_.find(c);
 		fim_err_t status=FIM_ERR_NO_ERROR;
 #ifdef FIM_ITERATED_COMMANDS
-		static fim_int it_buf=-1; /* FIXME: make this it_buf_ instead. */
-
 		if( c>='0' && c <='9' && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
 		{
-			if(it_buf>0)
+			if(it_buf_>0)
 			{
-				const fim_int nit_buf = it_buf;
-				it_buf*=10;
-				it_buf+=c - FIM_KEY_OFFSET;
-				if( it_buf < nit_buf )
-					it_buf = nit_buf;
+				const fim_int nit_buf = it_buf_;
+				it_buf_*=10;
+				it_buf_+=c - FIM_KEY_OFFSET;
+				if( it_buf_ < nit_buf )
+					it_buf_ = nit_buf;
 			}
 			else
-			       	it_buf=c - FIM_KEY_OFFSET;
+			       	it_buf_=c - FIM_KEY_OFFSET;
 			goto ret;
 		}
 		if(c==FIM_SYM_NULL_KEY) // this branch happens to be entered in SDL mode. investigate way to avoid this check.
@@ -637,29 +649,21 @@ done:
 
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
 #ifdef FIM_ITERATED_COMMANDS
-			if(it_buf>1)
+			if(it_buf_>1)
 			{
-				const fim_int mit = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
-				fim::string nc;
+				fim::string nc = it_buf_ = cap_iterations_counter(it_buf_);
 
-				if(mit>0 && it_buf > mit)
-				{
-					cout << "Command repeat parameter of " << it_buf << " exceeds the maximum allowed value of " << mit << ". You can adjust " FIM_VID_MAX_ITERATED_COMMANDS " to raise this limit.\n";
-					it_buf = FIM_MIN(mit,it_buf);
-				}
-				nc=it_buf;
-				if(it_buf>1)
+				if(it_buf_>1)
 					nc+="{"+ba+"}";
 					/* adding ; before } can cause problems as long as ;; is not supported by the parser*/
 				else
 					nc = ba;
-					
+				it_buf_ = -1;
 				cout << "About to execute " << nc << " .\n";
 				status=execute_internal(nc.c_str(),FIM_X_HISTORY);
-				it_buf=-1;
 			}
 			else
-				it_buf = -1,
+				it_buf_ = -1,
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(ba.c_str(),FIM_X_NULL);
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
@@ -831,7 +835,16 @@ ret:
 			//an alias should be expanded. arguments are appended.
 			std::ostringstream oss;
 			cmd=ocmd;
-			oss << ocmd;
+#ifdef FIM_ITERATED_COMMANDS
+			if (it_buf_ > 1) // for when ocmd is non-interactive (e.g. -o gtk)
+			{
+				it_buf_ = cap_iterations_counter(it_buf_);
+				oss << it_buf_ << '{' << ocmd << '}';
+				it_buf_ = -1;
+			}
+			else
+#endif /* FIM_ITERATED_COMMANDS */
+				oss << ocmd;
 			// pipe to the parser
 			fim_sys_int r = pipe(fim_pipedesc),sl;
 			if(r!=0)

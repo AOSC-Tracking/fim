@@ -134,6 +134,9 @@ class CommandConsole FIM_FINAL :
 	 */
 	fim_cls last_action_;
 	
+#ifdef FIM_ITERATED_COMMANDS
+	fim_int it_buf_{-1};
+#endif /* FIM_ITERATED_COMMANDS */
 #ifdef FIM_RECORDING
 	enum RecordMode { Recording, Playing, Normal };
 	RecordMode recordMode_;
@@ -300,6 +303,9 @@ class CommandConsole FIM_FINAL :
 	fim_cxr fcmd_commands_list(const args_t& args);
 	fim_cxr fcmd_set(const args_t& args);
 	fim_cxr fcmd_unalias(const args_t& args);
+#ifdef FIM_ITERATED_COMMANDS
+	fim_int cap_iterations_counter(fim_int it_buf)const;
+#endif /* FIM_ITERATED_COMMANDS */
 	bool executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim_cmd_id cmd);
