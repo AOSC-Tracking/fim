@@ -1151,6 +1151,11 @@ _lastgotodirection
 .fi
 .na
 .B
+_lastpageindex
+[out,g:] the last visited file page index.
+.fi
+.na
+.B
 _load_default_etc_fimrc
 [in,g:] if 1 at startup, load the system wide initialization file.
 .fi
@@ -1857,7 +1862,7 @@ bind "End" "$;";
 bind "^" "0;";
 bind "$" "$;";
 #bind "Backspace" "prev"; # console code for C-h and Backspace is the same :-)
-bind "'" "goto _lastfileindex";
+bind "'" "goto _lastfileindex.'f'.(_lastpageindex+1).'p'";
 bind '"' "scale 'shadow';i:fresh=1;redisplay;"; 
 bind '(' "goto '^p'";
 bind ')' "goto '$p'";

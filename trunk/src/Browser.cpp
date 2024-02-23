@@ -1742,7 +1742,7 @@ err:
 				const auto ss = string(o).substr(0,n-o);
 				const fim_goto_spec_t gss = goto_image_compute (ss.c_str(),xflags);
 
-				if (cf != gss.nf)
+				if (cf != gss.nf || nf == FIM_CNS_BAD_FILE_INDEX)
 					nf = gss.nf;
 				if (cp != gss.np)
 					np = gss.np;
@@ -1767,6 +1767,8 @@ err:
 		{
 			if( ( nf != cf ) || ( np != cp ) )
 			{	
+				const fim_int oap = getGlobalFloatVariable(FIM_VID_PAGE);
+				const fim_int ap = oap; // FIXME: page one reverts to zero; this needs to be fixed elsewhere
 				const fim::string ncf = current();
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,ncf); }
@@ -1779,6 +1781,7 @@ err:
 						// viewport()->img_goto_page(np); // modifying the current() image_ breaks a subsequent freeCachedImage originating from a reload()
 						setGlobalVariable(FIM_VID_PAGE,np); // this instead, is only symbolic and it's enough for now
 
+				setGlobalVariable(FIM_VID_LASTPAGEINDEX,ap);
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,ncf); }
 			}

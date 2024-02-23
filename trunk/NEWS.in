@@ -39,9 +39,11 @@
  * Scaling fix when starting with -o ca
 # (r2074)
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
+# (r2096)
+ * Introduce variable _lastpageindex to allow jump to last page
 # (r2077)
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
-# (r2075,r2077,r2090-r2091,r2093)
+# (r2075,r2077,r2090-r2091,r2093,r2096)
 # * Misc fixes
 # (r2076,r2079)
  * --slideshow option now accepts decimal values
