@@ -794,6 +794,7 @@ ret:
 						cache_key_t{current(),
 						  {getGlobalIntVariable(FIM_VID_PAGE), ((current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)}}, &viewportState));// FIXME
 				viewport()->ViewportState::operator=(viewportState);
+				setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		}
 		}
 		catch(FimException e)
@@ -1748,7 +1749,7 @@ err:
 				const auto ss = string(o).substr(0,n-o) + jmpchar;
 				const fim_goto_spec_t gss = goto_image_compute (ss.c_str(),xflags);
 
-				if (cf != gss.nf || nf == FIM_CNS_BAD_FILE_INDEX)
+				if (cf != gss.nf && gss.nf != FIM_CNS_BAD_FILE_INDEX)
 					nf = gss.nf;
 				if (cp != gss.np)
 					np = gss.np;

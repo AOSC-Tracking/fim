@@ -330,6 +330,7 @@ endif
 
 .PHONY: multipagetests
 multipagetests:	all
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "2p";c=page; goto "1p";d=page; goto _lastpageindex;e=page; stdout a.".".b.".".c.".".d.".".e;quit'   | grep 0.0.1.0.0;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1p+1p";c=page; goto "+1p+1p";d=page; goto "+1p+1p";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.1.2.0;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1";c=page; goto "+1+1";d=page; goto "+1+1";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.1.2.0;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1f+1f";c=page; goto "+1f+1f";d=page; goto "+1f+1f";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.0.0.0;
@@ -386,21 +387,23 @@ if ENABLE_PCX
 endif
 if ENABLE_PCX
 if ENABLE_PNG
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "-/5/";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.8.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "-/B";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.12.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/b";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.0.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/B";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/s";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/d";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.3.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/u";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.0.12
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12 # goto: only last subspec effective
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+2f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.3.12 # goto: only last subspec effective
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.2.12 # goto: only last subspec effective
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2p+1p";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 0.0.0.12 # goto: page jump idempotent on one-pager
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "-/5/";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.8.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "-/B";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.12.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/b";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.1.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/B";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.2.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/s";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.2.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/d";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.3.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+/u";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.1.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.2.12 # goto: only last subspec effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+2f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.3.12 # goto: only last subspec effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.2.12 # goto: only last subspec effective
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2p+1p";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.1.12 # goto: page jump idempotent on one-pager
 	@if $(MAKE) -C $(top_srcdir)/media/multipage ; then make multipagetests; fi
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "2f";c=_lastfileindex; goto c;d=_fileindex; stdout a.".".b.".".c.".".d."."._filelistlen;quit' | grep 1.1.1.1.12
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; next;b=_fileindex; goto "2f";c=_lastfileindex; goto c;d=_fileindex; stdout a.".".b.".".c.".".d."."._filelistlen;quit' | grep 1.2.1.1.12
 endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+50%";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "sort"; a=_fileindex; goto "+prime"; b=_fileindex;goto "+prime"; c=_fileindex; goto "+prime"; d=_fileindex; goto "+prime"; e=_fileindex; stdout a.".".b.".".c.".".d.".".e; quit' | grep 0.2.5.6.1
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "sort"; a=_fileindex; goto "+prime"; b=_fileindex;goto "+prime"; c=_fileindex; goto "+prime"; d=_fileindex; goto "+prime"; e=_fileindex; stdout a.".".b.".".c.".".d.".".e; quit' | grep 1.2.5.6.1
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -C 'bind "n" "goto \"+1f\"";' -Knnnq -F 'quit !(_fileindex==4);'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx -C 'bind "n" "goto \"+1F\"";' -Knnnq -F 'quit !(_fileindex==8);'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'list "sort_fsize"; goto 0; reload; stdout i:_filename; quit' | grep 1.pcx
@@ -589,11 +592,11 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* -K n -K q -k n -k n -k q -F 'stdout _fileindex;if(_fileindex!=3){quit 255}quit' # -k executes before -K
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* -k n -K n -K n -k q -K q -F 'stdout _fileindex;if(_fileindex!=2){quit 255}quit' # -k executes before -K
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* -K n -k n -k n -K q -k q -F 'stdout _fileindex;if(_fileindex!=3){quit 255}quit' # -k executes before -K
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*  -/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*  -/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=1){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*  -/                    4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --/  media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=1){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --/                    4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.___ -c 'stdout _fileindex;if(_fileindex!=0){quit 255}quit'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.___ -c 'stdout _fileindex;if(_fileindex!=1){quit 255}quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/* --// media/numbers_pcx/4.pcx -c 'stdout _fileindex;if(_fileindex!=5){quit 255}quit'
 endif
 if ENABLE_HISTORY
@@ -795,15 +798,15 @@ if ENABLE_GIF
 	cp -p $(top_srcdir)/media/icon_smile.gif $(top_srcdir)/media/icon_smile.pgm
 	cp -p $(top_srcdir)/media/icon_smile.gif $(top_srcdir)/media/icon_smile.ppm
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smile.ppm -K '' -K q -F 'quit !(_fileindex==2);' # test slash search
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F 'quit !(_fileindex==0);' # test slash search
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -K /smole.ppm -K '' -K q -F 'quit !(_fileindex==1);' # test slash search
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "goto '?$(top_srcdir)/media/icon_smile.ppm'" -K '' -K q -F 'quit !(_fileindex==2);' # test goto query
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='i';goto '/ICON_SMILE.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==2);' # test goto query
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='I';goto '/ICON_SMILE.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts=' ';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "                    goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
-	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='I';goto '/ICON_SMILE.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==1);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts=' ';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==1);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "                    goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==1);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/media/icon_smile.ppm/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==1);' # test goto query
 	$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm -c "_re_search_opts='b';goto '/icon_smile.ppm/'"       -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==2);' # test goto query
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c "_re_search_opts=' ';goto '/due/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==0);' # test goto query
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c "_re_search_opts=' ';goto '/due/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==1);' # test goto query
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/*.pcx --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c "_re_search_opts='D';goto '/due/'" -K '' -K q -F 'stdout _fileindex; quit !(_fileindex==3);' # test goto query
 	rm $(top_srcdir)/media/icon_smile.pgm $(top_srcdir)/media/icon_smile.ppm
 endif
@@ -837,7 +840,7 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png -c 'i=3;do  { i=i-1; stdout i; } while (i>=1) stdout "ok";quit i;' # seldom used language feats (TODO): this is buggy anyways..)
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c '-1;stdout _fileindex;quit!(_fileindex==10);' # FIXME
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c '-3;stdout _fileindex;quit!(_fileindex==8);'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c ' 0;stdout _fileindex;quit!(_fileindex==0);'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/?.pcx -c ' 0;stdout _fileindex;quit!(_fileindex==1);'
 	test `$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/-.pcx -c '3 stdout "y"; quit ((2+2)%(1+1))' | tr -d '\n' $(SNTZ)` = yyy # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '+"30.0"%;quit' # FIXME: add actual test # stress yacc.ypp
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/0.pcx -c '+ 30.0% ;quit' # FIXME: add actual test # stress yacc.ypp
