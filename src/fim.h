@@ -1136,6 +1136,7 @@ namespace fim
 #define FIM_FLC_PREV_PAGE		"goto '-1p'" /* not in vim */
 #define FIM_FLC_MAGNIFY			"scale '+'" /* not in vim */
 #define FIM_FLC_REDUCE			"scale '-'" /* not in vim */
+#define FIM_FLA_TOGGLE_VERBOSITY	"toggleVerbosity" /* not in vim */
 
 #define FIM_CMD_ACM_INFO(PREACM,POSTACM) FIM_CNS_CMDSEP "Executes autocommands for events " PREACM " and " POSTACM "."
 #define FIM_CNS_CMDSEP "\n" /* see CommandConsole::get_commands_reference() */

@@ -4,7 +4,7 @@
   The following code contains key bindings and aliases definitions
   which make up a first usable configuration for FIM.
  
- (c) 2007-2022 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@
 #endif
 #if 0
  		alias('A',"'autotop=1-autotop;'");
-		alias("toggleVerbosity","verbose=1-verbose;display;");
+		alias(FIM_FLA_TOGGLE_VERBOSITY,"verbose=1-verbose;display;");
 		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");
 #endif
 #if 0
