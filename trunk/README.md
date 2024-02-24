@@ -228,7 +228,8 @@ You can also run separately parts of `make tests`:
 	sudo apt install libjpeg-dev libpng-dev libtiff-dev libgif-dev
 	sudo apt install libsdl2-dev libaa1-dev libcaca-dev
 	# experimental, not recommended:
-	sudo apt install libpoppler-dev libdjvulibre-dev libspectre-dev
+	sudo apt install libpoppler-cpp-dev libpoppler-dev libpoppler-private-dev
+	sudo apt install libdjvulibre-dev libspectre-dev
 	sudo apt install libarchive-dev
 	sudo apt install libqoi-dev libwebp-dev libavif-dev
 	svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
@@ -370,9 +371,9 @@ patch.
   
  autoconf autoconf-archive autoheader automake autotools-dev bison ctags
  flex groff g++ libaa1-dev libcaca-dev libdjvulibre-dev libgif4 libgif-dev
- libjpeg-dev libncurses5-dev libpng-dev libpoppler-cpp-dev libpoppler-dev
- libreadline-dev libsdl2-dev libspectre-dev libtiff-dev libtool m4 make svn
- txt2html libexif-dev
+ libjpeg-dev libncurses5-dev libpng-dev libtiff-dev libexif-dev
+ libpoppler-cpp-dev libpoppler-dev libpoppler-private-dev libreadline-dev 
+ libsdl2-dev libspectre-dev libtool m4 make svn txt2html
 
  The above list was valid on a Debian Jessie installation; it's possible that
  these packages names change with time.

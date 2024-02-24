@@ -26,6 +26,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include <cstring>
 
 #include "FbiStuff.h"
@@ -34,21 +35,15 @@
 #ifdef HAVE_LIBPOPPLER
 
 /*
- * Note : at the time of writing this, the poppler API is unstable,
+ * Note : when at the time of writing this, the poppler API is unstable,
  * and subject to change.
  * So when changing these headers here, take care of changing them
  * in the configure script, too.
  * And please don't blame me (fim's author)!
  */
-#include <poppler/cpp/poppler-version.h>
-#if (POPPLER_VERSION_MINOR>=21)
-#if (POPPLER_VERSION_MINOR< 24)
-#include <poppler/splash/SplashBitmap.h>
-#include <poppler/splash/SplashTypes.h>
-#else
+#include <poppler/cpp/poppler-version.h> // POPPLER_VERSION_MAJOR POPPLER_VERSION_MINOR
 #include <splash/SplashBitmap.h>
 #include <splash/SplashTypes.h>
-#endif /* (POPPLER_VERSION_MINOR< 24) */
 #include <poppler/poppler-config.h>
 #include <poppler/OutputDev.h>
 #include <poppler/PDFDoc.h>
@@ -56,13 +51,18 @@
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
 #include <glib.h>
-#endif /* (POPPLER_VERSION_MINOR>=21) */
 
 #if HAVE_FILENO
 #define FIM_PDF_USE_FILENO 1
 #else
 #define FIM_PDF_USE_FILENO 0
 #endif /* HAVE_FILENO */
+
+#if ( POPPLER_VERSION_MAJOR > 0 || (POPPLER_VERSION_MAJOR==0 && (POPPLER_VERSION_MAJOR>32)) )
+#define FIM_POPPLER_WITH_UNIQPTR 1
+#else
+#define FIM_POPPLER_WITH_UNIQPTR 0
+#endif
 
 /*								*/
 #define GBool gboolean
@@ -102,7 +102,7 @@ static SplashColorMode gSplashColorMode = splashModeRGB8;
 
 static SplashColorPtr  gBgColor = SPLASH_COL_WHITE_PTR;
 
-static void splashColorSet(SplashColorPtr col, Guchar red, Guchar green, Guchar blue, Guchar alpha)
+static void splashColorSet(SplashColorPtr col, fim_byte_t red, fim_byte_t green, fim_byte_t blue, fim_byte_t alpha)
 {
     switch (gSplashColorMode)
     {
@@ -181,13 +181,17 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	SplashColorsInit();
 
 	// WARNING : a global variable from libpoppler! damn!!
+#if FIM_POPPLER_WITH_UNIQPTR
+	globalParams = std::make_unique<GlobalParams> ();
+#else /* FIM_POPPLER_WITH_UNIQPTR */
 	globalParams = new GlobalParams();
+#endif /* FIM_POPPLER_WITH_UNIQPTR */
 	if (!globalParams)
 		goto err;
 
 	globalParams->setErrQuiet(gFalse);
 
-#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
+#if (POPPLER_VERSION_MAJOR==0) && defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<21) // https://poppler.freedesktop.org/poppler-0.20.5.tar.gz is last tarball with it
 	fim_char_t _[1];
 	_[0]='\0';
 	globalParams->setBaseDir(_);
@@ -243,8 +247,12 @@ err:
 
 	if(ds->pd)		delete ds->pd ;
 	if(ds->od)	delete ds->od ;
+#if FIM_POPPLER_WITH_UNIQPTR
+#else /* FIM_POPPLER_WITH_UNIQPTR */
 	if (globalParams)	delete globalParams;
 	globalParams = FIM_NULL;
+#endif /* FIM_POPPLER_WITH_UNIQPTR */
+
 	if(ds)fim_free(ds);
 retnull:
 	return FIM_NULL;
@@ -272,7 +280,10 @@ pdf_done(void *data)
 	if(ds->bmp)		delete ds->bmp;
 	if(ds->pd)		delete ds->pd ;
 	if(ds->od)	delete ds->od ;
+#if FIM_POPPLER_WITH_UNIQPTR
+#else /* FIM_POPPLER_WITH_UNIQPTR */
 	if (globalParams)	delete globalParams;
+#endif /* FIM_POPPLER_WITH_UNIQPTR */
 	globalParams = FIM_NULL;
 
 	fim_free(ds);
