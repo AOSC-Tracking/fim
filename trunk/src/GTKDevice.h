@@ -32,7 +32,7 @@ class GTKDevice : public DisplayDevice {
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_err_t initialize(fim::sym_keys_t&);
 	virtual fim_err_t reinit(const fim_char_t *rs) FIM_OVERRIDE;
-	void finalize() {}
+	void finalize(void);
 	fim_err_t display(const void*, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_coo_t, fim_flags_t);
 	fim_coo_t get_chars_per_line() const;
 	fim_coo_t get_chars_per_column() const;
@@ -41,7 +41,7 @@ class GTKDevice : public DisplayDevice {
 	fim_bpp_t get_bpp() const;
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 	fim_err_t status_line(const fim_char_t*);
-	fim_bool_t handle_console_switch() {return 0;}
+	fim_bool_t handle_console_switch() {return false;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT FIM_OVERRIDE;
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT FIM_OVERRIDE;
 	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT FIM_OVERRIDE ;

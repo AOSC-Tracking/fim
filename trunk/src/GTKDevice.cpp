@@ -96,6 +96,14 @@ FIM_GTK_COUT_HEX(*(fim_key_t*)(C)); std::cout <<"\n"; \
 
 #define FIM_GTK_IS_TOGGLE(X) (X==strstr(X, "toggle")) && X[6] && !isalnum(X[6]) && (X[6]!=' ') && X[6]==X[7] // toggle__ toggle:: ...
 
+#define FIM_GTKDEVICE_INSPECT 0 /* TODO: take a decision if this is going to be user-oriented or devel-oriented output */
+#if FIM_GTKDEVICE_INSPECT
+#define FIM_PRINT_REPORT(X)   if(verbose_ops_)printf("GTK:%s:%s:%d:%c\n",__FILE__,__func__,__LINE__,X);
+#define FIM_PR(X)   FIM_PRINT_REPORT(X)
+#else /* FIM_GTKDEVICE_INSPECT */
+#define FIM_PR(X) 
+#endif /* FIM_GTKDEVICE_INSPECT */
+
 namespace fim
 {
 	extern fim_int fim_fmf_; /* FIXME */
@@ -152,12 +160,12 @@ namespace fim
 	int full_screen_{};
 	int show_menubar_{1};
 
+	const bool no_queue_ = false; /* only for setting variables or other service functionality */
 #if FIM_WANT_CMD_QUEUE
 	const bool do_queue_ = true;
 #else /* FIM_WANT_CMD_QUEUE */
-	const bool do_queue_ = false;
+	const bool do_queue_ = no_queue_; /* obsolete, dangerous */
 #endif /* FIM_WANT_CMD_QUEUE */
-	const bool no_queue_ = false;
 	bool do_as_interactive_ = false;
 
 #pragma GCC push_options
@@ -357,6 +365,7 @@ static const void * czptr_ {nullptr};
 
 int verbose_ = 0;
 int verbose_specs_ = 0;
+int verbose_ops_ = 0;
 
 typedef std::pair<fim_key_t,GdkModifierType> km_t;
 
@@ -418,8 +427,8 @@ static std::string xtrcttkn(const char* cmd, const char sep=' ')
 
 static void do_force_console()
 {
-	cc.execute("set", {"_display_console", "0" }, do_as_interactive_);
-	cc.execute("toggleVerbosity", {}, do_as_interactive_);
+	cc.execute("set", {FIM_VID_DISPLAY_CONSOLE, "0" }, do_as_interactive_);
+	cc.execute(FIM_FLA_TOGGLE_VERBOSITY, {}, do_as_interactive_);
 }
 
 static void do_print_item_help(GtkWidget *, const int * idxp)
@@ -1350,14 +1359,17 @@ fim_err_t GTKDevice::initialize(fim::sym_keys_t&sym_keys)
 #if !FIM_GTK_WITH_RENDERED_STATUSBAR
 	gtk_grid_attach_next_to(GTK_GRID(grid_), GTK_WIDGET(cmdline_entry_), GTK_WIDGET(statusbar_), GTK_POS_BOTTOM, 1, 1);
 #endif
-	g_signal_connect(G_OBJECT(window_), "destroy", G_CALLBACK(
+	g_signal_connect(G_OBJECT(window_), "destroy", G_CALLBACK( // TODO: need test in test suite
 			[]()
 			{
-				g_object_unref(pixbuf);
-				pixbuf = NULL;
-				gtk_container_remove (GTK_CONTAINER(grid_), drawingarea_);
-				drawingarea_ = NULL;
+				FIM_PR('*');
+				//g_object_unref(pixbuf);
+				//pixbuf = NULL;
+				//gtk_container_remove (GTK_CONTAINER(grid_), drawingarea_);
+				//drawingarea_ = NULL;
 				last_pressed_key_ = cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
+				if (!last_pressed_key_ )
+					cc.execute(FIM_FLT_QUIT, {}, false, false, do_queue_);
 			}
 		), NULL);
 	gtk_container_add(GTK_CONTAINER(window_), grid_);
@@ -1391,10 +1403,10 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 		FIM_GTK_DBG_COUT << "PRESSED " << last_pressed_key_ << " \n";
 	}
 
-	gtk_main_iteration();
 	sync_toggle_menus();
 	sync_vars_menus();
 	sync_radio_menus();
+	gtk_main_iteration(); // no menu sync after this, as the GTK window may have been destroyed
 
 	if ( last_pressed_key_ )
 	{
@@ -1415,16 +1427,14 @@ static fim_sys_int get_input_inner(fim_key_t * c, GdkEventKey*eventk, fim_sys_in
 
 fim_coo_t GTKDevice::width() const
 {
-	// FIXME: temporary
 	return gtk_widget_get_allocated_width((GtkWidget*)drawingarea_);
 }
 
 fim_coo_t GTKDevice::height() const
 {
-	// FIXME: temporary
 	fim_coo_t h = 0;
-	if(drawingarea_)
-		h = gtk_widget_get_allocated_height((GtkWidget*)drawingarea_);
+	// note that if drawingarea_ = NULL makes (drawingarea_ && !GTK_IS_WIDGET(drawingarea_)) true.
+	h = gtk_widget_get_allocated_height((GtkWidget*)drawingarea_);
 	return h;
 }
 
@@ -1834,6 +1844,11 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 			verbose_specs_ = 1;
 			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu tooltip\n";
 		}
+		if((!verbose_ops_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find("mmm") >= 0)
+		{
+			verbose_ops_ = 1;
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu operations\n";
+		}
 
 		if( rs && *rs )
 		{
@@ -1900,5 +1915,10 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 		return FIM_ERR_GENERIC;
 	}
 
+	void GTKDevice::finalize(void)
+	{
+		FIM_PR('*');
+		finalized_=true;
+	}
 #endif /* FIM_WITH_LIBGTK */
 #pragma GCC pop_options

@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2023 Michele Martone
+ (c) 2008-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -154,7 +154,7 @@ err:
 			fim_char_t*cso=(fim_char_t*)cso_;// FIXME
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
-			if(displaydevice_ && 0==displaydevice_->get_chars_per_column())
+			if(displaydevice_ /*&& 0==displaydevice_->get_chars_per_column()*/ ) /* note: need to destroy displaydevice_ after GUI-actioned window destroy */
 			{
 				// we display input as soon as it received.
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
