@@ -23,6 +23,7 @@
  * Scaling fix when starting with -o ca
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
  * Introduce variable _lastpageindex to allow jump to last page
+ * If there's only one file, passing a numeric argument to 'goto' will do a page jump
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
  * --slideshow option now accepts decimal values
  * bugfix: avoid memory leak while decoding PDF

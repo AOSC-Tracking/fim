@@ -416,7 +416,11 @@ If prepended by '-' or '+', the jump is relative to the current index.
 .fi
 The 'f' specifier asks for the jump to occur within the files (same for 'F', but accelerates if keep pressing).
 .fi
-The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing). The above form can be concatenated several times, but only the last occurrence of either file or page goto will be effective.
+The 'p' specifier asks for the jump to occur in terms of pages, within the current file (same for 'P', but accelerates if keep pressing).
+.fi
+If there's only one file in the list and no 'f' specified, a 'p' will be implied, for a page jump.
+.fi
+The above form can be concatenated several times, but only the last occurrence of either file or page goto will be effective.
 .fi
 If /\fR\fI{regexp}\fR/ is given, jump to the first image matching the given /\fR\fI{regexp}\fR/ regular expression pattern.
 .fi
@@ -1569,7 +1573,7 @@ command.
 Further default aliases are usually loaded at startup -- see the CONFIGURATION FILE EXAMPLE section below.
 .SH COMMAND LINE USAGE EXAMPLES
 .nf
-# jump to the third image:
+# jump to the third image (or to the third page if only one image is loaded):
 3;
 # jump to first image:
 ^;

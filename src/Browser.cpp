@@ -1736,10 +1736,16 @@ err:
 					++n;
 				while (*n &&  isdigit(*n)) // number
 					++n;
-				while (*n && (*n=='%' || tolower(*n)=='f' || tolower(*n)=='p')) // % [fp]
+				while (*n && *n=='%')
 					++n;
 
-				const auto ss = string(o).substr(0,n-o);
+				const bool autojmp = (tolower(*n)!='f' && tolower(*n)!='p');
+				const char jmpchar = ( autojmp && n_files() == 1 ) ? 'p' : FIM_SYM_CHAR_NUL;
+
+				while (*n && (tolower(*n)=='f' || tolower(*n)=='p')) // [fp]
+					++n;
+
+				const auto ss = string(o).substr(0,n-o) + jmpchar;
 				const fim_goto_spec_t gss = goto_image_compute (ss.c_str(),xflags);
 
 				if (cf != gss.nf || nf == FIM_CNS_BAD_FILE_INDEX)
