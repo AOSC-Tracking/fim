@@ -35,6 +35,7 @@ typedef time_t fim_time_t;
 
 namespace fim
 {
+	typedef fim::string fid_t;
 	std::ostream& operator<<(std::ostream& os, const cache_key_t & key);
 
 class Cache FIM_FINAL
@@ -107,8 +108,6 @@ class Cache FIM_FINAL
 
 namespace fim
 {
-
-typedef fim::string fid_t;
 
 class PACA FIM_FINAL	/* Parallel Cache */
 {
