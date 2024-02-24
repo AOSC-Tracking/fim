@@ -21,7 +21,7 @@
  * Experimental support for reading WebP images via libwebp
 # (r1988)
  * FIM requires a compiler supporting at least C++11
-# (r2002-r2003,r2047-r2053,r2056-r2071,r2073,r2079,r2091)
+# (r2002-r2003,r2047-r2053,r2056-r2071,r2073,r2079,r2091,r2097)
  * More tests
 # (r2048)
  * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"
@@ -41,6 +41,8 @@
  * Introduce expansion-only variable description syntax "#!fim:@var=val"
 # (r2096)
  * Introduce variable _lastpageindex to allow jump to last page
+# (r2097)
+ * If there's only one file, passing a numeric argument to 'goto' will do a page jump
 # (r2077)
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
 # (r2075,r2077,r2090-r2091,r2093,r2096)

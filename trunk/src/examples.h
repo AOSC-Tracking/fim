@@ -1,5 +1,5 @@
 const fim_char_t * const FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =
-"# jump to the third image:\n"
+"# jump to the third image (or to the third page if only one image is loaded):\n"
 "3;\n"
 "# jump to first image:\n"
 "^;\n"
