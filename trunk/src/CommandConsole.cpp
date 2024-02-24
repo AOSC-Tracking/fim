@@ -1268,9 +1268,6 @@ rlnull:
 			}
 #endif /* FIM_USE_READLINE */
 		}
-#if FIM_WANT_BACKGROUND_LOAD
-		blt_.join();
-#endif /* FIM_WANT_BACKGROUND_LOAD */
 		show_must_go_on_ = -1; /* without this it would break loops in postExecutionCommand_ aka -F */
 		FIM_AUTOCMD_EXEC(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 		return quit(return_code_);
@@ -1366,6 +1363,10 @@ rlnull:
 		if(viewport_)
 		       	delete viewport_;
 #endif /* FIM_WINDOWS */
+#if FIM_WANT_BACKGROUND_LOAD
+		if (blt_.joinable())
+			blt_.join(); // quitting without this (e.g. quitting on-stack like windowed aalib does) will lead to a crash
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 	}
 
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd, int*rp)
