@@ -871,6 +871,8 @@ if test x$fim_handle_pdf != xno ; then
   have_poppler=yes
         if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
     	# dear fim hackers, you should install pkg-config to get this macro expanded (p)
+	CXXFLAGS="$CXXFLAGS `pkg-config poppler        --cflags`";
+	CXXFLAGS="$CXXFLAGS `pkg-config poppler-splash --cflags`";
 dnl	# pkg-config --cflags poppler
 dnl	# pkg-config --cflags poppler-cpp
 dnl	# ...
