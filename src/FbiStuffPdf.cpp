@@ -41,15 +41,15 @@
  * in the configure script, too.
  * And please don't blame me (fim's author)!
  */
-#include <poppler/cpp/poppler-version.h> // POPPLER_VERSION_MAJOR POPPLER_VERSION_MINOR
+#include <cpp/poppler-version.h> // POPPLER_VERSION_MAJOR POPPLER_VERSION_MINOR
 #include <splash/SplashBitmap.h>
 #include <splash/SplashTypes.h>
-#include <poppler/poppler-config.h>
-#include <poppler/OutputDev.h>
-#include <poppler/PDFDoc.h>
-#include <poppler/SplashOutputDev.h>
-#include <poppler/Page.h>
-#include <poppler/GlobalParams.h>	/* globalParams lives here */
+#include <poppler-config.h>
+#include <OutputDev.h>
+#include <PDFDoc.h>
+#include <SplashOutputDev.h>
+#include <Page.h>
+#include <GlobalParams.h>	/* globalParams lives here */
 #include <glib.h>
 
 #if HAVE_FILENO
