@@ -2694,7 +2694,7 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 					{
 						char *fcpp = fcp;
 
-						if(*vip && image->isSetVar(vip) && *fcp )
+						if(*vip && ( image->isSetVar(vip) || isSetVar(vip) /*experimental*/ ) && *fcp )
 						{
 							char *vipp = FIM_NULL;
 strdo:
@@ -2718,8 +2718,9 @@ strdo:
 								++fcpp;
 								while(*fcpp && *fcpp!=':' && ( isalpha(*fcpp) || isdigit(*fcpp) || *fcpp=='_' ))
 									++fcpp;
-								string vn = string(vipp).substr(1,fcpp-vipp-1);
-								string vv = image->getStringVariable(vn);
+								const string vn = string(vipp).substr(1,fcpp-vipp-1);
+								const string iv = image->getStringVariable(vn); // experimental
+								const string vv = iv.size()>0 ? iv : getStringVariable(vn);
 								if(*fcpp==':')
 #if FIM_UNLIMITED_INFO_STRINGS
 									app += vv.c_str(),
