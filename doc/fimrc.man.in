@@ -1121,7 +1121,7 @@ _ignorecase
 .na
 .B
 _info_fmt_str
-[in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %k for the value of i:_comment (comment description) variable in square brackets; %l for current image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP is copied verbatim except for contained sequences of the form %:VAR:, which expand to the value of variable i:VAR; this is meant to be used like in e.g. '%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where the EXIF-set variable EXIF_DateTimeOriginal (make sure you have libexif for this) are used only if present.
+[in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %k for the value of i:_comment (comment description) variable in square brackets; %l for current image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set (or, otherwise, if VAR); EXP is copied verbatim except for contained sequences of the form %:VAR:, which expand to the value of variable i:VAR (or, if unset, VAR); this is meant to be used like in e.g. '%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where the EXIF-set variable EXIF_DateTimeOriginal (make sure you have libexif for this) are used only if present.
 .fi
 .na
 .B
@@ -1652,6 +1652,10 @@ alias "mirror" "togglemirror;redisplay"         "mirror the image along the vert
 alias "mirroronce" "mirror;togglemirror"        "mirror, but just for one display";
 alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
 alias "unlimit" "limit;i:fresh=1;reload;redisplay" "calling limit with no arguments restores the original list";
+#alias 'mark_current_file' '_markedfile=i:_filename';
+#alias 'goto_marked_file' 'goto "?"._markedfile';
+alias 'mark_current_file' '_markedfile=_fileindex'; # Note: temporary; _markedfile undocumented.
+alias 'goto_marked_file'  'goto _markedfile'; # Note: temporary.
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
 # codes are get caught by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
@@ -1692,7 +1696,9 @@ bind 'Tab'  "toggleVerbosity";
 bind 'Menu' "toggleVerbosity";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
-bind 'C-m' "list 'mark'";
+#bind 'C-m' "list 'mark'";
+bind 'C-m' "mark_current_file";
+bind 'C-j' "goto_marked_file";
 bind 'u'   "list 'unmark'";
 bind 'Enter' "list 'mark';goto _lastgotodirection";
 bind '-' "reduce";
@@ -1876,7 +1882,7 @@ _want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
 _caption_over_image_fmt="%?_comment?%:_comment:?";
 _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c"; # lower right line part
 #_display_status_fmt="%N:%k"; #
-_display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k"; # lower left line part
+_display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?%?_markedfile?[mark on %:_markedfile:]?:%k"; # lower left line part
 # funny aliases:
 alias "webcam" "pread 'vgrabbj -d /dev/video0';$" "say cheese";
 alias 'espeak' 'system \'espeak\' i:_filename." ".i:_comment' 'say something';
@@ -1954,6 +1960,8 @@ if( _device_string=='gtk' ) {
 		"_Advanced/Verbose keys  toggle||_display_busy||1||0"
 		"_Advanced/Downscale huge on load  toggle||_downscale_huge_at_load||1||0"
 		"_Advanced/Background prefetch  _want_prefetch=2    Foreground prefetch  _want_prefetch=1    No prefetch  _want_prefetch=0    "
+		"_Custom actions/_Mark current file  mark_current_file"
+		"_Custom actions/_Go to marked file  goto_marked_file"
 		"_Custom actions/Webcam shot (needs vgrabbj)  webcam"
 		"_Custom actions/Say something (need espeak)  espeak"
 		"_Custom actions/Max cached memory: 256MiB  _max_cached_memory=262144    unlimited  _max_cached_memory=0    very little  _max_cached_memory=1    80MiB  _max_cached_memory=81920  "
