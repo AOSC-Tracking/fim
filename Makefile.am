@@ -3,7 +3,7 @@
 # no-dependencies was due to problems with conditional sources
 # nostdinc disables the standard -I. include which breaks a correct string.h include
 AUTOMAKE_OPTIONS = nostdinc no-dependencies # dejagnu
-SUBDIRS = src doc distros scripts
+SUBDIRS = src doc distros scripts media
 
 dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS.in $(top_srcdir)/NEWS $(top_srcdir)/README.md
 # no INSTALL INSTALL.TXT is necessary in rules
@@ -35,8 +35,6 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/numbers_pcx/7.pcx \
 	$(top_srcdir)/media/numbers_pcx/8.pcx \
 	$(top_srcdir)/media/numbers_pcx/9.pcx \
-	$(top_srcdir)/media/multipage/sample.tex \
-	$(top_srcdir)/media/multipage/Makefile \
 	$(top_srcdir)/media/special/icon_smile_gif_at_7.bin \
 	$(top_srcdir)/media/special/images.desc \
 	$(top_srcdir)/media/special/modifiers.desc \
@@ -166,12 +164,12 @@ endif
 	test "`(      SSH_TTY= $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -t --no-framebuffer -c 'stderr _device_string' -kq ) 2>&1 > /dev/null`" = $(FIM_USE_ASCII_ART_DEFAULT) #
 # extras for readline and caption related:
 if WANT_READLINE
-	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'ne$$'\t'$$'\t' -K '' -Kq # completion_display_matches_hook
-	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t'n=x$$'\t'$$'\t' -K '' -Kq # cover completion of variables
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :'	'ne'	''	' -K '' -Kq # completion_display_matches_hook
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :'	'n=x'	''	' -K '' -Kq # cover completion of variables
 	echo q | $(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K : # cover fim_rl_getc
 	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -C '_caption_over_image=3;_caption_over_image_fmt="fim:%M";_display_status=1;display' -kn -kq # cover Viewport::extra_top_height 
 endif
-	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :$$'\t' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
+	$(FIM_EXE) $(FIMNORCOPTS) -o aa $(top_srcdir)/media/ -K :'	' -Kq | grep WELCOME 2>&1 | cat > /dev/null # cover what happens hitting Tab in console mode
 
 .PHONY: cacatests
 cacatests: all
@@ -246,7 +244,7 @@ sdltests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=h  $(FIMVIDEOTESTOPTS);
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=hhMR20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=hhMR20:10% -K '	' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o sdl=0:-1 ; test $$? = 252
 if FIM_HAVE_ANY_CONSOLEFONT
@@ -264,7 +262,7 @@ imlib2tests: all
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
 		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2  $(FIMVIDEOTESTOPTS);
 	$(NO_ASAN) $(TIMEOUT_LARGE) \
-		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=20:10% -K $$'\t' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
+		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=20:10% -K '	' -c 'while(0){1;}quit;' ; # cover: draw help grid, unlock, input poll, misc
 #	$(NO_ASAN) $(TIMEOUT_LARGE) \
 #		$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o imlib2=0:-1 ; test $$? = 252
 if FIM_HAVE_ANY_CONSOLEFONT
@@ -301,6 +299,7 @@ endif
 	if grep -q PKG_CHECK_MODULES configure.ac; then ! grep -q PKG_CHECK_MODULES configure; fi
 	test `grep '[^=]==[^=]' $(top_srcdir)/src/fimgs | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.*[^=]==[^=]' $(top_srcdir)/configure.ac | wc -l` = 0 # look out for more bashisms
+	test `grep '+=' $(top_srcdir)/configure.ac | wc -l` = 0 # look out for more bashisms
 	test `grep 'test.* == ' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate == on this line only
 	test `grep 'SNTZ.*wc' $(top_srcdir)/Makefile.am | wc -l` = 1 # tolerate SNTZ.*wc on this line only
 	! grep -n '^[^ ].\{83,\}' README
@@ -330,10 +329,12 @@ endif
 
 .PHONY: multipagetests
 multipagetests:	all
+if ENABLE_PS
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "2p";c=page; goto "1p";d=page; goto _lastpageindex;e=page; stdout a.".".b.".".c.".".d.".".e;quit'   | grep 0.0.1.0.0;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1p+1p";c=page; goto "+1p+1p";d=page; goto "+1p+1p";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.1.2.0;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1";c=page; goto "+1+1";d=page; goto "+1+1";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.1.2.0;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/multipage/sample.ps -c 'list "sort";a=page; goto;b=page; goto "+1f+1f";c=page; goto "+1f+1f";d=page; goto "+1f+1f";e=page; stdout a.".".b.".".c.".".d.".".e;quit' | grep 0.0.0.0.0;
+endif
 
 # this is the official way of testing fim
 .PHONY: tests
@@ -398,7 +399,7 @@ if ENABLE_PNG
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+1f+2f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.3.12 # goto: only last subspec effective
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2f+1f";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.2.12 # goto: only last subspec effective
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "+2p+1p";c=_fileindex; stdout a.".".b.".".c."."._filelistlen;quit' | grep 1.1.1.12 # goto: page jump idempotent on one-pager
-	@if $(MAKE) -C $(top_srcdir)/media/multipage ; then make multipagetests; fi
+	@if $(MAKE) -C $(top_srcdir)/media/multipage ; then make multipagetests; fi # the if is not really necessary
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; goto;b=_fileindex; goto "2f";c=_lastfileindex; goto c;d=_fileindex; stdout a.".".b.".".c.".".d."."._filelistlen;quit' | grep 1.1.1.1.12
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/image.png $(top_srcdir)/media/fim.png $(top_srcdir)/media/numbers_pcx/*.pcx -c 'list "sort";a=_fileindex; next;b=_fileindex; goto "2f";c=_lastfileindex; goto c;d=_fileindex; stdout a.".".b.".".c.".".d."."._filelistlen;quit' | grep 1.2.1.1.12
 endif
@@ -569,10 +570,10 @@ endif
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="ppm"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width!=0 && i:height!=0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C '_file_loader="pcx"' $(top_srcdir)/media/numbers_pcx/1.pcx -c 'stdout i:width; stdout (i:width==0 && i:height==0);quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --mark-from-image-descriptions-file $(top_srcdir)/media/special/images.desc -c 'l=_filelistlen;toggleLimitMarked;if(_filelistlen!=l/2)quit 255; quit'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator $$'\t' $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator '	' $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb --image-descriptions-file-separator '?'    $(top_srcdir)/media/special/loadable.desc $(top_srcdir)/media/numbers_pcx/ -c '/2.pcx;if(i:_comment=~"due")quit 255;quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -C 'cd "$(top_srcdir)"' $(top_srcdir)/media/special/dir.desc -c 'quit !(_filelistlen==2)'
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator $$'\t' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator '	' --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit;quit 255'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --image-descriptions-file-separator '?'    --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/2.pcx;if(i:_comment=~"due")quit 255;quit'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/1.pcx;if(i:prime=="no")quit 255;quit;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/numbers_pcx/ --load-image-descriptions-file $(top_srcdir)/media/special/images.desc -c '/4.pcx;if(i:prime=="yes")quit 255;quit;'

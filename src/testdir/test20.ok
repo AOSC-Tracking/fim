@@ -32,7 +32,7 @@ bind "C-h" "help"
 bind "Tab" "toggleVerbosity"
 bind "Enter" "list 'mark';goto _lastgotodirection"
 bind "C-k" "crop" # 0
-bind "C-m" "list 'mark'"
+bind "C-m" "mark_current_file"
 bind "C-n" "goto '+//'"
 bind "C-p" "goto '-//'"
 bind "C-r" "reload ''"
