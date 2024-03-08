@@ -70,7 +70,7 @@ AC_PROG_RANLIB
 AC_REVISION([$Revision$])
 
 AC_PROG_CXX
-#AC_PROG_CXXCPP
+AC_PROG_CXXCPP
 AC_CHECK_TOOL(AR, ar, ar)
 fim_cv_version=`cat $srcdir/VERSION`
 AC_LANG([C++])
@@ -883,8 +883,8 @@ dnl keep next line empty or it may break configure.
 
           AC_CHECK_LIB(poppler, g_free,
             have_poppler=yes
-            LIBS+=" $GLIB_LIBS $POPPLER_LIBS";
-            CXXFLAGS+=" $GLIB_CFLAGS $POPPLER_CFLAGS";
+            LIBS="$LIBS $GLIB_LIBS $POPPLER_LIBS";
+            CXXFLAGS="$CXXFLAGS $GLIB_CFLAGS $POPPLER_CFLAGS";
 	    ,
             have_poppler=no
       AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]), [$GLIB_LIBS $POPPLER_LIBS])
@@ -1301,7 +1301,7 @@ if test x$fim_want_gtk != xno; then
 PKG_CHECK_MODULES(GTK, gtk+-3.0) dnl sets GTK_CFLAGS GTK_LIBS
 # keep this line commented or next line empty or it may break configure. (PKG_CHECK_MODULES-related)
 AC_CHECK_LIB([glib-2.0], [g_free],
-  [ have_gtk=yes; fim_handle_gtk=yes; LIBS+=" $GTK_LIBS"; CXXFLAGS+=" $GTK_CFLAGS";
+  [ have_gtk=yes; fim_handle_gtk=yes; LIBS="$LIBS $GTK_LIBS"; CXXFLAGS="$CXXFLAGS $GTK_CFLAGS";
     AC_DEFINE([FIM_WITH_LIBGTK],[1],[We have GTK])],
   [ have_gtk=no; fim_handle_gtk=no; AC_MSG_WARN([*** GTK driver won't be added (GTK library not found) ***])]
   )
@@ -1831,6 +1831,15 @@ AH_TEMPLATE([FIM_TRY_DIA])
 AH_TEMPLATE([FIM_USE_ZCAT])
 
 dnl ==================
+AC_CHECK_PROG(have_tex,tex,yes,no)
+AC_CHECK_PROG(have_dvips,dvips,yes,no)
+AC_CHECK_PROG(have_pdf2djvu,pdf2djvu,yes,no)
+AC_CHECK_PROG(have_dvipdf,dvipdf,yes,no)
+AM_CONDITIONAL(WITH_TEX, test x$have_tex = xyes)
+AM_CONDITIONAL(WITH_DVIPS, test x$have_dvips = xyes)
+AM_CONDITIONAL(WITH_PDF2DJVU, test x$have_pdf2djvu = xyes)
+AM_CONDITIONAL(WITH_DVIPDF, test x$have_dvipdf = xyes)
+dnl ==================
 
 AC_CHECK_PROG(have_zcat,zcat,yes,no)
         if test x$have_zcat = xyes ; then
@@ -2205,6 +2214,8 @@ AC_SUBST(CXXFLAGS)
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
+	 media/Makefile
+	 media/multipage/Makefile
 	 scripts/maintenance/cron-build.sh
 	 scripts/maintenance/remote-build.sh
 	 scripts/maintenance/cron-svndump.pl

@@ -14,7 +14,8 @@ CLEANFILES= doctags$(EXEEXT) *.o  tags $(HTMLDOCS)
 
 EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man fim.man.in fimgs.man.in fimrc.man.in
 #MAN2HTML=man2html
-MAN2HTML=$(MAN) --html=cat
+#MAN2HTML=$(MAN) --html=cat
+MAN2HTML=groff -Thtml -man
 MAN2HTMLS = sed 's/&minus;/-/g'
 MAN2TXT=$(MAN) --ascii # when having e.g. a minimal groff installation
 

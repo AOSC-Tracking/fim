@@ -21,7 +21,7 @@
  * Experimental support for reading WebP images via libwebp
 # (r1988)
  * FIM requires a compiler supporting at least C++11
-# (r2002-r2003,r2047-r2053,r2056-r2071,r2073,r2079,r2091,r2097-r2098)
+# (r2002-r2003,r2047-r2053,r2056-r2071,r2073,r2079,r2091,r2097-r2098,2104)
  * More tests
 # (r2048)
  * Searches via '/' or '?' are now replayable via "recording 'repeat_last'"
@@ -49,7 +49,7 @@
  * The expandos of the form %:VAR: will first check for i:VAR, and then for VAR (experimental)
 # (r2075,r2077,r2090-r2091,r2093,r2096,r2100-2102)
 # * Misc fixes (e.g.: -o aa=w, poppler API, configure, ...)
-# (r2076,r2079,r2098)
+# (r2076,r2079,r2098,2104)
  * --slideshow option now accepts decimal values
 # (r2089)
 # * limited cache support for multipage files

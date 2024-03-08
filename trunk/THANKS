@@ -1,5 +1,6 @@
 	Thanks go to (in temporal order, newer to older):
 
+Leah Neukirchen, for build, configure, testing, and various suggestions
 Sijmen J. Mulder, for catching residual bashisms in configure.ac
 Rafael Laboissiere, for several compatibility and correctness fixes
 Martin Klaiber, for pointing out problems and testing

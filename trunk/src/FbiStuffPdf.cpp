@@ -58,10 +58,15 @@
 #define FIM_PDF_USE_FILENO 0
 #endif /* HAVE_FILENO */
 
-#if ( POPPLER_VERSION_MAJOR > 0 || (POPPLER_VERSION_MAJOR==0 && (POPPLER_VERSION_MAJOR>32)) )
+#if ( POPPLER_VERSION_MAJOR > 0 || (POPPLER_VERSION_MAJOR==0 && (POPPLER_VERSION_MINOR>82)) ) /* 759d1905 2019-11-02 17:50:59 */
 #define FIM_POPPLER_WITH_UNIQPTR 1
 #else
 #define FIM_POPPLER_WITH_UNIQPTR 0
+#endif
+#if ( POPPLER_VERSION_MAJOR > 22 || (POPPLER_VERSION_MAJOR==22 && (POPPLER_VERSION_MINOR>3)) ) /* 07889cdf 2022-02-15 17:14:44 */
+#define FIM_POPPLER_WITH_UNIQGOO 1
+#else
+#define FIM_POPPLER_WITH_UNIQGOO 0
 #endif
 
 /*								*/
@@ -197,7 +202,11 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	globalParams->setBaseDir(_);
 #endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
 
+#if FIM_POPPLER_WITH_UNIQGOO
+	ds->pd = new PDFDoc(std::make_unique<GooString>(filename));
+#else /* FIM_POPPLER_WITH_UNIQGOO */
 	ds->pd = new PDFDoc(new GooString(filename), FIM_NULL, FIM_NULL, (void*)FIM_NULL);
+#endif /* FIM_POPPLER_WITH_UNIQGOO */
 	if (!ds->pd)
         	goto err;
 
