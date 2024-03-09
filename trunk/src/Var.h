@@ -230,7 +230,17 @@ class Var FIM_FINAL
 		if(both_typed(FimTypeFloat,v))
 			return getFloat()-v.getFloat();
 		if(both_typed(FimTypeString,v))
+		{
+#if FIM_WANT_STRINGS_SUBTRACT
+			if (!isdigit(s_[0]) && !isdigit(v.s_[0]))
+			{
+				fim::string ts = getString();
+				ts.substitute(v.getString().c_str(), "");
+				return ts;
+			}
+#endif /* FIM_WANT_STRINGS_SUBTRACT */
 			return getFloat()-v.getFloat();
+		}
 		return getFloat()-v.getFloat(); 
 	}
 	int eq (const char*s)const

@@ -51,6 +51,8 @@
 # * Misc fixes (e.g.: -o aa=w, poppler API, configure, don't use pipe() with parser, ...)
 # (r2076,r2079,r2098,2104)
  * --slideshow option now accepts decimal values
+# (r2109)
+ * experimental: given strings a and b, a-b is the value with all occurrences of regexp b removed from a
 # (r2089)
 # * limited cache support for multipage files
 # (r2092)

@@ -27,6 +27,7 @@
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
  * The expandos of the form %:VAR: will first check for i:VAR, and then for VAR (experimental)
  * --slideshow option now accepts decimal values
+ * experimental: given strings a and b, a-b is the value with all occurrences of regexp b removed from a
  * bugfix: avoid memory leak while decoding PDF
 
                 Version 0.6-rc2

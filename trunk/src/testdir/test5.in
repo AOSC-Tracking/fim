@@ -14,4 +14,16 @@ else {stdout "single negations on regular expressions work";}
 if( !(!("aba"=~"a.*a")) ){stdout "double negations on regular expressions work";}
 else {stdout "double negations on regular expressions don't work"; }
 
+if( "baba" - "b" == 0 ){stdout "text subtraction test (on strings) is not yet ready";}
+else {stdout "text subtraction test (on strings) seems broken"; }
+
+a="baba";
+b="b";
+c = a - b;
+echo c;
+if( c == "aa" ){stdout "text subtraction test (on variables) is fine";}
+if( c =~ "aa" ){stdout "text subtraction test (on variables) is fine";}
+else {stdout "text subtraction (on variables) seems broken"; }
+if( c != "aa" ){stdout "text subtraction test (on variables) seems broken";}
+
 stdout "string test success";
