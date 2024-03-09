@@ -268,9 +268,10 @@ struct fim_options_t fim_options[] = {
     },
     {FIM_OSW_OUTPUT_DEVICE,      required_argument,       FIM_NULL, 'o',
 	"specify the desired output driver (aka graphic mode) ", FIM_DDN_VARS,
-"Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks.\n"
-"The available devices depend on the original configuration/compilation options, so you should\n"
-"get the list of available output devices issuing \\fBfim --version\\fP.\n"
+"Use the specified \\fBdevice\\fP (one among " FIM_DDN_VARS_NB ") as fim video output device, overriding automatic checks.\n"
+"If the \\fBdevice\\fP is empty and followed by " FIM_CNS_EX_GOPTS_STRING ", it will be selected automatically.\n"
+"The available devices depend on the current environment and on the configuration and compilation options.\n"
+"You can get the list of available output devices issuing \\fBfim --version\\fP.\n"
 "The possible values to " FIM_CNS_EX_GOPTS_STRING " that we describe here can also be passed as \"display 'reinit' " FIM_CNS_EX_GOPTS_STRING "\" -- see man " FIM_MAN_fR("fimrc") " for this.\n"
 // #ifndef FIM_WITH_NO_FRAMEBUFFER
 "The " FIM_MAN_fB(FIM_DDN_INN_FB) " option selects the Linux framebuffer. Presence of " FIM_CNS_EX_GOPTS_STRING " with value " FIM_MAN_fB("'S'") " (e.g. '" FIM_MAN_fB("fb=S") "') makes framebuffer initialization more picky: it does not tolerate running in a screen session.\n"
@@ -791,7 +792,7 @@ int fim_dump_man_page(void)
 			"fim - \\fBF\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBIM\\fPproved, an universal image viewer\n"
 			".SH SYNOPSIS\n"
 			FIM_MAN_Bh("fim", "[" FIM_CNS_EX_OPTIONS "] [--] " FIM_CNS_EX_IMPA_STRING " [" FIM_CNS_EX_IMPS_STRING "]")
-			FIM_MAN_Bh("fim", "--" FIM_OSW_OUTPUT_DEVICE " {"  FIM_DDN_VARS_NB "} ...")
+			FIM_MAN_Bh("fim", "--" FIM_OSW_OUTPUT_DEVICE " "  FIM_DDN_VARS	 "")
 			FIM_MAN_Bh("... | fim", "[" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_IMPS_STRING "] -"))+
 #ifdef FIM_READ_STDIN
 			string(FIM_MAN_Bh("fim", "[" FIM_CNS_EX_OPTIONS "] [--] [" FIM_CNS_EX_FILES_STRING "] - < " FIM_CNS_EX_FNLTF_STRING ))+
@@ -1274,6 +1275,54 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			if(std::getline(ls,fn,sc))
 				argsc.push_back(fn);
 	}
+}
+
+
+std::string guess_output_device(void)const
+{
+	// TODO : need better output device probing mechanism
+	std::string output_device;
+
+	if( fim_getenv(FIM_ENV_SSH) && *fim_getenv(FIM_ENV_SSH) ) /* is this a ssh session ? */
+	{
+#ifdef FIM_WITH_AALIB
+		output_device=FIM_DDN_INN_AA;
+#endif /* FIM_WITH_AALIB */
+#ifdef FIM_WITH_LIBCACA
+		output_device=FIM_DDN_INN_CACA;
+#endif /* FIM_WITH_LIBCACA */
+	}
+	else
+	#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2) || defined(FIM_WITH_LIBGTK)
+	/* check to see if we are under X */
+	if( fim_getenv(FIM_ENV_DISPLAY) && *fim_getenv(FIM_ENV_DISPLAY) )
+	{
+#ifdef FIM_WITH_LIBIMLIB2
+		output_device=FIM_DDN_INN_IL2;
+#endif /* FIM_WITH_LIBIMLIB2 */
+#ifdef FIM_WITH_LIBSDL
+		output_device=FIM_DDN_INN_SDL;
+#endif /* FIM_WITH_LIBSDL */
+#ifdef FIM_WITH_LIBGTK
+		output_device=FIM_DDN_INN_GTK;
+#endif /* FIM_WITH_LIBGTK */
+	}
+	else
+	#endif
+#ifndef FIM_WITH_NO_FRAMEBUFFER
+		output_device=FIM_DDN_INN_FB;
+#else /* FIM_WITH_NO_FRAMEBUFFER */
+#ifdef FIM_WITH_AALIB
+		output_device=FIM_DDN_INN_AA;
+#else /* FIM_WITH_AALIB */
+#ifdef FIM_WITH_LIBCACA
+		output_device=FIM_DDN_INN_CACA;
+#else /* FIM_WITH_LIBCACA */
+		output_device=FIM_DDN_INN_DUMB ;
+#endif /* FIM_WITH_LIBCACA */
+#endif /* FIM_WITH_AALIB */
+#endif	/* FIM_WITH_NO_FRAMEBUFFER */
+	return output_device;
 }
 
 	public:
@@ -2002,49 +2051,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 	
 		/* output device guess */
-		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )
-		{
-			if( fim_getenv(FIM_ENV_SSH) && *fim_getenv(FIM_ENV_SSH) ) /* is this a ssh session ? */
-			{
-	#ifdef FIM_WITH_AALIB
-				g_fim_output_device=FIM_DDN_INN_AA;
-	#endif /* FIM_WITH_AALIB */
-	#ifdef FIM_WITH_LIBCACA
-				g_fim_output_device=FIM_DDN_INN_CACA;
-	#endif /* FIM_WITH_LIBCACA */
-			}
-			else
-			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2) || defined(FIM_WITH_LIBGTK)
-			/* check to see if we are under X */
-			if( fim_getenv(FIM_ENV_DISPLAY) && *fim_getenv(FIM_ENV_DISPLAY) )
-			{
-	#ifdef FIM_WITH_LIBIMLIB2
-				g_fim_output_device=FIM_DDN_INN_IL2;
-	#endif /* FIM_WITH_LIBIMLIB2 */
-	#ifdef FIM_WITH_LIBSDL
-				g_fim_output_device=FIM_DDN_INN_SDL;
-	#endif /* FIM_WITH_LIBSDL */
-	#ifdef FIM_WITH_LIBGTK
-				g_fim_output_device=FIM_DDN_INN_GTK;
-	#endif /* FIM_WITH_LIBGTK */
-			}
-			else
-			#endif
-#ifndef FIM_WITH_NO_FRAMEBUFFER
-			g_fim_output_device=FIM_DDN_INN_FB;
-#else /* FIM_WITH_NO_FRAMEBUFFER */
-	#ifdef FIM_WITH_AALIB
-			g_fim_output_device=FIM_DDN_INN_AA;
-	#else /* FIM_WITH_AALIB */
-	#ifdef FIM_WITH_LIBCACA
-			g_fim_output_device=FIM_DDN_INN_CACA;
-	#else /* FIM_WITH_LIBCACA */
-			g_fim_output_device=FIM_DDN_INN_DUMB ;
-	#endif /* FIM_WITH_LIBCACA */
-	#endif /* FIM_WITH_AALIB */
-#endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
-		}
-		// TODO : need better output device probing mechanism
+
+		if( FIM_CNS_EMPTY_STRING == g_fim_output_device || '=' == g_fim_output_device[0] )
+			g_fim_output_device = guess_output_device() + g_fim_output_device;
 
 #if FIM_WANT_R_SWITCH
 		if(rs)
