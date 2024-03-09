@@ -60,12 +60,12 @@ int fim_pipedesc[2];
 	if(result<=0) {close(fim_pipedesc[0]);close(fim_pipedesc[1]);} \
 }
 #else /* FIM_WANT_PIPE_IN_LEXER */
-std::string fim_cmdbuf;
+fim_cmd_queue_t fim_cmdbuf;
 
 #define YY_INPUT(buf,result,max_size) \
 { \
 	const int r = fim_cmdbuf.size() ? 1 : 0; \
-	if (r) { buf[0]=fim_cmdbuf[0]; fim_cmdbuf.erase(0,1); } \
+	if (r) { buf[0]=fim_cmdbuf.front(); fim_cmdbuf.pop(); } \
 	else { buf[0]=EOF; } \
 	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
 	result = (buf[0]==EOF||r<1)?0:1; \

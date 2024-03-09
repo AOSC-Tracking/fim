@@ -30,7 +30,10 @@
 #if FIM_WANT_PIPE_IN_LEXER
 extern int fim_pipedesc[2];
 #else /* FIM_WANT_PIPE_IN_LEXER */
-extern std::string fim_cmdbuf;
+#include <deque>
+#include <queue>
+typedef std::deque<fim_char_t> fim_cmd_deque_t;
+typedef std::queue<fim_char_t, fim_cmd_deque_t> fim_cmd_queue_t;
 #endif /* FIM_WANT_PIPE_IN_LEXER */
 
 #if HAVE_FLEXLEXER_H
