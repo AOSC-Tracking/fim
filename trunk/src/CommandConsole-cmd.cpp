@@ -234,8 +234,12 @@ err:
 				oss << "\"" << item << "\" key is bound to command: " << getBoundAction(kstr_to_key(item))<<"\n";
 			if(isVariable(item) || fim_var_help_db_query(item).size())
 			{
-				oss << "\"" << item << "\" is a variable, with"
-					<< " description:\n" << fim_var_help_db_query(item) << "\n";
+				oss << "\"" << item << "\" is a variable, with";
+				const fim::string vds = fim_var_help_db_query(item);
+				if (vds.size())
+					oss << " description:\n" << fim_var_help_db_query(item) << "\n";
+				else
+					oss << " no description.\n";
 				if (islower(dl))
 					oss << " and " << " value:\n" << getStringVariable(item) << "\n";
 			}

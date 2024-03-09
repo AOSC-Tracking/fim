@@ -79,7 +79,15 @@ typedef nodeType * NodeType;
 #define FIM_OPRNDT(P) (P)->type
 #define FIM_OPRNDH(P) (P)->typeHint
 #define FIM_GV(V) fim::cc.getVariable(V)
-#define FIM_SV(I,V) fim::cc.setVariable(I,V)
+#define FIM_SV_BARE(I,V) fim::cc.setVariable(I,V)
+#ifdef FIM_WITH_LIBGTK
+#define FIM_SV(I,V) \
+			if(isalpha(I[0]) && !fim::cc.isSetVar(I)) \
+				fim::cc.setVariable(FIM_INTERNAL_STATE_CHANGED,1); \
+			FIM_SV_BARE(I,V)
+#else /* FIM_WITH_LIBGTK */
+#define FIM_SV(I,V) FIM_SV_BARE(I,V)
+#endif /* FIM_WITH_LIBGTK */
 #define FIM_GVT(V) fim::cc.getVariableType(V)
 #define FIM_EC(CMD,ARGS) fim::cc.execute(CMD,ARGS)
 typedef nodeType * NodeType;

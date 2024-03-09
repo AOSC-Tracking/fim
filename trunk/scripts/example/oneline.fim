@@ -14,5 +14,5 @@ $;
 -30%;
 # jump to the next image whose filename matches the ".*jpg" regular expression:
 /.*jpg;
-# executes the "date" system command
+# execute the "date" system command
 !"date";

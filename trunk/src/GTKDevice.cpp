@@ -1061,10 +1061,11 @@ repeat:
 		const auto cmd = std::string(b,0,e-b);
 		const void* cp = b;
 		std::string tooltip;
+		std::string tooltip_base;
 
 		if ( verbose_specs_ )
-			tooltip += s,
-			tooltip += "\n";
+			tooltip_base += s,
+			tooltip_base += "\n";
 
 		if ( rcmds.find(cmd) != rcmds.end() )
 		{
@@ -1095,7 +1096,7 @@ repeat:
 				menu_items_[add] = (GtkMenuItem*) gtk_check_menu_item_new_with_mnemonic(lbl.c_str()),
 				check_menu_items_[xtrcttkn(cmd.c_str())].insert((GtkWidget*) menu_items_[add]), // or vid?
 				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_items_[add]), FALSE);
-				tooltip += get_tooltip_from_toggle_spec(cmd);
+				tooltip += tooltip_base + get_tooltip_from_toggle_spec(cmd);
 			}
 			else
 			{
@@ -1133,7 +1134,7 @@ repeat:
 			{
 				g_signal_connect(G_OBJECT(menu_items_[add]), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI ); // cp centered on command, b is more
 				if (!tooltip.size() && cc.aliasRecall(cmd).size())
-					tooltip = cmd + " -> " + cc.aliasRecall(cmd);
+					tooltip = tooltip_base + cmd + " -> " + cc.aliasRecall(cmd);
 				gtk_widget_set_tooltip_text((GtkWidget*)menu_items_[add], (tooltip.size() ? tooltip.c_str() : cmd.c_str()) );
 			}
 			else
@@ -1834,20 +1835,28 @@ fim_err_t GTKDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_
 	{
 		FIM_GTK_DBG_COUT << ":" << rs << "\n";
 
-		if((!verbose_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find("mm") >= 0)
-		{
-			verbose_ = 1;
-			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menus build\n";
-		}
 		if((!verbose_specs_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find('m') >= 0)
 		{
 			verbose_specs_ = 1;
 			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu tooltip\n";
 		}
+
+		if((!verbose_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find("mm") >= 0)
+		{
+			verbose_ = 1;
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menus build\n";
+		}
+
 		if((!verbose_ops_) && cc.getVariable(FIM_VID_DBG_COMMANDS).find("mmm") >= 0)
 		{
 			verbose_ops_ = 1;
 			std::cout << FIM_CNS_DBG_CMDS_PFX << "setting verbose menu operations\n";
+		}
+
+		if (strchr(rs, 'V'))
+		{
+			verbose_ = verbose_specs_ = verbose_ops_ = 0;
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "unsetting verbosity\n";
 		}
 
 		if( rs && *rs )
