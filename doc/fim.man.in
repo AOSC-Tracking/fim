@@ -9,7 +9,7 @@ fim - \fBF\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBIM\fPproved
 [\fR\fI{options}\fR] [--] \fR\fI{imagepath}\fR [\fR\fI{imagepaths}\fR]
 .br
 .B fim
---output-device {fb|sdl|gtk|ca|aa|imlib2|dumb} ...
+--output-device [fb|sdl|gtk|ca|aa|dumb][=\fR\fI{gfxopts}\fR]
 .br
 .B ... | fim
 [\fR\fI{options}\fR] [--] [\fR\fI{imagepaths}\fR] -
@@ -206,10 +206,11 @@ Do not load or save execution history at startup.
 \fB-p\fP, \fB--script-from-stdin\fP
 Read commands from stdin before entering in interactive mode.
 .TP
-\fB-o (fb|sdl|gtk|ca|aa|imlib2|dumb)[=\fR\fI{gfxopts}\fR]\fP, \fB--output-device (fb|sdl|gtk|ca|aa|imlib2|dumb)[=\fR\fI{gfxopts}\fR]\fP
-Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.
-The available devices depend on the original configuration/compilation options, so you should
-get the list of available output devices issuing \fBfim --version\fP.
+\fB-o [fb|sdl|gtk|ca|aa|dumb][=\fR\fI{gfxopts}\fR]\fP, \fB--output-device [fb|sdl|gtk|ca|aa|dumb][=\fR\fI{gfxopts}\fR]\fP
+Use the specified \fBdevice\fP (one among fb|sdl|gtk|ca|aa|dumb) as fim video output device, overriding automatic checks.
+If the \fBdevice\fP is empty and followed by \fR\fI{gfxopts}\fR, it will be selected automatically.
+The available devices depend on the current environment and on the configuration and compilation options.
+You can get the list of available output devices issuing \fBfim --version\fP.
 The possible values to \fR\fI{gfxopts}\fR that we describe here can also be passed as "display 'reinit' \fR\fI{gfxopts}\fR" -- see man \fR\fIfimrc\fR for this.
 The \fBfb\fP option selects the Linux framebuffer. Presence of \fR\fI{gfxopts}\fR with value \fB'S'\fP (e.g. '\fBfb=S\fP') makes framebuffer initialization more picky: it does not tolerate running in a screen session.
 The \fBca\fP option (coloured ASCII-art) can be specified as \fBca\fP\fB[={['w']}] \fP; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.

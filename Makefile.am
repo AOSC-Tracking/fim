@@ -193,6 +193,12 @@ if ENABLE_GIF
 	test `SSH_TTY=1 $(NO_ASAN) $(FIM_EXE) -q $(FIMNORCOPTS) $(top_srcdir)/media/icon_smile.gif -c 'if(i:swidth<i:sheight){stderr i:swidth!=_screen_width;}else{stderr i:sheight!=_screen_height;}' -kq 2>&1 > /dev/null` = 0
 endif
 
+.PHONY: anyxtests
+anyxtests: all
+if ENABLE_JPEG
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) -o '=17x17' $(top_srcdir)/media/ -c 'quit !(_device_string=="sdl"||_device_string=="gtk");' # auto selection of device
+	$(NO_ASAN) $(FIM_EXE) $(FIMNORCOPTS) --output-device='=17x17' $(top_srcdir)/media/ -c 'quit !(_device_string=="sdl"||_device_string=="gtk");' # auto selection of device
+endif
 
 .PHONY: gtktests
 gtktests: all
@@ -903,6 +909,7 @@ endif
 if ENABLE_GTK
 	@if test -n "$(DISPLAY)"; then make gtktests; fi
 endif
+	@if test -n "$(DISPLAY)" && $(FIM_EXE) -V | grep 'gtk\|sdl' ; then make anyxtests; fi
 if HAVE_FIMGS
 	make fimgstests
 endif

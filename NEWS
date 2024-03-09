@@ -18,6 +18,7 @@
  * Simultaneous specification of file and page to 'goto' now possible
  * Enable descriptions to be searched in "goto /PATTERN/" by keeping the newly introduced 'D' in _re_search_opts
  * -o sdl  with SDL2: reduce chance of intercepting Tab during window switch
+ * -o =OPTS / --output-device==OPTS / --output-device =OPTS will pass OPTS to the auto-detected output device
  * bugfix: avoid terminal clutter after interruption of "endless_slideshow"
  * Configure fixes (remove bashisms by SDL version recognition)
  * Scaling fix when starting with -o ca

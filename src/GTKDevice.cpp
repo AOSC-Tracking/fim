@@ -18,14 +18,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-// TODO: this is work in progress, don't use it.
+// Note: this is work in progress, don't use it; here misc todos:
 // - need to cache more vars and eliminate redundancy of gdk_pixbuf_get_pixels()
-// - move vars to (anyway singleton) class
-// - in command line mode, clicking on menus may input command there
+// - move global vars to (anyway singleton) class
+// - in command line mode, perhaps to input text from menus when clicked?
 // - full screen mode to hide scrolldown menu
-// - update and sync widgets with vars' value
-// - clean up FIM's finalization with GTK's finalization
-// - radio buttons group update
 // - shall menu commands be allowed while in the console mode, or not? (FIM_GTK_ALLOW_MENU_IN_CONSOLE)
 // - auto sync of menus: variables, commands, aliases... (see FIM_GTK_WITH_VARS_SYNC)
 // - needs menu with i:variables
