@@ -395,14 +395,14 @@ static const char *sym_strstr(const char *haystack, const char *needle)
 		return NULL;
 }
 
-static std::string do_get_item_help(const char* item)
+static std::string do_get_item_help(const char* item, const fim_hflags_t flt=FIM_H_ALL)
 {
 #if FIM_GTK_WITH_VARS_SYNC
 	const auto ghc = 'l';
 #else /* FIM_GTK_WITH_VARS_SYNC */
 	const auto ghc = 'L';
 #endif /* FIM_GTK_WITH_VARS_SYNC */
-	const auto ih = cc.get_help(item, ghc);
+	const auto ih = cc.get_help(item, ghc, flt);
 	return ih;
 }
 
@@ -510,7 +510,7 @@ static void sync_vars_menus()
 #if FIM_GTK_WITH_VARS_SYNC
 	for ( const auto & cmi : var_menu_items_)
 	{
-		const auto tooltip = do_get_item_help(1+(const char*)strrchr(cmi.first.c_str(),'/'));
+		const auto tooltip = do_get_item_help(1+(const char*)strrchr(cmi.first.c_str(),'/'),FIM_H_VAR);
 		gtk_widget_set_tooltip_text(cmi.second, tooltip.c_str() );
 		gtk_widget_show(cmi.second);
 	}
@@ -651,10 +651,10 @@ void do_rebuild_help_aliases_menu(GtkWidget *aliaMi, const bool help_or_cmd, con
 		{
 			FIM_GTK_ASVA(alias);
 			if ( help_or_cmd )
-				gtk_widget_set_tooltip_text(aliMi, (do_get_item_help(alias.c_str()) /*+ " ... and click to see help..."*/).c_str() ),
+				gtk_widget_set_tooltip_text(aliMi, (do_get_item_help(alias.c_str(),FIM_H_ALIAS) /*+ " ... and click to see help..."*/).c_str() ),
 				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI ); // TODO; need specific help mechanism..
 			else
-				gtk_widget_set_tooltip_text(aliMi, (do_get_item_help(alias.c_str()) /*+ " ... and click to see definition..."*/).c_str() ),
+				gtk_widget_set_tooltip_text(aliMi, (do_get_item_help(alias.c_str(),FIM_H_ALIAS) /*+ " ... and click to see definition..."*/).c_str() ),
 				g_signal_connect( G_OBJECT(aliMi), "activate", G_CALLBACK( cb_cc_exec ), FIM_GTK_LCI );
 		}
 		gtk_menu_shell_append(GTK_MENU_SHELL(aliaMenu_), aliMi);
@@ -685,10 +685,10 @@ void do_rebuild_help_variables_menu(GtkWidget *varsMi, const bool help_or_cmd, c
 #endif /* FIM_GTK_WITH_VARS_SYNC */
 		// perhaps still need check if variable proper..
 		if (help_or_cmd)
-			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see help..."*/).c_str() ),
+			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str(),FIM_H_VAR) /*+ " ... and click to see help..."*/).c_str() ),
 			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_item_help ), FIM_GTK_LCI );
 		else
-			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str()) /*+ " ... and click to see value ..."*/).c_str() ),
+			gtk_widget_set_tooltip_text(varMi, (do_get_item_help(var.c_str(),FIM_H_CMD) /*+ " ... and click to see value ..."*/).c_str() ),
 			g_signal_connect( G_OBJECT(varMi), "activate", G_CALLBACK( do_print_var_val ), FIM_GTK_LCI );
 		gtk_menu_shell_append(GTK_MENU_SHELL(varsMenu_), varMi);
 		gtk_widget_show(varMi);
@@ -715,7 +715,7 @@ void do_rebuild_help_commands_menu(GtkWidget *cmdsMi, const bool help_or_press, 
 		// TODO: what about cmd_to_seq_?
 		const auto & csi = cmd_to_seq_.find(cmd);
 		GtkWidget * const cmdMi = gtk_menu_item_new_with_label(cmd.c_str());
-		gtk_widget_set_tooltip_text(cmdMi, (cmd + ": " + do_get_item_help(cmd.c_str())).c_str() ); // help msg
+		gtk_widget_set_tooltip_text(cmdMi, (cmd + ": " + do_get_item_help(cmd.c_str(),FIM_H_CMD)).c_str() ); // help msg
 
 		if ( csi != cmd_to_seq_.end() )
 		{

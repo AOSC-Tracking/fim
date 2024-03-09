@@ -138,7 +138,7 @@ err:
 	}
 #endif
 
-	fim_cxr CommandConsole::get_help(const fim_cmd_id& item, const char dl)const
+	fim_cxr CommandConsole::get_help(const fim_cmd_id& item, const char dl, const fim_hflags_t flt)const
 	{
 		if(item.size())
 		{
@@ -148,6 +148,7 @@ err:
 				fim::string hstr,cstr,astr,bstr,ptn;
 
 				ptn = item.substr(1,item.size());
+				if(flt&FIM_H_CMD)
 				for(size_t i=0;i<commands_.size();++i) 
 					if(commands_[i].getHelp().find(ptn) != commands_[i].getHelp().npos)
 					{
@@ -155,6 +156,7 @@ err:
 						cstr += " ";
 					}
 
+				if(flt&FIM_H_ALIAS)
 				for( aliases_t::const_iterator ai=aliases_.begin();ai!=aliases_.end();++ai)
 				{
 					if(ai->first.find(ptn) != ai->first.npos)
@@ -176,6 +178,7 @@ err:
 					}
 				}
 
+				if(flt&FIM_H_BIND)
 				for(bindings_t::const_iterator  bi=bindings_.begin();bi!=bindings_.end();++bi)
 				{
 					key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
@@ -228,10 +231,13 @@ err:
 				oss << sws << "\n";
 			if( findCommandIdx(item) != FIM_INVALID_IDX )
 				oss << "\"" << item << "\" is a command, documented:\n" << commands_[findCommandIdx(item)].getHelp() << "\n";
+			if(flt&FIM_H_ALIAS)
 			if(aliasRecall(fim::string(item))!=FIM_CNS_EMPTY_STRING)
 				oss << "\"" << item << "\" is an alias, and was declared as:\n" << get_alias_info(item) << "\n";
+			if(flt&FIM_H_BIND)
 			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
 				oss << "\"" << item << "\" key is bound to command: " << getBoundAction(kstr_to_key(item))<<"\n";
+			if(flt&FIM_H_VAR)
 			if(isVariable(item) || fim_var_help_db_query(item).size())
 			{
 				oss << "\"" << item << "\" is a variable, with";
