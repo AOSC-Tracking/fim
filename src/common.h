@@ -36,11 +36,6 @@ typedef std::deque<fim_char_t> fim_cmd_deque_t;
 typedef std::queue<fim_char_t, fim_cmd_deque_t> fim_cmd_queue_t;
 #endif /* FIM_WANT_PIPE_IN_LEXER */
 
-#if HAVE_FLEXLEXER_H
-extern FlexLexer *lexer;
-//#define YYLEX lexer->yylex()
-#endif /* HAVE_FLEXLEXER_H */
-
 namespace fim
 {
 	class CommandConsole;

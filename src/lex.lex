@@ -251,3 +251,6 @@ STRINGC_DQ {STRINGC}|\'
 
 %%
 
+#if HAVE_FLEXLEXER_H
+yyFlexLexer lexer; // better here than FlexLexer*lexer elsewhere
+#endif /* HAVE_FLEXLEXER_H */

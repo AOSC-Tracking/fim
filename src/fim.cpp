@@ -30,9 +30,6 @@
  * Global variables.
  * */
 	fim::string g_fim_output_device;
-#if HAVE_FLEXLEXER_H
-	FlexLexer *lexer;
-#endif /* HAVE_FLEXLEXER_H */
 
 /*
  * (nearly) all Fim stuff is in the fim namespace.
@@ -1906,16 +1903,6 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		// dt += getmilliseconds();
 		// std::cout << fim::string("fetched images list in ") << dt << " ms" << std::endl;
 	
-#if HAVE_FLEXLEXER_H
-		lexer=new yyFlexLexer;	//used by YYLEX
-		if(!lexer)
-		{
-			FIM_FPRINTF(stderr, "error while allocating the lexer!\n\n");
-			retcode=-1;
-			goto ret;
-		}
-#endif /* HAVE_FLEXLEXER_H */
-
 	#ifdef FIM_READ_STDIN	
 #if FIM_WANT_OBSOLETE
 		if( ( read_stdin_choice == FilesList ) +

@@ -2,7 +2,7 @@
 /*
  yacc.ypp : Parser source file template
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,8 +59,11 @@
 #include "fim_interpreter.h"
 #include "fim.h"
 
+#if HAVE_FLEXLEXER_H
+extern yyFlexLexer lexer;
+#endif /* HAVE_FLEXLEXER_H */
 #ifndef yylex
-#define  yylex lexer->yylex
+#define  yylex lexer.yylex
 #endif
 
 /* See fim_interpreter.cpp for prototypes */
