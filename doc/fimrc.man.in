@@ -1573,7 +1573,7 @@ command.
 Further default aliases are usually loaded at startup -- see the CONFIGURATION FILE EXAMPLE section below.
 .SH COMMAND LINE USAGE EXAMPLES
 .nf
-# jump to the third image (or to the third page if only one image is loaded):
+# jump to the third image:
 3;
 # jump to first image:
 ^;
@@ -1589,7 +1589,7 @@ $;
 -30%;
 # jump to the next image whose filename matches the ".*jpg" regular expression:
 /.*jpg;
-# executes the "date" system command
+# execute the "date" system command
 !"date";
 
 .SH CONFIGURATION FILE EXAMPLE
@@ -1891,10 +1891,12 @@ if( _device_string=='gtk' ) {
 	alias "man_fim"   "system 'man' 'fim';  _display_console=0;toggleVerbosity;";
 	alias "man_fimrc" "system 'man' 'fimrc';_display_console=0;toggleVerbosity;";
 	alias '_rebuild_menus' 'display "reinit" "f";';
+	alias '_rebuild_quieter_menus' '_debug_commands=_debug_commands-"m";display "reinit" "fV";'; # remove "m" occurrences from _debug_commands and rebuild
 	alias '_rebuild_verboser_menus' '_debug_commands=_debug_commands."m";_rebuild_menus;';
 	alias '_rebuild_verbosest_menus' '_debug_commands=_debug_commands."mm";_rebuild_menus;';
 	alias 'toggle_gtk_menus' 'if(!_hide_gtk_menus){_hide_gtk_menus=1;}else{_hide_gtk_menus=0;}';
 	autocmd "PreInteractiveCommand" "" "if(__internal_state_changed){_rebuild_menus;__internal_state_changed=0;}";
+	autocmd "PostExecutionCommand"  "" "if(__internal_state_changed){_rebuild_menus;__internal_state_changed=0;}";
 	autocmd "PreExecutionCycle"     "" "if(__internal_state_changed){_rebuild_menus;__internal_state_changed=0;}";
 	display "menuadd" 
 		"_File/"
@@ -1955,10 +1957,11 @@ if( _device_string=='gtk' ) {
 		"_Advanced/Show output console (then hide with Tab)  toggleVerbosity  v"
 		"_Advanced/Verbose keys  toggle___verbose_keys__1__0  "
 		"_Advanced/Low execution verbosity  _debug_commands=0    Intermediate execution verbosity  _debug_commands=ackCm    High execution verbosity  _debug_commands=ackCmmi  "
+		"_Advanced/Rebuild menus with no verbosity  _rebuild_quieter_menus"
 		"_Advanced/Rebuild menus with tooltips  _rebuild_verboser_menus"
 		"_Advanced/Rebuild menus very verbosely  _rebuild_verbosest_menus"
 		"_Advanced/Verbose keys  toggle||_display_busy||1||0"
-		"_Advanced/Downscale huge on load  toggle||_downscale_huge_at_load||1||0"
+		"_Advanced/Downscale huge images on load  toggle||_downscale_huge_at_load||1||0"
 		"_Advanced/Background prefetch  _want_prefetch=2    Foreground prefetch  _want_prefetch=1    No prefetch  _want_prefetch=0    "
 		"_Custom actions/_Mark current file  mark_current_file"
 		"_Custom actions/_Go to marked file  goto_marked_file"

@@ -1,5 +1,5 @@
 const fim_char_t * const FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =
-"# jump to the third image (or to the third page if only one image is loaded):\n"
+"# jump to the third image:\n"
 "3;\n"
 "# jump to first image:\n"
 "^;\n"
@@ -15,6 +15,6 @@ const fim_char_t * const FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =
 "-30%;\n"
 "# jump to the next image whose filename matches the \".*jpg\" regular expression:\n"
 "/.*jpg;\n"
-"# executes the \"date\" system command\n"
+"# execute the \"date\" system command\n"
 "!\"date\";\n"
 "";
