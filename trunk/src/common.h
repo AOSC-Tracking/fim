@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2023 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,13 @@
 #undef yyFlexLexer
 #include <FlexLexer.h>
 #endif /* HAVE_FLEXLEXER_H */
+
+#define FIM_WANT_PIPE_IN_LEXER 0 /* note that we are still checking for HAVE_PIPE */
+#if FIM_WANT_PIPE_IN_LEXER
 extern int fim_pipedesc[2];
+#else /* FIM_WANT_PIPE_IN_LEXER */
+extern std::string fim_cmdbuf;
+#endif /* FIM_WANT_PIPE_IN_LEXER */
 
 #if HAVE_FLEXLEXER_H
 extern FlexLexer *lexer;
