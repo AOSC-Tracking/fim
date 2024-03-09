@@ -65,6 +65,12 @@ extern fim_sys_int yyparse();
 
 #define FIM_CNS_IFELSE "if(" FIM_CNS_EX_NBEXP_STRING "){" FIM_CNS_EX_ACT_STRING ";}['else'{" FIM_CNS_EX_ACT_STRING ";}]"
 
+#if FIM_WANT_PIPE_IN_LEXER
+extern int fim_pipedesc[2];
+#else /* FIM_WANT_PIPE_IN_LEXER */
+extern fim_cmd_queue_t fim_cmdbuf;
+#endif /* FIM_WANT_PIPE_IN_LEXER */
+
 namespace fim
 {
 #if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
@@ -746,7 +752,7 @@ ret:
 			return FIM_ERR_GENERIC;
 		} 
 #else /* FIM_WANT_PIPE_IN_LEXER */
-		fim_cmdbuf += s;
+		fim_cmdbuf = fim_cmd_queue_t(fim_cmd_deque_t(s, s+strlen(s)));;
 #endif /* FIM_WANT_PIPE_IN_LEXER */
 		// note: the following is not convincing ;-)
 		for(fim_char_t *p=s;*p;++p)
@@ -774,7 +780,8 @@ ret:
 #if FIM_WANT_PIPE_IN_LEXER
 		close(fim_pipedesc[0]);
 #else /* FIM_WANT_PIPE_IN_LEXER */
-		fim_cmdbuf.clear();
+		fim_cmdbuf = fim_cmd_queue_t (); // unnecessary leftovers may remain after invalid input
+		assert ( 0 == fim_cmdbuf.size() );
 #endif /* FIM_WANT_PIPE_IN_LEXER */
 		if(iret!=0 || errno!=0)
 		{
