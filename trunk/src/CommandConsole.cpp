@@ -746,7 +746,7 @@ ret:
 		for(fim_char_t *p=s;*p;++p)
 			if(*p=='\n')
 				*p=' ';
-		iret=close(fim_pipedesc[1]);
+		iret=close(fim_pipedesc[1]); // important to close this before yyparse()
 		if(iret || errno)
 		{
 			fim_perror("in close(fim_pipedesc[1])");
@@ -754,7 +754,7 @@ ret:
 		}
 		try
 		{
-			iret=yyparse();
+			iret=yyparse(); // invokes YY_INPUT
 		}
 		catch	(FimException e)
 		{
@@ -831,7 +831,6 @@ ret:
 		{
 			if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
 				std::cout << FIM_CNS_DBG_CMDS_PFX << "expanding alias: '" << cmd << "' -> " << fim_shell_arg_escape(ocmd) << "\n";
-#if HAVE_PIPE
 			//an alias should be expanded. arguments are appended.
 			std::ostringstream oss;
 			cmd=ocmd;
@@ -845,35 +844,12 @@ ret:
 			else
 #endif /* FIM_ITERATED_COMMANDS */
 				oss << ocmd;
-			// pipe to the parser
-			fim_sys_int r = pipe(fim_pipedesc),sl;
-			if(r!=0)
-			{ferror("pipe error\n");exit(-1);}
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(size_t i=0;i<args.size();++i)
 				oss << " \"" << args[i] << fim::string("\""); 
 #endif			/* FIM_ALIASES_WITHOUT_ARGUMENTS */
-			sl=strlen(oss.str().c_str());
-			r=write(fim_pipedesc[1],oss.str().c_str(),sl);
-			if(r!=sl)
-			{ferror("pipe write error");exit(-1);} 
-			
-			/*
-			 * now the yyparse macro YY_INPUT itself handles the closing of the pipe.
-			 *
-			 * in this way nested commands could not cause harm, because the pipe
-			 * is terminated BEFORE executing the command, and reusing fim_pipedesc
-			 * is harmless.
-			 *
-			 * before occurred multiple pipe creations, on the same descriptor buffer,
-			 * resulting in a loss of the original descriptors on openings..
-			 */
-			close(fim_pipedesc[1]);
-			fim_perror(FIM_NULL);//FIXME: shall use only one yyparse-calling function!
-			yyparse();
-			fim_perror(FIM_NULL);//FIXME: shall use only one yyparse-calling function!
-			close(fim_pipedesc[0]);
-#endif /* HAVE_PIPE */
+			if ( FIM_ERR_NO_ERROR != execute_internal(oss.str().c_str(), FIM_X_NULL) )
+				exit(-1);
 			goto ok;
 		}
 		if(cmd==FIM_FLT_USLEEP)
