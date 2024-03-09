@@ -47,8 +47,8 @@
  * Support @ expansion of "@id" within "val" of "#!fim:var@=val" or "#!fim:@var@=val"
 # (2103)
  * The expandos of the form %:VAR: will first check for i:VAR, and then for VAR (experimental)
-# (r2075,r2077,r2090-r2091,r2093,r2096,r2100-2102,2105)
-# * Misc fixes (e.g.: -o aa=w, poppler API, configure, ...)
+# (r2075,r2077,r2090-r2091,r2093,r2096,r2100-2102,2105-2106)
+# * Misc fixes (e.g.: -o aa=w, poppler API, configure, don't use pipe() with parser, ...)
 # (r2076,r2079,r2098,2104)
  * --slideshow option now accepts decimal values
 # (r2089)

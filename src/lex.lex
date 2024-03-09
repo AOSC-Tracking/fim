@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2022 Michele Martone
+ (c) 2007-2024 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ int yywrap (){return 1;}
 #endif
 #endif
 
+#if FIM_WANT_PIPE_IN_LEXER
 int fim_pipedesc[2];
 /*#define YY_INPUT(buf,result,max_size) \
 { \
@@ -58,7 +59,19 @@ int fim_pipedesc[2];
 	result = (buf[0]==EOF||r<1)?0:1; \
 	if(result<=0) {close(fim_pipedesc[0]);close(fim_pipedesc[1]);} \
 }
+#else /* FIM_WANT_PIPE_IN_LEXER */
+std::string fim_cmdbuf;
 
+#define YY_INPUT(buf,result,max_size) \
+{ \
+	const int r = fim_cmdbuf.size() ? 1 : 0; \
+	if (r) { buf[0]=fim_cmdbuf[0]; fim_cmdbuf.erase(0,1); } \
+	else { buf[0]=EOF; } \
+	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
+	result = (buf[0]==EOF||r<1)?0:1; \
+	if(result<=0) { } \
+}
+#endif /* FIM_WANT_PIPE_IN_LEXER */
 
 //allocate and strcpy
 #define astrcpy(dst,src) \

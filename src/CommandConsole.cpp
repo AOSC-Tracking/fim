@@ -682,7 +682,6 @@ ret:
 
 	fim_err_t CommandConsole::execute_internal(const fim_char_t *ss, fim_xflags_t xflags)
 	{
-#if HAVE_PIPE
 		try{
 		/*
 		 *	execute a string containing a fim script.
@@ -694,7 +693,9 @@ ret:
 		/* fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false; */
 		fim_char_t *s=dupstr(ss);//this malloc is free
 		int iret=0;
+#if FIM_WANT_PIPE_IN_LEXER
 		int r =0;
+#endif /* FIM_WANT_PIPE_IN_LEXER */
 
 		if(s==FIM_NULL)
 		{
@@ -711,8 +712,9 @@ ret:
 			//goto ret;
 			fim_perror(FIM_NULL);// we need to clear errno
 		}
-		//we open a pipe with the lexer/parser
+#if FIM_WANT_PIPE_IN_LEXER
 		r = pipe(fim_pipedesc);
+		//we open a pipe with the lexer/parser
 		if(r!=0)
 		{
 			//strerror(errno);
@@ -743,15 +745,21 @@ ret:
     			cleanup();
 			return FIM_ERR_GENERIC;
 		} 
+#else /* FIM_WANT_PIPE_IN_LEXER */
+		fim_cmdbuf += s;
+#endif /* FIM_WANT_PIPE_IN_LEXER */
+		// note: the following is not convincing ;-)
 		for(fim_char_t *p=s;*p;++p)
 			if(*p=='\n')
 				*p=' ';
+#if FIM_WANT_PIPE_IN_LEXER
 		iret=close(fim_pipedesc[1]); // important to close this before yyparse()
 		if(iret || errno)
 		{
 			fim_perror("in close(fim_pipedesc[1])");
 			goto ret;
 		}
+#endif /* FIM_WANT_PIPE_IN_LEXER */
 		try
 		{
 			iret=yyparse(); // invokes YY_INPUT
@@ -763,7 +771,11 @@ ret:
 			else
 			       	;	/* ]:-)> */
 		}
+#if FIM_WANT_PIPE_IN_LEXER
 		close(fim_pipedesc[0]);
+#else /* FIM_WANT_PIPE_IN_LEXER */
+		fim_cmdbuf.clear();
+#endif /* FIM_WANT_PIPE_IN_LEXER */
 		if(iret!=0 || errno!=0)
 		{
 			if(getIntVariable(FIM_VID_VERBOSE_ERRORS)==1)
@@ -783,7 +795,9 @@ ret:
 			if(nochars(s)==false)
 				add_history(s);
 #endif /* FIM_USE_READLINE */
+#if FIM_WANT_PIPE_IN_LEXER
 ret:
+#endif /* FIM_WANT_PIPE_IN_LEXER */
 			fim_free(s);
 		}
 		catch	(FimException e)
@@ -791,7 +805,6 @@ ret:
 			if( e == FIM_E_TRAGIC || true )
 			       	return this->quit( FIM_E_TRAGIC );
 		}
-#endif /* HAVE_PIPE */
 		return FIM_ERR_NO_ERROR;
 	}
 
