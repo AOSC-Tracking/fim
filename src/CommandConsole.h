@@ -233,7 +233,7 @@ class CommandConsole FIM_FINAL :
 	bool with_scriptfile(void)const;
 	fim_cxr fcmd_executeFile(const args_t& args);
 #endif /* FIM_WANT_NOSCRIPTING */
-	fim_cxr get_help(const fim_cmd_id& item, const char dl)const;
+	fim_cxr get_help(const fim_cmd_id& item, const char dl, const fim_hflags_t flt=FIM_H_ALL)const;
 	private:
 	bool push(const fim_fn_t nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 	fim_cxr fcmd_echo(const args_t& args);

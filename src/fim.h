@@ -310,6 +310,7 @@ namespace rl
 namespace fim{
 enum fim_image_source_t FIM_ENUM_BASE { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */
 enum fim_xflags_t /*FIM_ENUM_BASE*/ { FIM_X_NULL=0,FIM_X_HISTORY=1,FIM_X_QUIET=2,FIM_X_NOAUTOCMD=4};	/* TODO: may introduce 'sandbox' like flags, here (for instance, for no-system/pipe-interacting executions) */
+enum fim_hflags_t /*FIM_ENUM_BASE*/ { FIM_H_NULL=0,FIM_H_ALIAS=1,FIM_H_BIND=2,FIM_H_CMD=4,FIM_H_VAR=4,FIM_H_ALL=-1};
 typedef std::pair<fim::string,std::pair<fim_page_t,fim_image_source_t> > cache_key_t;	//the current cache key
 enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 }
