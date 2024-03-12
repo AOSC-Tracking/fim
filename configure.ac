@@ -995,7 +995,7 @@ AC_ARG_ENABLE(webp, AS_HELP_STRING([--disable-webp],[Disable WebP file support.]
         fi
 ])
 if test x$fim_handle_webp = xyes; then
-	LIBS="$LIBS `pkg-config libwebpdemux --libs`";
+	LIBS="$LIBS `pkg-config libwebpdemux --libs` -lwebp";
 	CXXFLAGS="$CXXFLAGS `pkg-config libwebpdemux --cflags`";
 	AC_MSG_NOTICE([Enabling WebP file format support.])
 	AC_DEFINE(FIM_WITH_LIBWEBP, 1, [WebP file support.])
